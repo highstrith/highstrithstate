@@ -848,9 +848,14 @@
       height: 100%;
       object-fit: cover;
       object-position: center;
+      opacity: 0;
       filter: saturate(1.04) contrast(1.04) brightness(0.76);
       transform: scale(1.03);
       transition: transform 0.55s ease, filter 0.35s ease, opacity 0.35s ease;
+    }
+
+    .work-video.is-ready {
+      opacity: 1;
     }
 
     .work-card:hover .work-video {
@@ -1736,7 +1741,7 @@
               <article class="work-card reveal" style="--delay: 160ms;">
                 <div class="video-shell">
                   <video class="work-video media-video" data-autoplay-video autoplay playsinline muted loop preload="metadata">
-                    <source src="assets/work-01.mp4" type="video/mp4" />
+                    <source data-src="assets/work-01.mp4" type="video/mp4" />
                   </video>
                   <button class="sound-toggle" type="button" data-sound-toggle aria-label="切换声音">
                     <svg viewBox="0 0 24 24" class="icon-sound-on">
@@ -1762,7 +1767,7 @@
               <article class="work-card reveal" style="--delay: 220ms;">
                 <div class="video-shell">
                   <video class="work-video media-video" data-autoplay-video autoplay playsinline muted loop preload="metadata">
-                    <source src="assets/work-02.mp4" type="video/mp4" />
+                    <source data-src="assets/work-02.mp4" type="video/mp4" />
                   </video>
                   <button class="sound-toggle" type="button" data-sound-toggle aria-label="切换声音">
                     <svg viewBox="0 0 24 24" class="icon-sound-on">
@@ -1788,7 +1793,7 @@
               <article class="work-card reveal" style="--delay: 280ms;">
                 <div class="video-shell">
                   <video class="work-video media-video" data-autoplay-video autoplay playsinline muted loop preload="metadata">
-                    <source src="assets/work-03.mp4" type="video/mp4" />
+                    <source data-src="assets/work-03.mp4" type="video/mp4" />
                   </video>
                   <button class="sound-toggle" type="button" data-sound-toggle aria-label="切换声音">
                     <svg viewBox="0 0 24 24" class="icon-sound-on">
@@ -1814,7 +1819,7 @@
               <article class="work-card reveal" style="--delay: 340ms;">
                 <div class="video-shell">
                   <video class="work-video media-video" data-autoplay-video autoplay playsinline muted loop preload="metadata">
-                    <source src="assets/work-04.mp4" type="video/mp4" />
+                    <source data-src="assets/work-04.mp4" type="video/mp4" />
                   </video>
                   <button class="sound-toggle" type="button" data-sound-toggle aria-label="切换声音">
                     <svg viewBox="0 0 24 24" class="icon-sound-on">
@@ -1840,7 +1845,7 @@
               <article class="work-card reveal" style="--delay: 400ms;">
                 <div class="video-shell">
                   <video class="work-video media-video" data-autoplay-video autoplay playsinline muted loop preload="metadata">
-                    <source src="assets/work-05.mp4" type="video/mp4" />
+                    <source data-src="assets/work-05.mp4" type="video/mp4" />
                   </video>
                   <button class="sound-toggle" type="button" data-sound-toggle aria-label="切换声音">
                     <svg viewBox="0 0 24 24" class="icon-sound-on">
@@ -1866,7 +1871,7 @@
               <article class="work-card reveal" style="--delay: 460ms;">
                 <div class="video-shell">
                   <video class="work-video media-video" data-autoplay-video autoplay playsinline muted loop preload="metadata">
-                    <source src="assets/work-06.mp4" type="video/mp4" />
+                    <source data-src="assets/work-06.mp4" type="video/mp4" />
                   </video>
                   <button class="sound-toggle" type="button" data-sound-toggle aria-label="切换声音">
                     <svg viewBox="0 0 24 24" class="icon-sound-on">
@@ -1892,7 +1897,7 @@
               <article class="work-card reveal" style="--delay: 520ms;">
                 <div class="video-shell">
                   <video class="work-video media-video" data-autoplay-video autoplay playsinline muted loop preload="metadata">
-                    <source src="assets/work-07.mp4" type="video/mp4" />
+                    <source data-src="assets/work-07.mp4" type="video/mp4" />
                   </video>
                   <button class="sound-toggle" type="button" data-sound-toggle aria-label="切换声音">
                     <svg viewBox="0 0 24 24" class="icon-sound-on">
@@ -1918,7 +1923,7 @@
               <article class="work-card reveal" style="--delay: 580ms;">
                 <div class="video-shell">
                   <video class="work-video media-video" data-autoplay-video autoplay playsinline muted loop preload="metadata">
-                    <source src="assets/work-08.mp4" type="video/mp4" />
+                    <source data-src="assets/work-08.mp4" type="video/mp4" />
                   </video>
                   <button class="sound-toggle" type="button" data-sound-toggle aria-label="切换声音">
                     <svg viewBox="0 0 24 24" class="icon-sound-on">
@@ -1944,7 +1949,7 @@
               <article class="work-card reveal" style="--delay: 640ms;">
                 <div class="video-shell">
                   <video class="work-video media-video" data-autoplay-video autoplay playsinline muted loop preload="metadata">
-                    <source src="assets/work-09.mp4" type="video/mp4" />
+                    <source data-src="assets/work-09.mp4" type="video/mp4" />
                   </video>
                   <button class="sound-toggle" type="button" data-sound-toggle aria-label="切换声音">
                     <svg viewBox="0 0 24 24" class="icon-sound-on">
@@ -1970,7 +1975,7 @@
               <article class="work-card reveal" style="--delay: 700ms;">
                 <div class="video-shell">
                   <video class="work-video media-video" data-autoplay-video autoplay playsinline muted loop preload="metadata">
-                    <source src="assets/work-10.mp4" type="video/mp4" />
+                    <source data-src="assets/work-10.mp4" type="video/mp4" />
                   </video>
                   <button class="sound-toggle" type="button" data-sound-toggle aria-label="切换声音">
                     <svg viewBox="0 0 24 24" class="icon-sound-on"><path d="M11 5 6.5 8.5H3v7h3.5L11 19V5Z"></path><path d="M16 9c.9.9 1.5 2 1.5 3s-.6 2.1-1.5 3"></path><path d="M18.8 6.2c1.8 1.8 2.9 4 2.9 5.8s-1.1 4-2.9 5.8"></path></svg>
@@ -1987,7 +1992,7 @@
               <article class="work-card reveal" style="--delay: 760ms;">
                 <div class="video-shell">
                   <video class="work-video media-video" data-autoplay-video autoplay playsinline muted loop preload="metadata">
-                    <source src="assets/work-11.mp4" type="video/mp4" />
+                    <source data-src="assets/work-11.mp4" type="video/mp4" />
                   </video>
                   <button class="sound-toggle" type="button" data-sound-toggle aria-label="切换声音">
                     <svg viewBox="0 0 24 24" class="icon-sound-on"><path d="M11 5 6.5 8.5H3v7h3.5L11 19V5Z"></path><path d="M16 9c.9.9 1.5 2 1.5 3s-.6 2.1-1.5 3"></path><path d="M18.8 6.2c1.8 1.8 2.9 4 2.9 5.8s-1.1 4-2.9 5.8"></path></svg>
@@ -2004,7 +2009,7 @@
               <article class="work-card reveal" style="--delay: 820ms;">
                 <div class="video-shell">
                   <video class="work-video media-video" data-autoplay-video autoplay playsinline muted loop preload="metadata">
-                    <source src="assets/work-12.mp4" type="video/mp4" />
+                    <source data-src="assets/work-12.mp4" type="video/mp4" />
                   </video>
                   <button class="sound-toggle" type="button" data-sound-toggle aria-label="切换声音">
                     <svg viewBox="0 0 24 24" class="icon-sound-on"><path d="M11 5 6.5 8.5H3v7h3.5L11 19V5Z"></path><path d="M16 9c.9.9 1.5 2 1.5 3s-.6 2.1-1.5 3"></path><path d="M18.8 6.2c1.8 1.8 2.9 4 2.9 5.8s-1.1 4-2.9 5.8"></path></svg>
@@ -2021,7 +2026,7 @@
               <article class="work-card reveal" style="--delay: 880ms;">
                 <div class="video-shell">
                   <video class="work-video media-video" data-autoplay-video autoplay playsinline muted loop preload="metadata">
-                    <source src="assets/work-13.mp4" type="video/mp4" />
+                    <source data-src="assets/work-13.mp4" type="video/mp4" />
                   </video>
                   <button class="sound-toggle" type="button" data-sound-toggle aria-label="切换声音">
                     <svg viewBox="0 0 24 24" class="icon-sound-on"><path d="M11 5 6.5 8.5H3v7h3.5L11 19V5Z"></path><path d="M16 9c.9.9 1.5 2 1.5 3s-.6 2.1-1.5 3"></path><path d="M18.8 6.2c1.8 1.8 2.9 4 2.9 5.8s-1.1 4-2.9 5.8"></path></svg>
@@ -2038,7 +2043,7 @@
               <article class="work-card reveal" style="--delay: 940ms;">
                 <div class="video-shell">
                   <video class="work-video media-video" data-autoplay-video autoplay playsinline muted loop preload="metadata">
-                    <source src="assets/work-14.mp4" type="video/mp4" />
+                    <source data-src="assets/work-14.mp4" type="video/mp4" />
                   </video>
                   <button class="sound-toggle" type="button" data-sound-toggle aria-label="切换声音">
                     <svg viewBox="0 0 24 24" class="icon-sound-on"><path d="M11 5 6.5 8.5H3v7h3.5L11 19V5Z"></path><path d="M16 9c.9.9 1.5 2 1.5 3s-.6 2.1-1.5 3"></path><path d="M18.8 6.2c1.8 1.8 2.9 4 2.9 5.8s-1.1 4-2.9 5.8"></path></svg>
@@ -2055,7 +2060,7 @@
               <article class="work-card reveal" style="--delay: 1000ms;">
                 <div class="video-shell">
                   <video class="work-video media-video" data-autoplay-video autoplay playsinline muted loop preload="metadata">
-                    <source src="assets/work-15.mp4" type="video/mp4" />
+                    <source data-src="assets/work-15.mp4" type="video/mp4" />
                   </video>
                   <button class="sound-toggle" type="button" data-sound-toggle aria-label="切换声音">
                     <svg viewBox="0 0 24 24" class="icon-sound-on"><path d="M11 5 6.5 8.5H3v7h3.5L11 19V5Z"></path><path d="M16 9c.9.9 1.5 2 1.5 3s-.6 2.1-1.5 3"></path><path d="M18.8 6.2c1.8 1.8 2.9 4 2.9 5.8s-1.1 4-2.9 5.8"></path></svg>
@@ -2072,7 +2077,7 @@
               <article class="work-card reveal" style="--delay: 1060ms;">
                 <div class="video-shell">
                   <video class="work-video media-video" data-autoplay-video autoplay playsinline muted loop preload="metadata">
-                    <source src="assets/work-16.mp4" type="video/mp4" />
+                    <source data-src="assets/work-16.mp4" type="video/mp4" />
                   </video>
                   <button class="sound-toggle" type="button" data-sound-toggle aria-label="切换声音">
                     <svg viewBox="0 0 24 24" class="icon-sound-on"><path d="M11 5 6.5 8.5H3v7h3.5L11 19V5Z"></path><path d="M16 9c.9.9 1.5 2 1.5 3s-.6 2.1-1.5 3"></path><path d="M18.8 6.2c1.8 1.8 2.9 4 2.9 5.8s-1.1 4-2.9 5.8"></path></svg>
@@ -2187,7 +2192,7 @@
     </main>
   </div>
 
-  <audio id="bgMusic" src="assets/background-music.mp3" preload="auto" loop autoplay></audio>
+  <audio id="bgMusic" src="assets/background-music.mp3" preload="none" loop></audio>
 
   <script>
     (() => {
@@ -2399,6 +2404,8 @@
         "assets/originals/preview-15.mp4",
         "assets/originals/preview-16.mp4"
       ];
+      const mobileMedia = window.matchMedia("(max-width: 640px) and (orientation: portrait)");
+      const hoverMedia = window.matchMedia("(hover: hover)");
 
       function syncMusicButton(isPlaying) {
         musicToggle.classList.toggle("is-playing", isPlaying);
@@ -2417,8 +2424,11 @@
         originalGroup.className = "works-group works-group-original";
 
         originalCards.forEach((card, index) => {
+          const source = card.querySelector("source");
+          const workSrc = source?.dataset.src || source?.getAttribute("src") || "";
           card.dataset.originalWork = "true";
-          card.dataset.previewSrc = workPreviewSources[index] || card.querySelector("source")?.getAttribute("src") || "";
+          card.dataset.workSrc = workSrc;
+          card.dataset.previewSrc = workPreviewSources[index] || workSrc;
           originalGroup.appendChild(card);
         });
 
@@ -2431,9 +2441,8 @@
           cloneCard.removeAttribute("data-original-work");
           cloneCard.dataset.cloneWork = "true";
           cloneCard.querySelectorAll("video").forEach((cloneVideo) => {
-            cloneVideo.removeAttribute("data-autoplay-video");
             cloneVideo.removeAttribute("autoplay");
-            cloneVideo.preload = "metadata";
+            cloneVideo.preload = "none";
           });
         });
 
@@ -2511,11 +2520,15 @@
         syncMusicButton(false);
       });
 
-      startBackgroundMusic();
-      window.addEventListener("pointerdown", startBackgroundMusic, { once: true, passive: true });
-      window.addEventListener("click", startBackgroundMusic, { once: true, passive: true });
-      window.addEventListener("touchstart", startBackgroundMusic, { once: true, passive: true });
-      window.addEventListener("keydown", startBackgroundMusic, { once: true });
+      if (!mobileMedia.matches) {
+        startBackgroundMusic();
+        window.addEventListener("pointerdown", startBackgroundMusic, { once: true, passive: true });
+        window.addEventListener("click", startBackgroundMusic, { once: true, passive: true });
+        window.addEventListener("touchstart", startBackgroundMusic, { once: true, passive: true });
+        window.addEventListener("keydown", startBackgroundMusic, { once: true });
+      } else {
+        syncMusicButton(false);
+      }
 
       const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -2551,14 +2564,70 @@
         }
       };
 
+      const getVideoCard = (video) => video.closest(".work-card");
+
+      const getStoredSource = (video) => {
+        const source = video.querySelector("source");
+        return source?.dataset.src || source?.getAttribute("src") || video.currentSrc || "";
+      };
+
+      const selectWorkSource = (video) => {
+        const card = getVideoCard(video);
+        if (!card) return getStoredSource(video);
+
+        const workSrc = card.dataset.workSrc || getStoredSource(video);
+        const previewSrc = card.dataset.previewSrc || workSrc;
+        return mobileMedia.matches ? previewSrc : workSrc;
+      };
+
+      const loadWorkVideo = (video) => {
+        const source = video.querySelector("source");
+        const nextSrc = selectWorkSource(video);
+        if (!source || !nextSrc) return false;
+
+        video.preload = mobileMedia.matches ? "metadata" : "auto";
+        if (source.getAttribute("src") !== nextSrc) {
+          video.classList.remove("is-ready");
+          source.setAttribute("src", nextSrc);
+          video.load();
+        }
+
+        return true;
+      };
+
       videos.forEach((video) => {
         video.muted = true;
         video.loop = true;
         video.playsInline = true;
+        video.preload = "none";
         video.setAttribute("muted", "");
         video.setAttribute("playsinline", "");
         video.setAttribute("loop", "");
-        playVideo(video);
+        video.addEventListener("loadeddata", () => video.classList.add("is-ready"), { once: false });
+      });
+
+      const videoObserver = "IntersectionObserver" in window
+        ? new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            const video = entry.target;
+            if (entry.isIntersecting) {
+              if (loadWorkVideo(video)) playVideo(video);
+            } else if (mobileMedia.matches) {
+              video.pause();
+            }
+          });
+        }, {
+          rootMargin: mobileMedia.matches ? "420px 120px" : "260px 180px",
+          threshold: 0.04
+        })
+        : null;
+
+      videos.forEach((video) => {
+        if (videoObserver) {
+          videoObserver.observe(video);
+        } else if (loadWorkVideo(video)) {
+          playVideo(video);
+        }
       });
 
       const soundButtons = [...document.querySelectorAll("[data-sound-toggle]")];
@@ -2588,16 +2657,18 @@
         setSoundState(video, soundBtn, true);
 
         shell.addEventListener("pointerenter", () => {
+          loadWorkVideo(video);
           video.pause();
         });
 
         shell.addEventListener("pointerleave", () => {
-          playVideo(video);
+          if (loadWorkVideo(video)) playVideo(video);
         });
 
         soundBtn.addEventListener("click", (event) => {
           event.preventDefault();
           event.stopPropagation();
+          loadWorkVideo(video);
           setSoundState(video, soundBtn, !video.muted);
           if (!video.paused) playVideo(video);
         });
@@ -2613,10 +2684,11 @@
 
         card.addEventListener("pointerenter", () => {
           worksMarquee?.classList.add("is-paused");
+          loadWorkVideo(video);
           video.pause();
-          if (window.matchMedia("(hover: hover)").matches && !card.dataset.cloneWork) {
+          if (hoverMedia.matches && !card.dataset.cloneWork) {
             previewTimer = window.setTimeout(() => {
-              const source = card.dataset.previewSrc || video.querySelector("source")?.getAttribute("src") || video.currentSrc;
+              const source = card.dataset.previewSrc || selectWorkSource(video);
               if (!source || !preview || !previewVideo) return;
               previewVideo.preload = "auto";
               previewVideo.src = source;
@@ -2641,12 +2713,13 @@
             previewVideo.removeAttribute("src");
             previewVideo.load();
           }
-          playVideo(video);
+          if (loadWorkVideo(video)) playVideo(video);
         });
 
         soundBtn.addEventListener("click", (event) => {
           event.preventDefault();
           event.stopPropagation();
+          loadWorkVideo(video);
           setSoundState(video, soundBtn, !video.muted);
           if (!video.paused) playVideo(video);
         });
