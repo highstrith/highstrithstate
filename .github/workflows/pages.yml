@@ -27,9 +27,10 @@ jobs:
       - name: Prepare site
         run: |
           rm -rf public
-          mkdir -p public/assets
+          mkdir -p public/assets public/data
           cp index.html public/index.html
           cp -R assets/. public/assets/
+          cp -R data/. public/data/
           touch public/.nojekyll
 
       - name: Setup Pages
