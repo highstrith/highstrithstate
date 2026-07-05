@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Highstrith | 作品管理</title>
+  <style>
+    :root {
+      --bg: #0c0f15;
+      --panel: rgba(19, 24, 35, 0.9);
+      --panel-strong: rgba(13, 17, 26, 0.98);
+      --line: rgba(255, 255, 255, 0.08);
+      --line-strong: rgba(216, 180, 111, 0.38);
+      --text: #f7f3ec;
+      --muted: rgba(247, 243, 236, 0.68);
+      --soft: rgba(247, 243, 236, 0.42);
+      --accent: #d8b46f;
+      --danger: #ff8c78;
+      --success: #c4e39d;
+      --shadow: 0 28px 72px rgba(0, 0, 0, 0.34);
+      --radius: 28px;
+      --pad: clamp(18px, 3vw, 34px);
+      color-scheme: dark;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { margin: 0; min-height: 100%; }
+
+    body {
+      background:
+        radial-gradient(circle at top, rgba(216, 180, 111, 0.14), transparent 34%),
+        linear-gradient(180deg, #0e121b 0%, #090c12 100%);
+      color: var(--text);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .page {
+      width: min(1320px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 20px 0 48px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 12px;
+      z-index: 20;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(10, 14, 21, 0.82);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.22);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      margin-right: auto;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background:
+        linear-gradient(135deg, rgba(216, 180, 111, 0.36), rgba(216, 180, 111, 0.08)),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(216, 180, 111, 0.18);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .brand-copy {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .brand-copy strong {
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.82rem;
+    }
+
+    .brand-copy span {
+      color: var(--muted);
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .topbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .chip-btn,
+    .btn {
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .chip-btn:hover,
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .btn.primary {
+      border-color: rgba(216, 180, 111, 0.28);
+      background: linear-gradient(135deg, rgba(216, 180, 111, 0.24), rgba(216, 180, 111, 0.08));
+    }
+
+    .btn.danger {
+      border-color: rgba(255, 140, 120, 0.24);
+      background: rgba(255, 140, 120, 0.08);
+    }
+
+    .btn:disabled,
+    .chip-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+      gap: 18px;
+      padding: 22px 0 18px;
+    }
+
+    .hero-card,
+    .panel {
+      padding: var(--pad);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgba(216, 180, 111, 0.1), transparent 38%),
+        linear-gradient(180deg, rgba(18, 23, 33, 0.96), rgba(10, 13, 20, 0.98));
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow,
+    .section-kicker,
+    .field-label {
+      margin: 0;
+      color: var(--accent);
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      margin-top: 14px;
+      font-size: clamp(2.5rem, 7vw, 4.3rem);
+      line-height: 0.94;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-card p,
+    .panel p,
+    .field-help,
+    .meta-row,
+    .status-note {
+      color: var(--muted);
+      line-height: 1.72;
+    }
+
+    .hero-card .lede {
+      margin-top: 18px;
+      max-width: 58ch;
+      font-size: 1rem;
+    }
+
+    .hero-meta {
+      margin-top: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .hero-meta .stat {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.94rem;
+    }
+
+    .hero-meta strong {
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+    }
+
+    .hero-meta span {
+      color: var(--soft);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.72rem;
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 16px;
+    }
+
+    .mini-note {
+      display: grid;
+      gap: 8px;
+      padding: 20px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .panel-head .copy {
+      display: grid;
+      gap: 10px;
+    }
+
+    .upload-mode-note {
+      color: rgba(216, 180, 111, 0.9);
+      font-size: 0.86rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .upload-form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .upload-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .upload-field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .upload-input {
+      width: 100%;
+      min-height: 50px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+    }
+
+    .upload-input:focus {
+      border-color: rgba(216, 180, 111, 0.52);
+      background: rgba(255, 255, 255, 0.06);
+      transform: translateY(-1px);
+    }
+
+    .upload-input::placeholder {
+      color: rgba(247, 243, 236, 0.34);
+    }
+
+    .upload-input::file-selector-button {
+      margin-right: 12px;
+      padding: 10px 14px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(216, 180, 111, 0.16);
+      color: var(--text);
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .upload-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .upload-hint,
+    .upload-status {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.72;
+    }
+
+    .upload-status {
+      min-height: 1.6em;
+    }
+
+    .upload-status[data-tone="pending"] { color: #f0d18f; }
+    .upload-status[data-tone="success"] { color: var(--success); }
+    .upload-status[data-tone="error"] { color: #ffb0a0; }
+
+    .manage-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .manage-empty {
+      padding: 22px;
+      border-radius: 22px;
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.02);
+      text-align: center;
+      line-height: 1.72;
+    }
+
+    .manage-card {
+      display: grid;
+      grid-template-columns: 172px minmax(0, 1fr);
+      gap: 16px;
+      padding: 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .manage-preview {
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px;
+      aspect-ratio: 16 / 10;
+      background:
+        linear-gradient(160deg, rgba(216, 180, 111, 0.18), rgba(216, 180, 111, 0.04)),
+        linear-gradient(180deg, rgba(20, 25, 36, 0.94), rgba(10, 13, 20, 0.98));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .manage-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .preview-fallback {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      text-align: center;
+      color: var(--soft);
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .manage-copy {
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .manage-title-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .manage-title {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .manage-title h3 {
+      font-size: 1.12rem;
+      line-height: 1.18;
+    }
+
+    .manage-title p {
+      color: var(--soft);
+      letter-spacing: 0.12em;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 10px;
+      min-height: 30px;
+      border-radius: 999px;
+      border: 1px solid rgba(216, 180, 111, 0.24);
+      color: var(--accent);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .meta-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.88rem;
+    }
+
+    .meta-row strong {
+      color: var(--text);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .manage-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    @media (max-width: 1080px) {
+      .hero,
+      .content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: min(100% - 20px, 1320px);
+        padding-top: 10px;
+      }
+
+      .topbar {
+        top: 8px;
+        padding: 12px;
+      }
+
+      .topbar-actions {
+        width: 100%;
+      }
+
+      .topbar-actions .btn,
+      .topbar-actions .chip-btn {
+        flex: 1 1 0;
+      }
+
+      .upload-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .manage-card {
+        grid-template-columns: 1fr;
+      }
+
+      .panel-head {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div class="brand-copy">
+          <strong>Highstrith</strong>
+          <span id="brandRole">作品管理</span>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <a class="btn" id="publicSiteLink" href="/">
+          <span id="publicSiteLinkLabel">查看展示站</span>
+        </a>
+        <button class="chip-btn" id="langSwitch" type="button" aria-pressed="false">
+          <strong id="langCurrent">CN</strong>
+          <span>/</span>
+          <strong id="langTarget">EN</strong>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <article class="hero-card">
+          <p class="eyebrow" id="heroEyebrow">Private Admin</p>
+          <h1 id="heroTitle">把上传和作品管理从首页挪到这里。</h1>
+          <p class="lede" id="heroDesc">这个页面保留上传、编辑、删除的完整能力，但不从主页公开暴露。你可以在这里维护作品，首页只负责干净地展示结果。</p>
+          <div class="hero-meta">
+            <div class="stat">
+              <strong id="heroWorkCount">0</strong>
+              <span id="heroWorkCountLabel">已上传作品</span>
+            </div>
+            <div class="stat">
+              <strong>MP4 / JPG / PNG</strong>
+              <span id="heroFormatLabel">支持格式</span>
+            </div>
+          </div>
+        </article>
+
+        <div class="hero-side">
+          <article class="mini-note">
+            <p class="section-kicker" id="privacyKicker">Access</p>
+            <p id="privacyNote">这个地址不会从首页导航中出现，但它也不是带密码的后台。适合用于你自己维护内容，不适合公开传播。</p>
+          </article>
+          <article class="mini-note">
+            <p class="section-kicker" id="syncKicker">Sync</p>
+            <p id="syncNote">这里提交的作品会写入当前站点目录，并立即影响首页作品列表。刷新首页后就能看到最新内容。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="content">
+        <article class="panel">
+          <div class="panel-head">
+            <div class="copy">
+              <p class="section-kicker" id="uploadEyebrow">作品入库</p>
+              <h2 id="uploadPanelTitle">上传新作品，自动加入当前作品集。</h2>
+              <p id="uploadPanelNote">选择视频、封面和标题信息后，网站会把文件保存到当前站点目录，并立即把新作品加入现有网格。</p>
+              <p class="upload-mode-note" id="uploadModeNote">当前为新建模式。</p>
+            </div>
+          </div>
+
+          <form class="upload-form" id="uploadForm" novalidate>
+            <div class="upload-grid">
+              <label class="upload-field">
+                <span class="field-label" id="uploadCnTitleLabel">中文标题</span>
+                <input class="upload-input" id="uploadCnTitleInput" name="cnTitle" type="text" maxlength="80" placeholder="例如：新品发布短片" />
+              </label>
+              <label class="upload-field">
+                <span class="field-label" id="uploadEnTitleLabel">English Title</span>
+                <input class="upload-input" id="uploadEnTitleInput" name="enTitle" type="text" maxlength="80" placeholder="For example: Product Launch Film" />
+              </label>
+              <label class="upload-field">
+                <span class="field-label" id="uploadCnSubLabel">中文副标题</span>
+                <input class="upload-input" id="uploadCnSubInput" name="cnSub" type="text" maxlength="64" placeholder="例如：品牌 / 剪辑" />
+              </label>
+              <label class="upload-field">
+                <span class="field-label" id="uploadEnSubLabel">English Subtitle</span>
+                <input class="upload-input" id="uploadEnSubInput" name="enSub" type="text" maxlength="64" placeholder="For example: BRAND / EDIT" />
+              </label>
+              <label class="upload-field">
+                <span class="field-label" id="uploadVideoLabel">作品视频（MP4）</span>
+                <input class="upload-input" id="uploadVideoInput" name="videoFile" type="file" accept=".mp4,video/mp4" />
+                <small class="field-help" id="uploadVideoHelp">目前支持 MP4，建议上传压缩后的成片，减少浏览时的加载压力。</small>
+              </label>
+              <label class="upload-field">
+                <span class="field-label" id="uploadPosterLabel">封面图（可选）</span>
+                <input class="upload-input" id="uploadPosterInput" name="posterFile" type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" />
+                <small class="field-help" id="uploadPosterHelp">支持 PNG、JPG、JPEG、WEBP；如果不传，卡片会先用默认背景显示。</small>
+              </label>
+            </div>
+
+            <div class="upload-actions">
+              <button class="btn primary" id="uploadSubmit" type="submit">
+                <span id="uploadSubmitLabel">上传并加入作品集</span>
+              </button>
+              <button class="btn" id="uploadCancelEdit" type="button" hidden>
+                <span id="uploadCancelEditLabel">取消编辑</span>
+              </button>
+              <p class="upload-hint" id="uploadHint">上传成功后，作品会保存在本地 `assets/uploads`，刷新页面后仍会保留。</p>
+            </div>
+
+            <p class="upload-status" id="uploadStatus" aria-live="polite"></p>
+          </form>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <div class="copy">
+              <p class="section-kicker" id="manageKicker">Managed Works</p>
+              <h2 id="manageTitle">已上传作品管理</h2>
+              <p id="manageNote">这里只显示通过上传功能加入站点的作品。基础内置作品不会出现在这里，也不会提供删除入口。</p>
+            </div>
+          </div>
+
+          <div class="manage-list" id="manageList"></div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      const initialLang = localStorage.getItem('site-lang') === 'en' ? 'en' : 'cn';
+      const state = { lang: initialLang };
+
+      const translations = {
+        cn: {
+          pageTitle: 'Highstrith | 作品管理',
+          brandRole: '作品管理',
+          publicSiteLink: '查看展示站',
+          heroEyebrow: 'Private Admin',
+          heroTitle: '把上传和作品管理从首页挪到这里。',
+          heroDesc: '这个页面保留上传、编辑、删除的完整能力，但不从主页公开暴露。你可以在这里维护作品，首页只负责干净地展示结果。',
+          heroWorkCountLabel: '已上传作品',
+          heroFormatLabel: '支持格式',
+          privacyKicker: 'Access',
+          privacyNote: '这个地址不会从首页导航中出现，但它也不是带密码的后台。适合用于你自己维护内容，不适合公开传播。',
+          syncKicker: 'Sync',
+          syncNote: '这里提交的作品会写入当前站点目录，并立即影响首页作品列表。刷新首页后就能看到最新内容。',
+          uploadEyebrow: '作品入库',
+          uploadTitle: '上传新作品，自动加入当前作品集。',
+          uploadNote: '选择视频、封面和标题信息后，网站会把文件保存到当前站点目录，并立即把新作品加入现有网格。',
+          uploadModeCreate: '当前为新建模式。',
+          uploadModeEdit: '当前为编辑模式，你可以修改标题，也可以替换视频或封面。',
+          uploadCnTitleLabel: '中文标题',
+          uploadEnTitleLabel: '英文标题',
+          uploadCnSubLabel: '中文副标题',
+          uploadEnSubLabel: '英文副标题',
+          uploadCnTitlePlaceholder: '例如：新品发布短片',
+          uploadEnTitlePlaceholder: 'For example: Product Launch Film',
+          uploadCnSubPlaceholder: '例如：品牌 / 剪辑',
+          uploadEnSubPlaceholder: 'For example: BRAND / EDIT',
+          uploadVideoLabel: '作品视频（MP4）',
+          uploadPosterLabel: '封面图（可选）',
+          uploadVideoHelp: '目前支持 MP4，建议上传压缩后的成片，减少浏览时的加载压力。',
+          uploadPosterHelp: '支持 PNG、JPG、JPEG、WEBP；如果不传，卡片会先用默认背景显示。',
+          uploadSubmit: '上传并加入作品集',
+          uploadUpdate: '保存作品修改',
+          uploadCancelEdit: '取消编辑',
+          uploadHint: '上传成功后，作品会保存在本地 assets/uploads，刷新页面后仍会保留。',
+          uploadIdle: '上传面板已准备好。',
+          uploadNeedVideo: '请先选择一个 MP4 视频文件。',
+          uploadGeneratingPoster: '正在从视频自动生成封面…',
+          uploadUploadingVideo: '正在上传视频文件…',
+          uploadUploadingPoster: '正在上传封面图…',
+          uploadSavingWork: '正在写入作品信息…',
+          uploadUpdatingWork: '正在保存作品修改…',
+          uploadDeletingWork: '正在删除作品…',
+          uploadSuccess: '上传完成，新作品已经加入作品集。',
+          uploadUpdated: '作品修改已保存。',
+          uploadDeleted: '作品已删除。',
+          uploadDeleteConfirm: '确定删除这条已上传作品吗？对应的视频和封面也会一并移除。',
+          uploadUnavailable: '当前本地服务暂时不可用，稍后再试。',
+          manageKicker: '管理列表',
+          manageTitle: '已上传作品管理',
+          manageNote: '这里只显示通过上传功能加入站点的作品。基础内置作品不会出现在这里，也不会提供删除入口。',
+          manageEmpty: '还没有已上传作品。上传一条作品后，它会立刻出现在这里。',
+          manageItemTag: '已上传',
+          manageCreated: '创建时间',
+          manageVideo: '视频路径',
+          managePoster: '封面路径',
+          manageNoPoster: '暂未设置封面',
+          manageEdit: '编辑',
+          manageDelete: '删除',
+          langCurrent: 'CN',
+          langTarget: 'EN'
+        },
+        en: {
+          pageTitle: 'Highstrith | Work Admin',
+          brandRole: 'Work Admin',
+          publicSiteLink: 'View Public Site',
+          heroEyebrow: 'Private Admin',
+          heroTitle: 'Move upload and work management off the homepage.',
+          heroDesc: 'This page keeps the full upload, edit, and delete workflow without exposing it on the public homepage. Maintain the portfolio here, and let the homepage stay presentation-only.',
+          heroWorkCountLabel: 'Uploaded Works',
+          heroFormatLabel: 'Supported Formats',
+          privacyKicker: 'Access',
+          privacyNote: 'This page is intentionally absent from the homepage navigation, but it is not password-protected. It is suitable for your own maintenance flow, not for public distribution.',
+          syncKicker: 'Sync',
+          syncNote: 'Anything saved here writes into the current site directory and immediately affects the homepage work list. Refresh the public site to see the latest state.',
+          uploadEyebrow: 'Work Intake',
+          uploadTitle: 'Upload a new project and add it to the current portfolio.',
+          uploadNote: 'Choose a video, poster, and titles, then the site will save the files into this project folder and add the new work to the existing grid right away.',
+          uploadModeCreate: 'Create mode is active.',
+          uploadModeEdit: 'Edit mode is active. You can change titles or replace the video and poster.',
+          uploadCnTitleLabel: 'Chinese Title',
+          uploadEnTitleLabel: 'English Title',
+          uploadCnSubLabel: 'Chinese Subtitle',
+          uploadEnSubLabel: 'English Subtitle',
+          uploadCnTitlePlaceholder: 'For example: Product Launch Film',
+          uploadEnTitlePlaceholder: 'For example: Product Launch Film',
+          uploadCnSubPlaceholder: 'For example: BRAND / EDIT',
+          uploadEnSubPlaceholder: 'For example: BRAND / EDIT',
+          uploadVideoLabel: 'Project Video (MP4)',
+          uploadPosterLabel: 'Poster Image (Optional)',
+          uploadVideoHelp: 'MP4 is supported for now. Uploading a compressed deliverable will keep browsing smoother.',
+          uploadPosterHelp: 'PNG, JPG, JPEG, and WEBP are supported. If you skip it, the card falls back to the default background.',
+          uploadSubmit: 'Upload and Add to Portfolio',
+          uploadUpdate: 'Save Changes',
+          uploadCancelEdit: 'Cancel Edit',
+          uploadHint: 'Successful uploads are stored under assets/uploads and stay available after a refresh.',
+          uploadIdle: 'The upload panel is ready.',
+          uploadNeedVideo: 'Please choose an MP4 video file first.',
+          uploadGeneratingPoster: 'Generating a poster from the selected video…',
+          uploadUploadingVideo: 'Uploading the video file…',
+          uploadUploadingPoster: 'Uploading the poster image…',
+          uploadSavingWork: 'Saving the work entry…',
+          uploadUpdatingWork: 'Saving the work changes…',
+          uploadDeletingWork: 'Deleting the work…',
+          uploadSuccess: 'Upload complete. The new work is now in the portfolio.',
+          uploadUpdated: 'The work changes have been saved.',
+          uploadDeleted: 'The work has been deleted.',
+          uploadDeleteConfirm: 'Delete this uploaded work? Its video and poster files will be removed as well.',
+          uploadUnavailable: 'The local upload service is unavailable right now. Please try again shortly.',
+          manageKicker: 'Manage',
+          manageTitle: 'Uploaded Work Controls',
+          manageNote: 'Only works added through the upload flow appear here. Built-in portfolio items stay outside this panel and never expose delete controls.',
+          manageEmpty: 'No uploaded works yet. Add one and it will appear here immediately.',
+          manageItemTag: 'Uploaded',
+          manageCreated: 'Created',
+          manageVideo: 'Video Path',
+          managePoster: 'Poster Path',
+          manageNoPoster: 'No poster assigned yet',
+          manageEdit: 'Edit',
+          manageDelete: 'Delete',
+          langCurrent: 'EN',
+          langTarget: 'CN'
+        }
+      };
+
+      const localServiceOrigin = 'http://127.0.0.1:3000';
+      const isFileProtocol = window.location.protocol === 'file:';
+      const serviceOrigin = isFileProtocol ? localServiceOrigin : window.location.origin;
+      const serviceUrl = (path) => new URL(path, `${serviceOrigin}/`).toString();
+
+      if (isFileProtocol) {
+        const nextUrl = serviceUrl(`/admin.html${window.location.search}${window.location.hash}`);
+        window.location.replace(nextUrl);
+      }
+
+      const langSwitch = document.getElementById('langSwitch');
+      const langCurrent = document.getElementById('langCurrent');
+      const langTarget = document.getElementById('langTarget');
+      const brandRole = document.getElementById('brandRole');
+      const publicSiteLink = document.getElementById('publicSiteLink');
+      const publicSiteLinkLabel = document.getElementById('publicSiteLinkLabel');
+      const heroEyebrow = document.getElementById('heroEyebrow');
+      const heroTitle = document.getElementById('heroTitle');
+      const heroDesc = document.getElementById('heroDesc');
+      const heroWorkCount = document.getElementById('heroWorkCount');
+      const heroWorkCountLabel = document.getElementById('heroWorkCountLabel');
+      const heroFormatLabel = document.getElementById('heroFormatLabel');
+      const privacyKicker = document.getElementById('privacyKicker');
+      const privacyNote = document.getElementById('privacyNote');
+      const syncKicker = document.getElementById('syncKicker');
+      const syncNote = document.getElementById('syncNote');
+      const uploadEyebrow = document.getElementById('uploadEyebrow');
+      const uploadPanelTitle = document.getElementById('uploadPanelTitle');
+      const uploadPanelNote = document.getElementById('uploadPanelNote');
+      const uploadModeNote = document.getElementById('uploadModeNote');
+      const uploadForm = document.getElementById('uploadForm');
+      const uploadSubmit = document.getElementById('uploadSubmit');
+      const uploadSubmitLabel = document.getElementById('uploadSubmitLabel');
+      const uploadCancelEdit = document.getElementById('uploadCancelEdit');
+      const uploadCancelEditLabel = document.getElementById('uploadCancelEditLabel');
+      const uploadHint = document.getElementById('uploadHint');
+      const uploadStatus = document.getElementById('uploadStatus');
+      const uploadCnTitleLabel = document.getElementById('uploadCnTitleLabel');
+      const uploadEnTitleLabel = document.getElementById('uploadEnTitleLabel');
+      const uploadCnSubLabel = document.getElementById('uploadCnSubLabel');
+      const uploadEnSubLabel = document.getElementById('uploadEnSubLabel');
+      const uploadVideoLabel = document.getElementById('uploadVideoLabel');
+      const uploadPosterLabel = document.getElementById('uploadPosterLabel');
+      const uploadVideoHelp = document.getElementById('uploadVideoHelp');
+      const uploadPosterHelp = document.getElementById('uploadPosterHelp');
+      const uploadCnTitleInput = document.getElementById('uploadCnTitleInput');
+      const uploadEnTitleInput = document.getElementById('uploadEnTitleInput');
+      const uploadCnSubInput = document.getElementById('uploadCnSubInput');
+      const uploadEnSubInput = document.getElementById('uploadEnSubInput');
+      const uploadVideoInput = document.getElementById('uploadVideoInput');
+      const uploadPosterInput = document.getElementById('uploadPosterInput');
+      const manageKicker = document.getElementById('manageKicker');
+      const manageTitle = document.getElementById('manageTitle');
+      const manageNote = document.getElementById('manageNote');
+      const manageList = document.getElementById('manageList');
+
+      let uploadedWorkData = [];
+      let uploadMode = 'create';
+      let editingWorkId = '';
+      let uploadSubmitting = false;
+      let uploadStatusState = { key: 'uploadIdle', tone: 'muted', customMessage: '' };
+
+      const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+      }[char]));
+
+      const normalizeWork = (item) => {
+        const cnTitle = (item?.cnTitle || item?.enTitle || '未命名作品').trim();
+        const enTitle = (item?.enTitle || item?.cnTitle || 'Untitled Work').trim();
+        const cnSub = (item?.cnSub || item?.enSub || '自定义上传').trim();
+        const enSub = (item?.enSub || item?.cnSub || 'CUSTOM UPLOAD').trim();
+
+        return {
+          id: item?.id || '',
+          createdAt: item?.createdAt || '',
+          cnTitle,
+          enTitle,
+          cnSub,
+          enSub,
+          video: item?.video || '',
+          poster: item?.poster || '',
+        };
+      };
+
+      const isManagedWork = (item) => typeof item?.video === 'string' && item.video.startsWith('assets/uploads/');
+
+      const managedWorks = () => uploadedWorkData.filter(isManagedWork);
+
+      const findUploadedWork = (workId) => uploadedWorkData.find((item) => item.id === workId) || null;
+
+      const replaceUploadedWork = (work) => {
+        uploadedWorkData = [normalizeWork(work), ...uploadedWorkData.filter((item) => item.id !== work.id)];
+      };
+
+      const removeUploadedWork = (workId) => {
+        uploadedWorkData = uploadedWorkData.filter((item) => item.id !== workId);
+      };
+
+      const updateHeroMetrics = () => {
+        heroWorkCount.textContent = String(managedWorks().length);
+      };
+
+      const paintUploadStatus = () => {
+        const copy = translations[state.lang];
+        uploadStatus.textContent = uploadStatusState.customMessage || copy[uploadStatusState.key] || '';
+        uploadStatus.dataset.tone = uploadStatusState.tone;
+      };
+
+      const setUploadStatus = (key, tone = 'muted', customMessage = '') => {
+        uploadStatusState = { key, tone, customMessage };
+        paintUploadStatus();
+      };
+
+      const setUploadSubmitting = (isSubmitting) => {
+        uploadSubmitting = Boolean(isSubmitting);
+        uploadSubmit.disabled = uploadSubmitting;
+        uploadCancelEdit.disabled = uploadSubmitting;
+      };
+
+      const syncUploadModeUi = () => {
+        const copy = translations[state.lang];
+        uploadModeNote.textContent = copy[uploadMode === 'edit' ? 'uploadModeEdit' : 'uploadModeCreate'];
+        uploadSubmitLabel.textContent = copy[uploadMode === 'edit' ? 'uploadUpdate' : 'uploadSubmit'];
+        uploadCancelEdit.hidden = uploadMode !== 'edit';
+        uploadCancelEditLabel.textContent = copy.uploadCancelEdit;
+      };
+
+      const clearUploadForm = () => {
+        uploadForm.reset();
+      };
+
+      const setUploadMode = (mode, work = null) => {
+        uploadMode = mode === 'edit' ? 'edit' : 'create';
+        editingWorkId = uploadMode === 'edit' && work?.id ? work.id : '';
+        clearUploadForm();
+
+        if (uploadMode === 'edit' && work) {
+          uploadCnTitleInput.value = work.cnTitle || '';
+          uploadEnTitleInput.value = work.enTitle || '';
+          uploadCnSubInput.value = work.cnSub || '';
+          uploadEnSubInput.value = work.enSub || '';
+        }
+
+        syncUploadModeUi();
+      };
+
+      const openEditorForWork = (work) => {
+        setUploadMode('edit', work);
+        setUploadStatus('uploadIdle');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        uploadCnTitleInput.focus();
+      };
+
+      const uploadAsset = async (file, kind) => {
+        const response = await fetch(serviceUrl(`/api/upload-file?kind=${encodeURIComponent(kind)}&filename=${encodeURIComponent(file.name)}`), {
+          method: 'POST',
+          headers: {
+            'Content-Type': file.type || 'application/octet-stream',
+          },
+          body: file,
+        });
+        const payload = await response.json().catch(() => ({}));
+
+        if (!response.ok || !payload.path) {
+          throw new Error(payload.error || translations[state.lang].uploadUnavailable);
+        }
+
+        return payload.path;
+      };
+
+      const saveUploadedWork = async (work) => {
+        const response = await fetch(serviceUrl('/api/works'), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(work),
+        });
+        const payload = await response.json().catch(() => ({}));
+
+        if (!response.ok || !payload.work) {
+          throw new Error(payload.error || translations[state.lang].uploadUnavailable);
+        }
+
+        return normalizeWork(payload.work);
+      };
+
+      const updateUploadedWork = async (workId, work) => {
+        const response = await fetch(serviceUrl(`/api/works/${encodeURIComponent(workId)}`), {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(work),
+        });
+        const payload = await response.json().catch(() => ({}));
+
+        if (!response.ok || !payload.work) {
+          throw new Error(payload.error || translations[state.lang].uploadUnavailable);
+        }
+
+        return normalizeWork(payload.work);
+      };
+
+      const deleteUploadedWorkRequest = async (workId) => {
+        const response = await fetch(serviceUrl(`/api/works/${encodeURIComponent(workId)}`), {
+          method: 'DELETE',
+        });
+        const payload = await response.json().catch(() => ({}));
+
+        if (!response.ok || !payload.ok) {
+          throw new Error(payload.error || translations[state.lang].uploadUnavailable);
+        }
+      };
+
+      const hydrateUploadedWorks = async () => {
+        try {
+          const response = await fetch(serviceUrl('/api/works'), { cache: 'no-store' });
+          const payload = await response.json().catch(() => ({}));
+          uploadedWorkData = Array.isArray(payload.works) ? payload.works.map(normalizeWork) : [];
+        } catch (_) {
+          uploadedWorkData = [];
+        }
+      };
+
+      const waitForVideoEvent = (video, eventName) => new Promise((resolve, reject) => {
+        const onSuccess = () => {
+          cleanup();
+          resolve();
+        };
+        const onError = () => {
+          cleanup();
+          reject(new Error('Unable to read the selected video.'));
+        };
+        const cleanup = () => {
+          video.removeEventListener(eventName, onSuccess);
+          video.removeEventListener('error', onError);
+        };
+
+        video.addEventListener(eventName, onSuccess, { once: true });
+        video.addEventListener('error', onError, { once: true });
+      });
+
+      const generatePosterFromVideo = async (videoFile) => {
+        const objectUrl = URL.createObjectURL(videoFile);
+        const video = document.createElement('video');
+        video.preload = 'metadata';
+        video.muted = true;
+        video.playsInline = true;
+        video.src = objectUrl;
+
+        try {
+          await waitForVideoEvent(video, 'loadedmetadata');
+
+          if (video.readyState < 2) {
+            const seekTime = Number.isFinite(video.duration) && video.duration > 0.4
+              ? Math.min(video.duration * 0.2, 1.2)
+              : 0;
+
+            if (seekTime > 0) {
+              video.currentTime = seekTime;
+              await waitForVideoEvent(video, 'seeked');
+            } else {
+              await waitForVideoEvent(video, 'loadeddata');
+            }
+          }
+
+          const sourceWidth = video.videoWidth || 1280;
+          const sourceHeight = video.videoHeight || 720;
+          const targetWidth = Math.min(sourceWidth, 1600);
+          const targetHeight = Math.max(1, Math.round(targetWidth * (sourceHeight / sourceWidth)));
+          const canvas = document.createElement('canvas');
+          canvas.width = targetWidth;
+          canvas.height = targetHeight;
+          const context = canvas.getContext('2d');
+
+          if (!context) {
+            throw new Error(translations[state.lang].uploadUnavailable);
+          }
+
+          context.drawImage(video, 0, 0, targetWidth, targetHeight);
+
+          const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.9));
+          if (!blob) {
+            throw new Error('Unable to generate a poster image from the selected video.');
+          }
+
+          const stem = (videoFile.name || 'poster').replace(/\.[^.]+$/, '') || 'poster';
+          return new File([blob], `${stem}-poster.jpg`, { type: 'image/jpeg' });
+        } finally {
+          URL.revokeObjectURL(objectUrl);
+        }
+      };
+
+      const formatStamp = (value) => {
+        if (!value) return '—';
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return value;
+        return state.lang === 'cn'
+          ? date.toLocaleString('zh-CN', { hour12: false })
+          : date.toLocaleString('en-US', { hour12: false });
+      };
+
+      const renderManagedWorks = () => {
+        const copy = translations[state.lang];
+        const works = managedWorks();
+
+        if (!works.length) {
+          manageList.innerHTML = `<div class="manage-empty">${escapeHtml(copy.manageEmpty)}</div>`;
+          updateHeroMetrics();
+          return;
+        }
+
+        manageList.innerHTML = works.map((item) => {
+          const title = escapeHtml(state.lang === 'cn' ? item.cnTitle : item.enTitle);
+          const subtitle = escapeHtml(state.lang === 'cn' ? item.cnSub : item.enSub);
+          const createdAt = escapeHtml(formatStamp(item.createdAt));
+          const videoPath = escapeHtml(item.video || '—');
+          const posterPath = escapeHtml(item.poster || copy.manageNoPoster);
+          const preview = item.poster
+            ? `<img src="${escapeHtml(item.poster)}" alt="${title}" loading="lazy" />`
+            : `<div class="preview-fallback">${escapeHtml(copy.manageNoPoster)}</div>`;
+
+          return `
+            <article class="manage-card" data-work-id="${escapeHtml(item.id)}">
+              <div class="manage-preview">${preview}</div>
+              <div class="manage-copy">
+                <div class="manage-title-row">
+                  <div class="manage-title">
+                    <h3>${title}</h3>
+                    <p>${subtitle}</p>
+                  </div>
+                  <span class="pill">${escapeHtml(copy.manageItemTag)}</span>
+                </div>
+                <div class="meta-grid">
+                  <div class="meta-row">
+                    <strong>${escapeHtml(copy.manageCreated)}</strong>
+                    <span>${createdAt}</span>
+                  </div>
+                  <div class="meta-row">
+                    <strong>${escapeHtml(copy.manageVideo)}</strong>
+                    <span>${videoPath}</span>
+                  </div>
+                  <div class="meta-row">
+                    <strong>${escapeHtml(copy.managePoster)}</strong>
+                    <span>${posterPath}</span>
+                  </div>
+                </div>
+                <div class="manage-actions">
+                  <button class="btn" type="button" data-edit-work="${escapeHtml(item.id)}">${escapeHtml(copy.manageEdit)}</button>
+                  <button class="btn danger" type="button" data-delete-work="${escapeHtml(item.id)}">${escapeHtml(copy.manageDelete)}</button>
+                </div>
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        updateHeroMetrics();
+      };
+
+      const applyLanguage = (lang) => {
+        state.lang = lang;
+        localStorage.setItem('site-lang', lang);
+        document.documentElement.lang = lang === 'cn' ? 'zh-CN' : 'en';
+
+        const copy = translations[lang];
+        document.title = copy.pageTitle;
+        brandRole.textContent = copy.brandRole;
+        if (publicSiteLink) publicSiteLink.href = serviceUrl('/');
+        publicSiteLinkLabel.textContent = copy.publicSiteLink;
+        heroEyebrow.textContent = copy.heroEyebrow;
+        heroTitle.textContent = copy.heroTitle;
+        heroDesc.textContent = copy.heroDesc;
+        heroWorkCountLabel.textContent = copy.heroWorkCountLabel;
+        heroFormatLabel.textContent = copy.heroFormatLabel;
+        privacyKicker.textContent = copy.privacyKicker;
+        privacyNote.textContent = copy.privacyNote;
+        syncKicker.textContent = copy.syncKicker;
+        syncNote.textContent = copy.syncNote;
+        uploadEyebrow.textContent = copy.uploadEyebrow;
+        uploadPanelTitle.textContent = copy.uploadTitle;
+        uploadPanelNote.textContent = copy.uploadNote;
+        uploadCnTitleLabel.textContent = copy.uploadCnTitleLabel;
+        uploadEnTitleLabel.textContent = copy.uploadEnTitleLabel;
+        uploadCnSubLabel.textContent = copy.uploadCnSubLabel;
+        uploadEnSubLabel.textContent = copy.uploadEnSubLabel;
+        uploadVideoLabel.textContent = copy.uploadVideoLabel;
+        uploadPosterLabel.textContent = copy.uploadPosterLabel;
+        uploadVideoHelp.textContent = copy.uploadVideoHelp;
+        uploadPosterHelp.textContent = copy.uploadPosterHelp;
+        uploadHint.textContent = copy.uploadHint;
+        uploadCnTitleInput.placeholder = copy.uploadCnTitlePlaceholder;
+        uploadEnTitleInput.placeholder = copy.uploadEnTitlePlaceholder;
+        uploadCnSubInput.placeholder = copy.uploadCnSubPlaceholder;
+        uploadEnSubInput.placeholder = copy.uploadEnSubPlaceholder;
+        manageKicker.textContent = copy.manageKicker;
+        manageTitle.textContent = copy.manageTitle;
+        manageNote.textContent = copy.manageNote;
+        langCurrent.textContent = copy.langCurrent;
+        langTarget.textContent = copy.langTarget;
+        syncUploadModeUi();
+        paintUploadStatus();
+        renderManagedWorks();
+      };
+
+      langSwitch.addEventListener('click', () => {
+        applyLanguage(state.lang === 'cn' ? 'en' : 'cn');
+      });
+
+      uploadCancelEdit.addEventListener('click', () => {
+        setUploadMode('create');
+        setUploadStatus('uploadIdle');
+        uploadCnTitleInput.focus();
+      });
+
+      manageList.addEventListener('click', async (event) => {
+        const editButton = event.target.closest('[data-edit-work]');
+        const deleteButton = event.target.closest('[data-delete-work]');
+
+        if (editButton) {
+          const workId = editButton.getAttribute('data-edit-work') || '';
+          const work = findUploadedWork(workId);
+          if (!work) return;
+          openEditorForWork(work);
+          return;
+        }
+
+        if (!deleteButton || uploadSubmitting) return;
+
+        const workId = deleteButton.getAttribute('data-delete-work') || '';
+        const work = findUploadedWork(workId);
+        if (!work) return;
+        if (!window.confirm(translations[state.lang].uploadDeleteConfirm)) return;
+
+        setUploadSubmitting(true);
+        setUploadStatus('uploadDeletingWork', 'pending');
+
+        try {
+          await deleteUploadedWorkRequest(workId);
+          removeUploadedWork(workId);
+          renderManagedWorks();
+          if (editingWorkId === workId) {
+            setUploadMode('create');
+          }
+          setUploadStatus('uploadDeleted', 'success');
+        } catch (error) {
+          setUploadStatus('uploadUnavailable', 'error', error instanceof Error ? error.message : translations[state.lang].uploadUnavailable);
+        } finally {
+          setUploadSubmitting(false);
+        }
+      });
+
+      uploadForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (uploadSubmitting) return;
+
+        const currentWork = uploadMode === 'edit' ? findUploadedWork(editingWorkId) : null;
+        const wasEditing = uploadMode === 'edit' && !!currentWork;
+        const videoFile = uploadVideoInput.files?.[0];
+        const posterFile = uploadPosterInput.files?.[0];
+
+        if (uploadMode === 'create' && !videoFile) {
+          setUploadStatus('uploadNeedVideo', 'error');
+          return;
+        }
+
+        if (uploadMode === 'edit' && !currentWork) {
+          setUploadMode('create');
+          setUploadStatus('uploadUnavailable', 'error');
+          return;
+        }
+
+        setUploadSubmitting(true);
+
+        try {
+          let video = currentWork?.video || '';
+          if (videoFile) {
+            setUploadStatus('uploadUploadingVideo', 'pending');
+            video = await uploadAsset(videoFile, 'video');
+          }
+
+          let poster = currentWork?.poster || '';
+          if (posterFile) {
+            setUploadStatus('uploadUploadingPoster', 'pending');
+            poster = await uploadAsset(posterFile, 'poster');
+          } else if (!poster && videoFile) {
+            setUploadStatus('uploadGeneratingPoster', 'pending');
+            const generatedPoster = await generatePosterFromVideo(videoFile);
+            setUploadStatus('uploadUploadingPoster', 'pending');
+            poster = await uploadAsset(generatedPoster, 'poster');
+          }
+
+          const nextWorkPayload = {
+            cnTitle: uploadCnTitleInput.value || '',
+            enTitle: uploadEnTitleInput.value || '',
+            cnSub: uploadCnSubInput.value || '',
+            enSub: uploadEnSubInput.value || '',
+            video,
+            poster,
+          };
+
+          let savedWork;
+          if (uploadMode === 'edit' && currentWork) {
+            setUploadStatus('uploadUpdatingWork', 'pending');
+            savedWork = await updateUploadedWork(currentWork.id, nextWorkPayload);
+            replaceUploadedWork(savedWork);
+          } else {
+            setUploadStatus('uploadSavingWork', 'pending');
+            savedWork = await saveUploadedWork(nextWorkPayload);
+            replaceUploadedWork(savedWork);
+          }
+
+          renderManagedWorks();
+          setUploadMode('create');
+          setUploadStatus(wasEditing ? 'uploadUpdated' : 'uploadSuccess', 'success');
+        } catch (error) {
+          setUploadStatus('uploadUnavailable', 'error', error instanceof Error ? error.message : translations[state.lang].uploadUnavailable);
+        } finally {
+          setUploadSubmitting(false);
+        }
+      });
+
+      hydrateUploadedWorks().then(() => {
+        setUploadMode('create');
+        applyLanguage(state.lang);
+      });
+    })();
+  </script>
+</body>
+</html>

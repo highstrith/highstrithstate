@@ -193,7 +193,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      min-width: 160px;
+      min-width: 0;
       justify-content: flex-end;
     }
 
@@ -411,6 +411,11 @@
       justify-content: flex-end;
     }
 
+    .work-meta {
+      display: grid;
+      gap: 10px;
+    }
+
     .tag {
       padding: 10px 14px;
       border-radius: 999px;
@@ -453,6 +458,7 @@
       aspect-ratio: 4 / 3;
       overflow: hidden;
       background:
+        var(--poster-image, none) center / cover no-repeat,
         radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.12), transparent 20%),
         linear-gradient(180deg, rgba(24, 28, 38, 0.94), rgba(9, 11, 18, 0.98));
     }
@@ -481,6 +487,7 @@
     }
 
     .work-video.is-ready { opacity: 1; }
+    .work-video.is-unavailable { opacity: 0; }
     .work-card:hover .work-video { transform: scale(1.08); filter: saturate(1.1) contrast(1.08) brightness(0.92); }
 
     .work-badge {
@@ -778,7 +785,7 @@
         order: 3;
         width: 100%;
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 42px;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 42px;
         gap: 8px;
         margin-left: 0;
       }
@@ -988,6 +995,9 @@
       </nav>
 
       <div class="actions">
+        <a class="chip-btn" id="adminEntryLink" href="/admin.html" aria-label="打开管理页">
+          <strong id="adminEntryLabel">管理入口</strong>
+        </a>
         <button class="chip-btn" id="musicToggle" type="button" aria-pressed="false" aria-label="播放背景音乐">
           <strong>氛围音乐</strong>
           <span>OFF</span>
@@ -1176,7 +1186,7 @@
   <audio id="bgMusic" src="assets/background-music.mp3" preload="none" loop></audio>
 
     <script>
-    (() => {
+    (async () => {
       if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
       }
@@ -1184,6 +1194,8 @@
       const state = {
         lang: 'cn'
       };
+      const localServiceOrigin = window.location.protocol === 'file:' ? 'http://127.0.0.1:3000' : window.location.origin;
+      const adminServiceUrl = new URL('/admin.html', `${localServiceOrigin}/`).toString();
 
       const translations = {
         cn: {
@@ -1194,6 +1206,8 @@
           navContact: '联系',
           pageTitle: 'Highstrith | 3D 艺术家与视频剪辑',
           brandRole: '3D 艺术家与视频剪辑',
+          adminEntry: '管理入口',
+          adminEntryAria: '打开管理页',
           musicLabel: '氛围音乐',
           heroEyebrow: '3D 设计 / 动画 / 视频剪辑',
           heroTitle1: '让视觉更像电影，',
@@ -1205,6 +1219,44 @@
           worksKicker: '精选作品',
           worksTitle: '用镜头、节奏和材质建立可信的视觉记忆。',
           worksNote: '精选项目以卡片网格呈现，方便快速浏览作品方向、视频质感和内容类型，也适合移动端逐个查看。',
+          uploadEyebrow: '作品入库',
+          uploadTitle: '上传新作品，自动加入当前作品集。',
+          uploadNote: '选择视频、封面和标题信息后，网站会把文件保存到当前站点目录，并立即把新作品加入现有网格。',
+          uploadModeCreate: '当前为新建模式。',
+          uploadModeEdit: '当前为编辑模式，你可以修改标题，也可以替换视频或封面。',
+          uploadToggleOpen: '展开上传面板',
+          uploadToggleClose: '收起上传面板',
+          uploadCnTitleLabel: '中文标题',
+          uploadEnTitleLabel: '英文标题',
+          uploadCnSubLabel: '中文副标题',
+          uploadEnSubLabel: '英文副标题',
+          uploadCnTitlePlaceholder: '例如：新品发布短片',
+          uploadEnTitlePlaceholder: 'For example: Product Launch Film',
+          uploadCnSubPlaceholder: '例如：品牌 / 剪辑',
+          uploadEnSubPlaceholder: 'For example: BRAND / EDIT',
+          uploadVideoLabel: '作品视频（MP4）',
+          uploadPosterLabel: '封面图（可选）',
+          uploadVideoHelp: '目前支持 MP4，建议上传压缩后的成片，减少浏览时的加载压力。',
+          uploadPosterHelp: '支持 PNG、JPG、JPEG、WEBP；如果不传，卡片会先用默认背景显示。',
+          uploadSubmit: '上传并加入作品集',
+          uploadUpdate: '保存作品修改',
+          uploadCancelEdit: '取消编辑',
+          uploadHint: '上传成功后，作品会保存在本地 assets/uploads，刷新页面后仍会保留。',
+          uploadIdle: '上传面板已准备好。',
+          uploadNeedVideo: '请先选择一个 MP4 视频文件。',
+          uploadGeneratingPoster: '正在从视频自动生成封面…',
+          uploadUploadingVideo: '正在上传视频文件…',
+          uploadUploadingPoster: '正在上传封面图…',
+          uploadSavingWork: '正在写入作品信息…',
+          uploadUpdatingWork: '正在保存作品修改…',
+          uploadDeletingWork: '正在删除作品…',
+          uploadSuccess: '上传完成，新作品已经加入作品集。',
+          uploadUpdated: '作品修改已保存。',
+          uploadDeleted: '作品已删除。',
+          uploadDeleteConfirm: '确定删除这条已上传作品吗？对应的视频和封面也会一并移除。',
+          workEdit: '编辑',
+          workDelete: '删除',
+          uploadUnavailable: '当前本地服务暂时不可用，稍后再试。',
           processKicker: '制作流程',
           processTitle: '从想法到成片，让每一步都服务最终画面。',
           processNote: '每个项目都会先明确目标、受众和发布场景，再进入视觉制作与交付适配，减少返工，也让沟通更高效。',
@@ -1235,6 +1287,8 @@
           navContact: 'Contact',
           pageTitle: 'Highstrith | 3D Artist & Video Editor',
           brandRole: '3D Artist & Video Editor',
+          adminEntry: 'Admin',
+          adminEntryAria: 'Open admin page',
           musicLabel: 'Ambient',
           heroEyebrow: '3D Design / Motion / Video Editing',
           heroTitle1: 'Making visuals feel cinematic,',
@@ -1246,6 +1300,44 @@
           worksKicker: 'Selected Works',
           worksTitle: 'Building memorable visuals through camera, rhythm, and material detail.',
           worksNote: 'Selected projects are presented in a clear card grid so visitors can scan direction, motion quality, and content type quickly on desktop or mobile.',
+          uploadEyebrow: 'Work Intake',
+          uploadTitle: 'Upload a new project and add it to the current portfolio.',
+          uploadNote: 'Choose a video, poster, and titles, then the site will save the files into this project folder and add the new work to the existing grid right away.',
+          uploadModeCreate: 'Create mode is active.',
+          uploadModeEdit: 'Edit mode is active. You can change titles or replace the video and poster.',
+          uploadToggleOpen: 'Open Upload Panel',
+          uploadToggleClose: 'Hide Upload Panel',
+          uploadCnTitleLabel: 'Chinese Title',
+          uploadEnTitleLabel: 'English Title',
+          uploadCnSubLabel: 'Chinese Subtitle',
+          uploadEnSubLabel: 'English Subtitle',
+          uploadCnTitlePlaceholder: 'For example: Product Launch Film',
+          uploadEnTitlePlaceholder: 'For example: Product Launch Film',
+          uploadCnSubPlaceholder: 'For example: BRAND / EDIT',
+          uploadEnSubPlaceholder: 'For example: BRAND / EDIT',
+          uploadVideoLabel: 'Project Video (MP4)',
+          uploadPosterLabel: 'Poster Image (Optional)',
+          uploadVideoHelp: 'MP4 is supported for now. Uploading a compressed deliverable will keep browsing smoother.',
+          uploadPosterHelp: 'PNG, JPG, JPEG, and WEBP are supported. If you skip it, the card falls back to the default background.',
+          uploadSubmit: 'Upload and Add to Portfolio',
+          uploadUpdate: 'Save Changes',
+          uploadCancelEdit: 'Cancel Edit',
+          uploadHint: 'Successful uploads are stored under assets/uploads and stay available after a refresh.',
+          uploadIdle: 'The upload panel is ready.',
+          uploadNeedVideo: 'Please choose an MP4 video file first.',
+          uploadGeneratingPoster: 'Generating a poster from the selected video…',
+          uploadUploadingVideo: 'Uploading the video file…',
+          uploadUploadingPoster: 'Uploading the poster image…',
+          uploadSavingWork: 'Saving the work entry…',
+          uploadUpdatingWork: 'Saving the work changes…',
+          uploadDeletingWork: 'Deleting the work…',
+          uploadSuccess: 'Upload complete. The new work is now in the portfolio.',
+          uploadUpdated: 'The work changes have been saved.',
+          uploadDeleted: 'The work has been deleted.',
+          uploadDeleteConfirm: 'Delete this uploaded work? Its video and poster files will be removed as well.',
+          workEdit: 'Edit',
+          workDelete: 'Delete',
+          uploadUnavailable: 'The local upload service is unavailable right now. Please try again shortly.',
           processKicker: 'Workflow',
           processTitle: 'From idea to final cut, every step serves the image.',
           processNote: 'Each project starts with goals, audience, and delivery context before moving into production and format adaptation, keeping feedback focused and efficient.',
@@ -1270,7 +1362,7 @@
         }
       };
 
-      const workData = [
+      const baseWorkData = [
         { cnTitle: '未来序章', enTitle: 'Future Prologue', cnSub: '开场 / 3D', enSub: 'OPENING / 3D', video: 'assets/work-01.mp4' },
         { cnTitle: '机械幻景', enTitle: 'Mechanical Mirage', cnSub: '动效 / 设计', enSub: 'MOTION / DESIGN', video: 'assets/work-02.mp4' },
         { cnTitle: 'UE5 Test', enTitle: 'UE5 Study', cnSub: '环境 / 研究', enSub: 'ENVIRONMENT / STUDY', video: 'assets/work-03.mp4' },
@@ -1296,6 +1388,8 @@
       const sections = [...document.querySelectorAll('main section[id]')];
       const musicToggle = document.getElementById('musicToggle');
       const langSwitch = document.getElementById('langSwitch');
+      const adminEntryLink = document.getElementById('adminEntryLink');
+      const adminEntryLabel = document.getElementById('adminEntryLabel');
       const langCurrent = document.getElementById('langCurrent');
       const langTarget = document.getElementById('langTarget');
       const brandRole = document.querySelector('.brand-copy span');
@@ -1305,6 +1399,7 @@
       const heroTitleLines = [...document.querySelectorAll('.hero h1 .hero-title-line')];
       const heroLede = document.querySelector('.hero .lede');
       const heroButtons = [...document.querySelectorAll('.hero .cta-row .btn')];
+      const heroMetricValues = [...document.querySelectorAll('.hero-metrics .metric strong')];
       const heroMetrics = [...document.querySelectorAll('.hero-metrics .metric span')];
       const worksKicker = document.querySelector('#works .kicker');
       const worksTitle = document.querySelector('#works .section-title');
@@ -1322,9 +1417,56 @@
       const footerMain = document.querySelector('.footer > div:last-child');
       const workTagRows = [...document.querySelectorAll('.tag-row .tag')];
       const heroVideo = document.querySelector('.hero-video');
+      const WORK_VIDEO_MARGIN = 120;
       let musicPlaying = false;
+      let uploadedWorkData = [];
       let revealObserver = null;
       let videoObserver = null;
+      let workVideoSyncFrame = 0;
+
+      const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+      }[char]));
+
+      const normalizeWork = (item) => {
+        const cnTitle = (item?.cnTitle || item?.enTitle || '未命名作品').trim();
+        const enTitle = (item?.enTitle || item?.cnTitle || 'Untitled Work').trim();
+        const cnSub = (item?.cnSub || item?.enSub || '自定义上传').trim();
+        const enSub = (item?.enSub || item?.cnSub || 'CUSTOM UPLOAD').trim();
+
+        return {
+          id: item?.id || '',
+          createdAt: item?.createdAt || '',
+          cnTitle,
+          enTitle,
+          cnSub,
+          enSub,
+          video: item?.video || '',
+          poster: item?.poster || '',
+        };
+      };
+
+      const allWorkData = () => [...uploadedWorkData, ...baseWorkData].map(normalizeWork);
+
+      const workPosterFor = (item) => item?.poster || posterFor(item?.video || '');
+
+      const updateHeroMetrics = () => {
+        if (heroMetricValues[0]) heroMetricValues[0].textContent = String(allWorkData().length);
+      };
+
+      const hydrateUploadedWorks = async () => {
+        try {
+          const response = await fetch('/api/works', { cache: 'no-store' });
+          const payload = await response.json().catch(() => ({}));
+          uploadedWorkData = Array.isArray(payload.works) ? payload.works.map(normalizeWork) : [];
+        } catch (_) {
+          uploadedWorkData = [];
+        }
+      };
 
       const posterFor = (videoSrc) => {
         const match = videoSrc.match(/(?:^|\/)([^/]+)\.mp4$/i);
@@ -1340,6 +1482,10 @@
 
         if (nextPoster && currentPoster !== nextPoster) {
           video.setAttribute('poster', nextPoster);
+        }
+
+        if (nextPoster) {
+          video.closest('.video-shell')?.style.setProperty('--poster-image', `url("${nextPoster}")`);
         }
       };
 
@@ -1361,21 +1507,48 @@
         video.pause();
         source.removeAttribute('src');
         video.load();
-        video.classList.remove('is-ready');
+        markVideoUnavailable(video);
       };
 
-      const releaseDistantWorkVideos = () => {
+      const syncWorkVideos = () => {
+        workVideoSyncFrame = 0;
+        const shouldAutoload = canAutoloadWorkVideos();
+
         document.querySelectorAll('.work-video').forEach((video) => {
           const rect = video.getBoundingClientRect();
-          const farAbove = rect.bottom < -360;
-          const farBelow = rect.top > window.innerHeight + 360;
-          if (farAbove || farBelow) unloadVideo(video);
+          const inViewport = rect.bottom > 0 && rect.top < window.innerHeight;
+          const nearViewport = rect.bottom > -WORK_VIDEO_MARGIN && rect.top < window.innerHeight + WORK_VIDEO_MARGIN;
+
+          if (shouldAutoload && nearViewport) {
+            loadVideo(video);
+            if (inViewport) tryPlay(video);
+            else video.pause();
+            if (video.readyState >= 2) markVideoReady(video);
+            return;
+          }
+
+          video.pause();
+          markVideoUnavailable(video);
+
+          if (!nearViewport) unloadVideo(video);
         });
+      };
+
+      const scheduleWorkVideoSync = () => {
+        if (workVideoSyncFrame) return;
+        workVideoSyncFrame = window.requestAnimationFrame(syncWorkVideos);
       };
 
       const markVideoReady = (video) => {
         if (!video) return;
         video.classList.add('is-ready');
+        video.classList.remove('is-unavailable');
+      };
+
+      const markVideoUnavailable = (video) => {
+        if (!video) return;
+        video.classList.remove('is-ready');
+        video.classList.add('is-unavailable');
       };
 
       const initHeroVideo = async () => {
@@ -1466,15 +1639,6 @@
         return window.location.hash === '#works' || window.scrollY > 160;
       };
 
-      const loadVisibleWorkVideos = () => {
-        if (!canAutoloadWorkVideos()) return;
-        document.querySelectorAll('.work-video').forEach((video) => {
-          const rect = video.getBoundingClientRect();
-          const visible = rect.bottom > 0 && rect.top < window.innerHeight;
-          if (visible && loadVideo(video)) tryPlay(video);
-        });
-      };
-
       const scrollToHashTarget = () => {
         const target = currentHashTarget();
         if (!target) return;
@@ -1483,10 +1647,9 @@
           const targetTop = target.getBoundingClientRect().top + window.scrollY - topbarHeight - 24;
           window.scrollTo({ top: Math.max(0, targetTop), behavior: 'auto' });
           setActiveNav(target.id);
-          releaseDistantWorkVideos();
-          loadVisibleWorkVideos();
-          setTimeout(releaseDistantWorkVideos, 120);
-          setTimeout(releaseDistantWorkVideos, 420);
+          scheduleWorkVideoSync();
+          setTimeout(scheduleWorkVideoSync, 120);
+          setTimeout(scheduleWorkVideoSync, 420);
           setTimeout(updateActiveNav, 80);
         });
       };
@@ -1535,18 +1698,8 @@
 
         videoObserver = 'IntersectionObserver' in window
           ? new IntersectionObserver((entries) => {
-              entries.forEach((entry) => {
-                const video = entry.target;
-                if (entry.isIntersecting && canAutoloadWorkVideos()) {
-                  if (loadVideo(video)) tryPlay(video);
-                } else {
-                  video.pause();
-                  if (entry.boundingClientRect.top > window.innerHeight + 420 || entry.boundingClientRect.bottom < -420) {
-                    unloadVideo(video);
-                  }
-                }
-              });
-            }, { rootMargin: '0px 0px', threshold: 0.18 })
+              if (entries.length) scheduleWorkVideoSync();
+            }, { rootMargin: `${WORK_VIDEO_MARGIN}px 0px`, threshold: 0.01 })
           : null;
 
         document.querySelectorAll('.reveal').forEach((element) => {
@@ -1557,22 +1710,27 @@
         document.querySelectorAll('[data-autoplay-video]').forEach((video) => {
           const source = video.querySelector('source');
           if (source?.src || video.currentSrc) markVideoReady(video);
+          if (video.readyState >= 2) markVideoReady(video);
           if (videoObserver) videoObserver.observe(video);
           else loadVideo(video);
         });
+
+        scheduleWorkVideoSync();
       };
 
       const renderWorks = () => {
-        worksGrid.innerHTML = workData.map((item, index) => {
+        worksGrid.innerHTML = allWorkData().map((item, index) => {
           const number = String(index + 1).padStart(2, '0');
-          const title = state.lang === 'cn' ? item.cnTitle : item.enTitle;
-          const subtitle = state.lang === 'cn' ? item.cnSub : item.enSub;
+          const title = escapeHtml(state.lang === 'cn' ? item.cnTitle : item.enTitle);
+          const subtitle = escapeHtml(state.lang === 'cn' ? item.cnSub : item.enSub);
           const soundLabel = state.lang === 'cn' ? '切换声音' : 'Toggle sound';
+          const posterPath = escapeHtml(workPosterFor(item));
+          const videoPath = escapeHtml(item.video);
           return `
-            <article class="work-card reveal" style="--delay: ${80 + index * 18}ms;">
+            <article class="work-card reveal" data-work-id="${escapeHtml(item.id || '')}" style="--delay: ${80 + index * 18}ms;">
               <div class="video-shell">
-                <video class="work-video" data-autoplay-video muted loop playsinline preload="none" poster="${posterFor(item.video)}">
-                  <source data-src="${item.video}" type="video/mp4" />
+                <video class="work-video" data-autoplay-video muted loop playsinline preload="none" poster="${posterPath}">
+                  <source data-src="${videoPath}" type="video/mp4" />
                 </video>
                 <div class="work-badge">${number}</div>
                 <button class="sound-btn" type="button" data-sound-toggle aria-label="${soundLabel}">
@@ -1592,7 +1750,9 @@
               </div>
               <div class="work-info">
                 <h3>${title}</h3>
-                <p>${subtitle}</p>
+                <div class="work-meta">
+                  <p>${subtitle}</p>
+                </div>
               </div>
             </article>
           `;
@@ -1615,6 +1775,11 @@
         navLinks[3].textContent = copy.navAbout;
         navLinks[4].textContent = copy.navContact;
 
+        if (adminEntryLink) {
+          adminEntryLink.href = adminServiceUrl;
+          adminEntryLink.setAttribute('aria-label', copy.adminEntryAria);
+        }
+        if (adminEntryLabel) adminEntryLabel.textContent = copy.adminEntry;
         if (langCurrent) langCurrent.textContent = copy.langCurrent;
         if (langTarget) langTarget.textContent = copy.langTarget;
         if (brandRole) brandRole.textContent = copy.brandRole;
@@ -1627,6 +1792,7 @@
         if (heroLede) heroLede.textContent = copy.heroDesc;
         if (heroButtons[0]) heroButtons[0].querySelector('span').textContent = copy.heroPrimary;
         if (heroButtons[1]) heroButtons[1].querySelector('span').textContent = copy.heroSecondary;
+        updateHeroMetrics();
         if (heroMetrics[0]) heroMetrics[0].textContent = copy.heroMetrics[0];
         if (heroMetrics[1]) heroMetrics[1].textContent = copy.heroMetrics[1];
         if (heroMetrics[2]) heroMetrics[2].textContent = copy.heroMetrics[2];
@@ -1688,8 +1854,13 @@
       let releaseTimer = 0;
       window.addEventListener('scroll', () => {
         window.clearTimeout(releaseTimer);
-        releaseTimer = window.setTimeout(releaseDistantWorkVideos, 180);
-        loadVisibleWorkVideos();
+        releaseTimer = window.setTimeout(scheduleWorkVideoSync, 180);
+        scheduleWorkVideoSync();
+        updateActiveNav();
+      }, { passive: true });
+
+      window.addEventListener('resize', () => {
+        scheduleWorkVideoSync();
         updateActiveNav();
       }, { passive: true });
 
@@ -1716,6 +1887,7 @@
         window.addEventListener('keydown', autoStartMusic, { once: true });
       }
 
+      await hydrateUploadedWorks();
       applyLanguage(state.lang);
       window.addEventListener('hashchange', scrollToHashTarget);
     })();

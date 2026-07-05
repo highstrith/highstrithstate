@@ -1,3 +1,4 @@
 archive/
 .edge-mobile-profile/
 .pydeps/
+serve.*.log
