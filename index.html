@@ -773,21 +773,43 @@
       :root { --pad: 14px; }
       .shell { padding-top: 12px; }
       .topbar {
-        top: 8px;
+        position: static;
+        top: auto;
         padding: 12px;
         gap: 12px;
         border-radius: 28px;
       }
+      .topbar.is-public {
+        padding: 10px;
+        gap: 10px;
+        border-radius: 24px;
+      }
       .brand {
         width: 100%;
+      }
+      .topbar.is-public .brand {
+        gap: 10px;
       }
       .brand-mark {
         width: 38px;
         height: 38px;
         border-radius: 12px;
       }
+      .topbar.is-public .brand-mark {
+        width: 34px;
+        height: 34px;
+      }
       .brand-copy span {
         letter-spacing: 0.1em;
+      }
+      .topbar.is-public .brand-copy {
+        gap: 0;
+      }
+      .topbar.is-public .brand-copy strong {
+        font-size: 0.95rem;
+      }
+      .topbar.is-public .brand-copy span {
+        display: none;
       }
       .nav {
         order: 2;
@@ -797,6 +819,9 @@
         width: 100%;
         padding-bottom: 0;
         overflow: visible;
+      }
+      .topbar.is-public .nav {
+        gap: 6px;
       }
       .nav a {
         min-height: 38px;
@@ -808,6 +833,12 @@
         background: rgba(255, 255, 255, 0.03);
         font-size: 0.68rem;
         letter-spacing: 0.08em;
+      }
+      .topbar.is-public .nav a {
+        min-height: 34px;
+        padding: 0 4px;
+        font-size: 0.62rem;
+        letter-spacing: 0.04em;
       }
       .nav a::after {
         display: none;
@@ -826,12 +857,17 @@
       }
       .actions.is-public {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
       }
       .chip-btn {
         min-width: 0;
         min-height: 46px;
         padding: 0 14px;
         justify-content: space-between;
+      }
+      .topbar.is-public .chip-btn {
+        min-height: 42px;
+        padding: 0 12px;
       }
       #musicToggle {
         grid-column: 1 / -1;
@@ -874,7 +910,7 @@
       }
       .section {
         padding-top: 36px;
-        scroll-margin-top: 162px;
+        scroll-margin-top: 24px;
       }
       .work-card {
         border-radius: 20px;
@@ -1763,8 +1799,15 @@
         const target = currentHashTarget();
         if (!target) return;
         requestAnimationFrame(() => {
+          const compactViewport = window.matchMedia('(max-width: 700px)').matches;
           const topbarHeight = document.querySelector('.topbar')?.getBoundingClientRect().height || 0;
-          const targetTop = target.getBoundingClientRect().top + window.scrollY - topbarHeight - 24;
+          const anchorTarget = compactViewport && target.id === 'works' && worksGrid
+            ? worksGrid
+            : target;
+          const offset = compactViewport
+            ? (target.id === 'works' ? 12 : 18)
+            : topbarHeight + 24;
+          const targetTop = anchorTarget.getBoundingClientRect().top + window.scrollY - offset;
           window.scrollTo({ top: Math.max(0, targetTop), behavior: 'auto' });
           setActiveNav(target.id);
           scheduleWorkVideoSync();
@@ -1925,9 +1968,13 @@
           if (isLocalEditorHost) {
             adminEntryLink.href = adminServiceUrl;
             adminEntryLink.hidden = false;
+            adminEntryLink.style.display = '';
+            adminEntryLink.removeAttribute('aria-hidden');
             adminEntryLink.setAttribute('aria-label', copy.adminEntryAria);
           } else {
             adminEntryLink.hidden = true;
+            adminEntryLink.style.display = 'none';
+            adminEntryLink.setAttribute('aria-hidden', 'true');
           }
         }
         if (adminEntryLabel) adminEntryLabel.textContent = copy.adminEntry;
@@ -2004,6 +2051,7 @@
 
       if (topbar) {
         topbar.dataset.publicMode = isLocalEditorHost ? 'false' : 'true';
+        topbar.classList.toggle('is-public', !isLocalEditorHost);
       }
       if (actionsPanel) {
         actionsPanel.classList.toggle('is-public', !isLocalEditorHost);
