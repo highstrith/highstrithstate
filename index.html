@@ -967,6 +967,7 @@
       background: linear-gradient(180deg, rgba(6, 8, 14, 0.38), rgba(6, 8, 14, 0.56));
     }
 
+    .hero-poster,
     .hero-video {
       position: absolute;
       inset: 0;
@@ -974,9 +975,22 @@
       height: 100%;
       object-fit: cover;
       object-position: 68% 42%;
-      filter: saturate(1.03) contrast(1.05) brightness(0.7);
+    }
+
+    .hero-poster {
+      display: block;
+      filter: saturate(1.02) contrast(1.04) brightness(0.68);
       transform: scale(1.02);
     }
+
+    .hero-video {
+      filter: saturate(1.03) contrast(1.05) brightness(0.7);
+      transform: scale(1.02);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    .hero-video.is-ready { opacity: 1; }
 
     .hero-visual::before {
       background:
@@ -1161,7 +1175,8 @@
         </div>
 
         <div class="hero-visual reveal" style="--delay: 200ms;">
-          <video class="hero-video" autoplay muted loop playsinline preload="none" poster="assets/posters/hero-background.webp" aria-hidden="true">
+          <img class="hero-poster" src="assets/posters/hero-background.webp" alt="" decoding="async" fetchpriority="high" aria-hidden="true" />
+          <video class="hero-video" autoplay muted loop playsinline webkit-playsinline preload="metadata" poster="assets/posters/hero-background.webp" aria-hidden="true">
             <source data-src="assets/hero-background.mp4" type="video/mp4" />
           </video>
         </div>
@@ -1654,6 +1669,7 @@
           source.setAttribute('src', nextSrc);
           video.load();
         }
+        if (video.readyState >= 2) markVideoReady(video);
         return true;
       };
 
@@ -1712,6 +1728,13 @@
         const source = heroVideo.querySelector('source');
         if (!source) return;
 
+        if (!heroVideo.dataset.readyBound) {
+          ['loadeddata', 'canplay', 'playing', 'timeupdate'].forEach((eventName) => {
+            heroVideo.addEventListener(eventName, () => markVideoReady(heroVideo));
+          });
+          heroVideo.dataset.readyBound = 'true';
+        }
+
         if (!source.getAttribute('src')) {
           const nextSrc = source.dataset.src || '';
           if (!nextSrc) return;
@@ -1719,7 +1742,7 @@
         }
 
         heroVideo.load();
-        markVideoReady(heroVideo);
+        if (heroVideo.readyState >= 2) markVideoReady(heroVideo);
         await tryPlay(heroVideo);
       };
 
@@ -1824,8 +1847,9 @@
           if (!video || !button) return;
           setVideoPoster(video);
           setSoundState(button, true);
-          video.addEventListener('loadeddata', () => markVideoReady(video), { once: true });
-          video.addEventListener('canplay', () => markVideoReady(video), { once: true });
+          ['loadeddata', 'canplay', 'playing', 'timeupdate'].forEach((eventName) => {
+            video.addEventListener(eventName, () => markVideoReady(video));
+          });
           video.addEventListener('play', () => card.classList.add('is-active'));
           video.addEventListener('pause', () => card.classList.remove('is-active'));
           video.addEventListener('ended', () => card.classList.remove('is-active'));
@@ -1846,6 +1870,7 @@
           card.addEventListener('click', (event) => {
             if (!coarsePointer.matches || event.target.closest('[data-sound-toggle]')) return;
             loadVideo(video);
+            setVideoPoster(video);
 
             if (video.paused) {
               document.querySelectorAll('.work-card.is-active').forEach((activeCard) => {
@@ -1865,6 +1890,7 @@
             event.preventDefault();
             event.stopPropagation();
             loadVideo(video);
+            setVideoPoster(video);
             video.muted = !video.muted;
             setSoundState(button, video.muted);
             if (!video.paused) tryPlay(video);
@@ -1918,7 +1944,7 @@
             <article class="work-card reveal" data-work-id="${escapeHtml(item.id || '')}" style="--delay: ${80 + index * 18}ms;">
               <div class="video-shell">
                 ${posterPath ? `<img class="work-poster" src="${posterPath}" alt="" loading="lazy" decoding="async" />` : ''}
-                <video class="work-video" data-autoplay-video muted loop playsinline preload="none" poster="${posterPath}">
+                <video class="work-video" data-autoplay-video muted loop playsinline webkit-playsinline preload="metadata" poster="${posterPath}">
                   <source data-src="${videoPath}" type="video/mp4" />
                 </video>
                 <div class="work-badge">${number}</div>
