@@ -547,10 +547,9 @@
       background: #03050a;
     }
 
-    .work-player-close {
+    .work-player-control {
       position: absolute;
       top: 14px;
-      right: 14px;
       z-index: 2;
       width: 44px;
       height: 44px;
@@ -564,17 +563,41 @@
       backdrop-filter: blur(14px);
     }
 
-    .work-player-close svg {
+    .work-player-close {
+      right: 14px;
+    }
+
+    .work-player-orientation {
+      right: 68px;
+    }
+
+    .work-player-control svg {
       width: 19px;
       height: 19px;
       fill: none;
       stroke: currentColor;
       stroke-width: 2;
       stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .work-player-orientation .icon-portrait,
+    .work-player[data-orientation="landscape"] .work-player-orientation .icon-landscape {
+      display: none;
+    }
+
+    .work-player[data-orientation="landscape"] .work-player-orientation .icon-portrait {
+      display: block;
     }
 
     body.has-work-player {
       overflow: hidden;
+    }
+
+    @media (min-width: 701px) {
+      .work-player-orientation {
+        display: none;
+      }
     }
 
     .hover-open-progress {
@@ -1052,9 +1075,25 @@
         border-radius: 0;
         border: 0;
       }
+      .work-player-video {
+        transition: width 0.24s ease, height 0.24s ease, transform 0.24s ease;
+      }
+      .work-player.is-css-landscape .work-player-video {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 100svh;
+        height: 100vw;
+        transform: translate(-50%, -50%) rotate(90deg);
+        transform-origin: center;
+      }
       .work-player-close {
         top: 16px;
         right: 16px;
+      }
+      .work-player-orientation {
+        top: 16px;
+        right: 72px;
       }
     }
 
@@ -1449,7 +1488,11 @@
   <audio id="bgMusic" src="assets/background-music.mp3" preload="none" loop></audio>
   <div class="work-player" id="workPlayer" aria-hidden="true">
     <div class="work-player-panel" role="dialog" aria-modal="true" aria-label="作品视频播放器">
-      <button class="work-player-close" id="workPlayerClose" type="button" aria-label="关闭视频">
+      <button class="work-player-control work-player-orientation" id="workPlayerOrientation" type="button" aria-label="切换横屏播放" title="切换横屏播放">
+        <svg class="icon-landscape" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="10" rx="2"></rect><path d="M8 3 5 6l3 3M16 21l3-3-3-3"></path></svg>
+        <svg class="icon-portrait" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2"></rect><path d="M3 8 6 5l3 3M21 16l-3 3-3-3"></path></svg>
+      </button>
+      <button class="work-player-control work-player-close" id="workPlayerClose" type="button" aria-label="关闭视频">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>
       </button>
       <video class="work-player-video" id="workPlayerVideo" controls playsinline webkit-playsinline preload="metadata"></video>
@@ -1553,6 +1596,8 @@
           langTarget: 'EN',
           musicOn: '背景音乐已开启',
           musicOff: '播放背景音乐',
+          playerLandscape: '切换横屏播放',
+          playerPortrait: '切换竖屏播放',
           contactShortcut: '跳转到联系区',
           tag1: '品牌影像',
           tag2: '动态设计',
@@ -1634,6 +1679,8 @@
           langTarget: 'CN',
           musicOn: 'Background music on',
           musicOff: 'Play background music',
+          playerLandscape: 'Switch to landscape playback',
+          playerPortrait: 'Switch to portrait playback',
           contactShortcut: 'Jump to contact section',
           tag1: 'Brand Film',
           tag2: 'Motion Design',
@@ -1680,6 +1727,7 @@
       const workPlayer = document.getElementById('workPlayer');
       const workPlayerVideo = document.getElementById('workPlayerVideo');
       const workPlayerClose = document.getElementById('workPlayerClose');
+      const workPlayerOrientation = document.getElementById('workPlayerOrientation');
       const hoverOpenProgress = document.getElementById('hoverOpenProgress');
       const heroEyebrow = document.querySelector('.hero .eyebrow');
       const heroTitleLines = [...document.querySelectorAll('.hero h1 .hero-title-line')];
@@ -1714,6 +1762,8 @@
       let workPlaybackLocks = 0;
       let bgMusicResumeState = null;
       let workPlayerOpenedAt = 0;
+      let workPlayerOrientationMode = 'portrait';
+      let workPlayerFullscreenRequested = false;
       let hoverProgressFrame = 0;
       let hoverProgressStartedAt = 0;
 
@@ -2109,11 +2159,69 @@
         hoverOpenProgress.style.setProperty('--hover-angle', '0deg');
       };
 
+      const updateWorkPlayerOrientationLabel = () => {
+        if (!workPlayerOrientation) return;
+        const copy = translations[state.lang] || translations.cn;
+        const label = workPlayerOrientationMode === 'landscape' ? copy.playerPortrait : copy.playerLandscape;
+        workPlayerOrientation.setAttribute('aria-label', label);
+        workPlayerOrientation.setAttribute('title', label);
+      };
+
+      const requestWorkPlayerFullscreen = async () => {
+        if (!workPlayer || document.fullscreenElement) return true;
+        if (typeof workPlayer.requestFullscreen !== 'function') return false;
+
+        try {
+          await workPlayer.requestFullscreen({ navigationUI: 'hide' });
+          workPlayerFullscreenRequested = true;
+          return true;
+        } catch (_) {
+          return false;
+        }
+      };
+
+      const lockScreenOrientation = async (mode) => {
+        if (!screen.orientation || typeof screen.orientation.lock !== 'function') return false;
+
+        try {
+          if (!document.fullscreenElement) await requestWorkPlayerFullscreen();
+          await screen.orientation.lock(mode === 'landscape' ? 'landscape' : 'portrait');
+          return true;
+        } catch (_) {
+          return false;
+        }
+      };
+
+      const setWorkPlayerOrientation = async (mode, { lockNative = false } = {}) => {
+        workPlayerOrientationMode = mode === 'landscape' ? 'landscape' : 'portrait';
+        if (workPlayer) workPlayer.dataset.orientation = workPlayerOrientationMode;
+        updateWorkPlayerOrientationLabel();
+        if (workPlayer) workPlayer.classList.remove('is-css-landscape');
+        const nativeLocked = lockNative ? await lockScreenOrientation(workPlayerOrientationMode) : false;
+        if (workPlayerOrientationMode === 'landscape' && !nativeLocked) {
+          workPlayer?.classList.add('is-css-landscape');
+        }
+      };
+
+      const releaseWorkPlayerOrientation = async () => {
+        if (screen.orientation && typeof screen.orientation.unlock === 'function') {
+          try { screen.orientation.unlock(); } catch (_) {}
+        }
+
+        if (workPlayerFullscreenRequested && document.fullscreenElement === workPlayer && typeof document.exitFullscreen === 'function') {
+          try { await document.exitFullscreen(); } catch (_) {}
+        }
+
+        workPlayerFullscreenRequested = false;
+        await setWorkPlayerOrientation('portrait');
+      };
+
       const openWorkPlayer = async (video) => {
         if (!workPlayer || !workPlayerVideo || !video) return;
         const sourcePath = videoSourceFor(video);
         if (!sourcePath) return;
         cancelHoverProgress();
+        await setWorkPlayerOrientation('portrait');
 
         activeWorkVideo = video;
         const wasOpen = workPlayer.classList.contains('is-open');
@@ -2166,6 +2274,7 @@
         workPlayer.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('has-work-player');
         activeWorkVideo = null;
+        await releaseWorkPlayerOrientation();
         await releaseBackgroundMusic();
         scheduleWorkVideoSync();
       };
@@ -2379,6 +2488,7 @@
         if (workTagRows[1]) workTagRows[1].textContent = copy.tag2;
         if (workTagRows[2]) workTagRows[2].textContent = copy.tag3;
         if (workTagRows[3]) workTagRows[3].textContent = copy.tag4;
+        updateWorkPlayerOrientationLabel();
 
         renderWorks();
         scrollToHashTarget();
@@ -2395,6 +2505,11 @@
       }
 
       workPlayerClose?.addEventListener('click', closeWorkPlayer);
+      workPlayerOrientation?.addEventListener('click', async (event) => {
+        event.stopPropagation();
+        const nextMode = workPlayerOrientationMode === 'landscape' ? 'portrait' : 'landscape';
+        await setWorkPlayerOrientation(nextMode, { lockNative: true });
+      });
 
       workPlayer?.addEventListener('click', (event) => {
         if (Date.now() - workPlayerOpenedAt < 500) {
@@ -2405,6 +2520,10 @@
       });
 
       workPlayerVideo?.addEventListener('ended', closeWorkPlayer);
+
+      document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement !== workPlayer) workPlayerFullscreenRequested = false;
+      });
 
       window.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') closeWorkPlayer();
