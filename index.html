@@ -2580,6 +2580,7 @@
         window.addEventListener('keydown', autoStartMusic, { once: true });
       }
 
+      applyLanguage(state.lang);
       await hydrateUploadedWorks();
       applyLanguage(state.lang);
       window.addEventListener('hashchange', scrollToHashTarget);
