@@ -94,8 +94,8 @@ function uniqueStem(prefix) {
 function normalizeStoredWork(value) {
   const cnTitle = sanitizeText(value?.cnTitle, "Untitled Work", 80);
   const enTitle = sanitizeText(value?.enTitle, cnTitle || "Untitled Work", 80);
-  const cnSub = sanitizeText(value?.cnSub, "Custom Upload", 64);
-  const enSub = sanitizeText(value?.enSub, cnSub || "CUSTOM UPLOAD", 64);
+  const cnSub = sanitizeText(value?.cnSub, "", 64);
+  const enSub = sanitizeText(value?.enSub, "", 64);
 
   return {
     id: sanitizeText(value?.id, uniqueStem("work"), 48),
@@ -105,6 +105,7 @@ function normalizeStoredWork(value) {
     cnSub,
     enSub,
     video: typeof value?.video === "string" ? value.video : "",
+    mobileVideo: typeof value?.mobileVideo === "string" ? value.mobileVideo : "",
     poster: typeof value?.poster === "string" ? value.poster : "",
   };
 }
@@ -148,7 +149,8 @@ async function fileExists(fullPath) {
 
 async function deleteAssetIfUnused(assetRef, works, ignoredWorkId = "") {
   if (!assetRef) return;
-  const inUse = works.some((work) => work.id !== ignoredWorkId && (work.video === assetRef || work.poster === assetRef));
+  const inUse = works.some((work) => work.id !== ignoredWorkId
+    && (work.video === assetRef || work.mobileVideo === assetRef || work.poster === assetRef));
   if (inUse) return;
 
   const fullPath = resolveAssetReference(assetRef);
@@ -269,6 +271,7 @@ function buildWorkFromPayload(payload, existingWork = null) {
     cnSub: payload?.cnSub ?? existingWork?.cnSub,
     enSub: payload?.enSub ?? existingWork?.enSub,
     video: payload?.video ?? existingWork?.video,
+    mobileVideo: payload?.mobileVideo ?? existingWork?.mobileVideo ?? "",
     poster: payload?.poster ?? existingWork?.poster ?? "",
   });
 }
@@ -279,6 +282,11 @@ async function handleWorksPost(req, res) {
 
   if (!isAllowedAssetReference(payload?.video)) {
     sendJson(res, 400, { error: "Video path is invalid." });
+    return;
+  }
+
+  if (!isAllowedAssetReference(payload?.mobileVideo, true)) {
+    sendJson(res, 400, { error: "Mobile video path is invalid." });
     return;
   }
 
@@ -313,10 +321,16 @@ async function handleWorksPut(req, res, workId) {
   }
 
   const nextVideo = payload?.video ?? existingWork.video;
+  const nextMobileVideo = payload?.mobileVideo ?? existingWork.mobileVideo ?? "";
   const nextPoster = payload?.poster ?? existingWork.poster ?? "";
 
   if (!isAllowedAssetReference(nextVideo)) {
     sendJson(res, 400, { error: "Video path is invalid." });
+    return;
+  }
+
+  if (!isAllowedAssetReference(nextMobileVideo, true)) {
+    sendJson(res, 400, { error: "Mobile video path is invalid." });
     return;
   }
 
@@ -325,12 +339,20 @@ async function handleWorksPut(req, res, workId) {
     return;
   }
 
-  const updatedWork = buildWorkFromPayload({ ...payload, video: nextVideo, poster: nextPoster }, existingWork);
+  const updatedWork = buildWorkFromPayload({
+    ...payload,
+    video: nextVideo,
+    mobileVideo: nextMobileVideo,
+    poster: nextPoster,
+  }, existingWork);
   works[index] = updatedWork;
   await writeWorks(works);
 
   if (existingWork.video !== updatedWork.video) {
     await deleteAssetIfUnused(existingWork.video, works, updatedWork.id);
+  }
+  if (existingWork.mobileVideo !== updatedWork.mobileVideo) {
+    await deleteAssetIfUnused(existingWork.mobileVideo, works, updatedWork.id);
   }
   if (existingWork.poster !== updatedWork.poster) {
     await deleteAssetIfUnused(existingWork.poster, works, updatedWork.id);
@@ -355,6 +377,7 @@ async function handleWorksDelete(res, workId) {
 
   await writeWorks(works);
   await deleteAssetIfUnused(removedWork.video, works, removedWork.id);
+  await deleteAssetIfUnused(removedWork.mobileVideo, works, removedWork.id);
   await deleteAssetIfUnused(removedWork.poster, works, removedWork.id);
 
   sendJson(res, 200, { ok: true, id: workId });

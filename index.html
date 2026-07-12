@@ -1512,7 +1512,9 @@
       const currentPageUrl = new URL(window.location.href);
       const siteBaseUrl = new URL('.', currentPageUrl);
       const localServiceOrigin = 'http://127.0.0.1:3000/';
-      const isLocalEditorHost = currentPageUrl.protocol === 'file:' || /^(localhost|127\.0\.0\.1|::1)$/i.test(currentPageUrl.hostname);
+      const isLocalEditorHost = currentPageUrl.protocol === 'file:'
+        || /^(localhost|127\.0\.0\.1|::1)$/i.test(currentPageUrl.hostname)
+        || /^(10\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[01])\.)/.test(currentPageUrl.hostname);
       const apiBaseUrl = currentPageUrl.protocol === 'file:'
         ? new URL(localServiceOrigin)
         : new URL('/', currentPageUrl.origin);
@@ -1696,7 +1698,7 @@
         { cnTitle: 'AI 短片', enTitle: 'AI Short Film', cnSub: '剪辑 / 调色', enSub: 'EDIT / COLOR', video: 'assets/work-04.mp4' },
         { cnTitle: '人物动画', enTitle: 'Character Animation', cnSub: '角色 / 动画', enSub: 'CHARACTER / ANIMATION', video: 'assets/work-05.mp4' },
         { cnTitle: '开场宣传', enTitle: 'Opening Promo', cnSub: '开场 / 宣传', enSub: 'OPENING / PROMO', video: 'assets/work-06.mp4' },
-        { cnTitle: '夜行视界', enTitle: 'Night Vision', cnSub: '动效 / 电影', enSub: 'MOTION / FILM', video: 'assets/work-07.mp4' },
+        { cnTitle: '夜行视界', enTitle: 'Night Vision', cnSub: '动效 / 电影', enSub: 'MOTION / FILM', video: 'assets/work-07.mp4', mobileVideo: 'assets/mobile/work-07.mp4' },
         { cnTitle: '产品动画', enTitle: 'Product Animation', cnSub: '产品 / 动效', enSub: 'PRODUCT / MOTION', video: 'assets/work-08.mp4' },
         { cnTitle: 'UI / UX 视觉', enTitle: 'UI / UX Visuals', cnSub: '界面 / 视觉', enSub: 'UI / VISUAL', video: 'assets/work-09.mp4' },
         { cnTitle: '节奏测试', enTitle: 'Rhythm Test', cnSub: '节奏 / 测试', enSub: 'RHYTHM / TEST', video: 'assets/work-10.mp4' },
@@ -1705,11 +1707,12 @@
         { cnTitle: '动画流程', enTitle: 'Animation Pipeline', cnSub: '流程 / 动效', enSub: 'PIPELINE / MOTION', video: 'assets/work-13.mp4' },
         { cnTitle: '特效测试', enTitle: 'VFX Test', cnSub: '特效 / 测试', enSub: 'VFX / TEST', video: 'assets/work-14.mp4' },
         { cnTitle: '全流程短片', enTitle: 'Full Pipeline Short', cnSub: '完整 / 短片', enSub: 'FULL / FILM', video: 'assets/work-15.mp4' },
-        { cnTitle: '三维序列', enTitle: '3D Sequence', cnSub: '序列 / 3D', enSub: 'SEQUENCE / 3D', video: 'assets/work-16.mp4' }
+        { cnTitle: '三维序列', enTitle: '3D Sequence', cnSub: '序列 / 3D', enSub: 'SEQUENCE / 3D', video: 'assets/work-16.mp4', mobileVideo: 'assets/mobile/work-16.mp4' }
       ];
 
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
       const coarsePointer = window.matchMedia('(hover: none) and (pointer: coarse)');
+      const mobilePlaybackMode = window.matchMedia('(max-width: 700px)').matches || coarsePointer.matches;
       const worksGrid = document.getElementById('worksGrid');
       const navLinks = [...document.querySelectorAll('.nav a')];
       const sections = [...document.querySelectorAll('main section[id]')];
@@ -1778,8 +1781,8 @@
       const normalizeWork = (item) => {
         const cnTitle = (item?.cnTitle || item?.enTitle || '未命名作品').trim();
         const enTitle = (item?.enTitle || item?.cnTitle || 'Untitled Work').trim();
-        const cnSub = (item?.cnSub || item?.enSub || '自定义上传').trim();
-        const enSub = (item?.enSub || item?.cnSub || 'CUSTOM UPLOAD').trim();
+        const cnSub = (item?.cnSub ?? item?.enSub ?? '').trim();
+        const enSub = (item?.enSub ?? item?.cnSub ?? '').trim();
 
         return {
           id: item?.id || '',
@@ -1789,11 +1792,16 @@
           cnSub,
           enSub,
           video: item?.video || '',
+          mobileVideo: item?.mobileVideo || '',
           poster: item?.poster || '',
         };
       };
 
       const allWorkData = () => [...uploadedWorkData, ...baseWorkData].map(normalizeWork);
+
+      const workVideoFor = (item) => mobilePlaybackMode && item?.mobileVideo
+        ? item.mobileVideo
+        : item?.video || '';
 
       const workPosterFor = (item) => item?.poster || posterFor(item?.video || '');
 
@@ -1946,7 +1954,8 @@
 
       const syncWorkVideos = () => {
         workVideoSyncFrame = 0;
-        const shouldAutoload = canAutoloadWorkVideos();
+        // Mobile browsers should keep the grid lightweight; load a video only when its card is opened.
+        const shouldAutoload = canAutoloadWorkVideos() && !mobilePlaybackMode;
 
         document.querySelectorAll('.work-video').forEach((video) => {
           const rect = video.getBoundingClientRect();
@@ -2386,7 +2395,7 @@
           const subtitle = escapeHtml(state.lang === 'cn' ? item.cnSub : item.enSub);
           const soundLabel = state.lang === 'cn' ? '打开视频' : 'Open video';
           const posterPath = escapeHtml(workPosterFor(item));
-          const videoPath = escapeHtml(item.video);
+          const videoPath = escapeHtml(workVideoFor(item));
           return `
             <article class="work-card reveal" data-work-id="${escapeHtml(item.id || '')}" style="--delay: ${80 + index * 18}ms;">
               <div class="video-shell">

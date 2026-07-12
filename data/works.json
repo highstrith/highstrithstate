@@ -1,12 +1,24 @@
 [
   {
+    "id": "work-1783863606674-7ta9sp",
+    "createdAt": "2026-07-12T13:40:06.674Z",
+    "cnTitle": "AI患者",
+    "enTitle": "AI Patient",
+    "cnSub": "",
+    "enSub": "",
+    "video": "assets/uploads/work-1783863596658-desktop.mp4",
+    "mobileVideo": "assets/uploads/mobile/work-1783863596658-mobile.mp4",
+    "poster": "assets/uploads/posters/poster-1783864071336.webp"
+  },
+  {
     "id": "work-1783246320299-icguu6",
     "createdAt": "2026-07-05T10:12:00.299Z",
     "cnTitle": "街头篮球",
     "enTitle": "Street basketball",
     "cnSub": "Custom Upload",
     "enSub": "Custom Upload",
-    "video": "assets/uploads/work-1783436201027-bmp6p0.mp4",
-    "poster": "assets/uploads/posters/poster-1783246320293-zlfngl.png"
+    "video": "assets/uploads/desktop/work-1783436201027-desktop.mp4",
+    "mobileVideo": "assets/uploads/mobile/work-1783436201027-mobile.mp4",
+    "poster": "assets/uploads/posters/poster-1783246320293.webp"
   }
 ]

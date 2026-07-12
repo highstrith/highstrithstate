@@ -855,8 +855,8 @@
       const normalizeWork = (item) => {
         const cnTitle = (item?.cnTitle || item?.enTitle || '未命名作品').trim();
         const enTitle = (item?.enTitle || item?.cnTitle || 'Untitled Work').trim();
-        const cnSub = (item?.cnSub || item?.enSub || '自定义上传').trim();
-        const enSub = (item?.enSub || item?.cnSub || 'CUSTOM UPLOAD').trim();
+        const cnSub = (item?.cnSub ?? item?.enSub ?? '').trim();
+        const enSub = (item?.enSub ?? item?.cnSub ?? '').trim();
 
         return {
           id: item?.id || '',
@@ -866,6 +866,7 @@
           cnSub,
           enSub,
           video: item?.video || '',
+          mobileVideo: item?.mobileVideo || '',
           poster: item?.poster || '',
         };
       };
@@ -1284,6 +1285,7 @@
             cnSub: uploadCnSubInput.value || '',
             enSub: uploadEnSubInput.value || '',
             video,
+            mobileVideo: videoFile ? '' : (currentWork?.mobileVideo || ''),
             poster,
           };
 
