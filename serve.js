@@ -1,6 +1,7 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const zlib = require("zlib");
 const { URL } = require("url");
 
 const root = __dirname;
@@ -23,6 +24,7 @@ const types = {
   ".png": "image/png",
   ".jpg": "image/jpeg",
   ".jpeg": "image/jpeg",
+  ".gif": "image/gif",
   ".webp": "image/webp",
   ".mp3": "audio/mpeg",
   ".mp4": "video/mp4",
@@ -433,9 +435,12 @@ function handleStatic(req, res, requestUrl) {
 
     const ext = path.extname(file).toLowerCase();
     const type = types[ext] || "application/octet-stream";
+    const cacheControl = [".html", ".json"].includes(ext)
+      ? "no-cache"
+      : "public, max-age=31536000, immutable";
     const headers = {
       "Content-Type": type,
-      "Cache-Control": "no-store",
+      "Cache-Control": cacheControl,
     };
     const range = req.headers.range;
     const supportsRange = [".mp3", ".mp4", ".wav"].includes(ext);
@@ -469,12 +474,32 @@ function handleStatic(req, res, requestUrl) {
       return;
     }
 
+    const supportsCompression = [".html", ".css", ".js", ".json", ".svg"].includes(ext);
+    const acceptEncoding = String(req.headers["accept-encoding"] || "");
+    const compression = supportsCompression && acceptEncoding.includes("br")
+      ? "br"
+      : supportsCompression && acceptEncoding.includes("gzip")
+        ? "gzip"
+        : "";
+
+    if (!compression) {
+      res.writeHead(200, {
+        ...headers,
+        "Content-Length": stat.size,
+      });
+      fs.createReadStream(file).pipe(res);
+      return;
+    }
+
     res.writeHead(200, {
       ...headers,
-      "Content-Length": stat.size,
+      "Content-Encoding": compression,
+      "Vary": "Accept-Encoding",
     });
-
-    fs.createReadStream(file).pipe(res);
+    const compressor = compression === "br"
+      ? zlib.createBrotliCompress()
+      : zlib.createGzip();
+    fs.createReadStream(file).pipe(compressor).pipe(res);
   });
 }
 

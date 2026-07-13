@@ -485,6 +485,7 @@
     }
 
     .work-poster,
+    .work-preview,
     .work-video {
       position: absolute;
       inset: 0;
@@ -500,6 +501,13 @@
       transform: scale(1.01);
     }
 
+    .work-preview {
+      z-index: 1;
+      filter: saturate(1.03) contrast(1.05) brightness(0.78);
+      transform: scale(1.03);
+      transition: transform 0.45s ease, filter 0.3s ease;
+    }
+
     .work-video {
       opacity: 0;
       filter: saturate(1.03) contrast(1.05) brightness(0.78);
@@ -509,8 +517,8 @@
 
     .work-video.is-ready { opacity: 1; }
     .work-video.is-unavailable { opacity: 0; }
-    .work-card:hover .work-video { transform: scale(1.08); filter: saturate(1.1) contrast(1.08) brightness(0.92); }
-    .work-card.is-active .work-video { transform: scale(1.06); filter: saturate(1.1) contrast(1.08) brightness(0.9); }
+    .work-card:hover .work-preview { transform: scale(1.08); filter: saturate(1.1) contrast(1.08) brightness(0.92); }
+    .work-card.is-active .work-preview { transform: scale(1.06); filter: saturate(1.1) contrast(1.08) brightness(0.9); }
 
     .work-player {
       position: fixed;
@@ -1805,6 +1813,12 @@
 
       const workPosterFor = (item) => item?.poster || posterFor(item?.video || '');
 
+      const workPreviewFor = (item) => {
+        const videoPath = item?.video || '';
+        const match = videoPath.match(/(?:^|\/)([^/]+)\.mp4$/i);
+        return match ? `assets/previews/${match[1]}.gif` : '';
+      };
+
       const updateHeroMetrics = () => {
         if (heroMetricValues[0]) heroMetricValues[0].textContent = String(allWorkData().length);
       };
@@ -1954,26 +1968,10 @@
 
       const syncWorkVideos = () => {
         workVideoSyncFrame = 0;
-        // Mobile browsers should keep the grid lightweight; load a video only when its card is opened.
-        const shouldAutoload = canAutoloadWorkVideos() && !mobilePlaybackMode;
-
         document.querySelectorAll('.work-video').forEach((video) => {
-          const rect = video.getBoundingClientRect();
-          const inViewport = rect.bottom > 0 && rect.top < window.innerHeight;
-          const nearViewport = rect.bottom > -WORK_VIDEO_MARGIN && rect.top < window.innerHeight + WORK_VIDEO_MARGIN;
-
-          if (shouldAutoload && nearViewport) {
-            loadVideo(video);
-            if (!workPlayer?.classList.contains('is-open') && inViewport) tryPlay(video);
-            else video.pause();
-            if (video.readyState >= 2) markVideoReady(video);
-            return;
-          }
-
           video.pause();
           markVideoUnavailable(video);
-
-          if (!nearViewport) unloadVideo(video);
+          unloadVideo(video);
         });
       };
 
@@ -2088,10 +2086,6 @@
         });
 
         setActiveNav(current?.id || (window.scrollY < 160 ? 'home' : sections[sections.length - 1]?.id));
-      };
-
-      const canAutoloadWorkVideos = () => {
-        return window.location.hash === '#works' || window.scrollY > 160;
       };
 
       const scrollToHashTarget = () => {
@@ -2309,8 +2303,6 @@
 
           card.addEventListener('pointerenter', (event) => {
             if (!coarsePointer.matches) {
-              loadVideo(video);
-              setVideoPoster(video);
               window.clearTimeout(hoverOpenTimer);
               startHoverProgress(event);
               hoverOpenTimer = window.setTimeout(() => {
@@ -2336,7 +2328,6 @@
             window.clearTimeout(hoverOpenTimer);
             hoverOpenTimer = 0;
             cancelHoverProgress();
-            loadVideo(video);
             setVideoPoster(video);
             await openWorkPlayer(video);
           });
@@ -2347,7 +2338,6 @@
             window.clearTimeout(hoverOpenTimer);
             hoverOpenTimer = 0;
             cancelHoverProgress();
-            loadVideo(video);
             setVideoPoster(video);
             await openWorkPlayer(video);
           });
@@ -2395,12 +2385,14 @@
           const subtitle = escapeHtml(state.lang === 'cn' ? item.cnSub : item.enSub);
           const soundLabel = state.lang === 'cn' ? '打开视频' : 'Open video';
           const posterPath = escapeHtml(workPosterFor(item));
+          const previewPath = escapeHtml(workPreviewFor(item));
           const videoPath = escapeHtml(workVideoFor(item));
           return `
             <article class="work-card reveal" data-work-id="${escapeHtml(item.id || '')}" style="--delay: ${80 + index * 18}ms;">
               <div class="video-shell">
                 ${posterPath ? `<img class="work-poster" src="${posterPath}" alt="" loading="lazy" decoding="async" />` : ''}
-                <video class="work-video" data-autoplay-video muted loop playsinline webkit-playsinline preload="metadata" poster="${posterPath}">
+                ${previewPath ? `<img class="work-preview" src="${previewPath}" alt="" loading="lazy" decoding="async" />` : ''}
+                <video class="work-video" data-autoplay-video muted loop playsinline webkit-playsinline preload="none" poster="${posterPath}">
                   <source data-src="${videoPath}" type="video/mp4" />
                 </video>
                 <div class="work-badge">${number}</div>
