@@ -797,10 +797,6 @@
       align-items: start;
     }
 
-    .contact-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
     .about-card,
     .contact-card {
       padding: 24px;
@@ -852,6 +848,42 @@
 
     .contact-card.featured .contact-actions {
       margin-top: 20px;
+    }
+
+    .contact-unified {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr 0.88fr;
+      gap: 0;
+      padding: 0;
+    }
+
+    .contact-column {
+      min-width: 0;
+      padding: 28px;
+    }
+
+    .contact-column + .contact-column {
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .contact-column .section-note {
+      max-width: 34ch;
+    }
+
+    .contact-column .lines {
+      margin-top: 12px;
+    }
+
+    .contact-column .line-item {
+      padding: 12px 0;
+    }
+
+    .contact-column .line-item strong {
+      overflow-wrap: anywhere;
+    }
+
+    .contact-column .social-hub {
+      margin-top: 18px;
     }
 
     .social-hub { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
@@ -915,7 +947,6 @@
       .hero-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .works-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .info-grid { grid-template-columns: 1fr; }
-      .contact-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 980px) {
@@ -937,7 +968,6 @@
       .nav::-webkit-scrollbar { display: none; }
       .actions { margin-left: auto; min-width: auto; }
       .works-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .contact-grid { grid-template-columns: 1fr; }
       .hero-metrics { grid-template-columns: 1fr 1fr; }
     }
 
@@ -1068,6 +1098,9 @@
       .line-item strong { text-align: left; }
       .social-qr-preview { display: none; }
       .social-hub { gap: 8px; }
+      .contact-unified { grid-template-columns: 1fr; }
+      .contact-column { padding: 22px 20px; }
+      .contact-column + .contact-column { border-left: 0; border-top: 1px solid rgba(255, 255, 255, 0.08); }
       .social-link { padding: 10px 12px; }
       .hero .lede,
       .section-note {
@@ -1462,57 +1495,45 @@
             </div>
           </article>
 
-          <div class="contact-grid reveal" style="--delay: 120ms;">
-            <article class="contact-card">
-              <p class="kicker">创作能力</p>
-              <h3 style="margin: 0 0 10px; font-size: 1.18rem;">从一个想法到一支完整作品</h3>
-              <p class="section-note">覆盖创意、脚本、3D、动画、剪辑、调色与短片包装；可以独立完成，也可以按项目协作。</p>
-              <div class="lines">
-                <div class="line-item"><span>核心软件</span><strong>Blender / DaVinci / AE</strong></div>
-                <div class="line-item"><span>擅长内容</span><strong>短片 / 动效 / 剪辑</strong></div>
-                <div class="line-item"><span>创作方式</span><strong>一人全流程 / 项目协作</strong></div>
-              </div>
-            </article>
-
-            <article class="contact-card">
-              <p class="kicker">创作者信息</p>
-              <h3 style="margin: 0 0 10px; font-size: 1.18rem;">-橘小桔-</h3>
-              <p class="section-note">如果你有脚本、参考、发布计划或一个还在酝酿的方向，都可以直接联系我聊聊。</p>
-              <div class="lines">
-                <div class="line-item"><span>邮箱</span><strong><a href="mailto:highstrith@gmail.com">highstrith@gmail.com</a></strong></div>
-                <div class="line-item"><span>电话</span><strong><a href="tel:+8618020169750">+86 18020169750</a></strong></div>
-                <div class="line-item"><span>地点</span><strong>江苏 · 南京</strong></div>
-                <div class="line-item"><span>微信</span><strong>Gw1sgdsj_787</strong></div>
-              </div>
-            </article>
-          </div>
         </div>
       </section>
 
       <section class="section" id="contact">
-        <div class="contact-card featured reveal" style="--delay: 80ms;">
-          <div class="section-head">
-            <div class="copy">
-              <p class="kicker">联系</p>
-              <h2 class="section-title">一起把下一个想法做成作品。</h2>
-              <p class="section-note">想做短片、动画、剪辑包装，或需要从脚本到成片的全流程支持？带上你的方向、参考和时间计划，直接联系 -橘小桔-。</p>
+        <div class="contact-card featured contact-unified reveal" style="--delay: 80ms;">
+          <div class="contact-column">
+            <p class="kicker">联系 -橘小桔-</p>
+            <h2 class="section-title">一起把下一个想法做成作品。</h2>
+            <p class="section-note">想做短片、动画、剪辑包装，或需要从脚本到成片的全流程支持？带上你的方向、参考和时间计划，直接聊聊。</p>
+            <div class="contact-actions">
+              <a class="btn primary" href="mailto:highstrith@gmail.com">
+                <span>发送邮件</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5 12 12l8-4.5" /><path d="M4 7.5V18h16V7.5" /></svg>
+              </a>
+              <a class="btn" href="tel:+8618020169750"><span>直接拨打</span></a>
             </div>
-            <div class="tag-row">
-              <span class="tag">Fast Response</span>
-              <span class="tag">Brand Ready</span>
-              <span class="tag">Visual Direction</span>
+            <p class="kicker contact-sub-kicker">合作方式</p>
+            <p class="section-note">覆盖创意、脚本、3D、动画、剪辑、调色与短片包装；可以独立完成，也可以按项目协作。</p>
+            <div class="lines">
+              <div class="line-item"><span>核心软件</span><strong>Blender / DaVinci / AE</strong></div>
+              <div class="line-item"><span>擅长内容</span><strong>短片 / 动效 / 剪辑</strong></div>
+              <div class="line-item"><span>创作方式</span><strong>一人全流程 / 项目协作</strong></div>
             </div>
           </div>
-          <div class="contact-actions">
-            <a class="btn primary" href="mailto:highstrith@gmail.com">
-              <span>发送邮件</span>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5 12 12l8-4.5" /><path d="M4 7.5V18h16V7.5" /></svg>
-            </a>
-            <a class="btn" href="tel:+8618020169750">
-              <span>直接拨打</span>
-            </a>
+
+          <div class="contact-column">
+            <p class="kicker">直接找到我</p>
+            <div class="lines">
+              <div class="line-item"><span>邮箱</span><strong><a href="mailto:highstrith@gmail.com">highstrith@gmail.com</a></strong></div>
+              <div class="line-item"><span>电话</span><strong><a href="tel:+8618020169750">+86 18020169750</a></strong></div>
+              <div class="line-item"><span>地点</span><strong>江苏 · 南京</strong></div>
+              <div class="line-item"><span>微信</span><strong>Gw1sgdsj_787</strong></div>
+            </div>
           </div>
-          <div class="social-hub" aria-label="-橘小桔- 的社交账号">
+
+          <div class="contact-column">
+            <p class="kicker">社交入口</p>
+            <p class="section-note">微信、抖音和小红书可扫码添加，哔哩哔哩进入主页。</p>
+            <div class="social-hub" aria-label="-橘小桔- 的社交账号">
             <button class="social-link" type="button" data-social-platform="wechat" data-qr-image="assets/social/wechat-qr.png" data-qr-title="微信" data-qr-account="微信号：Gw1sgdsj_787" aria-label="打开微信二维码">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.8 5.2C5.5 5.2 2 7.9 2 11.3c0 2 1.2 3.8 3.1 4.9l-.7 2.5 2.8-1.5c.8.2 1.6.3 2.5.3 4.3 0 7.8-2.7 7.8-6.1s-3.5-6.2-7.8-6.2Z"></path><path d="M14.1 8.7c4.4 0 7.9 2.7 7.9 6.2 0 2-1.2 3.8-3.2 4.9l.7 2.5-2.8-1.5c-.8.2-1.6.3-2.5.3-1.3 0-2.5-.2-3.5-.7"></path></svg><span>微信</span>
               <span class="social-qr-preview"><img src="assets/social/wechat-qr.png" alt="微信二维码" loading="lazy" /></span>
@@ -1528,6 +1549,7 @@
             <a class="social-link" data-social-platform="bilibili" href="https://b23.tv/VFqS3Tj" target="_blank" rel="noopener noreferrer" aria-label="打开哔哩哔哩主页">
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="4"></rect><path d="m9 3 2 3m4-3-2 3M9 11v3m6-3v3"></path></svg><span>哔哩哔哩</span>
             </a>
+            </div>
           </div>
         </div>
       </section>

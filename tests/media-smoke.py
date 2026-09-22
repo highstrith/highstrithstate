@@ -31,6 +31,9 @@ with sync_playwright() as p:
     assert featured_video.locator("source").get_attribute("src") == "assets/works/prove-it.mp4"
     assert featured_video.evaluate("video => !video.paused")
     page.locator("#contact").scroll_into_view_if_needed()
+    assert page.locator("#contact .contact-unified").count() == 1
+    assert page.locator("#contact .contact-column").count() == 3
+    assert page.locator("#about .contact-card").count() == 0
     social_links = page.locator("[data-social-platform]")
     assert social_links.count() == 4
     assert social_links.filter(has_text="哔哩哔哩").get_attribute("href") == "https://b23.tv/VFqS3Tj"
