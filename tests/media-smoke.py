@@ -27,6 +27,13 @@ with sync_playwright() as p:
     assert page.locator(".work-card").nth(1).locator(".work-poster").evaluate("image => image.naturalWidth") > 0
     page.locator("#works").scroll_into_view_if_needed()
     page.wait_for_timeout(1200)
+    for index, source_path in enumerate([
+        "assets/uploads/work-1783863596658-desktop.mp4",
+        "assets/uploads/desktop/work-1783436201027-desktop.mp4",
+    ]):
+        uploaded_video = page.locator(".work-card").nth(index).locator(".work-video")
+        assert uploaded_video.locator("source").get_attribute("src") == source_path
+        assert uploaded_video.evaluate("video => !video.paused")
     featured_video = page.locator(".work-card").nth(2).locator(".work-video")
     assert featured_video.locator("source").get_attribute("src") == "assets/works/prove-it.mp4"
     assert featured_video.evaluate("video => !video.paused")

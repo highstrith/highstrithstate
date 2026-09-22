@@ -32,3 +32,9 @@ assert.equal((html.match(/assets\/works\//g) || []).length, 5, 'five starter wor
 assert.equal(works.length, 7, 'all seven portfolio works must be editable from the catalog');
 assert.equal(new Set(works.map((work) => work.id)).size, works.length, 'catalog work ids must be unique');
 assert.ok(works.every((work) => work.cnTitle && work.enTitle && work.cnSub && work.enSub && work.cnDesc && work.enDesc), 'catalog works must include titles, categories, and descriptions');
+for (const work of works) {
+  assert.ok(fs.existsSync(path.join(root, work.video)), `missing video for ${work.cnTitle}: ${work.video}`);
+  if (work.mobileVideo) {
+    assert.ok(fs.existsSync(path.join(root, work.mobileVideo)), `missing mobile video for ${work.cnTitle}: ${work.mobileVideo}`);
+  }
+}

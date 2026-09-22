@@ -9,7 +9,7 @@
     "cnDesc": "AI 主题叙事短片，关注人物与科技感画面的结合。",
     "enDesc": "An AI-themed narrative short built around character and futuristic visual language.",
     "video": "assets/uploads/work-1783863596658-desktop.mp4",
-    "mobileVideo": "assets/uploads/mobile/work-1783863596658-mobile.mp4",
+    "mobileVideo": "",
     "poster": "assets/uploads/posters/poster-1783864071336.png"
   },
   {
@@ -22,7 +22,7 @@
     "cnDesc": "街头运动影像，强调动作、节奏与环境氛围。",
     "enDesc": "A street-sports piece focused on movement, rhythm, and atmosphere.",
     "video": "assets/uploads/desktop/work-1783436201027-desktop.mp4",
-    "mobileVideo": "assets/uploads/mobile/work-1783436201027-mobile.mp4",
+    "mobileVideo": "",
     "poster": "assets/uploads/posters/poster-1783246320293.png"
   },
   {
@@ -67,7 +67,7 @@
   {
     "id": "featured-exported-film",
     "createdAt": "2026-01-01T00:00:00.000Z",
-    "cnTitle": "导出成片",
+    "cnTitle": "Two Seconds",
     "enTitle": "Exported Film",
     "cnSub": "剪辑 / 后期",
     "enSub": "EDIT / POST",
@@ -80,12 +80,12 @@
   {
     "id": "featured-timeline-1",
     "createdAt": "2026-01-01T00:00:00.000Z",
-    "cnTitle": "Timeline 1",
-    "enTitle": "Timeline 1",
+    "cnTitle": "AI 之后",
+    "enTitle": "AI 之后",
     "cnSub": "竖版 / 节奏",
     "enSub": "VERTICAL / RHYTHM",
-    "cnDesc": "面向移动端观看的竖版节奏剪辑测试。",
-    "enDesc": "A vertical editing study designed for mobile viewing and rhythm.",
+    "cnDesc": "AI 之后的谈判标准",
+    "enDesc": "Post-AI Negotiation Standards",
     "video": "assets/works/timeline-vertical.mp4",
     "mobileVideo": "",
     "poster": "assets/posters/timeline-vertical.jpg"
