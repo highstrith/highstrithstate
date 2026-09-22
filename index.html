@@ -1360,7 +1360,6 @@
       <nav class="nav" aria-label="主导航">
         <a href="#home" class="active">首页</a>
         <a href="#works">作品</a>
-        <a href="#process">流程</a>
         <a href="#about">关于</a>
         <a href="#contact">联系</a>
       </nav>
@@ -1438,7 +1437,7 @@
         <div class="works-grid reveal" id="worksGrid" style="--delay: 100ms;"></div>
       </section>
 
-      <section class="section" id="process">
+      <section class="section" id="process" hidden>
         <div class="section-head reveal" style="--delay: 40ms;">
           <div class="copy">
             <p class="kicker">制作流程</p>
@@ -2527,11 +2526,14 @@
 
         const copy = translations[lang];
         document.title = copy.pageTitle;
-        navLinks[0].textContent = copy.navHome;
-        navLinks[1].textContent = copy.navWorks;
-        navLinks[2].textContent = copy.navProcess;
-        navLinks[3].textContent = copy.navAbout;
-        navLinks[4].textContent = copy.navContact;
+        const setNavText = (href, text) => {
+          const link = navLinks.find((item) => item.getAttribute('href') === href);
+          if (link) link.textContent = text;
+        };
+        setNavText('#home', copy.navHome);
+        setNavText('#works', copy.navWorks);
+        setNavText('#about', copy.navAbout);
+        setNavText('#contact', copy.navContact);
 
         if (adminEntryLink) {
           if (isLocalEditorHost) {

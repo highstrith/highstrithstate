@@ -34,6 +34,8 @@ with sync_playwright() as p:
     assert page.locator("#contact .contact-unified").count() == 1
     assert page.locator("#contact .contact-column").count() == 3
     assert page.locator("#about .contact-card").count() == 0
+    assert page.locator("nav a[href='#process']").count() == 0
+    assert page.locator("#process").get_attribute("hidden") is not None
     social_links = page.locator("[data-social-platform]")
     assert social_links.count() == 4
     assert social_links.filter(has_text="哔哩哔哩").get_attribute("href") == "https://b23.tv/VFqS3Tj"
