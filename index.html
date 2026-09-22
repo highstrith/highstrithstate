@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark" />
   <meta name="description" content="Highstrith 的 3D 设计、动画与视频剪辑作品集。" />
   <title>Highstrith | 3D 艺术家与视频剪辑</title>
-  <link rel="preload" as="image" href="assets/posters/hero-background.webp" fetchpriority="high" />
+  <link rel="preload" as="image" href="assets/posters/hero-fireflies.jpg" fetchpriority="high" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -854,6 +854,32 @@
       margin-top: 20px;
     }
 
+    .social-hub { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .social-link {
+      position: relative; display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+      padding: 10px 13px; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 999px;
+      color: var(--text); background: rgba(255, 255, 255, 0.045); font: inherit; font-size: 0.82rem;
+      cursor: pointer; text-decoration: none; transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+    }
+    .social-link:hover, .social-link:focus-visible { border-color: rgba(216, 180, 111, 0.76); background: rgba(216, 180, 111, 0.1); transform: translateY(-2px); outline: none; }
+    .social-link svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+    .social-link .social-xhs { font-size: 0.62rem; font-weight: 800; letter-spacing: 0; }
+    .social-qr-preview {
+      position: absolute; z-index: 4; left: 50%; bottom: calc(100% + 12px); width: 168px; padding: 10px;
+      border: 1px solid rgba(216, 180, 111, 0.4); border-radius: 16px; background: rgba(10, 13, 20, 0.98);
+      box-shadow: var(--shadow); opacity: 0; pointer-events: none; transform: translate(-50%, 8px) scale(0.96);
+      transition: opacity 160ms ease, transform 160ms ease;
+    }
+    .social-qr-preview img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 9px; background: #fff; }
+    .social-link:hover .social-qr-preview, .social-link:focus-visible .social-qr-preview { opacity: 1; transform: translate(-50%, 0) scale(1); }
+    .social-qr-dialog { width: min(92vw, 400px); padding: 0; border: 1px solid rgba(216, 180, 111, 0.45); border-radius: 24px; color: var(--text); background: #0d111a; box-shadow: 0 28px 90px rgba(0, 0, 0, 0.58); }
+    .social-qr-dialog::backdrop { background: rgba(3, 5, 9, 0.76); backdrop-filter: blur(7px); }
+    .social-qr-inner { padding: 22px; text-align: center; }
+    .social-qr-dialog h3 { margin: 6px 0 4px; font-size: 1.12rem; }
+    .social-qr-dialog p { margin: 0 0 16px; color: var(--muted); font-size: 0.86rem; }
+    .social-qr-dialog img { display: block; width: min(100%, 320px); margin: 0 auto; border-radius: 14px; background: #fff; }
+    .social-qr-close { position: absolute; top: 12px; right: 12px; }
+
     .footer {
       display: flex;
       flex-wrap: wrap;
@@ -1040,6 +1066,9 @@
       .panel, .about-card, .contact-card { padding: 20px; }
       .line-item { flex-direction: column; align-items: flex-start; }
       .line-item strong { text-align: left; }
+      .social-qr-preview { display: none; }
+      .social-hub { gap: 8px; }
+      .social-link { padding: 10px 12px; }
       .hero .lede,
       .section-note {
         font-size: 0.94rem;
@@ -1351,9 +1380,9 @@
         </div>
 
         <div class="hero-visual reveal" style="--delay: 200ms;">
-          <img class="hero-poster" src="assets/posters/hero-background.webp" alt="" decoding="async" fetchpriority="high" aria-hidden="true" />
-          <video class="hero-video" autoplay muted loop playsinline webkit-playsinline preload="metadata" poster="assets/posters/hero-background.webp" aria-hidden="true">
-            <source data-src="assets/hero-background.mp4" type="video/mp4" />
+          <img class="hero-poster" src="assets/posters/hero-fireflies.jpg" alt="" decoding="async" fetchpriority="high" aria-hidden="true" />
+          <video class="hero-video" autoplay muted loop playsinline webkit-playsinline preload="metadata" poster="assets/posters/hero-fireflies.jpg" aria-hidden="true">
+            <source data-src="assets/hero-fireflies.mp4" type="video/mp4" />
           </video>
         </div>
       </section>
@@ -1380,26 +1409,26 @@
         <div class="section-head reveal" style="--delay: 40ms;">
           <div class="copy">
             <p class="kicker">制作流程</p>
-            <h2 class="section-title">从想法到成片，让每一步都服务最终画面。</h2>
-            <p class="section-note">每个项目都会先明确目标、受众和发布场景，再进入视觉制作与交付适配，减少返工，也让沟通更高效。</p>
+            <h2 class="section-title">从脚本前期到最终发布，把一个想法完整做出来。</h2>
+            <p class="section-note">我以一人全流程的方式完成从创意梳理、画面制作到多平台发布适配，让每个作品的表达与交付保持连贯。</p>
           </div>
         </div>
 
         <div class="process-grid">
           <article class="panel reveal" style="--delay: 80ms;">
-            <div class="step">01 / 发现</div>
-            <h3>先看目标，再看画面。</h3>
-            <p>先明确使用场景、受众和交付格式，再决定节奏、镜头语言与视觉方向，避免一开始就把内容做得太散。</p>
+            <div class="step">01 / 前期</div>
+            <h3>先把故事与方向说清楚。</h3>
+            <p>从需求、参考和脚本开始整理，确定内容重点、镜头语言与发布场景，让后续制作有清晰的创作坐标。</p>
             <div class="panel-list">
-              <span>需求梳理</span>
-              <span>参考分析</span>
-              <span>脚本方向</span>
+              <span>创意梳理</span>
+              <span>脚本前期</span>
+              <span>视觉设定</span>
             </div>
           </article>
           <article class="panel reveal" style="--delay: 140ms;">
             <div class="step">02 / 制作</div>
-            <h3>用材质、灯光和镜头建立质感。</h3>
-            <p>从三维画面、剪辑节奏到调色和音效同步推进，让整体风格统一，不会出现局部很强、整体很散的问题。</p>
+            <h3>把想法制作成有节奏的画面。</h3>
+            <p>围绕 3D、动画、剪辑、调色与包装推进制作，让画面、节奏和信息在同一套视觉语言里完成。</p>
             <div class="panel-list">
               <span>3D / 动效</span>
               <span>剪辑 / 调色</span>
@@ -1408,8 +1437,8 @@
           </article>
           <article class="panel reveal" style="--delay: 200ms;">
             <div class="step">03 / 交付</div>
-            <h3>适配平台，而不是只做演示。</h3>
-            <p>根据发布场景输出横版、竖版或短切片版本，同时保留修改空间，方便你在社媒、官网和大屏场景里复用。</p>
+            <h3>为不同平台准备合适版本。</h3>
+            <p>根据社媒、官网或大屏等实际场景完成横竖版、短切片与最终交付，让作品不止停留在演示阶段。</p>
             <div class="panel-list">
               <span>多尺寸输出</span>
               <span>版本管理</span>
@@ -1422,9 +1451,9 @@
       <section class="section" id="about">
         <div class="info-grid">
           <article class="about-card reveal" style="--delay: 60ms;">
-            <p class="kicker">关于我</p>
-            <h2 class="section-title" style="font-size: clamp(2rem, 4vw, 3.2rem);">让作品看起来不只是“完成了”，而是“成立了”。</h2>
-            <p class="section-note" style="margin-top: 14px;">我关注画面是否能讲清楚信息，是否有节奏感，是否足够适配品牌语境。视觉不只需要好看，也需要在真实发布场景里站得住。</p>
+            <p class="kicker">关于 -橘小桔-</p>
+            <h2 class="section-title" style="font-size: clamp(2rem, 4vw, 3.2rem);">把所有传媒能力，收进同一支作品里。</h2>
+            <p class="section-note" style="margin-top: 14px;">我是一名来自南京的全媒体创作者，专注于 3D 设计、动态视觉与视频剪辑。擅长从脚本前期一路完成制作，让每个想法成为可发布、可观看的完整内容。</p>
             <div class="contact-actions">
               <a class="btn primary" href="#contact">
                 <span>开始一个项目</span>
@@ -1435,20 +1464,20 @@
 
           <div class="contact-grid reveal" style="--delay: 120ms;">
             <article class="contact-card">
-              <p class="kicker">服务范围</p>
-              <h3 style="margin: 0 0 10px; font-size: 1.18rem;">从概念到成片的一体化支持</h3>
-              <p class="section-note">3D 设计、动画、后期剪辑、调色、品牌视觉方向和短片包装，都可以按单项目或整套需求协作。</p>
+              <p class="kicker">创作能力</p>
+              <h3 style="margin: 0 0 10px; font-size: 1.18rem;">从一个想法到一支完整作品</h3>
+              <p class="section-note">覆盖创意、脚本、3D、动画、剪辑、调色与短片包装；可以独立完成，也可以按项目协作。</p>
               <div class="lines">
                 <div class="line-item"><span>核心软件</span><strong>Blender / DaVinci / AE</strong></div>
-                <div class="line-item"><span>适合内容</span><strong>品牌片 / 活动片 / 产品片</strong></div>
-                <div class="line-item"><span>合作方式</span><strong>单项目 / 长期合作</strong></div>
+                <div class="line-item"><span>擅长内容</span><strong>短片 / 动效 / 剪辑</strong></div>
+                <div class="line-item"><span>创作方式</span><strong>一人全流程 / 项目协作</strong></div>
               </div>
             </article>
 
             <article class="contact-card">
-              <p class="kicker">信息</p>
-              <h3 style="margin: 0 0 10px; font-size: 1.18rem;">联系我之前，你可以先看这些</h3>
-              <p class="section-note">如果你已经有脚本、参考或发布计划，可以在邮件里一并说明；如果还只是一个方向，也可以先聊需求。</p>
+              <p class="kicker">创作者信息</p>
+              <h3 style="margin: 0 0 10px; font-size: 1.18rem;">-橘小桔-</h3>
+              <p class="section-note">如果你有脚本、参考、发布计划或一个还在酝酿的方向，都可以直接联系我聊聊。</p>
               <div class="lines">
                 <div class="line-item"><span>邮箱</span><strong><a href="mailto:highstrith@gmail.com">highstrith@gmail.com</a></strong></div>
                 <div class="line-item"><span>电话</span><strong><a href="tel:+8618020169750">+86 18020169750</a></strong></div>
@@ -1465,8 +1494,8 @@
           <div class="section-head">
             <div class="copy">
               <p class="kicker">联系</p>
-              <h2 class="section-title">准备开始下一支更有质感的作品了吗？</h2>
-              <p class="section-note">如果你需要品牌片、产品动画、短视频包装或视觉方向支持，可以直接联系我。请尽量附上目标、时长、参考和预计交付时间。</p>
+              <h2 class="section-title">一起把下一个想法做成作品。</h2>
+              <p class="section-note">想做短片、动画、剪辑包装，或需要从脚本到成片的全流程支持？带上你的方向、参考和时间计划，直接联系 -橘小桔-。</p>
             </div>
             <div class="tag-row">
               <span class="tag">Fast Response</span>
@@ -1483,17 +1512,44 @@
               <span>直接拨打</span>
             </a>
           </div>
+          <div class="social-hub" aria-label="-橘小桔- 的社交账号">
+            <button class="social-link" type="button" data-social-platform="wechat" data-qr-image="assets/social/wechat-qr.png" data-qr-title="微信" data-qr-account="微信号：Gw1sgdsj_787" aria-label="打开微信二维码">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.8 5.2C5.5 5.2 2 7.9 2 11.3c0 2 1.2 3.8 3.1 4.9l-.7 2.5 2.8-1.5c.8.2 1.6.3 2.5.3 4.3 0 7.8-2.7 7.8-6.1s-3.5-6.2-7.8-6.2Z"></path><path d="M14.1 8.7c4.4 0 7.9 2.7 7.9 6.2 0 2-1.2 3.8-3.2 4.9l.7 2.5-2.8-1.5c-.8.2-1.6.3-2.5.3-1.3 0-2.5-.2-3.5-.7"></path></svg><span>微信</span>
+              <span class="social-qr-preview"><img src="assets/social/wechat-qr.png" alt="微信二维码" loading="lazy" /></span>
+            </button>
+            <button class="social-link" type="button" data-social-platform="douyin" data-qr-image="assets/social/douyin-qr.png" data-qr-title="抖音" data-qr-account="抖音号：Gw1sgdsj_787" aria-label="打开抖音二维码">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v10.5a4.5 4.5 0 1 1-3.5-4.4"></path><path d="M14 3c.8 2.6 2.5 4.2 5 4.8"></path></svg><span>抖音</span>
+              <span class="social-qr-preview"><img src="assets/social/douyin-qr.png" alt="抖音二维码" loading="lazy" /></span>
+            </button>
+            <button class="social-link" type="button" data-social-platform="xiaohongshu" data-qr-image="assets/social/xiaohongshu-qr.jpg" data-qr-title="小红书" data-qr-account="rednote ID：1665365895" aria-label="打开小红书二维码">
+              <span class="social-xhs" aria-hidden="true">小红书</span><span>小红书</span>
+              <span class="social-qr-preview"><img src="assets/social/xiaohongshu-qr.jpg" alt="小红书二维码" loading="lazy" /></span>
+            </button>
+            <a class="social-link" data-social-platform="bilibili" href="https://b23.tv/VFqS3Tj" target="_blank" rel="noopener noreferrer" aria-label="打开哔哩哔哩主页">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="4"></rect><path d="m9 3 2 3m4-3-2 3M9 11v3m6-3v3"></path></svg><span>哔哩哔哩</span>
+            </a>
+          </div>
         </div>
       </section>
 
       <footer class="footer reveal" style="--delay: 100ms;">
         <div><strong>Highstrith</strong> · 2026</div>
-        <div>3D 设计、动态视觉、剪辑调色与适合品牌发布的视频方向。</div>
+        <div>-橘小桔- · 3D 设计、动态视觉、剪辑调色与全流程视频制作。</div>
       </footer>
     </main>
   </div>
 
   <audio id="bgMusic" src="assets/background-music.mp3" preload="none" loop></audio>
+  <dialog class="social-qr-dialog" id="social-qr-dialog" aria-labelledby="social-qr-title">
+    <div class="social-qr-inner">
+      <button class="work-player-control social-qr-close" id="socialQrClose" type="button" aria-label="关闭二维码">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+      <h3 id="social-qr-title">微信</h3>
+      <p id="social-qr-account">微信号：Gw1sgdsj_787</p>
+      <img id="social-qr-image" src="assets/social/wechat-qr.png" alt="微信二维码" />
+    </div>
+  </dialog>
   <div class="work-player" id="workPlayer" aria-hidden="true">
     <div class="work-player-panel" role="dialog" aria-modal="true" aria-label="作品视频播放器">
       <button class="work-player-control work-player-orientation" id="workPlayerOrientation" type="button" aria-label="切换横屏播放" title="切换横屏播放">
@@ -1591,17 +1647,17 @@
           workDelete: '删除',
           uploadUnavailable: '当前本地服务暂时不可用，稍后再试。',
           processKicker: '制作流程',
-          processTitle: '从想法到成片，让每一步都服务最终画面。',
-          processNote: '每个项目都会先明确目标、受众和发布场景，再进入视觉制作与交付适配，减少返工，也让沟通更高效。',
-          aboutKicker: '关于我',
-          aboutTitle: '让作品看起来不只是“完成了”，而是“成立了”。',
-          aboutNote: '我关注画面是否能讲清楚信息，是否有节奏感，是否足够适配品牌语境。视觉不只需要好看，也需要在真实发布场景里站得住。',
+          processTitle: '从脚本前期到最终发布，把一个想法完整做出来。',
+          processNote: '我以一人全流程的方式完成从创意梳理、画面制作到多平台发布适配，让每个作品的表达与交付保持连贯。',
+          aboutKicker: '关于 -橘小桔-',
+          aboutTitle: '把所有传媒能力，收进同一支作品里。',
+          aboutNote: '我是一名来自南京的全媒体创作者，专注于 3D 设计、动态视觉与视频剪辑。擅长从脚本前期一路完成制作，让每个想法成为可发布、可观看的完整内容。',
           contactKicker: '联系',
-          contactTitle: '准备开始下一支更有质感的作品了吗？',
-          contactNote: '如果你需要品牌片、产品动画、短视频包装或视觉方向支持，可以直接联系我。请尽量附上目标、时长、参考和预计交付时间。',
+          contactTitle: '一起把下一个想法做成作品。',
+          contactNote: '想做短片、动画、剪辑包装，或需要从脚本到成片的全流程支持？带上你的方向、参考和时间计划，直接联系 -橘小桔-。',
           contactPrimary: '发送邮件',
           contactSecondary: '直接拨打',
-          footerMain: '3D 设计、动态视觉、剪辑调色与适合品牌发布的视频方向。',
+          footerMain: '-橘小桔- · 3D 设计、动态视觉、剪辑调色与全流程视频制作。',
           langCurrent: 'CN',
           langTarget: 'EN',
           musicOn: '背景音乐已开启',
@@ -1674,17 +1730,17 @@
           workDelete: 'Delete',
           uploadUnavailable: 'The local upload service is unavailable right now. Please try again shortly.',
           processKicker: 'Workflow',
-          processTitle: 'From idea to final cut, every step serves the image.',
-          processNote: 'Each project starts with goals, audience, and delivery context before moving into production and format adaptation, keeping feedback focused and efficient.',
-          aboutKicker: 'About',
-          aboutTitle: 'Making work look not just finished, but resolved.',
-          aboutNote: 'I care about whether the image communicates clearly, whether it has rhythm, and whether it fits the brand voice. Good visuals need to hold up in real publishing contexts.',
+          processTitle: 'Taking an idea from early script work through to release.',
+          processNote: 'I work across creative development, production, and multi-platform delivery so each project stays coherent from first idea to final upload.',
+          aboutKicker: 'About -橘小桔-',
+          aboutTitle: 'Bringing every media skill into one finished work.',
+          aboutNote: 'I am a Nanjing-based multidisciplinary creator focused on 3D design, motion visuals, and video editing, working from early scripting through final delivery.',
           contactKicker: 'Contact',
-          contactTitle: 'Ready to start a more polished project?',
-          contactNote: 'If you need brand films, product motion, short-form packaging, or visual direction, reach out with goals, duration, references, and expected delivery timing when possible.',
+          contactTitle: 'Let’s turn the next idea into a finished work.',
+          contactNote: 'For short films, motion, editing, or end-to-end production support, reach out to -橘小桔- with your direction, references, and timeline.',
           contactPrimary: 'Send Email',
           contactSecondary: 'Call Now',
-          footerMain: '3D design, motion visuals, editing, color and brand-ready video direction.',
+          footerMain: '-橘小桔- · 3D design, motion visuals, editing, color, and end-to-end video production.',
           langCurrent: 'EN',
           langTarget: 'CN',
           musicOn: 'Background music on',
@@ -1699,7 +1755,7 @@
         }
       };
 
-      const baseWorkData = [
+      const legacyWorkData = [
         { cnTitle: '未来序章', enTitle: 'Future Prologue', cnSub: '开场 / 3D', enSub: 'OPENING / 3D', video: 'assets/work-01.mp4' },
         { cnTitle: '机械幻景', enTitle: 'Mechanical Mirage', cnSub: '动效 / 设计', enSub: 'MOTION / DESIGN', video: 'assets/work-02.mp4' },
         { cnTitle: 'UE5 Test', enTitle: 'UE5 Study', cnSub: '环境 / 研究', enSub: 'ENVIRONMENT / STUDY', video: 'assets/work-03.mp4' },
@@ -1716,6 +1772,14 @@
         { cnTitle: '特效测试', enTitle: 'VFX Test', cnSub: '特效 / 测试', enSub: 'VFX / TEST', video: 'assets/work-14.mp4' },
         { cnTitle: '全流程短片', enTitle: 'Full Pipeline Short', cnSub: '完整 / 短片', enSub: 'FULL / FILM', video: 'assets/work-15.mp4' },
         { cnTitle: '三维序列', enTitle: '3D Sequence', cnSub: '序列 / 3D', enSub: 'SEQUENCE / 3D', video: 'assets/work-16.mp4', mobileVideo: 'assets/mobile/work-16.mp4' }
+      ];
+
+      const baseWorkData = [
+        { cnTitle: 'Prove It', enTitle: 'Prove It', cnSub: '广告 / 剪辑', enSub: 'AD / EDIT', video: 'assets/works/prove-it.mp4', poster: 'assets/posters/prove-it.jpg' },
+        { cnTitle: '搭讪', enTitle: 'Approach', cnSub: '叙事 / 剪辑', enSub: 'NARRATIVE / EDIT', video: 'assets/works/approach.mp4', poster: 'assets/posters/approach.jpg' },
+        { cnTitle: '巨轮空降', enTitle: 'Giant Wheel', cnSub: '特效 / 合成', enSub: 'VFX / COMPOSITING', video: 'assets/works/giant-wheel.mp4', poster: 'assets/posters/giant-wheel.jpg' },
+        { cnTitle: '导出成片', enTitle: 'Exported Film', cnSub: '剪辑 / 后期', enSub: 'EDIT / POST', video: 'assets/works/exported-film.mp4', poster: 'assets/posters/exported-film.jpg' },
+        { cnTitle: 'Timeline 1', enTitle: 'Timeline 1', cnSub: '竖版 / 节奏', enSub: 'VERTICAL / RHYTHM', video: 'assets/works/timeline-vertical.mp4', poster: 'assets/posters/timeline-vertical.jpg' }
       ];
 
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -1759,6 +1823,11 @@
       const contactTitle = document.querySelector('#contact .section-title');
       const contactNote = document.querySelector('#contact .section-note');
       const contactButtons = [...document.querySelectorAll('#contact .contact-actions .btn')];
+      const socialQrDialog = document.querySelector('#social-qr-dialog');
+      const socialQrImage = document.querySelector('#social-qr-image');
+      const socialQrTitle = document.querySelector('#social-qr-title');
+      const socialQrAccount = document.querySelector('#social-qr-account');
+      const socialQrClose = document.querySelector('#socialQrClose');
       const footerMain = document.querySelector('.footer > div:last-child');
       const workTagRows = [...document.querySelectorAll('.tag-row .tag')];
       const heroVideo = document.querySelector('.hero-video');
@@ -1813,11 +1882,7 @@
 
       const workPosterFor = (item) => item?.poster || posterFor(item?.video || '');
 
-      const workPreviewFor = (item) => {
-        const videoPath = item?.video || '';
-        const match = videoPath.match(/(?:^|\/)([^/]+)\.mp4$/i);
-        return match ? `assets/previews/${match[1]}.gif` : '';
-      };
+      const workPreviewFor = () => '';
 
       const updateHeroMetrics = () => {
         if (heroMetricValues[0]) heroMetricValues[0].textContent = String(allWorkData().length);
@@ -1969,9 +2034,17 @@
       const syncWorkVideos = () => {
         workVideoSyncFrame = 0;
         document.querySelectorAll('.work-video').forEach((video) => {
-          video.pause();
-          markVideoUnavailable(video);
-          unloadVideo(video);
+          const bounds = video.getBoundingClientRect();
+          const inPlaybackRange = !reduceMotion.matches
+            && bounds.bottom >= -WORK_VIDEO_MARGIN
+            && bounds.top <= window.innerHeight + WORK_VIDEO_MARGIN;
+
+          if (inPlaybackRange) {
+            loadVideo(video);
+            tryPlay(video);
+          } else {
+            unloadVideo(video);
+          }
         });
       };
 
@@ -2522,6 +2595,25 @@
 
       workPlayerVideo?.addEventListener('ended', closeWorkPlayer);
 
+      document.querySelectorAll('[data-qr-image]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const image = button.dataset.qrImage;
+          const title = button.dataset.qrTitle;
+          const account = button.dataset.qrAccount;
+          if (!image || !socialQrDialog || !socialQrImage) return;
+          socialQrImage.src = image;
+          socialQrImage.alt = `${title}二维码`;
+          if (socialQrTitle) socialQrTitle.textContent = title;
+          if (socialQrAccount) socialQrAccount.textContent = account || '';
+          socialQrDialog.showModal();
+        });
+      });
+
+      socialQrClose?.addEventListener('click', () => socialQrDialog?.close());
+      socialQrDialog?.addEventListener('click', (event) => {
+        if (event.target === socialQrDialog) socialQrDialog.close();
+      });
+
       document.addEventListener('fullscreenchange', () => {
         if (document.fullscreenElement !== workPlayer) workPlayerFullscreenRequested = false;
       });
@@ -2580,4 +2672,3 @@
 </script>
 </body>
 </html>
-
