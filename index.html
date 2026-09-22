@@ -722,6 +722,14 @@
       text-transform: uppercase;
     }
 
+    .work-info .work-description {
+      color: rgba(247, 243, 236, 0.56);
+      font-size: 0.78rem;
+      letter-spacing: 0;
+      line-height: 1.55;
+      text-transform: none;
+    }
+
     .panel {
       position: relative;
       padding: 24px;
@@ -1796,11 +1804,11 @@
       ];
 
       const baseWorkData = [
-        { cnTitle: 'Prove It', enTitle: 'Prove It', cnSub: '广告 / 剪辑', enSub: 'AD / EDIT', video: 'assets/works/prove-it.mp4', poster: 'assets/posters/prove-it.jpg' },
-        { cnTitle: '搭讪', enTitle: 'Approach', cnSub: '叙事 / 剪辑', enSub: 'NARRATIVE / EDIT', video: 'assets/works/approach.mp4', poster: 'assets/posters/approach.jpg' },
-        { cnTitle: '巨轮空降', enTitle: 'Giant Wheel', cnSub: '特效 / 合成', enSub: 'VFX / COMPOSITING', video: 'assets/works/giant-wheel.mp4', poster: 'assets/posters/giant-wheel.jpg' },
-        { cnTitle: '导出成片', enTitle: 'Exported Film', cnSub: '剪辑 / 后期', enSub: 'EDIT / POST', video: 'assets/works/exported-film.mp4', poster: 'assets/posters/exported-film.jpg' },
-        { cnTitle: 'Timeline 1', enTitle: 'Timeline 1', cnSub: '竖版 / 节奏', enSub: 'VERTICAL / RHYTHM', video: 'assets/works/timeline-vertical.mp4', poster: 'assets/posters/timeline-vertical.jpg' }
+        { id: 'featured-prove-it', cnTitle: 'Prove It', enTitle: 'Prove It', cnSub: '广告 / 剪辑', enSub: 'AD / EDIT', cnDesc: '以节奏剪辑和品牌信息为核心的广告片段。', enDesc: 'An advertising piece built around rhythmic editing and clear brand messaging.', video: 'assets/works/prove-it.mp4', poster: 'assets/posters/prove-it.jpg' },
+        { id: 'featured-approach', cnTitle: '搭讪', enTitle: 'Approach', cnSub: '叙事 / 剪辑', enSub: 'NARRATIVE / EDIT', cnDesc: '用剪辑节奏组织人物关系与情绪变化。', enDesc: 'A narrative edit shaped around character dynamics and emotional shifts.', video: 'assets/works/approach.mp4', poster: 'assets/posters/approach.jpg' },
+        { id: 'featured-giant-wheel', cnTitle: '巨轮空降', enTitle: 'Giant Wheel', cnSub: '特效 / 合成', enSub: 'VFX / COMPOSITING', cnDesc: '结合三维资产、特效与合成完成的视觉实验。', enDesc: 'A visual experiment combining 3D assets, effects, and compositing.', video: 'assets/works/giant-wheel.mp4', poster: 'assets/posters/giant-wheel.jpg' },
+        { id: 'featured-exported-film', cnTitle: '导出成片', enTitle: 'Exported Film', cnSub: '剪辑 / 后期', enSub: 'EDIT / POST', cnDesc: '从素材整理到最终输出的完整后期片段。', enDesc: 'A post-production piece carried from media organization through final export.', video: 'assets/works/exported-film.mp4', poster: 'assets/posters/exported-film.jpg' },
+        { id: 'featured-timeline-1', cnTitle: 'Timeline 1', enTitle: 'Timeline 1', cnSub: '竖版 / 节奏', enSub: 'VERTICAL / RHYTHM', cnDesc: '面向移动端观看的竖版节奏剪辑测试。', enDesc: 'A vertical editing study designed for mobile viewing and rhythm.', video: 'assets/works/timeline-vertical.mp4', poster: 'assets/posters/timeline-vertical.jpg' }
       ];
 
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -1889,13 +1897,15 @@
           enTitle,
           cnSub,
           enSub,
+          cnDesc: (item?.cnDesc ?? '').trim(),
+          enDesc: (item?.enDesc ?? item?.cnDesc ?? '').trim(),
           video: item?.video || '',
           mobileVideo: item?.mobileVideo || '',
           poster: item?.poster || '',
         };
       };
 
-      const allWorkData = () => [...uploadedWorkData, ...baseWorkData].map(normalizeWork);
+      const allWorkData = () => (uploadedWorkData.length ? uploadedWorkData : baseWorkData).map(normalizeWork);
 
       const workVideoFor = (item) => mobilePlaybackMode && item?.mobileVideo
         ? item.mobileVideo
@@ -2477,6 +2487,7 @@
           const number = String(index + 1).padStart(2, '0');
           const title = escapeHtml(state.lang === 'cn' ? item.cnTitle : item.enTitle);
           const subtitle = escapeHtml(state.lang === 'cn' ? item.cnSub : item.enSub);
+          const description = escapeHtml(state.lang === 'cn' ? item.cnDesc : item.enDesc);
           const soundLabel = state.lang === 'cn' ? '打开视频' : 'Open video';
           const posterPath = escapeHtml(workPosterFor(item));
           const previewPath = escapeHtml(workPreviewFor(item));
@@ -2509,6 +2520,7 @@
                 <h3>${title}</h3>
                 <div class="work-meta">
                   <p>${subtitle}</p>
+                  ${description ? `<p class="work-description">${description}</p>` : ''}
                 </div>
               </div>
             </article>

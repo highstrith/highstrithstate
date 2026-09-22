@@ -98,6 +98,8 @@ function normalizeStoredWork(value) {
   const enTitle = sanitizeText(value?.enTitle, cnTitle || "Untitled Work", 80);
   const cnSub = sanitizeText(value?.cnSub, "", 64);
   const enSub = sanitizeText(value?.enSub, "", 64);
+  const cnDesc = sanitizeText(value?.cnDesc, "", 180);
+  const enDesc = sanitizeText(value?.enDesc, cnDesc, 180);
 
   return {
     id: sanitizeText(value?.id, uniqueStem("work"), 48),
@@ -106,6 +108,8 @@ function normalizeStoredWork(value) {
     enTitle,
     cnSub,
     enSub,
+    cnDesc,
+    enDesc,
     video: typeof value?.video === "string" ? value.video : "",
     mobileVideo: typeof value?.mobileVideo === "string" ? value.mobileVideo : "",
     poster: typeof value?.poster === "string" ? value.poster : "",
@@ -272,6 +276,8 @@ function buildWorkFromPayload(payload, existingWork = null) {
     enTitle: payload?.enTitle ?? existingWork?.enTitle,
     cnSub: payload?.cnSub ?? existingWork?.cnSub,
     enSub: payload?.enSub ?? existingWork?.enSub,
+    cnDesc: payload?.cnDesc ?? existingWork?.cnDesc,
+    enDesc: payload?.enDesc ?? existingWork?.enDesc,
     video: payload?.video ?? existingWork?.video,
     mobileVideo: payload?.mobileVideo ?? existingWork?.mobileVideo ?? "",
     poster: payload?.poster ?? existingWork?.poster ?? "",
@@ -317,26 +323,31 @@ async function handleWorksPut(req, res, workId) {
   }
 
   const existingWork = works[index];
-  if (!isAllowedAssetReference(existingWork.video)) {
-    sendJson(res, 403, { error: "Only uploaded works can be edited." });
-    return;
-  }
-
   const nextVideo = payload?.video ?? existingWork.video;
   const nextMobileVideo = payload?.mobileVideo ?? existingWork.mobileVideo ?? "";
   const nextPoster = payload?.poster ?? existingWork.poster ?? "";
 
-  if (!isAllowedAssetReference(nextVideo)) {
+  const isUploadedWork = existingWork.video.startsWith("assets/uploads/");
+  const mediaChanged = nextVideo !== existingWork.video
+    || nextMobileVideo !== existingWork.mobileVideo
+    || nextPoster !== existingWork.poster;
+
+  if (!isUploadedWork && mediaChanged) {
+    sendJson(res, 403, { error: "Built-in work media cannot be changed." });
+    return;
+  }
+
+  if (isUploadedWork && !isAllowedAssetReference(nextVideo)) {
     sendJson(res, 400, { error: "Video path is invalid." });
     return;
   }
 
-  if (!isAllowedAssetReference(nextMobileVideo, true)) {
+  if (isUploadedWork && !isAllowedAssetReference(nextMobileVideo, true)) {
     sendJson(res, 400, { error: "Mobile video path is invalid." });
     return;
   }
 
-  if (!isAllowedAssetReference(nextPoster, true)) {
+  if (isUploadedWork && !isAllowedAssetReference(nextPoster, true)) {
     sendJson(res, 400, { error: "Poster path is invalid." });
     return;
   }

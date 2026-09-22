@@ -612,6 +612,14 @@
                 <input class="upload-input" id="uploadEnSubInput" name="enSub" type="text" maxlength="64" placeholder="For example: BRAND / EDIT" />
               </label>
               <label class="upload-field">
+                <span class="field-label" id="uploadCnDescLabel">中文描述</span>
+                <textarea class="upload-input" id="uploadCnDescInput" name="cnDesc" maxlength="180" rows="3" placeholder="例如：一支强调节奏和视觉质感的短片。"></textarea>
+              </label>
+              <label class="upload-field">
+                <span class="field-label" id="uploadEnDescLabel">English Description</span>
+                <textarea class="upload-input" id="uploadEnDescInput" name="enDesc" maxlength="180" rows="3" placeholder="For example: A short film built around rhythm and visual texture."></textarea>
+              </label>
+              <label class="upload-field">
                 <span class="field-label" id="uploadVideoLabel">作品视频（MP4）</span>
                 <input class="upload-input" id="uploadVideoInput" name="videoFile" type="file" accept=".mp4,video/mp4" />
                 <small class="field-help" id="uploadVideoHelp">目前支持 MP4，建议上传压缩后的成片，减少浏览时的加载压力。</small>
@@ -665,7 +673,7 @@
           heroEyebrow: 'Private Admin',
           heroTitle: '把上传和作品管理从首页挪到这里。',
           heroDesc: '这个页面保留上传、编辑、删除的完整能力，但不从主页公开暴露。你可以在这里维护作品，首页只负责干净地展示结果。',
-          heroWorkCountLabel: '已上传作品',
+          heroWorkCountLabel: '已管理作品',
           heroFormatLabel: '支持格式',
           privacyKicker: 'Access',
           privacyNote: '这个地址不会从首页导航中出现，但它也不是带密码的后台。适合用于你自己维护内容，不适合公开传播。',
@@ -684,6 +692,10 @@
           uploadEnTitlePlaceholder: 'For example: Product Launch Film',
           uploadCnSubPlaceholder: '例如：品牌 / 剪辑',
           uploadEnSubPlaceholder: 'For example: BRAND / EDIT',
+          uploadCnDescLabel: '中文描述',
+          uploadEnDescLabel: '英文描述',
+          uploadCnDescPlaceholder: '例如：一支强调节奏和视觉质感的短片。',
+          uploadEnDescPlaceholder: 'For example: A short film built around rhythm and visual texture.',
           uploadVideoLabel: '作品视频（MP4）',
           uploadPosterLabel: '封面图（可选）',
           uploadVideoHelp: '目前支持 MP4，建议上传压缩后的成片，减少浏览时的加载压力。',
@@ -706,13 +718,15 @@
           uploadDeleteConfirm: '确定删除这条已上传作品吗？对应的视频和封面也会一并移除。',
           uploadUnavailable: '当前本地服务暂时不可用，稍后再试。',
           manageKicker: '管理列表',
-          manageTitle: '已上传作品管理',
-          manageNote: '这里只显示通过上传功能加入站点的作品。基础内置作品不会出现在这里，也不会提供删除入口。',
-          manageEmpty: '还没有已上传作品。上传一条作品后，它会立刻出现在这里。',
+          manageTitle: '全部作品管理',
+          manageNote: '这里显示首页的全部作品。你可以编辑名称、分类和描述；上传作品还可以替换媒体或删除。',
+          manageEmpty: '还没有作品。上传一条作品后，它会立刻出现在这里。',
           manageItemTag: '已上传',
+          manageBuiltInTag: '精选作品',
           manageCreated: '创建时间',
           manageVideo: '视频路径',
           managePoster: '封面路径',
+          manageDescription: '描述',
           manageNoPoster: '暂未设置封面',
           manageEdit: '编辑',
           manageDelete: '删除',
@@ -726,7 +740,7 @@
           heroEyebrow: 'Private Admin',
           heroTitle: 'Move upload and work management off the homepage.',
           heroDesc: 'This page keeps the full upload, edit, and delete workflow without exposing it on the public homepage. Maintain the portfolio here, and let the homepage stay presentation-only.',
-          heroWorkCountLabel: 'Uploaded Works',
+          heroWorkCountLabel: 'Managed Works',
           heroFormatLabel: 'Supported Formats',
           privacyKicker: 'Access',
           privacyNote: 'This page is intentionally absent from the homepage navigation, but it is not password-protected. It is suitable for your own maintenance flow, not for public distribution.',
@@ -745,6 +759,10 @@
           uploadEnTitlePlaceholder: 'For example: Product Launch Film',
           uploadCnSubPlaceholder: 'For example: BRAND / EDIT',
           uploadEnSubPlaceholder: 'For example: BRAND / EDIT',
+          uploadCnDescLabel: 'Chinese Description',
+          uploadEnDescLabel: 'English Description',
+          uploadCnDescPlaceholder: 'For example: A short film built around rhythm and visual texture.',
+          uploadEnDescPlaceholder: 'For example: A short film built around rhythm and visual texture.',
           uploadVideoLabel: 'Project Video (MP4)',
           uploadPosterLabel: 'Poster Image (Optional)',
           uploadVideoHelp: 'MP4 is supported for now. Uploading a compressed deliverable will keep browsing smoother.',
@@ -767,13 +785,15 @@
           uploadDeleteConfirm: 'Delete this uploaded work? Its video and poster files will be removed as well.',
           uploadUnavailable: 'The local upload service is unavailable right now. Please try again shortly.',
           manageKicker: 'Manage',
-          manageTitle: 'Uploaded Work Controls',
-          manageNote: 'Only works added through the upload flow appear here. Built-in portfolio items stay outside this panel and never expose delete controls.',
-          manageEmpty: 'No uploaded works yet. Add one and it will appear here immediately.',
+          manageTitle: 'All Work Controls',
+          manageNote: 'All homepage works appear here. Edit names, categories, and descriptions; uploaded works can also replace media or be deleted.',
+          manageEmpty: 'No works yet. Add one and it will appear here immediately.',
           manageItemTag: 'Uploaded',
+          manageBuiltInTag: 'Featured',
           manageCreated: 'Created',
           manageVideo: 'Video Path',
           managePoster: 'Poster Path',
+          manageDescription: 'Description',
           manageNoPoster: 'No poster assigned yet',
           manageEdit: 'Edit',
           manageDelete: 'Delete',
@@ -823,6 +843,8 @@
       const uploadEnTitleLabel = document.getElementById('uploadEnTitleLabel');
       const uploadCnSubLabel = document.getElementById('uploadCnSubLabel');
       const uploadEnSubLabel = document.getElementById('uploadEnSubLabel');
+      const uploadCnDescLabel = document.getElementById('uploadCnDescLabel');
+      const uploadEnDescLabel = document.getElementById('uploadEnDescLabel');
       const uploadVideoLabel = document.getElementById('uploadVideoLabel');
       const uploadPosterLabel = document.getElementById('uploadPosterLabel');
       const uploadVideoHelp = document.getElementById('uploadVideoHelp');
@@ -831,6 +853,8 @@
       const uploadEnTitleInput = document.getElementById('uploadEnTitleInput');
       const uploadCnSubInput = document.getElementById('uploadCnSubInput');
       const uploadEnSubInput = document.getElementById('uploadEnSubInput');
+      const uploadCnDescInput = document.getElementById('uploadCnDescInput');
+      const uploadEnDescInput = document.getElementById('uploadEnDescInput');
       const uploadVideoInput = document.getElementById('uploadVideoInput');
       const uploadPosterInput = document.getElementById('uploadPosterInput');
       const manageKicker = document.getElementById('manageKicker');
@@ -865,6 +889,8 @@
           enTitle,
           cnSub,
           enSub,
+          cnDesc: (item?.cnDesc ?? '').trim(),
+          enDesc: (item?.enDesc ?? item?.cnDesc ?? '').trim(),
           video: item?.video || '',
           mobileVideo: item?.mobileVideo || '',
           poster: item?.poster || '',
@@ -873,7 +899,7 @@
 
       const isManagedWork = (item) => typeof item?.video === 'string' && item.video.startsWith('assets/uploads/');
 
-      const managedWorks = () => uploadedWorkData.filter(isManagedWork);
+      const managedWorks = () => uploadedWorkData;
 
       const findUploadedWork = (workId) => uploadedWorkData.find((item) => item.id === workId) || null;
 
@@ -928,7 +954,13 @@
           uploadEnTitleInput.value = work.enTitle || '';
           uploadCnSubInput.value = work.cnSub || '';
           uploadEnSubInput.value = work.enSub || '';
+          uploadCnDescInput.value = work.cnDesc || '';
+          uploadEnDescInput.value = work.enDesc || '';
         }
+
+        const editingBuiltInWork = uploadMode === 'edit' && work && !isManagedWork(work);
+        uploadVideoInput.disabled = Boolean(editingBuiltInWork);
+        uploadPosterInput.disabled = Boolean(editingBuiltInWork);
 
         syncUploadModeUi();
       };
@@ -1103,6 +1135,7 @@
         manageList.innerHTML = works.map((item) => {
           const title = escapeHtml(state.lang === 'cn' ? item.cnTitle : item.enTitle);
           const subtitle = escapeHtml(state.lang === 'cn' ? item.cnSub : item.enSub);
+          const description = escapeHtml(state.lang === 'cn' ? item.cnDesc : item.enDesc);
           const createdAt = escapeHtml(formatStamp(item.createdAt));
           const videoPath = escapeHtml(item.video || '—');
           const posterPath = escapeHtml(item.poster || copy.manageNoPoster);
@@ -1119,7 +1152,7 @@
                     <h3>${title}</h3>
                     <p>${subtitle}</p>
                   </div>
-                  <span class="pill">${escapeHtml(copy.manageItemTag)}</span>
+                  <span class="pill">${escapeHtml(isManagedWork(item) ? copy.manageItemTag : copy.manageBuiltInTag)}</span>
                 </div>
                 <div class="meta-grid">
                   <div class="meta-row">
@@ -1134,10 +1167,14 @@
                     <strong>${escapeHtml(copy.managePoster)}</strong>
                     <span>${posterPath}</span>
                   </div>
+                  <div class="meta-row">
+                    <strong>${escapeHtml(copy.manageDescription)}</strong>
+                    <span>${description || '—'}</span>
+                  </div>
                 </div>
                 <div class="manage-actions">
                   <button class="btn" type="button" data-edit-work="${escapeHtml(item.id)}">${escapeHtml(copy.manageEdit)}</button>
-                  <button class="btn danger" type="button" data-delete-work="${escapeHtml(item.id)}">${escapeHtml(copy.manageDelete)}</button>
+                  ${isManagedWork(item) ? `<button class="btn danger" type="button" data-delete-work="${escapeHtml(item.id)}">${escapeHtml(copy.manageDelete)}</button>` : ''}
                 </div>
               </div>
             </article>
@@ -1173,6 +1210,8 @@
         uploadEnTitleLabel.textContent = copy.uploadEnTitleLabel;
         uploadCnSubLabel.textContent = copy.uploadCnSubLabel;
         uploadEnSubLabel.textContent = copy.uploadEnSubLabel;
+        uploadCnDescLabel.textContent = copy.uploadCnDescLabel;
+        uploadEnDescLabel.textContent = copy.uploadEnDescLabel;
         uploadVideoLabel.textContent = copy.uploadVideoLabel;
         uploadPosterLabel.textContent = copy.uploadPosterLabel;
         uploadVideoHelp.textContent = copy.uploadVideoHelp;
@@ -1182,6 +1221,8 @@
         uploadEnTitleInput.placeholder = copy.uploadEnTitlePlaceholder;
         uploadCnSubInput.placeholder = copy.uploadCnSubPlaceholder;
         uploadEnSubInput.placeholder = copy.uploadEnSubPlaceholder;
+        uploadCnDescInput.placeholder = copy.uploadCnDescPlaceholder;
+        uploadEnDescInput.placeholder = copy.uploadEnDescPlaceholder;
         manageKicker.textContent = copy.manageKicker;
         manageTitle.textContent = copy.manageTitle;
         manageNote.textContent = copy.manageNote;
@@ -1284,6 +1325,8 @@
             enTitle: uploadEnTitleInput.value || '',
             cnSub: uploadCnSubInput.value || '',
             enSub: uploadEnSubInput.value || '',
+            cnDesc: uploadCnDescInput.value || '',
+            enDesc: uploadEnDescInput.value || '',
             video,
             mobileVideo: videoFile ? '' : (currentWork?.mobileVideo || ''),
             poster,

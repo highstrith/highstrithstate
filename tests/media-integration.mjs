@@ -4,6 +4,7 @@ import path from 'node:path';
 
 const root = path.resolve(import.meta.dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const works = JSON.parse(fs.readFileSync(path.join(root, 'data/works.json'), 'utf8'));
 const media = [
   'assets/hero-fireflies.mp4',
   'assets/works/prove-it.mp4',
@@ -28,3 +29,6 @@ for (const asset of [...media, ...posters]) {
 
 assert.match(html, /const baseWorkData = \[\s*[\s\S]*?\];/);
 assert.equal((html.match(/assets\/works\//g) || []).length, 5, 'five starter works must be configured');
+assert.equal(works.length, 7, 'all seven portfolio works must be editable from the catalog');
+assert.equal(new Set(works.map((work) => work.id)).size, works.length, 'catalog work ids must be unique');
+assert.ok(works.every((work) => work.cnTitle && work.enTitle && work.cnSub && work.enSub && work.cnDesc && work.enDesc), 'catalog works must include titles, categories, and descriptions');

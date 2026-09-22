@@ -15,7 +15,7 @@ with sync_playwright() as p:
     page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
     page.wait_for_timeout(500)
     titles = [title.strip() for title in page.locator(".work-info h3").all_text_contents()]
-    subtitles = [subtitle.strip() for subtitle in page.locator(".work-meta p").all_text_contents()]
+    subtitles = [subtitle.strip() for subtitle in page.locator(".work-meta > p:first-child").all_text_contents()]
     assert titles[-5:] == ["Prove It", "搭讪", "巨轮空降", "导出成片", "Timeline 1"]
     assert subtitles[-5:] == ["广告 / 剪辑", "叙事 / 剪辑", "特效 / 合成", "剪辑 / 后期", "竖版 / 节奏"]
     missing_upload_posters = {
@@ -43,4 +43,10 @@ with sync_playwright() as p:
     qr_dialog = page.locator("#social-qr-dialog")
     assert qr_dialog.evaluate("dialog => dialog.open")
     assert qr_dialog.locator("img").evaluate("image => image.naturalWidth") > 0
+    admin = browser.new_page(viewport={"width": 1440, "height": 1000})
+    admin.goto("http://127.0.0.1:3000/admin.html", wait_until="networkidle")
+    assert admin.locator(".manage-card").count() == 7
+    assert admin.locator("#uploadCnDescInput").count() == 1
+    assert admin.locator("#uploadEnDescInput").count() == 1
+    admin.close()
     browser.close()
