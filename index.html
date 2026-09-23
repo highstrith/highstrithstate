@@ -2242,6 +2242,10 @@
       const syncWorkVideos = () => {
         workVideoSyncFrame = 0;
         document.querySelectorAll('.work-video').forEach((video) => {
+          if (mobilePlaybackMode) {
+            unloadVideo(video);
+            return;
+          }
           const bounds = video.getBoundingClientRect();
           const inPlaybackRange = !reduceMotion.matches
             && bounds.bottom >= -WORK_VIDEO_MARGIN

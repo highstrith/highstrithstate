@@ -9,6 +9,9 @@ with sync_playwright() as p:
         page.goto("http://127.0.0.1:3000/#works", wait_until="domcontentloaded")
         page.locator(".work-card").first.wait_for()
         indexes = (0, 7) if motion == "no-preference" else (0,)
+        if motion == "no-preference":
+            mobile_card_videos = page.locator(".work-card .work-video")
+            assert mobile_card_videos.evaluate_all("videos => videos.every(video => !video.currentSrc && video.paused)")
         for index in indexes:
             card = page.locator(".work-card").nth(index)
             card.scroll_into_view_if_needed()
