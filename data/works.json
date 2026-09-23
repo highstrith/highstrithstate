@@ -101,7 +101,7 @@
     "enDesc": "A newly added video. Edit its title, category, and description in the admin page.",
     "video": "assets/works/creative-3.mp4",
     "mobileVideo": "",
-    "poster": ""
+    "poster": "assets/posters/creative-3.jpg"
   },
   {
     "id": "added-visual-study",
@@ -114,7 +114,7 @@
     "enDesc": "A newly added video. Edit its title, category, and description in the admin page.",
     "video": "assets/works/visual-study.mp4",
     "mobileVideo": "",
-    "poster": ""
+    "poster": "assets/posters/visual-study.jpg"
   },
   {
     "id": "added-title-render",
@@ -127,7 +127,7 @@
     "enDesc": "A newly added title render. Edit its metadata in the admin page.",
     "video": "assets/works/title-render.mp4",
     "mobileVideo": "",
-    "poster": ""
+    "poster": "assets/posters/title-render.jpg"
   },
   {
     "id": "added-v30001-0180",
@@ -140,7 +140,7 @@
     "enDesc": "A newly added video. Edit its title, category, and description in the admin page.",
     "video": "assets/works/v30001-0180.mp4",
     "mobileVideo": "",
-    "poster": ""
+    "poster": "assets/posters/v30001-0180.jpg"
   },
   {
     "id": "added-render-test",
@@ -153,7 +153,7 @@
     "enDesc": "A newly added render test. Edit its metadata in the admin page.",
     "video": "assets/works/render-test.mp4",
     "mobileVideo": "",
-    "poster": ""
+    "poster": "assets/posters/render-test.jpg"
   },
   {
     "id": "added-completed-film",
@@ -166,6 +166,6 @@
     "enDesc": "A newly added finished film. Edit its metadata in the admin page.",
     "video": "assets/works/completed-film.mp4",
     "mobileVideo": "",
-    "poster": ""
+    "poster": "assets/posters/completed-film.jpg"
   }
 ]
