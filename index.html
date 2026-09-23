@@ -2026,7 +2026,7 @@
       const startBackgroundMusic = async () => {
         if (!bgMusic) return false;
         try {
-          bgMusic.volume = 0.34;
+          bgMusic.volume = 0.16;
           bgMusic.muted = false;
           await bgMusic.play();
           musicPlaying = true;
@@ -2699,18 +2699,6 @@
       }, { passive: true });
 
       updateActiveNav();
-
-      if (!reduceMotion.matches) {
-        const autoStartMusic = () => {
-          if (workPlayer?.classList.contains('is-open')) return;
-          if (musicPlaying || !bgMusic.paused) return;
-          startBackgroundMusic();
-        };
-
-        window.addEventListener('pointerdown', autoStartMusic, { once: true, passive: true });
-        window.addEventListener('click', autoStartMusic, { once: true, passive: true });
-        window.addEventListener('keydown', autoStartMusic, { once: true });
-      }
 
       applyLanguage(state.lang);
       await hydrateUploadedWorks();
