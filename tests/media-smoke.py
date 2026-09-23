@@ -16,8 +16,9 @@ with sync_playwright() as p:
     page.wait_for_timeout(500)
     titles = [title.strip() for title in page.locator(".work-info h3").all_text_contents()]
     subtitles = [subtitle.strip() for subtitle in page.locator(".work-meta > p:first-child").all_text_contents()]
-    assert titles[-5:] == ["Prove It", "搭讪", "巨轮空降", "导出成片", "Timeline 1"]
-    assert subtitles[-5:] == ["广告 / 剪辑", "叙事 / 剪辑", "特效 / 合成", "剪辑 / 后期", "竖版 / 节奏"]
+    catalog = page.request.get("http://127.0.0.1:3000/data/works.json").json()
+    assert titles == [work["cnTitle"] for work in catalog]
+    assert subtitles == [work["cnSub"] for work in catalog]
     missing_upload_posters = {
         "http://127.0.0.1:3000/assets/uploads/posters/poster-1783864071336.webp",
         "http://127.0.0.1:3000/assets/uploads/posters/poster-1783246320293.webp",
@@ -39,7 +40,13 @@ with sync_playwright() as p:
     assert featured_video.evaluate("video => !video.paused")
     page.locator("#contact").scroll_into_view_if_needed()
     assert page.locator("#contact .contact-unified").count() == 1
-    assert page.locator("#contact .contact-column").count() == 3
+    assert page.locator("#contact .contact-column").count() == 2
+    assert page.locator("#contact .contact-social-row").count() == 1
+    assert page.locator("#contact .contact-social-row [data-social-platform]").count() == 4
+    assert page.locator("#contact .contact-sub-kicker").count() == 0
+    social_row = page.locator("#contact .contact-social-row")
+    social_hub = social_row.locator(".social-hub")
+    assert abs((social_hub.bounding_box()["x"] + social_hub.bounding_box()["width"] / 2) - (social_row.bounding_box()["x"] + social_row.bounding_box()["width"] / 2)) < 2
     assert page.locator("#about .contact-card").count() == 0
     assert page.locator("nav a[href='#process']").count() == 0
     assert page.locator("#process").get_attribute("hidden") is not None
@@ -50,6 +57,11 @@ with sync_playwright() as p:
     qr_dialog = page.locator("#social-qr-dialog")
     assert qr_dialog.evaluate("dialog => dialog.open")
     assert qr_dialog.locator("img").evaluate("image => image.naturalWidth") > 0
+    mobile = browser.new_page(viewport={"width": 390, "height": 844})
+    mobile.goto("http://127.0.0.1:3000/#contact", wait_until="networkidle")
+    assert not mobile.evaluate("document.documentElement.scrollWidth > innerWidth")
+    assert mobile.locator("#contact .contact-social-row [data-social-platform]").count() == 4
+    mobile.close()
     admin = browser.new_page(viewport={"width": 1440, "height": 1000})
     admin.goto("http://127.0.0.1:3000/admin.html", wait_until="networkidle")
     assert admin.locator(".manage-card").count() == 7
