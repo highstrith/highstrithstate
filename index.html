@@ -2360,7 +2360,12 @@
           if (!workPlayer.classList.contains('is-open')) return false;
           workPlayerVideo.muted = false;
           workPlayerVideo.volume = 1;
-          return tryPlay(workPlayerVideo);
+          try {
+            await workPlayerVideo.play();
+            return true;
+          } catch (_) {
+            return false;
+          }
         };
 
         restartFromBeginning();
@@ -2633,7 +2638,7 @@
 
       workPlayer?.addEventListener('click', (event) => {
         if (Date.now() - workPlayerOpenedAt < 500) {
-          if (workPlayerVideo?.paused) tryPlay(workPlayerVideo);
+          if (workPlayerVideo?.paused) workPlayerVideo.play().catch(() => {});
           return;
         }
         if (event.target === workPlayer) closeWorkPlayer();
