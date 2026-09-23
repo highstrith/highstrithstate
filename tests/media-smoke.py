@@ -53,6 +53,17 @@ with sync_playwright() as p:
     social_links = page.locator("[data-social-platform]")
     assert social_links.count() == 4
     assert social_links.filter(has_text="哔哩哔哩").get_attribute("href") == "https://b23.tv/VFqS3Tj"
+    wechat = social_links.filter(has_text="微信")
+    wechat.hover()
+    qr_preview = page.locator("#social-qr-preview")
+    assert qr_preview.is_visible()
+    assert qr_preview.locator("img").evaluate("image => image.naturalWidth") > 0
+    preview_bounds = qr_preview.bounding_box()
+    assert preview_bounds["x"] >= 0 and preview_bounds["y"] >= 0
+    assert preview_bounds["x"] + preview_bounds["width"] <= page.viewport_size["width"]
+    assert preview_bounds["y"] + preview_bounds["height"] <= page.viewport_size["height"]
+    page.locator("#contact .contact-column").first.hover()
+    assert not qr_preview.is_visible()
     social_links.filter(has_text="微信").click()
     qr_dialog = page.locator("#social-qr-dialog")
     assert qr_dialog.evaluate("dialog => dialog.open")

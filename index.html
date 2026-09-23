@@ -916,6 +916,15 @@
     .social-link:hover, .social-link:focus-visible { border-color: rgba(216, 180, 111, 0.76); background: rgba(216, 180, 111, 0.1); transform: translateY(-2px); outline: none; }
     .social-link svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; }
     .social-link .social-xhs { font-size: 0.62rem; font-weight: 800; letter-spacing: 0; }
+    .social-qr-preview {
+      position: fixed; z-index: 100; width: 224px; padding: 12px;
+      border: 1px solid rgba(216, 180, 111, 0.45); border-radius: 18px;
+      background: #0d111a; box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
+      pointer-events: none; text-align: center;
+    }
+    .social-qr-preview[hidden] { display: none; }
+    .social-qr-preview img { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; border-radius: 9px; background: #fff; }
+    .social-qr-preview p { margin: 9px 0 0; color: var(--text); font-size: 0.82rem; }
     .social-qr-dialog { width: min(92vw, 400px); padding: 0; border: 1px solid rgba(216, 180, 111, 0.45); border-radius: 24px; color: var(--text); background: #0d111a; box-shadow: 0 28px 90px rgba(0, 0, 0, 0.58); }
     .social-qr-dialog::backdrop { background: rgba(3, 5, 9, 0.76); backdrop-filter: blur(7px); }
     .social-qr-inner { padding: 22px; text-align: center; }
@@ -1563,6 +1572,10 @@
   </div>
 
   <audio id="bgMusic" src="assets/background-music.mp3" preload="none" loop></audio>
+  <div class="social-qr-preview" id="social-qr-preview" aria-hidden="true" hidden>
+    <img alt="" />
+    <p></p>
+  </div>
   <dialog class="social-qr-dialog" id="social-qr-dialog" aria-labelledby="social-qr-title">
     <div class="social-qr-inner">
       <button class="work-player-control social-qr-close" id="socialQrClose" type="button" aria-label="关闭二维码">
@@ -1850,6 +1863,9 @@
       const socialQrImage = document.querySelector('#social-qr-image');
       const socialQrTitle = document.querySelector('#social-qr-title');
       const socialQrAccount = document.querySelector('#social-qr-account');
+      const socialQrPreview = document.querySelector('#social-qr-preview');
+      const socialQrPreviewImage = socialQrPreview?.querySelector('img');
+      const socialQrPreviewAccount = socialQrPreview?.querySelector('p');
       const socialQrClose = document.querySelector('#socialQrClose');
       const footerMain = document.querySelector('.footer > div:last-child');
       const workTagRows = [...document.querySelectorAll('.tag-row .tag')];
@@ -2625,8 +2641,35 @@
 
       workPlayerVideo?.addEventListener('ended', closeWorkPlayer);
 
+      const hideSocialQrPreview = () => {
+        if (socialQrPreview) socialQrPreview.hidden = true;
+      };
+
+      const showSocialQrPreview = (button) => {
+        if (!socialQrPreview || !socialQrPreviewImage || !socialQrPreviewAccount || !window.matchMedia('(hover: hover)').matches) return;
+        socialQrPreviewImage.src = button.dataset.qrImage;
+        socialQrPreviewImage.alt = `${button.dataset.qrTitle}二维码`;
+        socialQrPreviewAccount.textContent = button.dataset.qrAccount || '';
+        socialQrPreview.hidden = false;
+        const trigger = button.getBoundingClientRect();
+        const width = socialQrPreview.offsetWidth;
+        const height = socialQrPreview.offsetHeight;
+        const gap = 12;
+        const left = Math.max(gap, Math.min(trigger.left + trigger.width / 2 - width / 2, window.innerWidth - width - gap));
+        const top = trigger.top - height - gap >= gap
+          ? trigger.top - height - gap
+          : Math.min(trigger.bottom + gap, window.innerHeight - height - gap);
+        socialQrPreview.style.left = `${left}px`;
+        socialQrPreview.style.top = `${Math.max(gap, top)}px`;
+      };
+
       document.querySelectorAll('[data-qr-image]').forEach((button) => {
+        button.addEventListener('pointerenter', () => showSocialQrPreview(button));
+        button.addEventListener('pointerleave', hideSocialQrPreview);
+        button.addEventListener('focus', () => showSocialQrPreview(button));
+        button.addEventListener('blur', hideSocialQrPreview);
         button.addEventListener('click', () => {
+          hideSocialQrPreview();
           const image = button.dataset.qrImage;
           const title = button.dataset.qrTitle;
           const account = button.dataset.qrAccount;
@@ -2638,6 +2681,9 @@
           socialQrDialog.showModal();
         });
       });
+
+      window.addEventListener('scroll', hideSocialQrPreview, { passive: true });
+      window.addEventListener('resize', hideSocialQrPreview);
 
       socialQrClose?.addEventListener('click', () => socialQrDialog?.close());
       socialQrDialog?.addEventListener('click', (event) => {
