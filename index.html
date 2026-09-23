@@ -435,6 +435,39 @@
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
+    .works-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 28px;
+    }
+
+    .works-page-button {
+      min-width: 42px;
+      height: 42px;
+      padding: 0 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      font: inherit;
+      cursor: pointer;
+      transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .works-page-button:hover,
+    .works-page-button.is-current {
+      border-color: rgba(216, 180, 111, 0.5);
+      background: rgba(216, 180, 111, 0.12);
+      color: var(--text);
+    }
+
+    .works-page-button:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
     .works-grid.reveal {
       opacity: 1;
       transform: none;
@@ -1481,6 +1514,7 @@
         </div>
 
         <div class="works-grid reveal" id="worksGrid" style="--delay: 100ms;"></div>
+        <nav class="works-pagination" id="worksPagination" aria-label="作品分页"></nav>
       </section>
 
       <section class="section" id="process" hidden>
@@ -1934,6 +1968,8 @@
       };
 
       const allWorkData = () => (uploadedWorkData.length ? uploadedWorkData : baseWorkData).map(normalizeWork);
+      const WORKS_PER_PAGE = 8;
+      let worksPage = 1;
 
       const workVideoFor = (item) => mobilePlaybackMode && item?.mobileVideo
         ? item.mobileVideo
@@ -2471,8 +2507,13 @@
       };
 
       const renderWorks = () => {
-        worksGrid.innerHTML = allWorkData().map((item, index) => {
-          const number = String(index + 1).padStart(2, '0');
+        const works = allWorkData();
+        const pageCount = Math.max(1, Math.ceil(works.length / WORKS_PER_PAGE));
+        worksPage = Math.min(worksPage, pageCount);
+        const pageStart = (worksPage - 1) * WORKS_PER_PAGE;
+        const pageWorks = works.slice(pageStart, pageStart + WORKS_PER_PAGE);
+        worksGrid.innerHTML = pageWorks.map((item, index) => {
+          const number = String(pageStart + index + 1).padStart(2, '0');
           const title = escapeHtml(state.lang === 'cn' ? item.cnTitle : item.enTitle);
           const subtitle = escapeHtml(state.lang === 'cn' ? item.cnSub : item.enSub);
           const description = escapeHtml(state.lang === 'cn' ? item.cnDesc : item.enDesc);
@@ -2514,6 +2555,28 @@
             </article>
           `;
         }).join('');
+
+        const pagination = document.getElementById('worksPagination');
+        if (pagination) {
+          pagination.hidden = pageCount < 2;
+          pagination.innerHTML = pageCount < 2 ? '' : [
+            `<button class="works-page-button" type="button" data-page="${worksPage - 1}" aria-label="上一页" ${worksPage === 1 ? 'disabled' : ''}>←</button>`,
+            ...Array.from({ length: pageCount }, (_, index) => {
+              const page = index + 1;
+              return `<button class="works-page-button${page === worksPage ? ' is-current' : ''}" type="button" data-page="${page}" aria-label="第 ${page} 页" aria-current="${page === worksPage ? 'page' : 'false'}">${page}</button>`;
+            }),
+            `<button class="works-page-button" type="button" data-page="${worksPage + 1}" aria-label="下一页" ${worksPage === pageCount ? 'disabled' : ''}>→</button>`
+          ].join('');
+          pagination.querySelectorAll('[data-page]').forEach((button) => {
+            button.addEventListener('click', () => {
+              const nextPage = Number(button.dataset.page);
+              if (nextPage < 1 || nextPage > pageCount || nextPage === worksPage) return;
+              worksPage = nextPage;
+              renderWorks();
+              document.querySelector('#works .section-head')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+          });
+        }
 
         setupWorkCards();
         refreshObservers();

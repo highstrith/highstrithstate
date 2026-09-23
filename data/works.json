@@ -89,5 +89,83 @@
     "video": "assets/works/timeline-vertical.mp4",
     "mobileVideo": "",
     "poster": "assets/posters/timeline-vertical.jpg"
+  },
+  {
+    "id": "added-creative-3",
+    "createdAt": "2026-09-23T00:00:00.000Z",
+    "cnTitle": "3 号作品",
+    "enTitle": "Work 03",
+    "cnSub": "视频作品",
+    "enSub": "VIDEO",
+    "cnDesc": "新加入的作品视频，可在管理页继续完善标题、分类与描述。",
+    "enDesc": "A newly added video. Edit its title, category, and description in the admin page.",
+    "video": "assets/works/creative-3.mp4",
+    "mobileVideo": "",
+    "poster": ""
+  },
+  {
+    "id": "added-visual-study",
+    "createdAt": "2026-09-23T00:00:00.000Z",
+    "cnTitle": "视觉练习",
+    "enTitle": "Visual Study",
+    "cnSub": "视频作品",
+    "enSub": "VIDEO",
+    "cnDesc": "新加入的作品视频，可在管理页继续完善标题、分类与描述。",
+    "enDesc": "A newly added video. Edit its title, category, and description in the admin page.",
+    "video": "assets/works/visual-study.mp4",
+    "mobileVideo": "",
+    "poster": ""
+  },
+  {
+    "id": "added-title-render",
+    "createdAt": "2026-09-23T00:00:00.000Z",
+    "cnTitle": "片头渲染",
+    "enTitle": "Title Render",
+    "cnSub": "片头 / 三维",
+    "enSub": "TITLE / 3D",
+    "cnDesc": "新加入的片头渲染作品，可在管理页继续编辑作品信息。",
+    "enDesc": "A newly added title render. Edit its metadata in the admin page.",
+    "video": "assets/works/title-render.mp4",
+    "mobileVideo": "",
+    "poster": ""
+  },
+  {
+    "id": "added-v30001-0180",
+    "createdAt": "2026-09-23T00:00:00.000Z",
+    "cnTitle": "V30001-0180",
+    "enTitle": "V30001-0180",
+    "cnSub": "视频作品",
+    "enSub": "VIDEO",
+    "cnDesc": "新加入的作品视频，可在管理页继续完善标题、分类与描述。",
+    "enDesc": "A newly added video. Edit its title, category, and description in the admin page.",
+    "video": "assets/works/v30001-0180.mp4",
+    "mobileVideo": "",
+    "poster": ""
+  },
+  {
+    "id": "added-render-test",
+    "createdAt": "2026-09-23T00:00:00.000Z",
+    "cnTitle": "渲染测试",
+    "enTitle": "Render Test",
+    "cnSub": "渲染 / 测试",
+    "enSub": "RENDER / TEST",
+    "cnDesc": "新加入的渲染测试作品，可在管理页继续编辑作品信息。",
+    "enDesc": "A newly added render test. Edit its metadata in the admin page.",
+    "video": "assets/works/render-test.mp4",
+    "mobileVideo": "",
+    "poster": ""
+  },
+  {
+    "id": "added-completed-film",
+    "createdAt": "2026-09-23T00:00:00.000Z",
+    "cnTitle": "成片",
+    "enTitle": "Completed Film",
+    "cnSub": "成片 / 剪辑",
+    "enSub": "FILM / EDIT",
+    "cnDesc": "新加入的成片视频，可在管理页继续完善标题、分类与描述。",
+    "enDesc": "A newly added finished film. Edit its metadata in the admin page.",
+    "video": "assets/works/completed-film.mp4",
+    "mobileVideo": "",
+    "poster": ""
   }
 ]
