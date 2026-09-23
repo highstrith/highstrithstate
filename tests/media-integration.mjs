@@ -6,7 +6,7 @@ const root = path.resolve(import.meta.dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const works = JSON.parse(fs.readFileSync(path.join(root, 'data/works.json'), 'utf8'));
 const media = [
-  'assets/hero-fireflies.mp4',
+  'assets/hero-digital-human.jpg',
   'assets/works/prove-it.mp4',
   'assets/works/approach.mp4',
   'assets/works/giant-wheel.mp4',
@@ -14,7 +14,6 @@ const media = [
   'assets/works/timeline-vertical.mp4',
 ];
 const posters = [
-  'assets/posters/hero-fireflies.jpg',
   'assets/posters/prove-it.jpg',
   'assets/posters/approach.jpg',
   'assets/posters/giant-wheel.jpg',

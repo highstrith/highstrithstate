@@ -8,9 +8,8 @@ with sync_playwright() as p:
     page.on("response", lambda response: not_found.append(response.url) if response.status == 404 else None)
     page.goto("http://127.0.0.1:3000/", wait_until="networkidle")
 
-    assert page.locator(".hero-poster").get_attribute("src") == "assets/posters/hero-fireflies.jpg"
-    assert page.locator(".hero-video source").get_attribute("data-src") == "assets/hero-fireflies.mp4"
-    assert page.locator(".hero-video source").get_attribute("src") == "assets/hero-fireflies.mp4"
+    assert page.locator(".hero-avatar").get_attribute("src") == "assets/hero-digital-human.jpg"
+    assert page.locator(".hero-avatar").evaluate("image => image.naturalWidth") == 1792
     assert page.locator(".work-card").count() == 7
     page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
     page.wait_for_timeout(500)

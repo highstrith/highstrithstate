@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark" />
   <meta name="description" content="Highstrith 的 3D 设计、动画与视频剪辑作品集。" />
   <title>Highstrith | 3D 艺术家与视频剪辑</title>
-  <link rel="preload" as="image" href="assets/posters/hero-fireflies.jpg" fetchpriority="high" />
+  <link rel="preload" as="image" href="assets/hero-digital-human.jpg" fetchpriority="high" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -361,10 +361,6 @@
       color: var(--muted);
       font-size: 0.82rem;
       letter-spacing: 0.06em;
-    }
-
-    .hero-video::-webkit-media-controls {
-      display: none !important;
     }
 
     .section {
@@ -1200,164 +1196,199 @@
       .reveal { opacity: 1; transform: none; }
     }
 
-    /* Full-screen hero overlay */
+    /* Split hero with the creator's digital human */
     .hero {
       display: grid;
-      grid-template-columns: 1fr;
-      grid-template-areas: "stack";
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      grid-template-areas: "copy visual";
+      align-items: stretch;
       position: relative;
-      min-height: var(--hero-height);
-      padding: 24px 0 0;
+      min-height: clamp(640px, calc(100svh - 148px), 820px);
+      padding: clamp(16px, 2vw, 28px);
       overflow: hidden;
       margin-bottom: clamp(28px, 4vw, 54px);
-    }
-
-    .hero-copy,
-    .hero-visual {
-      grid-area: stack;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      background:
+        radial-gradient(ellipse at 82% 48%, rgba(152, 14, 27, 0.2), transparent 44%),
+        #07080d;
     }
 
     .hero-visual {
       position: relative;
+      grid-area: visual;
       z-index: 1;
-      min-height: var(--hero-height);
-      padding: 0;
-      border-radius: var(--radius-xl);
+      min-width: 0;
+      min-height: 0;
+      border-radius: 22px;
       overflow: hidden;
-      display: block;
-      background: linear-gradient(180deg, rgba(6, 8, 14, 0.38), rgba(6, 8, 14, 0.56));
-    }
-
-    .hero-poster,
-    .hero-video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: 68% 42%;
-    }
-
-    .hero-poster {
-      display: block;
-      filter: saturate(1.02) contrast(1.04) brightness(0.68);
-      transform: scale(1.02);
-    }
-
-    .hero-video {
-      filter: saturate(1.03) contrast(1.05) brightness(0.7);
-      transform: scale(1.02);
-      opacity: 0;
-      transition: opacity 0.35s ease;
-    }
-
-    .hero-video.is-ready { opacity: 1; }
-
-    .hero-visual::before {
       background:
-        linear-gradient(90deg, rgba(6, 8, 14, 0.72) 0%, rgba(6, 8, 14, 0.42) 46%, rgba(6, 8, 14, 0.18) 100%),
-        linear-gradient(180deg, rgba(6, 8, 14, 0.18), rgba(6, 8, 14, 0.3));
-      opacity: 1;
-      mix-blend-mode: normal;
+        radial-gradient(ellipse at 72% 40%, rgba(176, 20, 34, 0.28), transparent 48%),
+        linear-gradient(145deg, #292a31, #414148 58%, #24252c);
+    }
+
+    .hero-avatar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      max-width: none;
+      object-fit: cover;
+      object-position: top left;
+      display: block;
+      filter: saturate(0.88) contrast(1.04) brightness(0.88);
     }
 
     .hero-visual::after {
-      background: linear-gradient(180deg, rgba(6, 8, 14, 0.06) 0%, rgba(6, 8, 14, 0.08) 44%, rgba(6, 8, 14, 0.58) 100%);
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(7, 8, 13, 0.16), transparent 30%),
+        linear-gradient(180deg, transparent 68%, rgba(7, 8, 13, 0.48));
     }
 
     .hero-copy {
       position: relative;
+      grid-area: copy;
       z-index: 3;
       display: grid;
-      align-content: start;
-      gap: 16px;
-      align-self: start;
-      justify-self: start;
-      width: min(920px, calc(100% - 56px));
-      margin-left: clamp(18px, 5vw, 72px);
-      padding: clamp(22px, 4vw, 48px) 0 0;
-      border-radius: 0;
+      align-content: center;
+      align-self: stretch;
+      justify-self: stretch;
+      gap: 22px;
+      width: auto;
+      margin: 0;
+      padding: clamp(22px, 4vw, 58px) clamp(18px, 3.6vw, 52px);
+      border-radius: 22px;
       background: transparent;
       border: 0;
       backdrop-filter: none;
       box-shadow: none;
-      overflow: hidden;
+      overflow: visible;
+    }
+
+    .hero .eyebrow {
+      color: #ef4a53;
+      letter-spacing: 0.2em;
+    }
+
+    .hero .eyebrow::before {
+      content: "";
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      margin-right: 11px;
+      border-radius: 50%;
+      background: #f12e3a;
+      box-shadow: 0 0 14px rgba(241, 46, 58, 0.8);
     }
 
     .hero-metrics {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
+      display: none;
     }
 
     .hero h1 {
-      max-width: 18ch;
-      font-size: clamp(3rem, 5.8vw, 5.05rem);
+      max-width: 12ch;
+      font-size: clamp(3.1rem, 5.4vw, 5.2rem);
       line-height: 0.96;
+      letter-spacing: -0.045em;
+    }
+
+    .hero-title-accent {
+      background: linear-gradient(100deg, #f0444c, #c91524 78%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 34px rgba(195, 20, 36, 0.16);
     }
 
     .hero .lede {
-      max-width: 64ch;
-      line-height: 1.68;
+      max-width: 46ch;
+      line-height: 1.8;
     }
 
-    .hero .metric {
-      padding: 12px 13px 13px;
+    .hero .btn.primary {
+      border-color: rgba(228, 38, 50, 0.62);
+      background: linear-gradient(135deg, rgba(206, 20, 34, 0.42), rgba(87, 10, 18, 0.2));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 8px 28px rgba(167, 14, 27, 0.16);
     }
 
-    .hero .metric span {
-      margin-top: 6px;
+    .hero .btn.primary:hover {
+      border-color: rgba(255, 72, 82, 0.92);
+      background: linear-gradient(135deg, rgba(224, 27, 42, 0.58), rgba(100, 12, 22, 0.28));
+    }
+
+    .hero-location {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+      color: rgba(247, 243, 236, 0.58);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+    }
+
+    .hero-location::before {
+      content: "";
+      width: 26px;
+      height: 1px;
+      background: rgba(239, 74, 83, 0.75);
     }
 
     @media (max-width: 980px) {
       .hero {
-        min-height: auto;
-      }
-
-      .hero-visual {
-        min-height: min(76svh, 700px);
-      }
-
-      .hero-copy {
-        width: min(700px, calc(100% - 28px));
-        margin-left: 14px;
+        min-height: clamp(600px, 76svh, 760px);
+        grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
       }
 
       .hero h1 {
-        max-width: 15ch;
-        font-size: clamp(2.7rem, 8.6vw, 4.35rem);
-      }
-
-      .hero-metrics {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        font-size: clamp(2.8rem, 6.5vw, 4.25rem);
       }
     }
 
     @media (max-width: 700px) {
       .hero {
-        min-height: auto;
-        padding-top: 12px;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-areas: "stack";
+        min-height: min(760px, calc(100svh - 112px));
+        padding: 10px;
         margin-bottom: 34px;
       }
 
       .hero-visual {
-        min-height: min(68svh, 560px);
-        border-radius: 24px;
+        grid-area: stack;
+        min-height: 0;
+        margin: 0;
+        border-radius: 22px;
       }
 
       .hero-copy {
-        width: calc(100% - 20px);
-        margin-left: 10px;
-        padding: 22px;
-        backdrop-filter: blur(10px);
+        grid-area: stack;
+        align-content: end;
+        width: 100%;
+        padding: 24px 18px 28px;
+        background: linear-gradient(180deg, transparent 12%, rgba(7, 8, 13, 0.68) 48%, rgba(7, 8, 13, 0.96) 100%);
+        border-radius: 22px;
       }
 
       .hero h1 {
-        max-width: 12ch;
-        font-size: clamp(2.35rem, 11.8vw, 3.55rem);
+        max-width: 11ch;
+        font-size: clamp(2.45rem, 10.5vw, 3.55rem);
       }
 
-      .hero-metrics {
-        display: none;
+      .hero-visual::after {
+        background:
+          linear-gradient(180deg, rgba(7, 8, 13, 0.04), transparent 24%),
+          linear-gradient(90deg, rgba(7, 8, 13, 0.1), transparent 52%);
+      }
+
+      .hero .lede {
+        max-width: 38ch;
+        font-size: 0.94rem;
       }
     }
   </style>
@@ -1412,7 +1443,7 @@
           <div class="eyebrow">3D 设计 / 动画 / 视频剪辑</div>
           <h1>
             <span class="hero-title-line">让视觉更像电影，</span>
-            <span class="hero-title-line">也更像品牌。</span>
+            <span class="hero-title-line hero-title-accent">也更像品牌。</span>
           </h1>
           <p class="lede">
             为品牌影像、产品动画和短片内容提供从视觉方向到后期成片的一体化支持，让画面更有质感，也更清楚地服务信息表达。
@@ -1426,19 +1457,11 @@
               <span>获取合作方式</span>
             </a>
           </div>
-          <div class="hero-metrics">
-            <div class="metric"><strong>16</strong><span>精选视频项目</span></div>
-            <div class="metric"><strong>3D</strong><span>建模与动效</span></div>
-            <div class="metric"><strong>EDIT</strong><span>剪辑与调色</span></div>
-            <div class="metric"><strong>BRAND</strong><span>品牌视觉表达</span></div>
-          </div>
+          <div class="hero-location">可接项目合作 <span>江苏 · 南京</span></div>
         </div>
 
         <div class="hero-visual reveal" style="--delay: 200ms;">
-          <img class="hero-poster" src="assets/posters/hero-fireflies.jpg" alt="" decoding="async" fetchpriority="high" aria-hidden="true" />
-          <video class="hero-video" autoplay muted loop playsinline webkit-playsinline preload="metadata" poster="assets/posters/hero-fireflies.jpg" aria-hidden="true">
-            <source data-src="assets/hero-fireflies.mp4" type="video/mp4" />
-          </video>
+          <img class="hero-avatar" src="assets/hero-digital-human.jpg" alt="-橘小桔- 的数字人正面形象" decoding="async" fetchpriority="high" />
         </div>
       </section>
 
@@ -1640,7 +1663,6 @@
           heroDesc: '为品牌影像、产品动画和短片内容提供从视觉方向到后期成片的一体化支持，让画面更有质感，也更清楚地服务信息表达。',
           heroPrimary: '查看精选作品',
           heroSecondary: '获取合作方式',
-          heroMetrics: ['精选视频项目', '建模与动效', '剪辑与调色', '品牌视觉表达'],
           worksKicker: '精选作品',
           worksTitle: '用镜头、节奏和材质建立可信的视觉记忆。',
           worksNote: '精选项目以卡片网格呈现，方便快速浏览作品方向、视频质感和内容类型，也适合移动端逐个查看。',
@@ -1723,7 +1745,6 @@
           heroDesc: 'I support brand films, product motion, and short-form content from visual direction through post-production, shaping images that feel polished and communicate clearly.',
           heroPrimary: 'View Selected Works',
           heroSecondary: 'Get in Touch',
-          heroMetrics: ['Selected Projects', 'Modeling & Motion', 'Editing & Color', 'Brand Visuals'],
           worksKicker: 'Selected Works',
           worksTitle: 'Building memorable visuals through camera, rhythm, and material detail.',
           worksNote: 'Selected projects are presented in a clear card grid so visitors can scan direction, motion quality, and content type quickly on desktop or mobile.',
@@ -1844,8 +1865,6 @@
       const heroTitleLines = [...document.querySelectorAll('.hero h1 .hero-title-line')];
       const heroLede = document.querySelector('.hero .lede');
       const heroButtons = [...document.querySelectorAll('.hero .cta-row .btn')];
-      const heroMetricValues = [...document.querySelectorAll('.hero-metrics .metric strong')];
-      const heroMetrics = [...document.querySelectorAll('.hero-metrics .metric span')];
       const worksKicker = document.querySelector('#works .kicker');
       const worksTitle = document.querySelector('#works .section-title');
       const worksNote = document.querySelector('#works .section-note');
@@ -1869,7 +1888,6 @@
       const socialQrClose = document.querySelector('#socialQrClose');
       const footerMain = document.querySelector('.footer > div:last-child');
       const workTagRows = [...document.querySelectorAll('.tag-row .tag')];
-      const heroVideo = document.querySelector('.hero-video');
       const WORK_VIDEO_MARGIN = 120;
       const WORK_HOVER_OPEN_DELAY = 2500;
       let musicPlaying = false;
@@ -1924,10 +1942,6 @@
       const workPosterFor = (item) => item?.poster || posterFor(item?.video || '');
 
       const workPreviewFor = () => '';
-
-      const updateHeroMetrics = () => {
-        if (heroMetricValues[0]) heroMetricValues[0].textContent = String(allWorkData().length);
-      };
 
       const hydrateUploadedWorks = async () => {
         const assignUploadedWorks = (payload) => {
@@ -2104,47 +2118,6 @@
         if (!video) return;
         video.classList.remove('is-ready');
         video.classList.add('is-unavailable');
-      };
-
-      const initHeroVideo = async () => {
-        if (!heroVideo) return;
-        const source = heroVideo.querySelector('source');
-        if (!source) return;
-
-        if (!heroVideo.dataset.readyBound) {
-          ['loadeddata', 'canplay', 'playing', 'timeupdate'].forEach((eventName) => {
-            heroVideo.addEventListener(eventName, () => markVideoReady(heroVideo));
-          });
-          heroVideo.dataset.readyBound = 'true';
-        }
-
-        if (!source.getAttribute('src')) {
-          const nextSrc = source.dataset.src || '';
-          if (!nextSrc) return;
-          source.setAttribute('src', nextSrc);
-        }
-
-        heroVideo.load();
-        if (heroVideo.readyState >= 2) markVideoReady(heroVideo);
-        await tryPlay(heroVideo);
-      };
-
-      const scheduleHeroVideo = () => {
-        if (!heroVideo || reduceMotion.matches) return;
-
-        const compactViewport = window.matchMedia('(max-width: 700px)').matches;
-        const loadHero = () => { initHeroVideo().catch(() => {}); };
-
-        if (compactViewport) {
-          if ('requestIdleCallback' in window) {
-            window.requestIdleCallback(loadHero, { timeout: 2000 });
-          } else {
-            setTimeout(loadHero, 1200);
-          }
-          return;
-        }
-
-        loadHero();
       };
 
       const tryPlay = async (video) => {
@@ -2588,11 +2561,6 @@
         if (heroLede) heroLede.textContent = copy.heroDesc;
         if (heroButtons[0]) heroButtons[0].querySelector('span').textContent = copy.heroPrimary;
         if (heroButtons[1]) heroButtons[1].querySelector('span').textContent = copy.heroSecondary;
-        updateHeroMetrics();
-        if (heroMetrics[0]) heroMetrics[0].textContent = copy.heroMetrics[0];
-        if (heroMetrics[1]) heroMetrics[1].textContent = copy.heroMetrics[1];
-        if (heroMetrics[2]) heroMetrics[2].textContent = copy.heroMetrics[2];
-        if (heroMetrics[3]) heroMetrics[3].textContent = copy.heroMetrics[3];
 
         if (worksKicker) worksKicker.textContent = copy.worksKicker;
         if (worksTitle) worksTitle.innerHTML = copy.worksTitle;
@@ -2730,7 +2698,6 @@
         updateActiveNav();
       }, { passive: true });
 
-      scheduleHeroVideo();
       updateActiveNav();
 
       if (!reduceMotion.matches) {
