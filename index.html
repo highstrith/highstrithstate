@@ -3,28 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#070911" />
+  <meta name="theme-color" content="#08080b" />
   <meta name="color-scheme" content="dark" />
   <meta name="description" content="Highstrith 的 3D 设计、动画与视频剪辑作品集。" />
   <title>Highstrith | 3D 艺术家与视频剪辑</title>
-  <link rel="preload" as="image" href="assets/hero-digital-human.jpg" fetchpriority="high" />
+  <link rel="preload" as="image" href="assets/hero-digital-human-full.jpg" fetchpriority="high" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #070911;
-      --bg-soft: #0b1020;
-      --panel: rgba(14, 18, 29, 0.84);
-      --panel-strong: rgba(18, 24, 37, 0.96);
+      --bg: #08080b;
+      --bg-soft: #101014;
+      --panel: rgba(17, 17, 22, 0.9);
+      --panel-strong: rgba(20, 20, 26, 0.96);
       --line: rgba(255, 255, 255, 0.08);
       --line-strong: rgba(255, 255, 255, 0.14);
-      --text: #f7f3ec;
-      --muted: rgba(247, 243, 236, 0.68);
-      --faint: rgba(247, 243, 236, 0.44);
-      --accent: #d8b46f;
-      --accent-2: #7db4ff;
-      --accent-3: #78d3be;
+      --text: #f4f2f0;
+      --muted: rgba(244, 242, 240, 0.68);
+      --faint: rgba(244, 242, 240, 0.46);
+      --accent: #ed4050;
+      --accent-2: #ed4050;
+      --accent-3: #ed4050;
       --shadow: 0 22px 58px rgba(0, 0, 0, 0.36);
       --radius-xl: 32px;
       --radius-lg: 24px;
@@ -42,11 +42,7 @@
       min-height: 100vh;
       color: var(--text);
       font-family: "Noto Sans SC", "Space Grotesk", system-ui, sans-serif;
-      background:
-        radial-gradient(circle at 18% 14%, rgba(216, 180, 111, 0.14), transparent 22%),
-        radial-gradient(circle at 82% 12%, rgba(125, 180, 255, 0.14), transparent 20%),
-        radial-gradient(circle at 72% 78%, rgba(120, 211, 190, 0.09), transparent 18%),
-        linear-gradient(180deg, #05070c 0%, #090d15 48%, #05070c 100%);
+      background: linear-gradient(180deg, #08080b 0%, #111014 52%, #08080b 100%);
       overflow-x: hidden;
     }
 
@@ -56,12 +52,7 @@
       inset: 0;
       pointer-events: none;
       z-index: -2;
-      opacity: 0.14;
-      background:
-        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-      background-size: 100% 100%, 72px 72px;
-      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.24), rgba(0, 0, 0, 0.04));
+      display: none;
     }
 
     a { color: inherit; text-decoration: none; }
@@ -198,8 +189,7 @@
     }
 
     .chip-btn,
-    .icon-btn,
-    .sound-btn {
+    .icon-btn {
       border: 1px solid rgba(255, 255, 255, 0.12);
       background: rgba(255, 255, 255, 0.04);
       color: var(--text);
@@ -208,8 +198,7 @@
     }
 
     .chip-btn:hover,
-    .icon-btn:hover,
-    .sound-btn:hover {
+    .icon-btn:hover {
       transform: translateY(-1px);
       border-color: rgba(216, 180, 111, 0.44);
       background: rgba(216, 180, 111, 0.08);
@@ -231,8 +220,7 @@
       letter-spacing: 0.08em;
     }
 
-    .icon-btn,
-    .sound-btn {
+    .icon-btn {
       width: 42px;
       height: 42px;
       border-radius: 999px;
@@ -240,8 +228,7 @@
       place-items: center;
     }
 
-    .icon-btn svg,
-    .sound-btn svg {
+    .icon-btn svg {
       width: 18px;
       height: 18px;
       fill: none;
@@ -562,6 +549,14 @@
       display: grid;
     }
 
+    .work-player-focus-sentinel {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
     .work-player-panel {
       position: relative;
       width: min(1180px, 94vw);
@@ -633,76 +628,6 @@
       .work-player-orientation {
         display: none;
       }
-    }
-
-    .hover-open-progress {
-      position: fixed;
-      left: 0;
-      top: 0;
-      z-index: 90;
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      pointer-events: none;
-      opacity: 0;
-      transform: translate3d(-999px, -999px, 0) scale(0.88);
-      transition: opacity 0.16s ease, transform 0.16s ease;
-      background:
-        conic-gradient(var(--accent) var(--hover-angle, 0deg), rgba(255, 255, 255, 0.2) 0),
-        rgba(4, 6, 11, 0.72);
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
-      backdrop-filter: blur(10px);
-    }
-
-    .hover-open-progress::before {
-      content: "";
-      position: absolute;
-      inset: 5px;
-      border-radius: 50%;
-      background: rgba(4, 6, 11, 0.88);
-    }
-
-    .hover-open-progress::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 0;
-      height: 0;
-      margin-left: -3px;
-      margin-top: -6px;
-      border-top: 6px solid transparent;
-      border-bottom: 6px solid transparent;
-      border-left: 9px solid var(--text);
-    }
-
-    .hover-open-progress.is-visible {
-      opacity: 1;
-    }
-
-    .work-badge {
-      position: absolute;
-      top: 14px;
-      left: 14px;
-      z-index: 3;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(8, 10, 16, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: var(--text);
-      font-size: 0.72rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      backdrop-filter: blur(16px);
-    }
-
-    .sound-btn {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      z-index: 3;
-      backdrop-filter: blur(16px);
-      opacity: 0.9;
     }
 
     .play-overlay {
@@ -1169,11 +1094,6 @@
       .work-info {
         padding: 16px 16px 18px;
       }
-      .sound-btn {
-        top: auto;
-        right: 14px;
-        bottom: 14px;
-      }
       .play-overlay {
         width: 46px;
         height: 46px;
@@ -1415,6 +1335,247 @@
         font-size: 0.94rem;
       }
     }
+
+    /* Portfolio refresh: one cinematic canvas, one accent, media first. */
+    .shell { padding-top: 14px; }
+    .topbar {
+      min-height: 68px;
+      padding: 10px 16px;
+      background: rgba(11, 11, 15, 0.88);
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.2);
+    }
+    .brand { min-width: 178px; }
+    .brand-mark { width: 38px; height: 38px; border-radius: 12px; }
+    .brand-copy span { display: none; }
+    .nav { gap: clamp(14px, 2vw, 28px); }
+    .nav a { margin-top: 0; letter-spacing: 0.08em; }
+    .nav a::after { background: var(--accent); }
+    .actions { gap: 6px; }
+    .chip-btn { min-height: 38px; padding: 0 12px; font-size: 0.78rem; }
+    .chip-btn:hover, .icon-btn:hover, .btn:hover,
+    .social-link:hover, .social-link:focus-visible {
+      border-color: rgba(237, 64, 80, 0.65);
+      background: rgba(237, 64, 80, 0.12);
+    }
+    .nav a.active { color: var(--text); }
+    .nav a.active::after { transform: scaleX(1); }
+    .btn { min-height: 50px; letter-spacing: 0.06em; white-space: nowrap; }
+    .btn.primary {
+      border-color: rgba(237, 64, 80, 0.7);
+      background: #b51f32;
+      color: #fff;
+    }
+    .hero {
+      display: block;
+      height: clamp(530px, calc(100svh - 114px), 690px);
+      min-height: 0;
+      padding: 0;
+      margin: 18px 0 0;
+      border-radius: 24px;
+      border-color: rgba(255, 255, 255, 0.12);
+      background: #09080b url('assets/hero-studio-red.jpg') center / cover no-repeat;
+      isolation: isolate;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(7, 7, 10, 0.42) 0%, rgba(7, 7, 10, 0.18) 48%, transparent 75%);
+    }
+    .hero-visual {
+      position: absolute;
+      inset: 0 0 0 auto;
+      width: 61%;
+      height: 100%;
+      z-index: 1;
+      border-radius: 0;
+      background: transparent;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 27%, #000 100%);
+      mask-image: linear-gradient(90deg, transparent 0%, #000 27%, #000 100%);
+    }
+    .hero-avatar {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 12%;
+      filter: saturate(0.64) contrast(1.13) brightness(0.78);
+      transform: scale(1.1);
+    }
+    .hero-visual::after {
+      background: linear-gradient(90deg, rgba(8, 8, 11, 0.26), transparent 35%, rgba(140, 10, 22, 0.14));
+    }
+    .hero-copy {
+      position: relative;
+      width: min(62%, 860px);
+      height: 100%;
+      min-height: 0;
+      padding: clamp(30px, 5vw, 74px);
+      gap: clamp(14px, 2.2vw, 24px);
+    }
+    .hero .eyebrow { color: #f5a0a7; letter-spacing: 0.16em; }
+    .hero .eyebrow::before { display: none; }
+    .hero h1 {
+      max-width: none;
+      font-size: clamp(3.5rem, 6vw, 6.4rem);
+      line-height: 1.08;
+      letter-spacing: -0.055em;
+    }
+    .hero-title-line { white-space: nowrap; }
+    .hero-title-accent {
+      background: linear-gradient(110deg, #ff4c5d, #d8233b);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    .hero .lede { max-width: 32ch; line-height: 1.55; font-size: clamp(0.94rem, 1.2vw, 1.05rem); }
+    .hero .btn.primary { background: #b51f32; border-color: #d53549; box-shadow: none; }
+    .hero .btn.primary:hover { background: #d92c43; border-color: #f45a6c; }
+    #works { padding-top: clamp(34px, 4vw, 58px); }
+    #works .section-head { margin-bottom: 22px; }
+    #works .section-title { font-size: clamp(2rem, 3.2vw, 3rem); line-height: 1.16; }
+    .works-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .work-card {
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      background: #151419;
+      cursor: pointer;
+      outline: none;
+    }
+    .work-card:hover, .work-card:focus-visible {
+      transform: translateY(-3px);
+      border-color: rgba(237, 64, 80, 0.7);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.32);
+    }
+    .work-card:focus-visible { outline: 2px solid #f26776; outline-offset: 3px; }
+    .work-card.is-active { border-color: rgba(237, 64, 80, 0.26); box-shadow: none; }
+    .video-shell { aspect-ratio: 4 / 3; }
+    .work-poster { filter: saturate(0.92) contrast(1.02) brightness(0.9); }
+    .work-video { filter: saturate(1.03) contrast(1.04) brightness(0.92); }
+    .work-info { min-height: 74px; padding: 13px 15px 15px; gap: 5px; }
+    .work-info h3 { font-size: 0.98rem; line-height: 1.35; }
+    .work-info p { color: var(--faint); font-size: 0.7rem; letter-spacing: 0.08em; }
+    .play-overlay { width: 42px; height: 42px; left: 12px; bottom: 12px; background: rgba(8, 8, 11, 0.72); }
+    .works-page-button:hover, .works-page-button.is-current { border-color: rgba(237, 64, 80, 0.65); background: rgba(237, 64, 80, 0.15); }
+    #contact { padding-top: clamp(52px, 6vw, 84px); }
+    .contact-card.featured { background: #151419; border: 1px solid rgba(255, 255, 255, 0.1); }
+    .contact-column { padding: clamp(22px, 3vw, 42px); }
+    .contact-column:first-child { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+    .contact-column .section-title { font-size: clamp(2rem, 3.5vw, 3.4rem); line-height: 1.12; }
+    .contact-column .lines { margin-top: 0; }
+    .contact-column .line-item { padding: 9px 0; }
+    .contact-card.featured .contact-actions { margin-top: 22px; }
+    .contact-social-row { padding: 18px 24px 20px; }
+    .social-link { border-color: rgba(255, 255, 255, 0.16); }
+    .social-qr-preview, .social-qr-dialog { border-color: rgba(237, 64, 80, 0.48); }
+    .footer { padding-top: 22px; }
+
+    @media (max-width: 1100px) {
+      .works-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero-copy { width: 66%; }
+      .hero h1 { font-size: clamp(3rem, 6vw, 4.7rem); }
+    }
+    @media (min-width: 701px) and (max-width: 980px) {
+      .topbar { flex-wrap: nowrap; align-items: center; gap: 12px; }
+      .brand { width: auto; min-width: 158px; }
+      .nav { order: 0; width: auto; justify-content: center; overflow: visible; padding-bottom: 0; }
+      .actions { order: 0; width: auto; min-width: 0; display: flex; gap: 4px; margin-left: 0; }
+      .chip-btn { padding: 0 9px; }
+      .icon-btn { width: 38px; height: 38px; }
+    }
+    @media (max-width: 700px) {
+      .shell { padding-top: 8px; }
+      .topbar, .topbar.is-public {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 4px 8px;
+        min-height: 0;
+        padding: 8px 10px;
+        border-radius: 16px;
+      }
+      .brand { grid-column: 1; grid-row: 1; width: auto; min-width: 0; gap: 7px; }
+      .brand-mark, .topbar.is-public .brand-mark { width: 32px; height: 32px; border-radius: 9px; }
+      .brand-copy strong, .topbar.is-public .brand-copy strong { font-size: 0.86rem; }
+      .nav, .topbar.is-public .nav {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        order: 0;
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        width: 100%;
+        min-width: 0;
+        padding: 3px 0 0;
+      }
+      .nav a, .topbar.is-public .nav a {
+        display: inline-flex;
+        min-height: 30px;
+        padding: 0 4px;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        font-size: 0.77rem;
+      }
+      .nav a.active { color: #f26776; background: transparent; }
+      .actions, .actions.is-public {
+        grid-column: 2;
+        grid-row: 1;
+        order: 0;
+        display: flex;
+        width: auto;
+        min-width: 0;
+        gap: 4px;
+        margin-left: 0;
+      }
+      .chip-btn, .topbar.is-public .chip-btn { min-height: 32px; padding: 0 7px; gap: 3px; font-size: 0.68rem; }
+      .chip-btn strong { letter-spacing: 0; }
+      #musicToggle, .actions.is-public #musicToggle { grid-column: auto; }
+      .hero {
+        height: min(540px, calc(100svh - 125px));
+        min-height: 490px;
+        margin-top: 8px;
+        padding: 0;
+        border-radius: 16px;
+      }
+      .hero::before { background: linear-gradient(180deg, rgba(8, 8, 11, 0.1) 0%, rgba(8, 8, 11, 0.03) 35%, rgba(8, 8, 11, 0.85) 69%, #08080b 100%); }
+      .hero-visual {
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        -webkit-mask-image: none;
+        mask-image: none;
+      }
+      .hero-avatar { object-position: 50% 12%; transform: scale(1.08); }
+      .hero-copy {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        align-content: end;
+        gap: 13px;
+        padding: 20px 22px 26px;
+        background: transparent;
+        border-radius: 0;
+      }
+      .hero h1 { max-width: none; font-size: clamp(2.45rem, 10.9vw, 3.4rem); line-height: 1.08; }
+      .hero .lede { max-width: 30ch; font-size: 0.88rem; }
+      .cta-row { display: flex; flex-wrap: wrap; width: auto; gap: 8px; }
+      .cta-row .btn { width: auto; min-height: 42px; padding: 0 13px; font-size: 0.74rem; }
+      #works { padding-top: 38px; }
+      .works-grid { grid-template-columns: 1fr; gap: 14px; }
+      .work-info { min-height: 0; padding: 13px 15px 15px; }
+      .contact-column { padding: 22px; }
+      .contact-social-row { padding: 16px 14px 20px; }
+    }
+    @media (max-width: 340px) {
+      .brand-copy { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -1443,10 +1604,10 @@
 
       <div class="actions">
         <a class="chip-btn" id="adminEntryLink" href="/admin.html" aria-label="打开管理页">
-          <strong id="adminEntryLabel">管理入口</strong>
+          <strong id="adminEntryLabel">管理</strong>
         </a>
         <button class="chip-btn" id="musicToggle" type="button" aria-pressed="false" aria-label="播放背景音乐">
-          <strong>氛围音乐</strong>
+          <strong>音乐</strong>
           <span>OFF</span>
         </button>
         <button class="chip-btn" id="langSwitch" type="button" aria-pressed="false" aria-label="切换语言">
@@ -1463,43 +1624,34 @@
     <main id="home">
       <section class="hero">
         <div class="hero-copy reveal" style="--delay: 120ms;">
-          <div class="eyebrow">3D 设计 / 动画 / 视频剪辑</div>
+          <div class="eyebrow">3D / 动画 / 剪辑</div>
           <h1>
-            <span class="hero-title-line">让视觉更像电影，</span>
-            <span class="hero-title-line hero-title-accent">也更像品牌。</span>
+            <span class="hero-title-line">让视觉更像</span>
+            <span class="hero-title-line hero-title-accent">电影。</span>
           </h1>
           <p class="lede">
-            为品牌影像、产品动画和短片内容提供从视觉方向到后期成片的一体化支持，让画面更有质感，也更清楚地服务信息表达。
+            3D、动画与剪辑，为品牌和故事制作有质感的画面。
           </p>
           <div class="cta-row">
             <a class="btn primary" href="#works">
-              <span>查看精选作品</span>
+              <span>看作品</span>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l8 7-8 7" /></svg>
             </a>
             <a class="btn" href="#contact">
-              <span>获取合作方式</span>
+              <span>联系我</span>
             </a>
           </div>
-          <div class="hero-location">可接项目合作 <span>江苏 · 南京</span></div>
         </div>
 
         <div class="hero-visual reveal" style="--delay: 200ms;">
-          <img class="hero-avatar" src="assets/hero-digital-human.jpg" alt="-橘小桔- 的数字人正面形象" decoding="async" fetchpriority="high" />
+          <img class="hero-avatar" src="assets/hero-digital-human-full.jpg" alt="-橘小桔- 的数字人形象" decoding="async" fetchpriority="high" />
         </div>
       </section>
 
       <section class="section" id="works">
         <div class="section-head reveal" style="--delay: 40ms;">
           <div class="copy">
-            <p class="kicker">精选作品</p>
-            <h2 class="section-title">用镜头、节奏和材质建立可信的视觉记忆。</h2>
-            <p class="section-note">精选项目以卡片网格呈现，方便快速浏览作品方向、视频质感和内容类型，也适合移动端逐个查看。</p>
-          </div>
-          <div class="tag-row">
-            <span class="tag">品牌影像</span>
-            <span class="tag">动态设计</span>
-            <span class="tag">三维序列</span>
-            <span class="tag">后期制作</span>
+            <h2 class="section-title">精选作品</h2>
           </div>
         </div>
 
@@ -1553,20 +1705,16 @@
       <section class="section" id="contact">
         <div class="contact-card featured contact-unified reveal" style="--delay: 80ms;">
           <div class="contact-column">
-            <p class="kicker">联系 -橘小桔-</p>
-            <h2 class="section-title">一起把下一个想法做成作品。</h2>
-            <p class="section-note">短片、动画或剪辑项目，带上想法和时间计划，直接聊聊。</p>
+            <h2 class="section-title">聊聊合作。</h2>
             <div class="contact-actions">
               <a class="btn primary" href="mailto:highstrith@gmail.com">
                 <span>发送邮件</span>
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5 12 12l8-4.5" /><path d="M4 7.5V18h16V7.5" /></svg>
               </a>
-              <a class="btn" href="tel:+8618020169750"><span>直接拨打</span></a>
             </div>
           </div>
 
           <div class="contact-column">
-            <p class="kicker">直接找到我</p>
             <div class="lines">
               <div class="line-item"><span>邮箱</span><strong><a href="mailto:highstrith@gmail.com">highstrith@gmail.com</a></strong></div>
               <div class="line-item"><span>电话</span><strong><a href="tel:+8618020169750">+86 18020169750</a></strong></div>
@@ -1595,8 +1743,8 @@
       </section>
 
       <footer class="footer reveal" style="--delay: 100ms;">
-        <div><strong>Highstrith</strong> · 2026</div>
-        <div>-橘小桔- · 3D 设计、动态视觉、剪辑调色与全流程视频制作。</div>
+        <div><strong>Highstrith</strong> © 2026</div>
+        <div>-橘小桔- / 江苏南京</div>
       </footer>
     </main>
   </div>
@@ -1617,6 +1765,7 @@
     </div>
   </dialog>
   <div class="work-player" id="workPlayer" aria-hidden="true">
+    <span class="work-player-focus-sentinel" id="workPlayerFocusStart" tabindex="0"></span>
     <div class="work-player-panel" role="dialog" aria-modal="true" aria-label="作品视频播放器">
       <button class="work-player-control work-player-orientation" id="workPlayerOrientation" type="button" aria-label="切换横屏播放" title="切换横屏播放">
         <svg class="icon-landscape" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="10" rx="2"></rect><path d="M8 3 5 6l3 3M16 21l3-3-3-3"></path></svg>
@@ -1625,11 +1774,10 @@
       <button class="work-player-control work-player-close" id="workPlayerClose" type="button" aria-label="关闭视频">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>
       </button>
-      <video class="work-player-video" id="workPlayerVideo" controls playsinline webkit-playsinline preload="metadata"></video>
+      <video class="work-player-video" id="workPlayerVideo" controls playsinline webkit-playsinline preload="metadata" tabindex="0"></video>
     </div>
+    <span class="work-player-focus-sentinel" id="workPlayerFocusEnd" tabindex="0"></span>
   </div>
-  <div class="hover-open-progress" id="hoverOpenProgress" aria-hidden="true"></div>
-
   <script>
     (async () => {
       if ('scrollRestoration' in history) {
@@ -1660,17 +1808,17 @@
           navContact: '联系',
           pageTitle: 'Highstrith | 3D 艺术家与视频剪辑',
           brandRole: '3D 艺术家与视频剪辑',
-          adminEntry: '管理入口',
+          adminEntry: '管理',
           adminEntryAria: '打开管理页',
-          musicLabel: '氛围音乐',
-          heroEyebrow: '3D 设计 / 动画 / 视频剪辑',
-          heroTitle1: '让视觉更像电影，',
-          heroTitle2: '也更像品牌。',
-          heroDesc: '为品牌影像、产品动画和短片内容提供从视觉方向到后期成片的一体化支持，让画面更有质感，也更清楚地服务信息表达。',
-          heroPrimary: '查看精选作品',
-          heroSecondary: '获取合作方式',
+          musicLabel: '音乐',
+          heroEyebrow: '3D / 动画 / 剪辑',
+          heroTitle1: '让视觉更像',
+          heroTitle2: '电影。',
+          heroDesc: '3D、动画与剪辑，为品牌和故事制作有质感的画面。',
+          heroPrimary: '看作品',
+          heroSecondary: '联系我',
           worksKicker: '精选作品',
-          worksTitle: '用镜头、节奏和材质建立可信的视觉记忆。',
+          worksTitle: '精选作品',
           worksNote: '精选项目以卡片网格呈现，方便快速浏览作品方向、视频质感和内容类型，也适合移动端逐个查看。',
           uploadEyebrow: '作品入库',
           uploadTitle: '上传新作品，自动加入当前作品集。',
@@ -1714,11 +1862,11 @@
           processTitle: '从脚本前期到最终发布，把一个想法完整做出来。',
           processNote: '我以一人全流程的方式完成从创意梳理、画面制作到多平台发布适配，让每个作品的表达与交付保持连贯。',
           contactKicker: '联系',
-          contactTitle: '一起把下一个想法做成作品。',
+          contactTitle: '聊聊合作。',
           contactNote: '短片、动画或剪辑项目，带上想法和时间计划，直接聊聊。',
           contactPrimary: '发送邮件',
           contactSecondary: '直接拨打',
-          footerMain: '-橘小桔- · 3D 设计、动态视觉、剪辑调色与全流程视频制作。',
+          footerMain: '-橘小桔- / 江苏南京',
           langCurrent: 'CN',
           langTarget: 'EN',
           musicOn: '背景音乐已开启',
@@ -1740,15 +1888,15 @@
           brandRole: '3D Artist & Video Editor',
           adminEntry: 'Admin',
           adminEntryAria: 'Open admin page',
-          musicLabel: 'Ambient',
-          heroEyebrow: '3D Design / Motion / Video Editing',
-          heroTitle1: 'Making visuals feel cinematic,',
-          heroTitle2: 'and feel like a brand.',
-          heroDesc: 'I support brand films, product motion, and short-form content from visual direction through post-production, shaping images that feel polished and communicate clearly.',
-          heroPrimary: 'View Selected Works',
-          heroSecondary: 'Get in Touch',
+          musicLabel: 'Sound',
+          heroEyebrow: '3D / MOTION / EDIT',
+          heroTitle1: 'Make it',
+          heroTitle2: 'cinematic.',
+          heroDesc: '3D, motion and editing for brands and stories.',
+          heroPrimary: 'View works',
+          heroSecondary: 'Contact',
           worksKicker: 'Selected Works',
-          worksTitle: 'Building memorable visuals through camera, rhythm, and material detail.',
+          worksTitle: 'Selected works',
           worksNote: 'Selected projects are presented in a clear card grid so visitors can scan direction, motion quality, and content type quickly on desktop or mobile.',
           uploadEyebrow: 'Work Intake',
           uploadTitle: 'Upload a new project and add it to the current portfolio.',
@@ -1792,11 +1940,11 @@
           processTitle: 'Taking an idea from early script work through to release.',
           processNote: 'I work across creative development, production, and multi-platform delivery so each project stays coherent from first idea to final upload.',
           contactKicker: 'Contact',
-          contactTitle: 'Let’s turn the next idea into a finished work.',
+          contactTitle: 'Let’s talk.',
           contactNote: 'Have a film, animation, or editing project? Share your idea and timeline, and let’s talk.',
           contactPrimary: 'Send Email',
           contactSecondary: 'Call Now',
-          footerMain: '-橘小桔- · 3D design, motion visuals, editing, color, and end-to-end video production.',
+          footerMain: '-橘小桔- / Nanjing, China',
           langCurrent: 'EN',
           langTarget: 'CN',
           musicOn: 'Background music on',
@@ -1831,11 +1979,19 @@
       ];
 
       const baseWorkData = [
+        { id: 'work-1783863606674-7ta9sp', cnTitle: 'AI患者', enTitle: 'AI Patient', cnSub: '科幻 / 叙事', enSub: 'SCI-FI / NARRATIVE', video: 'assets/uploads/work-1783863596658-desktop.mp4', poster: 'assets/uploads/posters/poster-1783864071336.png' },
+        { id: 'work-1783246320299-icguu6', cnTitle: '街头篮球', enTitle: 'Street Basketball', cnSub: '运动 / 节奏', enSub: 'SPORT / RHYTHM', video: 'assets/uploads/desktop/work-1783436201027-desktop.mp4', poster: 'assets/uploads/posters/poster-1783246320293.png' },
         { id: 'featured-prove-it', cnTitle: 'Prove It', enTitle: 'Prove It', cnSub: '广告 / 剪辑', enSub: 'AD / EDIT', cnDesc: '以节奏剪辑和品牌信息为核心的广告片段。', enDesc: 'An advertising piece built around rhythmic editing and clear brand messaging.', video: 'assets/works/prove-it.mp4', poster: 'assets/posters/prove-it.jpg' },
         { id: 'featured-approach', cnTitle: '搭讪', enTitle: 'Approach', cnSub: '叙事 / 剪辑', enSub: 'NARRATIVE / EDIT', cnDesc: '用剪辑节奏组织人物关系与情绪变化。', enDesc: 'A narrative edit shaped around character dynamics and emotional shifts.', video: 'assets/works/approach.mp4', poster: 'assets/posters/approach.jpg' },
         { id: 'featured-giant-wheel', cnTitle: '巨轮空降', enTitle: 'Giant Wheel', cnSub: '特效 / 合成', enSub: 'VFX / COMPOSITING', cnDesc: '结合三维资产、特效与合成完成的视觉实验。', enDesc: 'A visual experiment combining 3D assets, effects, and compositing.', video: 'assets/works/giant-wheel.mp4', poster: 'assets/posters/giant-wheel.jpg' },
-        { id: 'featured-exported-film', cnTitle: '导出成片', enTitle: 'Exported Film', cnSub: '剪辑 / 后期', enSub: 'EDIT / POST', cnDesc: '从素材整理到最终输出的完整后期片段。', enDesc: 'A post-production piece carried from media organization through final export.', video: 'assets/works/exported-film.mp4', poster: 'assets/posters/exported-film.jpg' },
-        { id: 'featured-timeline-1', cnTitle: 'Timeline 1', enTitle: 'Timeline 1', cnSub: '竖版 / 节奏', enSub: 'VERTICAL / RHYTHM', cnDesc: '面向移动端观看的竖版节奏剪辑测试。', enDesc: 'A vertical editing study designed for mobile viewing and rhythm.', video: 'assets/works/timeline-vertical.mp4', poster: 'assets/posters/timeline-vertical.jpg' }
+        { id: 'featured-exported-film', cnTitle: 'Two Seconds', enTitle: 'Exported Film', cnSub: '剪辑 / 后期', enSub: 'EDIT / POST', cnDesc: '从素材整理到最终输出的完整后期片段。', enDesc: 'A post-production piece carried from media organization through final export.', video: 'assets/works/exported-film.mp4', poster: 'assets/posters/exported-film.jpg' },
+        { id: 'featured-timeline-1', cnTitle: 'AI 之后', enTitle: 'AI 之后', cnSub: '竖版 / 节奏', enSub: 'VERTICAL / RHYTHM', cnDesc: 'AI 之后的谈判标准', enDesc: 'Post-AI Negotiation Standards', video: 'assets/works/timeline-vertical.mp4', poster: 'assets/posters/timeline-vertical.jpg' },
+        { id: 'added-creative-3', cnTitle: '动作预演', enTitle: 'Action Study', cnSub: '角色 / 动画', enSub: 'CHARACTER / MOTION', video: 'assets/works/creative-3.mp4', poster: 'assets/posters/creative-3.jpg' },
+        { id: 'added-visual-study', cnTitle: '产品视觉实验', enTitle: 'Product Visual Study', cnSub: '产品 / 三维', enSub: 'PRODUCT / 3D', video: 'assets/works/visual-study.mp4', poster: 'assets/posters/visual-study.jpg' },
+        { id: 'added-title-render', cnTitle: '特运尖兵片头', enTitle: 'Special Mission Titles', cnSub: '片头 / 三维', enSub: 'TITLE / 3D', video: 'assets/works/title-render.mp4', poster: 'assets/posters/title-render.jpg' },
+        { id: 'added-v30001-0180', cnTitle: '街巷角色动画', enTitle: 'Alley Character Animation', cnSub: '角色 / 动画', enSub: 'CHARACTER / ANIMATION', video: 'assets/works/v30001-0180.mp4', poster: 'assets/posters/v30001-0180.jpg' },
+        { id: 'added-render-test', cnTitle: '能量实验', enTitle: 'Energy Study', cnSub: '特效 / 渲染', enSub: 'VFX / RENDER', video: 'assets/works/render-test.mp4', poster: 'assets/posters/render-test.jpg' },
+        { id: 'added-completed-film', cnTitle: '花与兔子', enTitle: 'A Flower for the Rabbit', cnSub: '短片 / 动画', enSub: 'SHORT FILM / ANIMATION', video: 'assets/works/completed-film.mp4', poster: 'assets/posters/completed-film.jpg' }
       ];
 
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -1859,7 +2015,9 @@
       const workPlayerVideo = document.getElementById('workPlayerVideo');
       const workPlayerClose = document.getElementById('workPlayerClose');
       const workPlayerOrientation = document.getElementById('workPlayerOrientation');
-      const hoverOpenProgress = document.getElementById('hoverOpenProgress');
+      const workPlayerFocusStart = document.getElementById('workPlayerFocusStart');
+      const workPlayerFocusEnd = document.getElementById('workPlayerFocusEnd');
+      const siteShell = document.querySelector('.shell');
       const heroEyebrow = document.querySelector('.hero .eyebrow');
       const heroTitleLines = [...document.querySelectorAll('.hero h1 .hero-title-line')];
       const heroLede = document.querySelector('.hero .lede');
@@ -1885,7 +2043,6 @@
       const footerMain = document.querySelector('.footer > div:last-child');
       const workTagRows = [...document.querySelectorAll('.tag-row .tag')];
       const WORK_VIDEO_MARGIN = 120;
-      const WORK_HOVER_OPEN_DELAY = 2500;
       let musicPlaying = false;
       let uploadedWorkData = [];
       let revealObserver = null;
@@ -1897,8 +2054,6 @@
       let workPlayerOpenedAt = 0;
       let workPlayerOrientationMode = 'portrait';
       let workPlayerFullscreenRequested = false;
-      let hoverProgressFrame = 0;
-      let hoverProgressStartedAt = 0;
 
       const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
         '&': '&amp;',
@@ -2128,16 +2283,6 @@
         }
       };
 
-      const setSoundState = (button, muted) => {
-        const onIcon = button.querySelector('.icon-sound-on');
-        const offIcon = button.querySelector('.icon-sound-off');
-        if (onIcon && offIcon) {
-          onIcon.style.display = muted ? 'none' : 'block';
-          offIcon.style.display = muted ? 'block' : 'none';
-        }
-        button.setAttribute('aria-label', state.lang === 'cn' ? (muted ? '开启声音' : '静音') : (muted ? 'Enable sound' : 'Mute sound'));
-      };
-
       const currentHashTarget = () => {
         if (!window.location.hash || window.location.hash === '#home') return null;
         try {
@@ -2213,40 +2358,6 @@
         document.querySelectorAll('.work-card').forEach(stopCardPreview);
       };
 
-      const moveHoverProgress = (event) => {
-        if (!hoverOpenProgress) return;
-        hoverOpenProgress.style.transform = `translate3d(${event.clientX + 18}px, ${event.clientY + 18}px, 0) scale(1)`;
-      };
-
-      const updateHoverProgress = () => {
-        if (!hoverOpenProgress || !hoverProgressStartedAt) return;
-        const elapsed = performance.now() - hoverProgressStartedAt;
-        const progress = Math.min(1, elapsed / WORK_HOVER_OPEN_DELAY);
-        hoverOpenProgress.style.setProperty('--hover-angle', `${Math.round(progress * 360)}deg`);
-        if (progress < 1) {
-          hoverProgressFrame = window.requestAnimationFrame(updateHoverProgress);
-        }
-      };
-
-      const startHoverProgress = (event) => {
-        if (!hoverOpenProgress) return;
-        window.cancelAnimationFrame(hoverProgressFrame);
-        hoverProgressStartedAt = performance.now();
-        hoverOpenProgress.style.setProperty('--hover-angle', '0deg');
-        hoverOpenProgress.classList.add('is-visible');
-        moveHoverProgress(event);
-        hoverProgressFrame = window.requestAnimationFrame(updateHoverProgress);
-      };
-
-      const cancelHoverProgress = () => {
-        if (!hoverOpenProgress) return;
-        window.cancelAnimationFrame(hoverProgressFrame);
-        hoverProgressFrame = 0;
-        hoverProgressStartedAt = 0;
-        hoverOpenProgress.classList.remove('is-visible');
-        hoverOpenProgress.style.setProperty('--hover-angle', '0deg');
-      };
-
       const updateWorkPlayerOrientationLabel = () => {
         if (!workPlayerOrientation) return;
         const copy = translations[state.lang] || translations.cn;
@@ -2308,7 +2419,6 @@
         if (!workPlayer || !workPlayerVideo || !video) return;
         const sourcePath = videoSourceFor(video);
         if (!sourcePath) return;
-        cancelHoverProgress();
         await setWorkPlayerOrientation('portrait');
 
         activeWorkVideo = video;
@@ -2349,6 +2459,7 @@
 
         workPlayer.classList.add('is-open');
         workPlayer.setAttribute('aria-hidden', 'false');
+        if (siteShell) siteShell.inert = true;
         document.body.classList.add('has-work-player');
         workPlayerOpenedAt = Date.now();
 
@@ -2360,26 +2471,26 @@
       const closeWorkPlayer = async () => {
         if (!workPlayer || !workPlayerVideo || !workPlayer.classList.contains('is-open')) return;
 
+        const returnFocusTo = activeWorkVideo?.closest('.work-card');
         workPlayerVideo.pause();
         workPlayerVideo.removeAttribute('src');
         workPlayerVideo.load();
         workPlayer.classList.remove('is-open');
         workPlayer.setAttribute('aria-hidden', 'true');
+        if (siteShell) siteShell.inert = false;
         document.body.classList.remove('has-work-player');
         activeWorkVideo = null;
         await releaseWorkPlayerOrientation();
         await releaseBackgroundMusic();
+        returnFocusTo?.focus({ preventScroll: true });
         scheduleWorkVideoSync();
       };
 
       const setupWorkCards = () => {
         document.querySelectorAll('.work-card').forEach((card) => {
           const video = card.querySelector('video');
-          const button = card.querySelector('[data-sound-toggle]');
-          let hoverOpenTimer = 0;
-          if (!video || !button) return;
+          if (!video) return;
           setVideoPoster(video);
-          setSoundState(button, true);
           ['loadeddata', 'canplay', 'playing', 'timeupdate'].forEach((eventName) => {
             video.addEventListener(eventName, () => markVideoReady(video));
           });
@@ -2391,43 +2502,14 @@
             markVideoUnavailable(video);
           });
 
-          card.addEventListener('pointerenter', (event) => {
-            if (!coarsePointer.matches) {
-              window.clearTimeout(hoverOpenTimer);
-              startHoverProgress(event);
-              hoverOpenTimer = window.setTimeout(() => {
-                hoverOpenTimer = 0;
-                openWorkPlayer(video);
-              }, WORK_HOVER_OPEN_DELAY);
-            }
-          });
-
-          card.addEventListener('pointermove', (event) => {
-            if (!coarsePointer.matches && hoverOpenTimer) moveHoverProgress(event);
-          });
-
-          card.addEventListener('pointerleave', () => {
-            window.clearTimeout(hoverOpenTimer);
-            hoverOpenTimer = 0;
-            cancelHoverProgress();
-            if (!workPlayer?.classList.contains('is-open')) stopCardPreview(card);
-          });
-
-          card.addEventListener('click', async (event) => {
-            if (event.target.closest('[data-sound-toggle]')) return;
-            window.clearTimeout(hoverOpenTimer);
-            hoverOpenTimer = 0;
-            cancelHoverProgress();
+          card.addEventListener('click', async () => {
             setVideoPoster(video);
             await openWorkPlayer(video);
           });
 
-          button.addEventListener('click', async (event) => {
+          card.addEventListener('keydown', async (event) => {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
             event.preventDefault();
-            event.stopPropagation();
-            window.clearTimeout(hoverOpenTimer);
-            hoverOpenTimer = 0;
-            cancelHoverProgress();
             setVideoPoster(video);
             await openWorkPlayer(video);
           });
@@ -2475,34 +2557,20 @@
         const pageStart = (worksPage - 1) * WORKS_PER_PAGE;
         const pageWorks = works.slice(pageStart, pageStart + WORKS_PER_PAGE);
         worksGrid.innerHTML = pageWorks.map((item, index) => {
-          const number = String(pageStart + index + 1).padStart(2, '0');
           const title = escapeHtml(state.lang === 'cn' ? item.cnTitle : item.enTitle);
           const subtitle = escapeHtml(state.lang === 'cn' ? item.cnSub : item.enSub);
-          const description = escapeHtml(state.lang === 'cn' ? item.cnDesc : item.enDesc);
-          const soundLabel = state.lang === 'cn' ? '打开视频' : 'Open video';
+          const openLabel = escapeHtml(`${state.lang === 'cn' ? '播放作品' : 'Play work'}：${state.lang === 'cn' ? item.cnTitle : item.enTitle}`);
           const posterPath = escapeHtml(workPosterFor(item));
           const previewPath = escapeHtml(workPreviewFor(item));
           const videoPath = escapeHtml(workVideoFor(item));
           return `
-            <article class="work-card reveal" data-work-id="${escapeHtml(item.id || '')}" style="--delay: ${80 + index * 18}ms;">
+            <article class="work-card reveal" data-work-id="${escapeHtml(item.id || '')}" role="button" tabindex="0" aria-label="${openLabel}" style="--delay: ${80 + index * 18}ms;">
               <div class="video-shell">
                 ${posterPath ? `<img class="work-poster" src="${posterPath}" alt="" loading="lazy" decoding="async" />` : ''}
                 ${previewPath ? `<img class="work-preview" src="${previewPath}" alt="" loading="lazy" decoding="async" />` : ''}
                 <video class="work-video" data-autoplay-video muted loop playsinline webkit-playsinline preload="none" poster="${posterPath}">
                   <source data-src="${videoPath}" type="video/mp4" />
                 </video>
-                <div class="work-badge">${number}</div>
-                <button class="sound-btn" type="button" data-sound-toggle aria-label="${soundLabel}">
-                  <svg class="icon-sound-on" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M11 5 6.5 8.5H3v7h3.5L11 19V5Z"></path>
-                    <path d="M16 9c.9.9 1.5 2 1.5 3s-.6 2.1-1.5 3"></path>
-                    <path d="M18.8 6.2c1.8 1.8 2.9 4 2.9 5.8s-1.1 4-2.9 5.8"></path>
-                  </svg>
-                  <svg class="icon-sound-off" viewBox="0 0 24 24" aria-hidden="true" style="display:none;">
-                    <path d="M11 5 6.5 8.5H3v7h3.5L11 19V5Z"></path>
-                    <path d="M16 9l5 5M21 9l-5 5"></path>
-                  </svg>
-                </button>
                 <div class="play-overlay" aria-hidden="true">
                   <svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7V5z"></path></svg>
                 </div>
@@ -2511,7 +2579,6 @@
                 <h3>${title}</h3>
                 <div class="work-meta">
                   <p>${subtitle}</p>
-                  ${description ? `<p class="work-description">${description}</p>` : ''}
                 </div>
               </div>
             </article>
@@ -2634,6 +2701,16 @@
       });
 
       workPlayerVideo?.addEventListener('ended', closeWorkPlayer);
+
+      const playerFocusable = () => [workPlayerOrientation, workPlayerClose, workPlayerVideo]
+        .filter((element) => element && getComputedStyle(element).display !== 'none');
+      workPlayerFocusStart?.addEventListener('focus', () => playerFocusable().at(-1)?.focus());
+      workPlayerFocusEnd?.addEventListener('focus', () => playerFocusable()[0]?.focus());
+      document.addEventListener('focusin', (event) => {
+        if (workPlayer?.classList.contains('is-open') && !workPlayer.contains(event.target)) {
+          workPlayerClose?.focus();
+        }
+      });
 
       const hideSocialQrPreview = () => {
         if (socialQrPreview) socialQrPreview.hidden = true;

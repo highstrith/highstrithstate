@@ -6,18 +6,19 @@ with sync_playwright() as p:
     page = browser.new_page(viewport={"width": 1440, "height": 1000})
     not_found = []
     page.on("response", lambda response: not_found.append(response.url) if response.status == 404 else None)
-    page.goto("http://127.0.0.1:3000/", wait_until="networkidle")
+    page.goto("http://127.0.0.1:3000/", wait_until="domcontentloaded")
+    page.locator(".work-card").first.wait_for()
 
-    assert page.locator(".hero-avatar").get_attribute("src") == "assets/hero-digital-human.jpg"
+    assert page.locator(".hero-avatar").get_attribute("src") == "assets/hero-digital-human-full.jpg"
     assert page.locator(".hero-avatar").evaluate("image => image.naturalWidth") == 1792
-    assert page.locator(".work-card").count() == 7
+    assert page.locator(".work-card").count() == 8
     page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
     page.wait_for_timeout(500)
     titles = [title.strip() for title in page.locator(".work-info h3").all_text_contents()]
     subtitles = [subtitle.strip() for subtitle in page.locator(".work-meta > p:first-child").all_text_contents()]
     catalog = page.request.get("http://127.0.0.1:3000/data/works.json").json()
-    assert titles == [work["cnTitle"] for work in catalog]
-    assert subtitles == [work["cnSub"] for work in catalog]
+    assert titles == [work["cnTitle"] for work in catalog[:8]]
+    assert subtitles == [work["cnSub"] for work in catalog[:8]]
     missing_upload_posters = {
         "http://127.0.0.1:3000/assets/uploads/posters/poster-1783864071336.webp",
         "http://127.0.0.1:3000/assets/uploads/posters/poster-1783246320293.webp",
@@ -68,13 +69,13 @@ with sync_playwright() as p:
     assert qr_dialog.evaluate("dialog => dialog.open")
     assert qr_dialog.locator("img").evaluate("image => image.naturalWidth") > 0
     mobile = browser.new_page(viewport={"width": 390, "height": 844})
-    mobile.goto("http://127.0.0.1:3000/#contact", wait_until="networkidle")
+    mobile.goto("http://127.0.0.1:3000/#contact", wait_until="domcontentloaded")
     assert not mobile.evaluate("document.documentElement.scrollWidth > innerWidth")
     assert mobile.locator("#contact .contact-social-row [data-social-platform]").count() == 4
     mobile.close()
     admin = browser.new_page(viewport={"width": 1440, "height": 1000})
-    admin.goto("http://127.0.0.1:3000/admin.html", wait_until="networkidle")
-    assert admin.locator(".manage-card").count() == 7
+    admin.goto("http://127.0.0.1:3000/admin.html", wait_until="domcontentloaded")
+    assert admin.locator(".manage-card").count() == 13
     assert admin.locator("#uploadCnDescInput").count() == 1
     assert admin.locator("#uploadEnDescInput").count() == 1
     admin.close()
