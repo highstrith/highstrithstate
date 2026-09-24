@@ -10,10 +10,14 @@ with sync_playwright() as p:
     page.locator(".work-card").first.wait_for()
     assert page.locator(".work-card").count() == 8
     assert page.locator(".work-card").last.locator("h3").inner_text() == "动作预演"
-    assert page.locator(".work-description").count() == 0
+    assert page.locator(".work-description").count() == 8
     assert page.locator("#works .tag-row").count() == 0
-    assert page.locator("#works .section-note").count() == 0
+    assert page.locator("#works .section-note").count() == 1
     assert page.locator(".hero-visual .hero-avatar").get_attribute("src") == "assets/hero-digital-human-full.jpg"
+    assert page.locator(".hero .hero-signature").count() == 1
+    assert page.locator("#featuredWorks").count() == 1
+    assert page.locator("#about").count() == 1
+    assert page.locator("#process:not([hidden])").count() == 1
     assert page.locator("#bgMusic").evaluate("audio => audio.paused")
     assert page.locator(".works-grid").evaluate("grid => getComputedStyle(grid).gridTemplateColumns.split(' ').length") == 4
     assert page.locator("#contact .contact-actions .btn").count() == 1
