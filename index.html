@@ -1459,6 +1459,42 @@
     .work-info { min-height: 74px; padding: 13px 15px 15px; gap: 5px; }
     .work-info h3 { font-size: 0.98rem; line-height: 1.35; }
     .work-info p { color: var(--faint); font-size: 0.7rem; letter-spacing: 0.08em; }
+    .hero-signature {
+      max-width: 34ch;
+      margin: -4px 0 0;
+      color: rgba(247, 243, 236, 0.62);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+    .section-note { max-width: 48ch; }
+    .about-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: clamp(28px, 7vw, 120px);
+      align-items: end;
+      padding: clamp(26px, 4vw, 62px) 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .about-panel .section-title { max-width: 13ch; margin-top: 12px; }
+    .about-copy { max-width: 44ch; color: var(--muted); font-size: 1.05rem; line-height: 1.85; }
+    .work-description {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+    .work-card:nth-child(-n + 3) .video-shell { aspect-ratio: 16 / 10; }
+    .work-card:nth-child(-n + 3) .work-info { min-height: 106px; }
+    .work-card:nth-child(-n + 3) .work-info h3 { font-size: 1.08rem; }
+    #process { display: block; }
+    @media (max-width: 700px) {
+      .about-panel { grid-template-columns: 1fr; gap: 18px; padding: 28px 0; }
+      .about-panel .section-title { max-width: 15ch; }
+      .about-copy { font-size: 0.95rem; line-height: 1.7; }
+      .work-card:nth-child(-n + 3) .video-shell { aspect-ratio: 4 / 3; }
+    }
     .play-overlay { width: 42px; height: 42px; left: 12px; bottom: 12px; background: rgba(8, 8, 11, 0.72); }
     .works-page-button:hover, .works-page-button.is-current { border-color: rgba(237, 64, 80, 0.65); background: rgba(237, 64, 80, 0.15); }
     #contact { padding-top: clamp(52px, 6vw, 84px); }
@@ -1632,6 +1668,7 @@
           <p class="lede">
             3D、动画与剪辑，为品牌和故事制作有质感的画面。
           </p>
+          <p class="hero-signature" id="heroSignature">从一个画面出发，把情绪、节奏和叙事做完整。</p>
           <div class="cta-row">
             <a class="btn primary" href="#works">
               <span>看作品</span>
@@ -1652,6 +1689,7 @@
         <div class="section-head reveal" style="--delay: 40ms;">
           <div class="copy">
             <h2 class="section-title">精选作品</h2>
+            <p class="section-note" id="featuredWorks">先看三组最能代表我的作品，再继续浏览完整作品集。</p>
           </div>
         </div>
 
@@ -1659,7 +1697,17 @@
         <nav class="works-pagination" id="worksPagination" aria-label="作品分页"></nav>
       </section>
 
-      <section class="section" id="process" hidden>
+      <section class="section" id="about">
+        <div class="about-panel reveal" style="--delay: 40ms;">
+          <div>
+            <p class="kicker" id="aboutKicker">关于我</p>
+            <h2 class="section-title" id="aboutTitle">我把抽象想法，变成有情绪的画面。</h2>
+          </div>
+          <p class="about-copy" id="aboutCopy">我在江苏南京工作，主要创作 3D、角色动画、动态视觉和视频剪辑。比起追逐单一风格，我更在意画面是否有自己的气质，以及每个镜头是否在推动故事。</p>
+        </div>
+      </section>
+
+      <section class="section" id="process">
         <div class="section-head reveal" style="--delay: 40ms;">
           <div class="copy">
             <p class="kicker">制作流程</p>
@@ -1815,11 +1863,15 @@
           heroTitle1: '让视觉更像',
           heroTitle2: '电影。',
           heroDesc: '3D、动画与剪辑，为品牌和故事制作有质感的画面。',
+          heroSignature: '从一个画面出发，把情绪、节奏和叙事做完整。',
           heroPrimary: '看作品',
           heroSecondary: '联系我',
           worksKicker: '精选作品',
           worksTitle: '精选作品',
           worksNote: '精选项目以卡片网格呈现，方便快速浏览作品方向、视频质感和内容类型，也适合移动端逐个查看。',
+          aboutKicker: '关于我',
+          aboutTitle: '我把抽象想法，变成有情绪的画面。',
+          aboutCopy: '我在江苏南京工作，主要创作 3D、角色动画、动态视觉和视频剪辑。比起追逐单一风格，我更在意画面是否有自己的气质，以及每个镜头是否在推动故事。',
           uploadEyebrow: '作品入库',
           uploadTitle: '上传新作品，自动加入当前作品集。',
           uploadNote: '选择视频、封面和标题信息后，网站会把文件保存到当前站点目录，并立即把新作品加入现有网格。',
@@ -1893,11 +1945,15 @@
           heroTitle1: 'Make it',
           heroTitle2: 'cinematic.',
           heroDesc: '3D, motion and editing for brands and stories.',
+          heroSignature: 'Starting from one image, I build the emotion, rhythm, and story around it.',
           heroPrimary: 'View works',
           heroSecondary: 'Contact',
           worksKicker: 'Selected Works',
           worksTitle: 'Selected works',
           worksNote: 'Selected projects are presented in a clear card grid so visitors can scan direction, motion quality, and content type quickly on desktop or mobile.',
+          aboutKicker: 'About',
+          aboutTitle: 'I turn abstract ideas into images with feeling.',
+          aboutCopy: 'Based in Nanjing, I work across 3D, character animation, motion design, and video editing. I care less about following one fixed style and more about giving each image its own atmosphere and purpose.',
           uploadEyebrow: 'Work Intake',
           uploadTitle: 'Upload a new project and add it to the current portfolio.',
           uploadNote: 'Choose a video, poster, and titles, then the site will save the files into this project folder and add the new work to the existing grid right away.',
@@ -2021,6 +2077,10 @@
       const heroEyebrow = document.querySelector('.hero .eyebrow');
       const heroTitleLines = [...document.querySelectorAll('.hero h1 .hero-title-line')];
       const heroLede = document.querySelector('.hero .lede');
+      const heroSignature = document.getElementById('heroSignature');
+      const aboutKicker = document.getElementById('aboutKicker');
+      const aboutTitle = document.getElementById('aboutTitle');
+      const aboutCopy = document.getElementById('aboutCopy');
       const heroButtons = [...document.querySelectorAll('.hero .cta-row .btn')];
       const worksKicker = document.querySelector('#works .kicker');
       const worksTitle = document.querySelector('#works .section-title');
@@ -2563,6 +2623,7 @@
         worksGrid.innerHTML = pageWorks.map((item, index) => {
           const title = escapeHtml(state.lang === 'cn' ? item.cnTitle : item.enTitle);
           const subtitle = escapeHtml(state.lang === 'cn' ? item.cnSub : item.enSub);
+          const description = escapeHtml(state.lang === 'cn' ? item.cnDesc : item.enDesc);
           const openLabel = escapeHtml(`${state.lang === 'cn' ? '播放作品' : 'Play work'}：${state.lang === 'cn' ? item.cnTitle : item.enTitle}`);
           const posterPath = escapeHtml(workPosterFor(item));
           const previewPath = escapeHtml(workPreviewFor(item));
@@ -2584,6 +2645,7 @@
                 <div class="work-meta">
                   <p>${subtitle}</p>
                 </div>
+                <p class="work-description">${description}</p>
               </div>
             </article>
           `;
@@ -2654,12 +2716,16 @@
         if (heroTitleLines[0]) heroTitleLines[0].textContent = copy.heroTitle1;
         if (heroTitleLines[1]) heroTitleLines[1].textContent = copy.heroTitle2;
         if (heroLede) heroLede.textContent = copy.heroDesc;
+        if (heroSignature) heroSignature.textContent = copy.heroSignature;
         if (heroButtons[0]) heroButtons[0].querySelector('span').textContent = copy.heroPrimary;
         if (heroButtons[1]) heroButtons[1].querySelector('span').textContent = copy.heroSecondary;
 
         if (worksKicker) worksKicker.textContent = copy.worksKicker;
         if (worksTitle) worksTitle.innerHTML = copy.worksTitle;
         if (worksNote) worksNote.textContent = copy.worksNote;
+        if (aboutKicker) aboutKicker.textContent = copy.aboutKicker;
+        if (aboutTitle) aboutTitle.textContent = copy.aboutTitle;
+        if (aboutCopy) aboutCopy.textContent = copy.aboutCopy;
         if (processKicker) processKicker.textContent = copy.processKicker;
         if (processTitle) processTitle.textContent = copy.processTitle;
         if (processNote) processNote.textContent = copy.processNote;
