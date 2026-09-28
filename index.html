@@ -21,18 +21,18 @@
       --line-strong: rgba(255, 255, 255, 0.14);
       --text: #f4f2f0;
       --muted: rgba(244, 242, 240, 0.68);
-      --faint: rgba(244, 242, 240, 0.46);
+      --faint: rgba(244, 242, 240, 0.68);
       --accent: #ed4050;
       --accent-2: #ed4050;
       --accent-3: #ed4050;
       --shadow: 0 22px 58px rgba(0, 0, 0, 0.36);
-      --radius-xl: 32px;
+      --radius-xl: 24px;
       --radius-lg: 24px;
-      --radius-md: 18px;
-      --radius-sm: 14px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
       --pad: clamp(14px, 2.8vw, 42px);
       --shell: min(1460px, calc(100vw - 2 * var(--pad)));
-      --hero-height: clamp(520px, calc(100svh - 152px), 680px);
+      --hero-height: clamp(540px, calc(100svh - 380px), 580px);
     }
 
     * { box-sizing: border-box; }
@@ -64,7 +64,7 @@
       top: 12px;
       z-index: 200;
       padding: 10px 14px;
-      border-radius: 999px;
+      border-radius: 12px;
       background: #fff;
       color: #000;
       transform: translateY(-160%);
@@ -99,7 +99,7 @@
       gap: 18px;
       padding: 16px 18px;
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 999px;
+      border-radius: 24px;
       background: rgba(8, 10, 16, 0.62);
       backdrop-filter: blur(24px);
       box-shadow: 0 18px 50px rgba(0, 0, 0, 0.24);
@@ -200,14 +200,14 @@
     .chip-btn:hover,
     .icon-btn:hover {
       transform: translateY(-1px);
-      border-color: rgba(216, 180, 111, 0.44);
-      background: rgba(216, 180, 111, 0.08);
+      border-color: rgba(237, 64, 80, 0.44);
+      background: rgba(237, 64, 80, 0.08);
     }
 
     .chip-btn {
       min-height: 44px;
       padding: 0 14px;
-      border-radius: 999px;
+      border-radius: 12px;
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -223,7 +223,7 @@
     .icon-btn {
       width: 42px;
       height: 42px;
-      border-radius: 999px;
+      border-radius: 12px;
       display: grid;
       place-items: center;
     }
@@ -246,7 +246,7 @@
     }
 
     .eyebrow {
-      color: rgba(247, 243, 236, 0.56);
+      color: rgba(247, 243, 236, 0.68);
       text-transform: uppercase;
       letter-spacing: 0.42em;
       font-size: 0.76rem;
@@ -269,6 +269,9 @@
       text-shadow: 0 0 40px rgba(255, 255, 255, 0.03);
     }
 
+    .hero-title-mask { display: block; overflow: hidden; padding-bottom: 0.12em; margin-bottom: -0.12em; }
+    :is(a, button):focus-visible { outline: 2px solid #f26776; outline-offset: 3px; }
+
     .lede {
       margin: 0;
       max-width: 58ch;
@@ -287,7 +290,7 @@
     .btn {
       min-height: 54px;
       padding: 0 18px;
-      border-radius: 999px;
+      border-radius: 12px;
       display: inline-flex;
       align-items: center;
       gap: 10px;
@@ -301,12 +304,12 @@
 
     .btn:hover {
       transform: translateY(-2px);
-      border-color: rgba(216, 180, 111, 0.52);
-      background: rgba(216, 180, 111, 0.08);
+      border-color: rgba(237, 64, 80, 0.52);
+      background: rgba(237, 64, 80, 0.08);
     }
 
     .btn.primary {
-      background: linear-gradient(135deg, rgba(216, 180, 111, 0.22), rgba(255, 255, 255, 0.04));
+      background: linear-gradient(135deg, rgba(237, 64, 80, 0.22), rgba(255, 255, 255, 0.04));
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
     }
 
@@ -366,7 +369,7 @@
 
     .kicker {
       margin: 0 0 12px;
-      color: rgba(247, 243, 236, 0.58);
+      color: rgba(247, 243, 236, 0.68);
       text-transform: uppercase;
       letter-spacing: 0.38em;
       font-size: 0.75rem;
@@ -433,7 +436,7 @@
       height: 42px;
       padding: 0 14px;
       border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 999px;
+      border-radius: 12px;
       background: rgba(255, 255, 255, 0.04);
       color: var(--muted);
       font: inherit;
@@ -443,8 +446,8 @@
 
     .works-page-button:hover,
     .works-page-button.is-current {
-      border-color: rgba(216, 180, 111, 0.5);
-      background: rgba(216, 180, 111, 0.12);
+      border-color: rgba(237, 64, 80, 0.5);
+      background: rgba(237, 64, 80, 0.12);
       color: var(--text);
     }
 
@@ -460,42 +463,29 @@
 
     .work-card {
       position: relative;
-      border-radius: 22px;
+      border-radius: 16px;
       overflow: hidden;
       background: linear-gradient(180deg, rgba(17, 21, 33, 0.9), rgba(9, 12, 19, 0.96));
-      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 240ms ease, border-color 240ms ease, box-shadow 240ms ease;
     }
 
-    .work-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(216, 180, 111, 0.42);
+    .work-card:focus-visible {
+      border-color: rgba(237, 64, 80, 0.42);
       box-shadow: 0 24px 58px rgba(0, 0, 0, 0.34);
     }
 
     .work-card.is-active {
-      border-color: rgba(216, 180, 111, 0.42);
+      border-color: rgba(237, 64, 80, 0.42);
       box-shadow: 0 24px 58px rgba(0, 0, 0, 0.34);
     }
 
     .video-shell {
       position: relative;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 16 / 9;
       overflow: hidden;
       background:
         radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.12), transparent 20%),
         linear-gradient(180deg, rgba(24, 28, 38, 0.94), rgba(9, 11, 18, 0.98));
-    }
-
-    .video-shell::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 2;
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 20%),
-        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.08), transparent 24%),
-        linear-gradient(180deg, rgba(0, 0, 0, 0.01), rgba(0, 0, 0, 0.2));
     }
 
     .work-poster,
@@ -506,33 +496,19 @@
       display: block;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       object-position: center;
     }
 
-    .work-poster {
-      filter: saturate(0.92) contrast(1.02) brightness(0.76);
-      transform: scale(1.01);
-    }
-
-    .work-preview {
-      z-index: 1;
-      filter: saturate(1.03) contrast(1.05) brightness(0.78);
-      transform: scale(1.03);
-      transition: transform 0.45s ease, filter 0.3s ease;
-    }
+    .work-preview { z-index: 1; }
 
     .work-video {
       opacity: 0;
-      filter: saturate(1.03) contrast(1.05) brightness(0.78);
-      transform: scale(1.03);
-      transition: opacity 0.3s ease, transform 0.45s ease, filter 0.3s ease;
+      transition: opacity 0.3s ease;
     }
 
     .work-video.is-ready { opacity: 1; }
     .work-video.is-unavailable { opacity: 0; }
-    .work-card:hover .work-preview { transform: scale(1.08); filter: saturate(1.1) contrast(1.08) brightness(0.92); }
-    .work-card.is-active .work-preview { transform: scale(1.06); filter: saturate(1.1) contrast(1.08) brightness(0.9); }
 
     .work-player {
       position: fixed;
@@ -549,6 +525,9 @@
       display: grid;
     }
 
+    .work-player.is-exiting { display: grid; pointer-events: none; }
+    .work-player.is-exiting * { pointer-events: none; }
+
     .work-player-focus-sentinel {
       position: absolute;
       width: 1px;
@@ -562,7 +541,7 @@
       width: min(1180px, 94vw);
       max-height: min(82vh, 760px);
       aspect-ratio: 16 / 9;
-      border-radius: 18px;
+      border-radius: 24px;
       overflow: hidden;
       background: rgba(6, 8, 14, 0.96);
       border: 1px solid rgba(255, 255, 255, 0.14);
@@ -593,7 +572,7 @@
     .work-player-status p { margin: 0; font-size: 0.9rem; }
     .work-player-status button { margin-top: 12px; }
     .no-js-work { display: block; color: inherit; text-decoration: none; }
-    .no-js-work img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 14px; }
+    .no-js-work img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; border-radius: 16px; background: #101014; }
     .no-js-work h3 { margin: 12px 0 6px; }
 
     .work-player-control {
@@ -688,14 +667,14 @@
     .work-info p {
       margin: 0;
       color: var(--muted);
-      font-size: 0.74rem;
+      font-size: 0.8125rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
     }
 
     .work-info .work-description {
-      color: rgba(247, 243, 236, 0.56);
-      font-size: 0.78rem;
+      color: var(--muted);
+      font-size: 0.875rem;
       letter-spacing: 0;
       line-height: 1.55;
       text-transform: none;
@@ -707,7 +686,7 @@
       border-radius: 24px;
       background:
         linear-gradient(180deg, rgba(15, 19, 30, 0.92), rgba(9, 12, 19, 0.96)),
-        radial-gradient(circle at top right, rgba(216, 180, 111, 0.1), transparent 30%);
+        radial-gradient(circle at top right, rgba(237, 64, 80, 0.1), transparent 30%);
       overflow: hidden;
     }
 
@@ -728,7 +707,7 @@
       align-items: center;
       gap: 10px;
       margin-bottom: 18px;
-      color: rgba(247, 243, 236, 0.58);
+      color: rgba(247, 243, 236, 0.68);
       letter-spacing: 0.24em;
       text-transform: uppercase;
       font-size: 0.72rem;
@@ -806,7 +785,7 @@
     .contact-card.featured {
       margin-top: 4px;
       background:
-        linear-gradient(135deg, rgba(216, 180, 111, 0.1), transparent 38%),
+        linear-gradient(135deg, rgba(237, 64, 80, 0.1), transparent 38%),
         linear-gradient(180deg, rgba(16, 20, 30, 0.94), rgba(9, 12, 19, 0.98));
     }
 
@@ -874,23 +853,23 @@
     .social-hub { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
     .social-link {
       position: relative; display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
-      padding: 10px 13px; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 999px;
+      padding: 10px 13px; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px;
       color: var(--text); background: rgba(255, 255, 255, 0.045); font: inherit; font-size: 0.82rem;
       cursor: pointer; text-decoration: none; transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
     }
-    .social-link:hover, .social-link:focus-visible { border-color: rgba(216, 180, 111, 0.76); background: rgba(216, 180, 111, 0.1); transform: translateY(-2px); outline: none; }
+    .social-link:hover, .social-link:focus-visible { border-color: rgba(237, 64, 80, 0.76); background: rgba(237, 64, 80, 0.1); transform: translateY(-2px); }
     .social-link svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; }
     .social-link .social-xhs { font-size: 0.62rem; font-weight: 800; letter-spacing: 0; }
     .social-qr-preview {
       position: fixed; z-index: 100; width: 224px; padding: 12px;
-      border: 1px solid rgba(216, 180, 111, 0.45); border-radius: 18px;
+      border: 1px solid rgba(237, 64, 80, 0.45); border-radius: 24px;
       background: #0d111a; box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
       pointer-events: none; text-align: center;
     }
     .social-qr-preview[hidden] { display: none; }
     .social-qr-preview img { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; border-radius: 9px; background: #fff; }
     .social-qr-preview p { margin: 9px 0 0; color: var(--text); font-size: 0.82rem; }
-    .social-qr-dialog { width: min(92vw, 400px); padding: 0; border: 1px solid rgba(216, 180, 111, 0.45); border-radius: 24px; color: var(--text); background: #0d111a; box-shadow: 0 28px 90px rgba(0, 0, 0, 0.58); }
+    .social-qr-dialog { width: min(92vw, 400px); padding: 0; border: 1px solid rgba(237, 64, 80, 0.45); border-radius: 24px; color: var(--text); background: #0d111a; box-shadow: 0 28px 90px rgba(0, 0, 0, 0.58); }
     .social-qr-dialog::backdrop { background: rgba(3, 5, 9, 0.76); backdrop-filter: blur(7px); }
     .social-qr-inner { padding: 22px; text-align: center; }
     .social-qr-dialog h3 { margin: 6px 0 4px; font-size: 1.12rem; }
@@ -920,18 +899,6 @@
     .reveal {
       opacity: 1;
       transform: none;
-      transition: opacity 0.7s ease, transform 0.7s ease;
-      transition-delay: var(--delay, 0ms);
-    }
-
-    .reveal.is-pending {
-      opacity: 0;
-      transform: translateY(18px);
-    }
-
-    .reveal.is-visible {
-      opacity: 1;
-      transform: translateY(0);
     }
 
     @media (max-width: 1280px) {
@@ -1036,8 +1003,8 @@
         display: none;
       }
       .nav a.active {
-        border-color: rgba(216, 180, 111, 0.28);
-        background: rgba(216, 180, 111, 0.1);
+        border-color: rgba(237, 64, 80, 0.28);
+        background: rgba(237, 64, 80, 0.1);
       }
       .actions {
         order: 3;
@@ -1113,7 +1080,7 @@
         scroll-margin-top: 24px;
       }
       .work-card {
-        border-radius: 20px;
+        border-radius: 16px;
       }
       .work-info {
         padding: 16px 16px 18px;
@@ -1129,7 +1096,7 @@
         width: 100vw;
         height: 100svh;
         max-height: none;
-        border-radius: 0;
+        border-radius: 24px;
         border: 0;
       }
       .work-player-video {
@@ -1294,7 +1261,7 @@
       align-items: center;
       gap: 10px;
       margin-top: 4px;
-      color: rgba(247, 243, 236, 0.58);
+      color: rgba(247, 243, 236, 0.68);
       font-size: 0.78rem;
       letter-spacing: 0.12em;
     }
@@ -1391,9 +1358,9 @@
       color: #fff;
     }
     .hero {
-      display: block;
-      height: clamp(530px, calc(100svh - 114px), 690px);
-      min-height: 0;
+      display: grid;
+      height: auto;
+      min-height: var(--hero-height);
       padding: 0;
       margin: 18px 0 0;
       border-radius: 24px;
@@ -1437,7 +1404,7 @@
     .hero-copy {
       position: relative;
       width: min(62%, 860px);
-      height: 100%;
+      height: auto;
       min-height: 0;
       padding: clamp(30px, 5vw, 74px);
       gap: clamp(14px, 2.2vw, 24px);
@@ -1456,40 +1423,32 @@
       -webkit-background-clip: text;
       background-clip: text;
     }
-    .hero .lede { max-width: 32ch; line-height: 1.55; font-size: clamp(0.94rem, 1.2vw, 1.05rem); }
+    .hero .lede { max-width: 46ch; line-height: 1.55; font-size: clamp(0.94rem, 1.2vw, 1.05rem); }
     .hero .btn.primary { background: #b51f32; border-color: #d53549; box-shadow: none; }
     .hero .btn.primary:hover { background: #d92c43; border-color: #f45a6c; }
-    #works { padding-top: clamp(34px, 4vw, 58px); }
+    #works { padding-top: 32px; }
     #works .section-head { margin-bottom: 22px; }
     #works .section-title { font-size: clamp(2rem, 3.2vw, 3rem); line-height: 1.16; }
     .works-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
     .work-card {
-      border-radius: 14px;
+      border-radius: 16px;
       border: 1px solid rgba(255, 255, 255, 0.11);
       background: #151419;
       cursor: pointer;
       outline: none;
     }
-    .work-card:hover, .work-card:focus-visible {
-      transform: translateY(-3px);
+    .work-card:focus-visible {
       border-color: rgba(237, 64, 80, 0.7);
       box-shadow: 0 18px 42px rgba(0, 0, 0, 0.32);
     }
     .work-card:focus-visible { outline: 2px solid #f26776; outline-offset: 3px; }
-    .work-card.is-active { border-color: rgba(237, 64, 80, 0.26); box-shadow: none; }
-    .video-shell { aspect-ratio: 4 / 3; }
-    .work-poster { filter: saturate(0.92) contrast(1.02) brightness(0.9); }
-    .work-video { filter: saturate(1.03) contrast(1.04) brightness(0.92); }
-    .work-info { min-height: 74px; padding: 13px 15px 15px; gap: 5px; }
-    .work-info h3 { font-size: 0.98rem; line-height: 1.35; }
-    .work-info p { color: var(--faint); font-size: 0.7rem; letter-spacing: 0.08em; }
-    .hero-signature {
-      max-width: 34ch;
-      margin: -4px 0 0;
-      color: rgba(247, 243, 236, 0.62);
-      font-size: 0.92rem;
-      line-height: 1.6;
+    @media (hover: hover) and (pointer: fine) {
+      .work-card:hover { transform: translateY(-2px); border-color: rgba(237, 64, 80, 0.7); box-shadow: 0 18px 42px rgba(0, 0, 0, 0.32); }
     }
+    .work-card.is-active { border-color: rgba(237, 64, 80, 0.26); box-shadow: none; }
+    .work-info { min-height: 74px; padding: 13px 15px 15px; gap: 5px; }
+    .work-info h3 { font-size: 1rem; line-height: 1.35; }
+    .work-info p { color: var(--muted); font-size: 0.8125rem; letter-spacing: 0.08em; }
     .section-note { max-width: 48ch; }
     .about-panel {
       display: grid;
@@ -1502,22 +1461,18 @@
     }
     .about-panel .section-title { max-width: 13ch; margin-top: 12px; }
     .about-copy { max-width: 44ch; color: var(--muted); font-size: 1.05rem; line-height: 1.85; }
-    .work-description {
+    .work-info .work-description {
       margin: 0;
       color: var(--muted);
-      font-size: 0.78rem;
+      font-size: 0.875rem;
       line-height: 1.55;
       letter-spacing: 0;
     }
-    .work-card:nth-child(-n + 3) .video-shell { aspect-ratio: 16 / 10; }
-    .work-card:nth-child(-n + 3) .work-info { min-height: 106px; }
-    .work-card:nth-child(-n + 3) .work-info h3 { font-size: 1.08rem; }
     #process { display: block; }
     @media (max-width: 700px) {
       .about-panel { grid-template-columns: 1fr; gap: 18px; padding: 28px 0; }
       .about-panel .section-title { max-width: 15ch; }
       .about-copy { font-size: 0.95rem; line-height: 1.7; }
-      .work-card:nth-child(-n + 3) .video-shell { aspect-ratio: 4 / 3; }
     }
     .play-overlay { width: 42px; height: 42px; left: 12px; bottom: 12px; background: rgba(8, 8, 11, 0.72); }
     .works-page-button:hover, .works-page-button.is-current { border-color: rgba(237, 64, 80, 0.65); background: rgba(237, 64, 80, 0.15); }
@@ -1557,7 +1512,7 @@
         gap: 4px 8px;
         min-height: 0;
         padding: 8px 10px;
-        border-radius: 16px;
+        border-radius: 24px;
       }
       .brand { grid-column: 1; grid-row: 1; width: auto; min-width: 0; gap: 7px; }
       .brand-mark, .topbar.is-public .brand-mark { width: 32px; height: 32px; border-radius: 9px; }
@@ -1597,11 +1552,11 @@
       .chip-btn strong { letter-spacing: 0; }
       #musicToggle, .actions.is-public #musicToggle { grid-column: auto; }
       .hero {
-        height: min(540px, calc(100svh - 125px));
-        min-height: 490px;
+        height: auto;
+        min-height: clamp(450px, calc(100svh - 380px), 480px);
         margin-top: 8px;
         padding: 0;
-        border-radius: 16px;
+        border-radius: 24px;
       }
       .hero::before { background: linear-gradient(180deg, rgba(8, 8, 11, 0.1) 0%, rgba(8, 8, 11, 0.03) 35%, rgba(8, 8, 11, 0.85) 69%, #08080b 100%); }
       .hero-visual {
@@ -1615,7 +1570,7 @@
       .hero-avatar { object-position: 50% 12%; transform: scale(1.08); }
       .hero-copy {
         width: 100%;
-        height: 100%;
+        height: auto;
         min-height: 0;
         align-content: end;
         gap: 13px;
@@ -1623,7 +1578,7 @@
         background: transparent;
         border-radius: 0;
       }
-      .hero h1 { max-width: none; font-size: clamp(2.45rem, 10.9vw, 3.4rem); line-height: 1.08; }
+      .hero h1 { max-width: none; font-size: clamp(2.2rem, 10.9vw, 3.4rem); line-height: 1.08; }
       .hero .lede { max-width: 30ch; font-size: 0.88rem; }
       .cta-row { display: flex; flex-wrap: wrap; width: auto; gap: 8px; }
       .cta-row .btn { width: auto; min-height: 42px; padding: 0 13px; font-size: 0.74rem; }
@@ -1683,16 +1638,15 @@
 
     <main id="home">
       <section class="hero">
-        <div class="hero-copy reveal" style="--delay: 120ms;">
+        <div class="hero-copy">
           <div class="eyebrow">3D / 动画 / 剪辑</div>
           <h1>
-            <span class="hero-title-line">让视觉更像</span>
-            <span class="hero-title-line hero-title-accent">电影。</span>
+            <span class="hero-title-mask"><span class="hero-title-line">让视觉更像</span></span>
+            <span class="hero-title-mask"><span class="hero-title-line hero-title-accent">电影。</span></span>
           </h1>
           <p class="lede">
-            3D、动画与剪辑，为品牌和故事制作有质感的画面。
+            3D、动画与剪辑，从脚本前期到多平台交付。
           </p>
-          <p class="hero-signature" id="heroSignature">从一个画面出发，把情绪、节奏和叙事做完整。</p>
           <div class="cta-row">
             <a class="btn primary" href="#works">
               <span>看作品</span>
@@ -1704,7 +1658,7 @@
           </div>
         </div>
 
-        <div class="hero-visual reveal" style="--delay: 200ms;">
+        <div class="hero-visual">
           <img class="hero-avatar" src="assets/hero-digital-human-full.jpg" alt="-橘小桔- 的数字人形象" decoding="async" fetchpriority="high" />
         </div>
       </section>
@@ -1717,7 +1671,7 @@
           </div>
         </div>
 
-        <div class="works-grid reveal" id="worksGrid" style="--delay: 100ms;"></div>
+        <div class="works-grid" id="worksGrid"></div>
         <noscript>
           <!-- generated-works:start -->
 <div class="works-grid">
@@ -1909,8 +1863,7 @@
           heroEyebrow: '3D / 动画 / 剪辑',
           heroTitle1: '让视觉更像',
           heroTitle2: '电影。',
-          heroDesc: '3D、动画与剪辑，为品牌和故事制作有质感的画面。',
-          heroSignature: '从一个画面出发，把情绪、节奏和叙事做完整。',
+          heroDesc: '3D、动画与剪辑，从脚本前期到多平台交付。',
           heroPrimary: '看作品',
           heroSecondary: '联系我',
           worksKicker: '精选作品',
@@ -1998,8 +1951,7 @@
           heroEyebrow: '3D / MOTION / EDIT',
           heroTitle1: 'Make it',
           heroTitle2: 'cinematic.',
-          heroDesc: '3D, motion and editing for brands and stories.',
-          heroSignature: 'Starting from one image, I build the emotion, rhythm, and story around it.',
+          heroDesc: '3D, animation and editing, from script development to delivery across platforms.',
           heroPrimary: 'View works',
           heroSecondary: 'Contact',
           worksKicker: 'Selected Works',
@@ -2324,7 +2276,6 @@
       const heroEyebrow = document.querySelector('.hero .eyebrow');
       const heroTitleLines = [...document.querySelectorAll('.hero h1 .hero-title-line')];
       const heroLede = document.querySelector('.hero .lede');
-      const heroSignature = document.getElementById('heroSignature');
       const aboutKicker = document.getElementById('aboutKicker');
       const aboutTitle = document.getElementById('aboutTitle');
       const aboutCopy = document.getElementById('aboutCopy');
@@ -2363,6 +2314,76 @@
       let workPlayerOrientationMode = 'portrait';
       let workPlayerFullscreenRequested = false;
       let playerSession = null;
+
+      // The page stays visible at rest; only a running native animation owns an entrance.
+      const stageAnimations = new Set();
+      const playerAnimations = new Set();
+      const revealedElements = new WeakSet();
+      const revealedWorks = new Set();
+      let motionAvailable = true;
+      const canAnimate = () => motionAvailable && !reduceMotion.matches && !document.hidden
+        && typeof Element.prototype.animate === 'function' && typeof window.IntersectionObserver === 'function';
+      const cancelAnimations = (animations) => {
+        for (const animation of animations) {
+          animation.onfinish = null;
+          animation.oncancel = null;
+          animation.cancel();
+        }
+        animations.clear();
+      };
+      const animateElement = (element, frames, timing, animations = stageAnimations, finished) => {
+        if (!element || !canAnimate()) return false;
+        try {
+          const animation = element.animate(frames, { ...timing, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' });
+          animations.add(animation);
+          animation.onfinish = () => {
+            animations.delete(animation);
+            animation.onfinish = null;
+            animation.cancel();
+            finished?.();
+          };
+          animation.oncancel = () => animations.delete(animation);
+          return true;
+        } catch (_) {
+          motionAvailable = false;
+          finishDecorativeMotion();
+          return false;
+        }
+      };
+      const finishDecorativeMotion = () => {
+        cancelAnimations(stageAnimations);
+        cancelAnimations(playerAnimations);
+        workPlayer?.classList.remove('is-exiting');
+      };
+      const revealImmediately = (target) => {
+        if (!target) return;
+        if (target.id === 'home') target = document.querySelector('.hero');
+        target.querySelectorAll('.reveal').forEach((element) => {
+          revealedElements.add(element);
+          if (element.dataset.workId) revealedWorks.add(element.dataset.workId);
+          revealObserver?.unobserve(element);
+        });
+        for (const animation of stageAnimations) {
+          if (target.contains(animation.effect?.target)) {
+            animation.onfinish = null;
+            animation.cancel();
+            stageAnimations.delete(animation);
+          }
+        }
+      };
+      const startHeroEntrance = () => {
+        if (currentHashTarget()?.id !== 'home' && currentHashTarget()) return;
+        const mobile = compactViewport.matches;
+        heroTitleLines.forEach((line, index) => animateElement(line,
+          [{ transform: `translateY(${mobile ? 24 : 48}px)` }, { transform: 'translateY(0)' }],
+          { duration: mobile ? 500 : 650, delay: index * (mobile ? 70 : 100) }));
+        animateElement(document.querySelector('.hero-visual'),
+          [{ opacity: 0, transform: `translateX(${mobile ? 12 : 24}px)` }, { opacity: 1, transform: 'translateX(0)' }],
+          { duration: mobile ? 650 : 900, delay: mobile ? 70 : 100 });
+        [heroLede, document.querySelector('.hero .cta-row')].forEach((element, index) => animateElement(element,
+          [{ opacity: 0, transform: `translateY(${mobile ? 12 : 24}px)` }, { opacity: 1, transform: 'translateY(0)' }],
+          { duration: mobile ? 300 : 400, delay: (mobile ? 450 : 550) + index * (mobile ? 100 : 150) }));
+      };
 
       const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
         '&': '&amp;',
@@ -2635,6 +2656,7 @@
       const scrollToHashTarget = () => {
         const target = currentHashTarget();
         if (!target) return;
+        revealImmediately(target);
         requestAnimationFrame(() => {
           const compactViewport = window.matchMedia('(max-width: 700px)').matches;
           const topbarHeight = document.querySelector('.topbar')?.getBoundingClientRect().height || 0;
@@ -2802,6 +2824,9 @@
         if (!workPlayer || !workPlayerVideo || !video) return;
         const sourcePath = videoSourceFor(video);
         if (!sourcePath) return;
+        cancelAnimations(playerAnimations);
+        workPlayer.classList.remove('is-exiting');
+        workPlayer.inert = false;
         setWorkPlayerOrientation('portrait');
 
         activeWorkVideo = video;
@@ -2816,12 +2841,16 @@
 
         workPlayerClose?.focus({ preventScroll: true });
         startPlayerVideo(sourcePath, video.getAttribute('poster') || '');
+        animateElement(workPlayer, [{ opacity: 0 }, { opacity: 1 }], { duration: 220 }, playerAnimations);
+        animateElement(workPlayer.querySelector('.work-player-panel'),
+          [{ transform: 'scale(.98)' }, { transform: 'scale(1)' }], { duration: 220 }, playerAnimations);
       };
 
-      const closeWorkPlayer = async () => {
+      const closeWorkPlayer = () => {
         if (!workPlayer || !workPlayerVideo || !workPlayer.classList.contains('is-open')) return;
 
         const returnFocusTo = activeWorkVideo?.closest('.work-card');
+        cancelAnimations(playerAnimations);
         disposePlayerSession();
         setPlayerState('idle');
         workPlayerVideo.pause();
@@ -2829,13 +2858,18 @@
         workPlayerVideo.load();
         workPlayer.classList.remove('is-open');
         workPlayer.setAttribute('aria-hidden', 'true');
+        workPlayer.inert = true;
         if (siteShell) siteShell.inert = false;
         document.body.classList.remove('has-work-player');
         activeWorkVideo = null;
-        await releaseWorkPlayerOrientation();
-        await releaseBackgroundMusic();
-        if (!activeWorkVideo) returnFocusTo?.focus({ preventScroll: true });
+        returnFocusTo?.focus({ preventScroll: true });
+        // Logical close is immediate. The remaining 140ms layer cannot receive input.
+        workPlayer.classList.add('is-exiting');
+        if (!animateElement(workPlayer, [{ opacity: 1 }, { opacity: 0 }], { duration: 140 }, playerAnimations,
+          () => workPlayer.classList.remove('is-exiting'))) workPlayer.classList.remove('is-exiting');
         scheduleWorkVideoSync();
+        releaseWorkPlayerOrientation();
+        releaseBackgroundMusic();
       };
 
       const setupWorkCards = () => {
@@ -2872,33 +2906,43 @@
         if (revealObserver) revealObserver.disconnect();
         if (videoObserver) videoObserver.disconnect();
 
-        revealObserver = 'IntersectionObserver' in window
+        revealObserver = canAnimate()
           ? new IntersectionObserver((entries) => {
               entries.forEach((entry) => {
                 if (entry.isIntersecting) {
-                  entry.target.classList.remove('is-pending');
-                  entry.target.classList.add('is-visible');
-                  revealObserver.unobserve(entry.target);
+                  const element = entry.target;
+                  revealObserver.unobserve(element);
+                  if (revealedElements.has(element) || (element.dataset.workId && revealedWorks.has(element.dataset.workId))) return;
+                  revealedElements.add(element);
+                  const card = element.classList.contains('work-card');
+                  if (card) revealedWorks.add(element.dataset.workId);
+                  const row = card ? [...worksGrid.children].filter(sibling => Math.abs(sibling.offsetTop - element.offsetTop) < 2) : [];
+                  const distance = (card ? 20 : 24) / (compactViewport.matches ? 2 : 1);
+                  animateElement(element, [{ opacity: 0, transform: `translateY(${distance}px)` }, { opacity: 1, transform: 'translateY(0)' }],
+                    { duration: card ? 450 : 500, delay: card ? Math.max(0, row.indexOf(element)) * 50 : 0 });
                 }
               });
-            }, { threshold: 0.15 })
+            }, { threshold: 0.01 })
           : null;
 
-        videoObserver = 'IntersectionObserver' in window
+        videoObserver = typeof window.IntersectionObserver === 'function'
           ? new IntersectionObserver((entries) => {
               if (entries.length) scheduleWorkVideoSync();
             }, { rootMargin: `${WORK_VIDEO_MARGIN}px 0px`, threshold: 0.01 })
           : null;
 
         document.querySelectorAll('.reveal').forEach((element) => {
-          if (revealObserver && !reduceMotion.matches && !element.classList.contains('is-visible') && element.getBoundingClientRect().top >= window.innerHeight) {
-            element.classList.add('is-pending');
+          if (element.classList.contains('work-card') && !workDataReady) return;
+          if (revealedElements.has(element) || (element.dataset.workId && revealedWorks.has(element.dataset.workId))) return;
+          if (revealObserver) {
             revealObserver.observe(element);
           } else {
-            element.classList.remove('is-pending');
-            element.classList.add('is-visible');
+            revealedElements.add(element);
+            if (element.dataset.workId) revealedWorks.add(element.dataset.workId);
           }
         });
+
+        revealImmediately(currentHashTarget());
 
         document.querySelectorAll('[data-autoplay-video]').forEach((video) => {
           const source = video.querySelector('source');
@@ -2911,12 +2955,19 @@
       };
 
       const renderWorks = () => {
+        for (const animation of stageAnimations) {
+          if (worksGrid.contains(animation.effect?.target)) {
+            animation.onfinish = null;
+            animation.cancel();
+            stageAnimations.delete(animation);
+          }
+        }
         const works = allWorkData();
         const pageCount = Math.max(1, Math.ceil(works.length / WORKS_PER_PAGE));
         worksPage = Math.min(worksPage, pageCount);
         const pageStart = (worksPage - 1) * WORKS_PER_PAGE;
         const pageWorks = works.slice(pageStart, pageStart + WORKS_PER_PAGE);
-        worksGrid.innerHTML = pageWorks.map((item, index) => {
+        worksGrid.innerHTML = pageWorks.map((item) => {
           const title = escapeHtml(state.lang === 'cn' ? item.cnTitle : item.enTitle);
           const subtitle = escapeHtml(state.lang === 'cn' ? item.cnSub : item.enSub);
           const description = escapeHtml(state.lang === 'cn' ? item.cnDesc : item.enDesc);
@@ -2924,7 +2975,7 @@
           const posterPath = escapeHtml(workPosterFor(item));
           const previewPath = escapeHtml(workPreviewFor(item));
           return `
-            <article class="work-card reveal" data-work-id="${escapeHtml(item.id || '')}" role="button" tabindex="0" aria-label="${openLabel}" style="--delay: ${80 + index * 18}ms;">
+            <article class="work-card reveal" data-work-id="${escapeHtml(item.id || '')}" role="button" tabindex="0" aria-label="${openLabel}">
               <div class="video-shell">
                 ${posterPath ? `<img class="work-poster" src="${posterPath}" alt="" loading="lazy" decoding="async" />` : ''}
                 <video class="work-video" data-autoplay-video muted loop playsinline webkit-playsinline preload="none" poster="${posterPath}">
@@ -3010,7 +3061,6 @@
         if (heroTitleLines[0]) heroTitleLines[0].textContent = copy.heroTitle1;
         if (heroTitleLines[1]) heroTitleLines[1].textContent = copy.heroTitle2;
         if (heroLede) heroLede.textContent = copy.heroDesc;
-        if (heroSignature) heroSignature.textContent = copy.heroSignature;
         if (heroButtons[0]) heroButtons[0].querySelector('span').textContent = copy.heroPrimary;
         if (heroButtons[1]) heroButtons[1].querySelector('span').textContent = copy.heroSecondary;
 
@@ -3165,14 +3215,21 @@
       updateActiveNav();
 
       document.addEventListener('visibilitychange', () => {
-        if (document.hidden) stopAllCardPreviews();
+        if (document.hidden) {
+          stopAllCardPreviews();
+          finishDecorativeMotion();
+        }
         scheduleWorkVideoSync();
       });
       compactViewport.addEventListener('change', scheduleWorkVideoSync);
       coarsePointer.addEventListener('change', scheduleWorkVideoSync);
-      reduceMotion.addEventListener('change', refreshObservers);
+      reduceMotion.addEventListener('change', () => {
+        if (reduceMotion.matches) finishDecorativeMotion();
+        refreshObservers();
+      });
 
       applyLanguage(state.lang);
+      startHeroEntrance();
       await hydrateUploadedWorks();
       workDataReady = true;
       applyLanguage(state.lang);

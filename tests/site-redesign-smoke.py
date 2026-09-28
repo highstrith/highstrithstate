@@ -14,7 +14,7 @@ with sync_playwright() as p:
     assert page.locator("#works .tag-row").count() == 0
     assert page.locator("#works .section-note").count() == 1
     assert page.locator(".hero-visual .hero-avatar").get_attribute("src") == "assets/hero-digital-human-full.jpg"
-    assert page.locator(".hero .hero-signature").count() == 1
+    assert page.locator(".hero .lede").inner_text() == "3D、动画与剪辑，从脚本前期到多平台交付。"
     assert page.locator("#featuredWorks").count() == 1
     assert page.locator("#about").count() == 1
     assert page.locator("#process:not([hidden])").count() == 1
