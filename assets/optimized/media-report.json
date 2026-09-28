@@ -1,0 +1,124 @@
+{
+  "tool": "ffmpeg version 6.0 Copyright (c) 2000-2023 the FFmpeg developers",
+  "toolHash": "a90e3db6a3fd35f6074b013f948b1aa45b31c6375489d39e572bea3f18336584",
+  "previews": [
+    {
+      "id": "work-1783863606674-7ta9sp",
+      "source": "assets/uploads/work-1783863596658-desktop.mp4",
+      "sourceHash": "f3a154b6c6b70ac91eb5f8b5317c725e2ec22bf47466dfeb295bc257ffc4b434",
+      "previewSeconds": 20,
+      "previewBytes": 1635083,
+      "mobileBytes": 12344296,
+      "webRemux": false
+    },
+    {
+      "id": "work-1783246320299-icguu6",
+      "source": "assets/uploads/desktop/work-1783436201027-desktop.mp4",
+      "sourceHash": "bd24842da77abbec287ad4770d6406258f083913e604a4e67b3bf65648d50273",
+      "previewSeconds": 15.04,
+      "previewBytes": 1183499,
+      "mobileBytes": 3896553,
+      "webRemux": false
+    },
+    {
+      "id": "featured-prove-it",
+      "source": "assets/works/prove-it.mp4",
+      "sourceHash": "bfdaced374f473e19e49174d29d571c8f5fe66cb589451043f6a56d0d067272b",
+      "previewSeconds": 20,
+      "previewBytes": 1571976,
+      "mobileBytes": 4352697,
+      "webRemux": true
+    },
+    {
+      "id": "featured-approach",
+      "source": "assets/works/approach.mp4",
+      "sourceHash": "21842d8b8a4214930d17a680abf12c1519f060ca5d62c1135e99c3a10e4dc567",
+      "previewSeconds": 20,
+      "previewBytes": 1594923,
+      "mobileBytes": 5359529,
+      "webRemux": true
+    },
+    {
+      "id": "featured-giant-wheel",
+      "source": "assets/works/giant-wheel.mp4",
+      "sourceHash": "e0228684971f5ab2de7793d105473f1d37e1e621345e1ecbca6b47df5c7b5a9d",
+      "previewSeconds": 20,
+      "previewBytes": 1587412,
+      "mobileBytes": 2796584,
+      "webRemux": true
+    },
+    {
+      "id": "featured-exported-film",
+      "source": "assets/works/exported-film.mp4",
+      "sourceHash": "918e9df609aaaef5b8601fc00436cc972c18f47387549c7d8bf70b9eb465a946",
+      "previewSeconds": 20,
+      "previewBytes": 1569162,
+      "mobileBytes": 5998234,
+      "webRemux": true
+    },
+    {
+      "id": "featured-timeline-1",
+      "source": "assets/works/timeline-vertical.mp4",
+      "sourceHash": "df1d8232da6eb0cc54fdac8c42169bf8aea9d9bb60daabc6e7e55a2dc6a3ea6b",
+      "previewSeconds": 20,
+      "previewBytes": 1563655,
+      "mobileBytes": 3091231,
+      "webRemux": false
+    },
+    {
+      "id": "added-creative-3",
+      "source": "assets/works/creative-3.mp4",
+      "sourceHash": "46d6e4f780895c8feb6053dde09be9b8ab7c8353309abb3a7f0138361d88b660",
+      "previewSeconds": 10.2,
+      "previewBytes": 628083,
+      "mobileBytes": 1122129,
+      "webRemux": true
+    },
+    {
+      "id": "added-visual-study",
+      "source": "assets/works/visual-study.mp4",
+      "sourceHash": "6fd6189ceb7395ec8e2572a8df02ccb569987125aab5b1aecdcef30c8c461012",
+      "previewSeconds": 5,
+      "previewBytes": 253617,
+      "mobileBytes": 441015,
+      "webRemux": false
+    },
+    {
+      "id": "added-title-render",
+      "source": "assets/works/title-render.mp4",
+      "sourceHash": "a401f3f44f217a4cc8b8c76a743ab6441214fde014f940fd756d09467b9b3dae",
+      "previewSeconds": 13.52,
+      "previewBytes": 973464,
+      "mobileBytes": 3162186,
+      "webRemux": false
+    },
+    {
+      "id": "added-v30001-0180",
+      "source": "assets/works/v30001-0180.mp4",
+      "sourceHash": "ba681b583f1d285c5511284e19cea643987937a6e3596d09fee383ab0a4042b2",
+      "previewSeconds": 7.2,
+      "previewBytes": 500103,
+      "mobileBytes": 353540,
+      "webRemux": true
+    },
+    {
+      "id": "added-render-test",
+      "source": "assets/works/render-test.mp4",
+      "sourceHash": "8074dd13a694cb582fd134a84c0c963d3a96c71c3a0d2cab1dba2d2fa2cc7a9d",
+      "previewSeconds": 2.23,
+      "previewBytes": 238938,
+      "mobileBytes": 341850,
+      "webRemux": true
+    },
+    {
+      "id": "added-completed-film",
+      "source": "assets/works/completed-film.mp4",
+      "sourceHash": "eceb45f7040e186d855ca355e50314f3a68d876e00cd9825f49928640f21c4bb",
+      "previewSeconds": 20,
+      "previewBytes": 1542113,
+      "mobileBytes": 1276645,
+      "webRemux": true
+    }
+  ],
+  "failed": []
+}

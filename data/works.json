@@ -9,8 +9,10 @@
     "cnDesc": "AI 主题叙事短片，关注人物与科技感画面的结合。",
     "enDesc": "An AI-themed narrative short built around character and futuristic visual language.",
     "video": "assets/uploads/work-1783863596658-desktop.mp4",
-    "mobileVideo": "",
-    "poster": "assets/uploads/posters/poster-1783864071336.png"
+    "mobileVideo": "assets/optimized/work-1783863606674-7ta9sp/f45c74fe008c4d5a-mobile.mp4",
+    "poster": "assets/uploads/posters/poster-1783864071336.png",
+    "previewVideo": "assets/optimized/work-1783863606674-7ta9sp/f45c74fe008c4d5a-preview.mp4",
+    "webVideo": ""
   },
   {
     "id": "work-1783246320299-icguu6",
@@ -22,8 +24,10 @@
     "cnDesc": "街头运动影像，强调动作、节奏与环境氛围。",
     "enDesc": "A street-sports piece focused on movement, rhythm, and atmosphere.",
     "video": "assets/uploads/desktop/work-1783436201027-desktop.mp4",
-    "mobileVideo": "",
-    "poster": "assets/uploads/posters/poster-1783246320293.png"
+    "mobileVideo": "assets/optimized/work-1783246320299-icguu6/bfa370895bb42ad2-mobile.mp4",
+    "poster": "assets/uploads/posters/poster-1783246320293.png",
+    "previewVideo": "assets/optimized/work-1783246320299-icguu6/bfa370895bb42ad2-preview.mp4",
+    "webVideo": ""
   },
   {
     "id": "featured-prove-it",
@@ -35,8 +39,10 @@
     "cnDesc": "以节奏剪辑和品牌信息为核心的广告片段。",
     "enDesc": "An advertising piece built around rhythmic editing and clear brand messaging.",
     "video": "assets/works/prove-it.mp4",
-    "mobileVideo": "",
-    "poster": "assets/posters/prove-it.jpg"
+    "mobileVideo": "assets/optimized/featured-prove-it/cd767b20630250e0-mobile.mp4",
+    "poster": "assets/posters/prove-it.jpg",
+    "previewVideo": "assets/optimized/featured-prove-it/cd767b20630250e0-preview.mp4",
+    "webVideo": "assets/optimized/featured-prove-it/cd767b20630250e0-web.mp4"
   },
   {
     "id": "featured-approach",
@@ -48,8 +54,10 @@
     "cnDesc": "用剪辑节奏组织人物关系与情绪变化。",
     "enDesc": "A narrative edit shaped around character dynamics and emotional shifts.",
     "video": "assets/works/approach.mp4",
-    "mobileVideo": "",
-    "poster": "assets/posters/approach.jpg"
+    "mobileVideo": "assets/optimized/featured-approach/cd49b1b8bae9ec30-mobile.mp4",
+    "poster": "assets/posters/approach.jpg",
+    "previewVideo": "assets/optimized/featured-approach/cd49b1b8bae9ec30-preview.mp4",
+    "webVideo": "assets/optimized/featured-approach/cd49b1b8bae9ec30-web.mp4"
   },
   {
     "id": "featured-giant-wheel",
@@ -61,8 +69,10 @@
     "cnDesc": "结合三维资产、特效与合成完成的视觉实验。",
     "enDesc": "A visual experiment combining 3D assets, effects, and compositing.",
     "video": "assets/works/giant-wheel.mp4",
-    "mobileVideo": "",
-    "poster": "assets/posters/giant-wheel.jpg"
+    "mobileVideo": "assets/optimized/featured-giant-wheel/e34a0f469b8fb4a8-mobile.mp4",
+    "poster": "assets/posters/giant-wheel.jpg",
+    "previewVideo": "assets/optimized/featured-giant-wheel/e34a0f469b8fb4a8-preview.mp4",
+    "webVideo": "assets/optimized/featured-giant-wheel/e34a0f469b8fb4a8-web.mp4"
   },
   {
     "id": "featured-exported-film",
@@ -74,8 +84,10 @@
     "cnDesc": "从素材整理到最终输出的完整后期片段。",
     "enDesc": "A post-production piece carried from media organization through final export.",
     "video": "assets/works/exported-film.mp4",
-    "mobileVideo": "",
-    "poster": "assets/posters/exported-film.jpg"
+    "mobileVideo": "assets/optimized/featured-exported-film/8fa39c62fc8744f1-mobile.mp4",
+    "poster": "assets/posters/exported-film.jpg",
+    "previewVideo": "assets/optimized/featured-exported-film/8fa39c62fc8744f1-preview.mp4",
+    "webVideo": "assets/optimized/featured-exported-film/8fa39c62fc8744f1-web.mp4"
   },
   {
     "id": "featured-timeline-1",
@@ -87,8 +99,10 @@
     "cnDesc": "AI 之后的谈判标准",
     "enDesc": "Post-AI Negotiation Standards",
     "video": "assets/works/timeline-vertical.mp4",
-    "mobileVideo": "",
-    "poster": "assets/posters/timeline-vertical.jpg"
+    "mobileVideo": "assets/optimized/featured-timeline-1/1cb5652cea04d99a-mobile.mp4",
+    "poster": "assets/posters/timeline-vertical.jpg",
+    "previewVideo": "assets/optimized/featured-timeline-1/1cb5652cea04d99a-preview.mp4",
+    "webVideo": ""
   },
   {
     "id": "added-creative-3",
@@ -100,8 +114,10 @@
     "cnDesc": "人物动作与镜头节奏练习。",
     "enDesc": "A study of character movement and camera rhythm.",
     "video": "assets/works/creative-3.mp4",
-    "mobileVideo": "",
-    "poster": "assets/posters/creative-3.jpg"
+    "mobileVideo": "assets/optimized/added-creative-3/7d75e914394bb2db-mobile.mp4",
+    "poster": "assets/posters/creative-3.jpg",
+    "previewVideo": "assets/optimized/added-creative-3/7d75e914394bb2db-preview.mp4",
+    "webVideo": "assets/optimized/added-creative-3/7d75e914394bb2db-web.mp4"
   },
   {
     "id": "added-visual-study",
@@ -113,8 +129,10 @@
     "cnDesc": "产品造型、材质与色彩的三维视觉实验。",
     "enDesc": "A 3D study in product form, materials and color.",
     "video": "assets/works/visual-study.mp4",
-    "mobileVideo": "",
-    "poster": "assets/posters/visual-study.jpg"
+    "mobileVideo": "assets/optimized/added-visual-study/f86ec23445a707b1-mobile.mp4",
+    "poster": "assets/posters/visual-study.jpg",
+    "previewVideo": "assets/optimized/added-visual-study/f86ec23445a707b1-preview.mp4",
+    "webVideo": ""
   },
   {
     "id": "added-title-render",
@@ -126,8 +144,10 @@
     "cnDesc": "《特运尖兵》三维片头设计。",
     "enDesc": "A 3D title sequence for Special Mission.",
     "video": "assets/works/title-render.mp4",
-    "mobileVideo": "",
-    "poster": "assets/posters/title-render.jpg"
+    "mobileVideo": "assets/optimized/added-title-render/395d653cd1cd6d3f-mobile.mp4",
+    "poster": "assets/posters/title-render.jpg",
+    "previewVideo": "assets/optimized/added-title-render/395d653cd1cd6d3f-preview.mp4",
+    "webVideo": ""
   },
   {
     "id": "added-v30001-0180",
@@ -139,8 +159,10 @@
     "cnDesc": "街巷场景中的角色动画练习。",
     "enDesc": "Character animation set in an urban alley.",
     "video": "assets/works/v30001-0180.mp4",
-    "mobileVideo": "",
-    "poster": "assets/posters/v30001-0180.jpg"
+    "mobileVideo": "assets/optimized/added-v30001-0180/81442d4f8fbe4541-mobile.mp4",
+    "poster": "assets/posters/v30001-0180.jpg",
+    "previewVideo": "assets/optimized/added-v30001-0180/81442d4f8fbe4541-preview.mp4",
+    "webVideo": "assets/optimized/added-v30001-0180/81442d4f8fbe4541-web.mp4"
   },
   {
     "id": "added-render-test",
@@ -152,8 +174,10 @@
     "cnDesc": "火焰与能量材质的动态渲染实验。",
     "enDesc": "A motion render study of flame and energy materials.",
     "video": "assets/works/render-test.mp4",
-    "mobileVideo": "",
-    "poster": "assets/posters/render-test.jpg"
+    "mobileVideo": "assets/optimized/added-render-test/e3a0351c51df4200-mobile.mp4",
+    "poster": "assets/posters/render-test.jpg",
+    "previewVideo": "assets/optimized/added-render-test/e3a0351c51df4200-preview.mp4",
+    "webVideo": "assets/optimized/added-render-test/e3a0351c51df4200-web.mp4"
   },
   {
     "id": "added-completed-film",
@@ -165,7 +189,9 @@
     "cnDesc": "以兔子角色为主角的动画短片。",
     "enDesc": "An animated short featuring two rabbit characters.",
     "video": "assets/works/completed-film.mp4",
-    "mobileVideo": "",
-    "poster": "assets/posters/completed-film.jpg"
+    "mobileVideo": "assets/optimized/added-completed-film/2d5918801c67cc53-mobile.mp4",
+    "poster": "assets/posters/completed-film.jpg",
+    "previewVideo": "assets/optimized/added-completed-film/2d5918801c67cc53-preview.mp4",
+    "webVideo": "assets/optimized/added-completed-film/2d5918801c67cc53-web.mp4"
   }
 ]

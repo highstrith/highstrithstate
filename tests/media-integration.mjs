@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import vm from 'node:vm';
 
 const root = path.resolve(import.meta.dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -38,7 +39,10 @@ assert.equal(works.find((work) => work.id === 'added-creative-3')?.cnTitle, '动
 assert.equal(works.find((work) => work.id === 'added-v30001-0180')?.cnTitle, '街巷角色动画');
 for (const work of works) {
   assert.ok(fs.existsSync(path.join(root, work.video)), `missing video for ${work.cnTitle}: ${work.video}`);
-  if (work.mobileVideo) {
-    assert.ok(fs.existsSync(path.join(root, work.mobileVideo)), `missing mobile video for ${work.cnTitle}: ${work.mobileVideo}`);
+  for (const key of ['previewVideo', 'mobileVideo', 'webVideo']) if (work[key]) {
+    assert.ok(fs.existsSync(path.join(root, work[key])), `missing ${key} for ${work.cnTitle}: ${work[key]}`);
   }
 }
+const snapshot = vm.runInNewContext(html.match(/const baseWorkData = (\[[\s\S]*?\n      \]);/)[1]);
+assert.equal(JSON.stringify(snapshot), JSON.stringify(works), 'static fallback snapshot must retain all current media and metadata');
+assert.equal((html.match(/class="no-js-work"/g) || []).length, works.length, 'all works must remain accessible without JavaScript');
