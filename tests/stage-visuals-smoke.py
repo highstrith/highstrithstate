@@ -250,6 +250,58 @@ class StageVisuals(unittest.TestCase):
         self.assertAlmostEqual(box["width"] / box["height"], 16 / 9, places=2)
         self.assertFalse(page.evaluate("document.documentElement.scrollWidth > innerWidth"))
 
+    def test_delayed_fullscreen_exit_cannot_reset_a_reopened_player_orientation(self):
+        for reopen in (True, False):
+            with self.subTest(reopen=reopen):
+                page = self.page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+                # Keep native fullscreen changes; defer only completion of the public exit API.
+                page.add_init_script("""const nativeExitFullscreen = document.exitFullscreen.bind(document);
+                  document.exitFullscreen = () => {
+                    const nativeExit = nativeExitFullscreen();
+                    return new Promise((resolve, reject) => {
+                      window.completeFullscreenExit = async () => {
+                        try { await nativeExit; resolve(); }
+                        catch (error) { reject(error); }
+                        await Promise.resolve();
+                      };
+                    });
+                  };""")
+                self.ready(page, '#works')
+                page.locator('.work-card').first.click()
+                page.locator('#workPlayerOrientation').click()
+                page.wait_for_function("document.fullscreenElement === document.querySelector('#workPlayer')")
+                page.wait_for_function("document.querySelector('#workPlayer').dataset.orientation === 'landscape'")
+                page.locator('#workPlayerClose').click()
+                self.assertEqual(page.locator('#workPlayerVideo').get_attribute('src'), None)
+                self.assertFalse(page.locator('.shell').evaluate('e=>e.inert'))
+                page.wait_for_function("typeof window.completeFullscreenExit === 'function' && !document.fullscreenElement")
+
+                if reopen:
+                    page.locator('.work-card').nth(1).click()
+                    page.locator('#workPlayerOrientation').click()
+                    page.wait_for_function("document.fullscreenElement === document.querySelector('#workPlayer')")
+                    page.wait_for_function("document.querySelector('#workPlayer').dataset.orientation === 'landscape'")
+                    before = page.locator('#workPlayer').evaluate("""e=>({orientation:e.dataset.orientation, hidden:e.getAttribute('aria-hidden'), cssLandscape:e.classList.contains('is-css-landscape'), label:document.querySelector('#workPlayerOrientation').getAttribute('aria-label'), title:document.querySelector('#workPlayerOrientation').title})""")
+                    self.assertEqual(before['orientation'], 'landscape')
+                    self.assertEqual(before['label'], '切换竖屏播放')
+                    self.assertEqual(before['hidden'], 'false')
+
+                page.evaluate('window.completeFullscreenExit()')
+                if reopen:
+                    after = page.locator('#workPlayer').evaluate("""e=>({orientation:e.dataset.orientation, hidden:e.getAttribute('aria-hidden'), cssLandscape:e.classList.contains('is-css-landscape'), label:document.querySelector('#workPlayerOrientation').getAttribute('aria-label'), title:document.querySelector('#workPlayerOrientation').title})""")
+                    self.assertEqual(after, before, 'old fullscreen exit must not roll back the new orientation or UI')
+                    self.assertTrue(page.locator('.shell').evaluate('e=>e.inert'))
+                    self.assertIsNotNone(page.locator('#workPlayerVideo').get_attribute('src'))
+                    page.locator('#workPlayerClose').click()
+                    page.wait_for_function("!document.fullscreenElement")
+                    page.evaluate('window.completeFullscreenExit()')
+
+                self.assertEqual(page.locator('#workPlayer').get_attribute('data-orientation'), 'portrait')
+                self.assertEqual(page.locator('#workPlayerOrientation').get_attribute('aria-label'), '切换横屏播放')
+                self.assertFalse(page.locator('#workPlayer').evaluate("e=>e.classList.contains('is-css-landscape')"))
+                self.assertEqual(page.locator('#workPlayer').get_attribute('aria-hidden'), 'true')
+                page.close()
+
 
 if __name__ == "__main__":
     unittest.main()

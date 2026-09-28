@@ -2313,6 +2313,7 @@
       let workPlayerOpenedAt = 0;
       let workPlayerOrientationMode = 'portrait';
       let workPlayerFullscreenRequested = false;
+      let workPlayerGeneration = 0;
       let playerSession = null;
 
       // The page stays visible at rest; only a running native animation owns an entrance.
@@ -2739,6 +2740,7 @@
       };
 
       const releaseWorkPlayerOrientation = async () => {
+        const generation = workPlayerGeneration;
         if (screen.orientation && typeof screen.orientation.unlock === 'function') {
           try { screen.orientation.unlock(); } catch (_) {}
         }
@@ -2747,6 +2749,8 @@
           try { await document.exitFullscreen(); } catch (_) {}
         }
 
+        // A native fullscreen exit may settle after another work has opened.
+        if (generation !== workPlayerGeneration || workPlayer.classList.contains('is-open')) return;
         workPlayerFullscreenRequested = false;
         await setWorkPlayerOrientation('portrait');
       };
@@ -2824,6 +2828,7 @@
         if (!workPlayer || !workPlayerVideo || !video) return;
         const sourcePath = videoSourceFor(video);
         if (!sourcePath) return;
+        workPlayerGeneration += 1;
         cancelAnimations(playerAnimations);
         workPlayer.classList.remove('is-exiting');
         workPlayer.inert = false;
