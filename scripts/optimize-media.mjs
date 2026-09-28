@@ -88,9 +88,10 @@ for (const work of works) {
     const mobileVideo = encode('mobile', ['-i', source, '-map', '0:v:0', '-map', '0:a:0?', '-vf', `scale=${scaled(info, 1280, 720)}`, '-r', String(info.fps), '-c:v', 'libx264', '-preset', 'veryfast', '-threads', '2', '-crf', '25', '-maxrate', '3M', '-bufsize', '6M', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '96k', '-movflags', '+faststart']);
     const webVideo = faststart(source) ? '' : encode('web', ['-i', source, '-map', '0:v:0', '-map', '0:a:0?', '-c', 'copy', '-movflags', '+faststart']);
     if (sha(source) !== sourceHash) throw new Error('Source changed while generating.');
-    Object.assign(work, { previewVideo, mobileVideo, webVideo });
     const previewInfo = inspect(path.join(root, previewVideo));
-    report.previews.push({ id: work.id, source: work.video, sourceHash, previewSeconds: previewInfo.duration, previewBytes: fs.statSync(path.join(root, previewVideo)).size, mobileBytes: fs.statSync(path.join(root, mobileVideo)).size, webRemux: !!webVideo });
+    const previewReport = { id: work.id, source: work.video, sourceHash, previewSeconds: previewInfo.duration, previewBytes: fs.statSync(path.join(root, previewVideo)).size, mobileBytes: fs.statSync(path.join(root, mobileVideo)).size, webRemux: !!webVideo };
+    Object.assign(work, { previewVideo, mobileVideo, webVideo });
+    report.previews.push(previewReport);
     console.log(`${work.cnTitle || work.id}: ${previewInfo.duration}s preview; mobile ready${webVideo ? '; desktop faststart' : ''}`);
   } catch (error) {
     report.failed.push({ id: work.id, error: error.message });

@@ -79,8 +79,17 @@ try {
   spawnSync(process.execPath, [path.join(modifiedTool, 'optimize-media.mjs'), '--root', temporary], { encoding: 'utf8', env: { ...process.env, FFMPEG_PATH: ffmpeg } });
   const reconfigured = JSON.parse(fs.readFileSync(path.join(temporary, 'data/works.json')));
   assert.notEqual(reconfigured[0].previewVideo, output[0].previewVideo, 'changing encoding configuration must change its immutable resource URL');
+  for (const key of ['previewVideo', 'mobileVideo', 'webVideo']) run(['-v', 'error', '-i', path.join(temporary, reconfigured[0][key]), '-f', 'null', '-']);
+  fs.writeFileSync(path.join(temporary, output[0].previewVideo), 'corrupt cached preview');
+  const corrupted = generate();
+  assert.equal(corrupted.status, 1, 'unreadable cached preview must be reported as a failure');
+  const failureReport = JSON.parse(fs.readFileSync(path.join(temporary, 'assets/optimized/media-report.json')));
+  assert.ok(failureReport.failed.some(work => work.id === 'landscape' && /No readable video:/.test(work.error)), 'report must identify the unreadable cached preview');
+  assert.ok(!failureReport.previews.some(work => work.id === 'landscape'), 'failed cached media must not be reported as ready');
+  const afterFailure = JSON.parse(fs.readFileSync(path.join(temporary, 'data/works.json')));
+  assert.deepEqual(afterFailure[0], reconfigured[0], 'failed cached preview must preserve the complete healthy alternate catalogue entry');
   for (const [file, hash] of originals) assert.equal(digest(file), hash, 'original video must remain unchanged');
-  console.log('media optimizer: profiles, twenty-second clips, no-upscale, decode, failure isolation, cache and originals PASS');
+  console.log('media optimizer: profiles, twenty-second clips, no-upscale, decode, failure isolation, cache, corrupt-cache retention and originals PASS');
 } finally {
   fs.rmSync(temporary, { recursive: true, force: true });
 }
