@@ -990,6 +990,8 @@
           cnDesc: (item?.cnDesc ?? '').trim(),
           enDesc: (item?.enDesc ?? item?.cnDesc ?? '').trim(),
           video: item?.video || '',
+          previewVideo: typeof item?.previewVideo === 'string' ? item.previewVideo : '',
+          webVideo: typeof item?.webVideo === 'string' ? item.webVideo : '',
           mobileVideo: item?.mobileVideo || '',
           poster: item?.poster || '',
         };
@@ -1074,7 +1076,7 @@
       const openWorkPreview = async (work) => {
         if (!work?.video || !manageVideoDialog || !manageVideoPlayer) return;
         manageVideoPlayer.poster = work.poster || '';
-        manageVideoPlayer.src = work.video;
+        manageVideoPlayer.src = work.webVideo || work.video;
         manageVideoDialog.showModal();
         try { await manageVideoPlayer.play(); } catch (_) {}
       };
@@ -1251,12 +1253,12 @@
           const subtitle = escapeHtml(state.lang === 'cn' ? item.cnSub : item.enSub);
           const description = escapeHtml(state.lang === 'cn' ? item.cnDesc : item.enDesc);
           const createdAt = escapeHtml(formatStamp(item.createdAt));
-          const videoPath = escapeHtml(item.video || '—');
+          const previewPath = escapeHtml(item.previewVideo || item.video || '');
           const poster = escapeHtml(item.poster || '');
 
           return `
             <article class="manage-card" data-work-id="${escapeHtml(item.id)}">
-              <div class="manage-preview" data-preview-video="${videoPath}">
+              <div class="manage-preview" data-preview-video="${previewPath}">
                 ${poster ? `<img src="${poster}" alt="${title}" loading="lazy" />` : `<div class="preview-fallback">${escapeHtml(copy.manageNoPoster)}</div>`}
                 <video muted loop playsinline preload="none" poster="${poster}" aria-label="${title}"></video>
                 <button class="manage-preview-action" type="button" data-view-work="${escapeHtml(item.id)}" aria-label="${escapeHtml(copy.manageView)}：${title}"><span>${escapeHtml(copy.manageView)}</span></button>
@@ -1476,6 +1478,8 @@
             cnDesc: uploadCnDescInput.value || '',
             enDesc: uploadEnDescInput.value || '',
             video,
+            previewVideo: videoFile ? '' : (currentWork?.previewVideo || ''),
+            webVideo: videoFile ? '' : (currentWork?.webVideo || ''),
             mobileVideo: videoFile ? '' : (currentWork?.mobileVideo || ''),
             poster,
           };

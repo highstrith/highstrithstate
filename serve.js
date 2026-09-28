@@ -10,6 +10,9 @@ const dataDir = path.join(root, "data");
 const worksFile = path.join(dataDir, "works.json");
 const uploadDir = path.join(root, "assets", "uploads");
 const posterUploadDir = path.join(uploadDir, "posters");
+const optimizedDir = path.join(root, "assets", "optimized");
+const MEDIA_FIELDS = ["video", "poster", "previewVideo", "webVideo", "mobileVideo"];
+const DERIVED_VIDEO_FIELDS = ["previewVideo", "webVideo", "mobileVideo"];
 
 const MAX_METADATA_BYTES = 256 * 1024;
 const MAX_VIDEO_BYTES = 180 * 1024 * 1024;
@@ -111,6 +114,8 @@ function normalizeStoredWork(value) {
     cnDesc,
     enDesc,
     video: typeof value?.video === "string" ? value.video : "",
+    previewVideo: typeof value?.previewVideo === "string" ? value.previewVideo : "",
+    webVideo: typeof value?.webVideo === "string" ? value.webVideo : "",
     mobileVideo: typeof value?.mobileVideo === "string" ? value.mobileVideo : "",
     poster: typeof value?.poster === "string" ? value.poster : "",
   };
@@ -130,39 +135,40 @@ async function writeWorks(works) {
   await fs.promises.writeFile(worksFile, `${JSON.stringify(works, null, 2)}\n`, "utf8");
 }
 
-function isAllowedAssetReference(value, allowEmpty = false) {
-  if (!value && allowEmpty) return true;
-  if (typeof value !== "string") return false;
-  if (!value.startsWith("assets/uploads/")) return false;
-
-  const fullPath = path.join(root, value);
-  return pathInsideWorkspace(fullPath);
+function pathInsideDirectory(fullPath, directory) {
+  const relative = path.relative(directory, fullPath);
+  return relative !== "" && relative !== ".." && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
 }
 
-function resolveAssetReference(value) {
-  if (!isAllowedAssetReference(value, false)) return null;
-  return resolveInsideWorkspace(path.join(root, value));
+function isAllowedAssetReference(value, allowEmpty = false, allowOptimized = false) {
+  if ((value === undefined || value === null || value === "") && allowEmpty) return true;
+  return resolveAssetReference(value, allowOptimized) !== null;
 }
 
-async function fileExists(fullPath) {
+function resolveAssetReference(value, allowOptimized = false) {
+  if (typeof value !== "string") return null;
+  const directory = value.startsWith("assets/uploads/") ? uploadDir
+    : allowOptimized && value.startsWith("assets/optimized/") ? optimizedDir : null;
+  if (!directory) return null;
+  const fullPath = path.resolve(root, value);
+  if (!pathInsideDirectory(fullPath, directory)) return null;
   try {
-    await fs.promises.access(fullPath, fs.constants.F_OK);
-    return true;
+    const realPath = fs.realpathSync(fullPath);
+    return pathInsideDirectory(realPath, fs.realpathSync(directory)) && fs.statSync(realPath).isFile()
+      ? realPath : null;
   } catch (_) {
-    return false;
+    return null;
   }
 }
 
-async function deleteAssetIfUnused(assetRef, works, ignoredWorkId = "") {
+async function deleteAssetIfUnused(assetRef, works) {
   if (!assetRef) return;
-  const inUse = works.some((work) => work.id !== ignoredWorkId
-    && (work.video === assetRef || work.mobileVideo === assetRef || work.poster === assetRef));
+  const fullPath = resolveAssetReference(assetRef, true);
+  if (!fullPath) return;
+  const inUse = works.some((work) => MEDIA_FIELDS.some((field) => work[field] === assetRef
+    || resolveAssetReference(work[field], true) === fullPath));
   if (inUse) return;
-
-  const fullPath = resolveAssetReference(assetRef);
-  if (!fullPath || !(await fileExists(fullPath))) return;
-
-  await fs.promises.unlink(fullPath).catch(() => {});
+  await fs.promises.unlink(path.resolve(root, assetRef)).catch(() => {});
 }
 
 function readRequestBody(req, maxBytes) {
@@ -279,6 +285,8 @@ function buildWorkFromPayload(payload, existingWork = null) {
     cnDesc: payload?.cnDesc ?? existingWork?.cnDesc,
     enDesc: payload?.enDesc ?? existingWork?.enDesc,
     video: payload?.video ?? existingWork?.video,
+    previewVideo: payload?.previewVideo ?? existingWork?.previewVideo ?? "",
+    webVideo: payload?.webVideo ?? existingWork?.webVideo ?? "",
     mobileVideo: payload?.mobileVideo ?? existingWork?.mobileVideo ?? "",
     poster: payload?.poster ?? existingWork?.poster ?? "",
   });
@@ -293,9 +301,11 @@ async function handleWorksPost(req, res) {
     return;
   }
 
-  if (!isAllowedAssetReference(payload?.mobileVideo, true)) {
-    sendJson(res, 400, { error: "Mobile video path is invalid." });
-    return;
+  for (const field of DERIVED_VIDEO_FIELDS) {
+    if (!isAllowedAssetReference(payload?.[field], true, true)) {
+      sendJson(res, 400, { error: `${field} path is invalid.` });
+      return;
+    }
   }
 
   if (!isAllowedAssetReference(payload?.poster, true)) {
@@ -323,52 +333,37 @@ async function handleWorksPut(req, res, workId) {
   }
 
   const existingWork = works[index];
-  const nextVideo = payload?.video ?? existingWork.video;
-  const nextMobileVideo = payload?.mobileVideo ?? existingWork.mobileVideo ?? "";
-  const nextPoster = payload?.poster ?? existingWork.poster ?? "";
+  const nextMedia = Object.fromEntries(MEDIA_FIELDS.map((field) => [field, payload?.[field] ?? existingWork[field]]));
 
   const isUploadedWork = existingWork.video.startsWith("assets/uploads/");
-  const mediaChanged = nextVideo !== existingWork.video
-    || nextMobileVideo !== existingWork.mobileVideo
-    || nextPoster !== existingWork.poster;
+  const mediaChanged = MEDIA_FIELDS.some((field) => nextMedia[field] !== existingWork[field]);
 
   if (!isUploadedWork && mediaChanged) {
     sendJson(res, 403, { error: "Built-in work media cannot be changed." });
     return;
   }
 
-  if (isUploadedWork && !isAllowedAssetReference(nextVideo)) {
-    sendJson(res, 400, { error: "Video path is invalid." });
-    return;
+  if (isUploadedWork && nextMedia.video !== existingWork.video) {
+    for (const field of DERIVED_VIDEO_FIELDS) nextMedia[field] = "";
   }
 
-  if (isUploadedWork && !isAllowedAssetReference(nextMobileVideo, true)) {
-    sendJson(res, 400, { error: "Mobile video path is invalid." });
-    return;
-  }
-
-  if (isUploadedWork && !isAllowedAssetReference(nextPoster, true)) {
-    sendJson(res, 400, { error: "Poster path is invalid." });
-    return;
+  for (const field of MEDIA_FIELDS) {
+    if (isUploadedWork && nextMedia[field] !== existingWork[field]
+      && !isAllowedAssetReference(nextMedia[field], field !== "video", DERIVED_VIDEO_FIELDS.includes(field))) {
+      sendJson(res, 400, { error: `${field} path is invalid.` });
+      return;
+    }
   }
 
   const updatedWork = buildWorkFromPayload({
     ...payload,
-    video: nextVideo,
-    mobileVideo: nextMobileVideo,
-    poster: nextPoster,
+    ...nextMedia,
   }, existingWork);
   works[index] = updatedWork;
   await writeWorks(works);
 
-  if (existingWork.video !== updatedWork.video) {
-    await deleteAssetIfUnused(existingWork.video, works, updatedWork.id);
-  }
-  if (existingWork.mobileVideo !== updatedWork.mobileVideo) {
-    await deleteAssetIfUnused(existingWork.mobileVideo, works, updatedWork.id);
-  }
-  if (existingWork.poster !== updatedWork.poster) {
-    await deleteAssetIfUnused(existingWork.poster, works, updatedWork.id);
+  for (const field of MEDIA_FIELDS) {
+    if (existingWork[field] !== updatedWork[field]) await deleteAssetIfUnused(existingWork[field], works);
   }
 
   sendJson(res, 200, { work: updatedWork });
@@ -383,15 +378,13 @@ async function handleWorksDelete(res, workId) {
   }
 
   const [removedWork] = works.splice(index, 1);
-  if (!isAllowedAssetReference(removedWork.video)) {
+  if (!removedWork.video.startsWith("assets/uploads/")) {
     sendJson(res, 403, { error: "Only uploaded works can be deleted." });
     return;
   }
 
   await writeWorks(works);
-  await deleteAssetIfUnused(removedWork.video, works, removedWork.id);
-  await deleteAssetIfUnused(removedWork.mobileVideo, works, removedWork.id);
-  await deleteAssetIfUnused(removedWork.poster, works, removedWork.id);
+  for (const field of MEDIA_FIELDS) await deleteAssetIfUnused(removedWork[field], works);
 
   sendJson(res, 200, { ok: true, id: workId });
 }
