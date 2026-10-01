@@ -410,7 +410,6 @@
     }
 
     .works-grid,
-    .process-grid,
     .contact-grid {
       display: grid;
       gap: 16px;
@@ -1488,7 +1487,6 @@
     .work-card:nth-child(-n + 3) .video-shell { aspect-ratio: 16 / 10; }
     .work-card:nth-child(-n + 3) .work-info { min-height: 106px; }
     .work-card:nth-child(-n + 3) .work-info h3 { font-size: 1.08rem; }
-    #process { display: block; }
     @media (max-width: 700px) {
       .about-panel { grid-template-columns: 1fr; gap: 18px; padding: 28px 0; }
       .about-panel .section-title { max-width: 15ch; }
@@ -1635,7 +1633,6 @@
       <nav class="nav" aria-label="主导航">
         <a href="#home" class="active">首页</a>
         <a href="#works">作品</a>
-        <a href="#process" id="processNavLink">制作流程</a>
         <a href="#contact">联系</a>
       </nav>
 
@@ -1705,49 +1702,6 @@
             <h2 class="section-title" id="aboutTitle">我把抽象想法，变成有情绪的画面。</h2>
           </div>
           <p class="about-copy" id="aboutCopy">我在江苏南京工作，主要创作 3D、角色动画、动态视觉和视频剪辑。比起追逐单一风格，我更在意画面是否有自己的气质，以及每个镜头是否在推动故事。</p>
-        </div>
-      </section>
-
-      <section class="section" id="process">
-        <div class="section-head reveal" style="--delay: 40ms;">
-          <div class="copy">
-            <p class="kicker">制作流程</p>
-            <h2 class="section-title">从脚本前期到最终发布，把一个想法完整做出来。</h2>
-            <p class="section-note">我以一人全流程的方式完成从创意梳理、画面制作到多平台发布适配，让每个作品的表达与交付保持连贯。</p>
-          </div>
-        </div>
-
-        <div class="process-grid">
-          <article class="panel reveal" style="--delay: 80ms;">
-            <div class="step">01 / 前期</div>
-            <h3>先把故事与方向说清楚。</h3>
-            <p>从需求、参考和脚本开始整理，确定内容重点、镜头语言与发布场景，让后续制作有清晰的创作坐标。</p>
-            <div class="panel-list">
-              <span>创意梳理</span>
-              <span>脚本前期</span>
-              <span>视觉设定</span>
-            </div>
-          </article>
-          <article class="panel reveal" style="--delay: 140ms;">
-            <div class="step">02 / 制作</div>
-            <h3>把想法制作成有节奏的画面。</h3>
-            <p>围绕 3D、动画、剪辑、调色与包装推进制作，让画面、节奏和信息在同一套视觉语言里完成。</p>
-            <div class="panel-list">
-              <span>3D / 动效</span>
-              <span>剪辑 / 调色</span>
-              <span>节奏包装</span>
-            </div>
-          </article>
-          <article class="panel reveal" style="--delay: 200ms;">
-            <div class="step">03 / 交付</div>
-            <h3>为不同平台准备合适版本。</h3>
-            <p>根据社媒、官网或大屏等实际场景完成横竖版、短切片与最终交付，让作品不止停留在演示阶段。</p>
-            <div class="panel-list">
-              <span>多尺寸输出</span>
-              <span>版本管理</span>
-              <span>快速修改</span>
-            </div>
-          </article>
         </div>
       </section>
 
@@ -1853,7 +1807,6 @@
         cn: {
           navHome: '首页',
           navWorks: '作品',
-          navProcess: '流程',
           navContact: '联系',
           pageTitle: 'Highstrith | 3D 艺术家与视频剪辑',
           brandRole: '3D 艺术家与视频剪辑',
@@ -1911,9 +1864,6 @@
           workEdit: '编辑',
           workDelete: '删除',
           uploadUnavailable: '当前本地服务暂时不可用，稍后再试。',
-          processKicker: '制作流程',
-          processTitle: '从脚本前期到最终发布，把一个想法完整做出来。',
-          processNote: '我以一人全流程的方式完成从创意梳理、画面制作到多平台发布适配，让每个作品的表达与交付保持连贯。',
           contactKicker: '联系',
           contactTitle: '聊聊合作。',
           contactNote: '短片、动画或剪辑项目，带上想法和时间计划，直接聊聊。',
@@ -1935,7 +1885,6 @@
         en: {
           navHome: 'Home',
           navWorks: 'Works',
-          navProcess: 'Process',
           navContact: 'Contact',
           pageTitle: 'Highstrith | 3D Artist & Video Editor',
           brandRole: '3D Artist & Video Editor',
@@ -1993,9 +1942,6 @@
           workEdit: 'Edit',
           workDelete: 'Delete',
           uploadUnavailable: 'The local upload service is unavailable right now. Please try again shortly.',
-          processKicker: 'Workflow',
-          processTitle: 'Taking an idea from early script work through to release.',
-          processNote: 'I work across creative development, production, and multi-platform delivery so each project stays coherent from first idea to final upload.',
           contactKicker: 'Contact',
           contactTitle: 'Let’s talk.',
           contactNote: 'Have a film, animation, or editing project? Share your idea and timeline, and let’s talk.',
@@ -2086,9 +2032,6 @@
       const worksKicker = document.querySelector('#works .kicker');
       const worksTitle = document.querySelector('#works .section-title');
       const worksNote = document.querySelector('#works .section-note');
-      const processKicker = document.querySelector('#process .kicker');
-      const processTitle = document.querySelector('#process .section-title');
-      const processNote = document.querySelector('#process .section-note');
       const contactKicker = document.querySelector('#contact .kicker');
       const contactTitle = document.querySelector('#contact .section-title');
       const contactNote = document.querySelector('#contact .section-note');
@@ -2691,7 +2634,6 @@
         };
         setNavText('#home', copy.navHome);
         setNavText('#works', copy.navWorks);
-        setNavText('#process', copy.navProcess);
         setNavText('#contact', copy.navContact);
 
         if (adminEntryLink) {
@@ -2728,9 +2670,6 @@
         if (aboutKicker) aboutKicker.textContent = copy.aboutKicker;
         if (aboutTitle) aboutTitle.textContent = copy.aboutTitle;
         if (aboutCopy) aboutCopy.textContent = copy.aboutCopy;
-        if (processKicker) processKicker.textContent = copy.processKicker;
-        if (processTitle) processTitle.textContent = copy.processTitle;
-        if (processNote) processNote.textContent = copy.processNote;
         if (contactKicker) contactKicker.textContent = copy.contactKicker;
         if (contactTitle) contactTitle.textContent = copy.contactTitle;
         if (contactNote) contactNote.textContent = copy.contactNote;

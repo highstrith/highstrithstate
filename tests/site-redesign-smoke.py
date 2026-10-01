@@ -17,8 +17,8 @@ with sync_playwright() as p:
     assert page.locator(".hero .hero-signature").count() == 1
     assert page.locator("#featuredWorks").count() == 1
     assert page.locator("#about").count() == 1
-    assert page.locator("#process:not([hidden])").count() == 1
-    assert page.locator("nav a[href='#process']").count() == 1
+    assert page.locator("#process").count() == 0
+    assert page.locator("nav a[href='#process']").count() == 0
     assert page.locator("#bgMusic").evaluate("audio => audio.paused")
     assert page.locator(".works-grid").evaluate("grid => getComputedStyle(grid).gridTemplateColumns.split(' ').length") == 4
     assert page.locator("#contact .contact-actions .btn").count() == 1
