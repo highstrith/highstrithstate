@@ -1,5 +1,18 @@
 [
   {
+    "id": "work-lying-down-20261001",
+    "createdAt": "2026-10-01T07:00:00.000Z",
+    "cnTitle": "趴着办公早该知道",
+    "enTitle": "Should Have Worked Lying Down",
+    "cnSub": "AI 动画 / 喜剧短片",
+    "enSub": "AI ANIMATION / COMEDY",
+    "cnDesc": "甜甜向科学家朋友琪琪分享床式工位，用一本正经的理由解释趴着办公。",
+    "enDesc": "Tiantian introduces her bed workstation to her scientist friend Qiqi, making a straight-faced case for working lying down.",
+    "video": "assets/uploads/lying-down-20261001.mp4",
+    "mobileVideo": "",
+    "poster": "assets/uploads/posters/lying-down-20261001-16x9.png"
+  },
+  {
     "id": "work-1783863606674-7ta9sp",
     "createdAt": "2026-07-12T13:40:06.674Z",
     "cnTitle": "AI患者",

@@ -30,7 +30,13 @@ for (const asset of [...media, ...posters]) {
 assert.ok(fs.statSync(path.join(root, 'assets/hero-studio-red.jpg')).size < 500_000, 'hero background should stay below 500 KB for mobile');
 assert.doesNotMatch(html, /<link[^>]+rel="preload"[^>]+hero-studio-red/i, 'decorative hero background should not be preloaded');
 
-assert.equal(works.length, 13, 'all thirteen portfolio works must remain editable from the catalog');
+assert.equal(works.length, 14, 'the new film and all thirteen existing works must remain in the catalog');
+const lyingDownFilm = works.find((work) => work.id === 'work-lying-down-20261001');
+assert.equal(lyingDownFilm?.cnTitle, '趴着办公早该知道');
+assert.equal(lyingDownFilm?.video, 'assets/uploads/lying-down-20261001.mp4');
+assert.equal(lyingDownFilm?.poster, 'assets/uploads/posters/lying-down-20261001-16x9.png');
+assert.match(html, /work-lying-down-20261001/, 'offline catalog must include the new film');
+assert.ok(fs.existsSync(path.join(root, lyingDownFilm.poster)), 'the new film cover must exist');
 assert.equal(new Set(works.map((work) => work.id)).size, works.length, 'catalog work ids must be unique');
 assert.ok(works.every((work) => work.cnTitle && work.enTitle && work.cnSub && work.enSub && work.cnDesc && work.enDesc), 'catalog works must include titles, categories, and descriptions');
 assert.ok(works.every((work) => !/新加入|可在管理页|newly added|admin page/i.test(`${work.cnDesc} ${work.enDesc}`)), 'public catalog metadata must not contain editor instructions');
