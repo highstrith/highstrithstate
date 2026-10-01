@@ -48,7 +48,7 @@ with sync_playwright() as p:
     social_hub = social_row.locator(".social-hub")
     assert abs((social_hub.bounding_box()["x"] + social_hub.bounding_box()["width"] / 2) - (social_row.bounding_box()["x"] + social_row.bounding_box()["width"] / 2)) < 2
     assert page.locator("#about .contact-card").count() == 0
-    assert page.locator("nav a[href='#process']").count() == 0
+    assert page.locator("nav a[href='#process']").count() == 1
     assert page.locator("#process").get_attribute("hidden") is None
     social_links = page.locator("[data-social-platform]")
     assert social_links.count() == 4
