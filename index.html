@@ -413,7 +413,6 @@
     }
 
     .works-grid,
-    .process-grid,
     .contact-grid {
       display: grid;
       gap: 16px;
@@ -1592,6 +1591,7 @@
       .brand-copy { display: none; }
     }
   </style>
+  <link rel="stylesheet" href="desktop-experience.css" />
 </head>
 <body>
   <a class="skip-link" href="#home">跳到内容</a>
@@ -1614,6 +1614,7 @@
       <nav class="nav" aria-label="主导航">
         <a href="#home" class="active">首页</a>
         <a href="#works">作品</a>
+        <a href="#about">关于</a>
         <a href="#contact">联系</a>
       </nav>
 
@@ -1648,13 +1649,11 @@
             3D、动画与剪辑，从脚本前期到多平台交付。
           </p>
           <div class="cta-row">
-            <a class="btn primary" href="#works">
+            <a class="btn primary magnetic-action" href="#works">
               <span>看作品</span>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l8 7-8 7" /></svg>
             </a>
-            <a class="btn" href="#contact">
-              <span>联系我</span>
-            </a>
+            <button class="btn" type="button" data-open-catalogue><span>全部作品</span></button>
           </div>
         </div>
 
@@ -1664,6 +1663,21 @@
       </section>
 
       <section class="section" id="works">
+        <div class="stage-root" id="worksStage" data-active-index="0">
+          <div class="stage-viewport">
+            <div class="stage-heading"><span>Highstrith / Selected works</span><span id="stageProgress">01 / 05</span></div>
+            <div class="stage-track" id="stageTrack"></div>
+            <div class="stage-controls">
+              <div class="stage-dots" id="stageDots" aria-label="精选作品跳转"></div>
+              <div class="stage-actions">
+                <button type="button" data-stage-step="-1" aria-label="上一部作品">←</button>
+                <button type="button" data-stage-step="1" aria-label="下一部作品">→</button>
+                <button type="button" data-open-catalogue>全部作品</button>
+              </div>
+            </div>
+            <div class="view-cursor" id="viewCursor" aria-hidden="true">观看</div>
+          </div>
+        </div>
         <div class="section-head reveal" style="--delay: 40ms;">
           <div class="copy">
             <h2 class="section-title">精选作品</h2>
@@ -1675,6 +1689,7 @@
         <noscript>
           <!-- generated-works:start -->
 <div class="works-grid">
+<a class="no-js-work" href="assets/optimized/work-lying-down-20261001/4e6663b8d35374e3-web.mp4"><img src="assets/uploads/posters/lying-down-20261001-16x9.png" alt="" loading="lazy" /><h3>趴着办公早该知道</h3><p>AI 动画 / 喜剧短片 · 播放完整作品</p></a>
 <a class="no-js-work" href="assets/uploads/work-1783863596658-desktop.mp4"><img src="assets/uploads/posters/poster-1783864071336.png" alt="" loading="lazy" /><h3>AI患者</h3><p>科幻 / 叙事 · 播放完整作品</p></a>
 <a class="no-js-work" href="assets/uploads/desktop/work-1783436201027-desktop.mp4"><img src="assets/uploads/posters/poster-1783246320293.png" alt="" loading="lazy" /><h3>街头篮球</h3><p>运动 / 节奏 · 播放完整作品</p></a>
 <a class="no-js-work" href="assets/optimized/featured-prove-it/1476460cc117075e-web.mp4"><img src="assets/posters/prove-it.jpg" alt="" loading="lazy" /><h3>Prove It</h3><p>广告 / 剪辑 · 播放完整作品</p></a>
@@ -1701,49 +1716,6 @@
             <h2 class="section-title" id="aboutTitle">我把抽象想法，变成有情绪的画面。</h2>
           </div>
           <p class="about-copy" id="aboutCopy">我在江苏南京工作，主要创作 3D、角色动画、动态视觉和视频剪辑。比起追逐单一风格，我更在意画面是否有自己的气质，以及每个镜头是否在推动故事。</p>
-        </div>
-      </section>
-
-      <section class="section" id="process">
-        <div class="section-head reveal" style="--delay: 40ms;">
-          <div class="copy">
-            <p class="kicker">制作流程</p>
-            <h2 class="section-title">从脚本前期到最终发布，把一个想法完整做出来。</h2>
-            <p class="section-note">我以一人全流程的方式完成从创意梳理、画面制作到多平台发布适配，让每个作品的表达与交付保持连贯。</p>
-          </div>
-        </div>
-
-        <div class="process-grid">
-          <article class="panel reveal" style="--delay: 80ms;">
-            <div class="step">01 / 前期</div>
-            <h3>先把故事与方向说清楚。</h3>
-            <p>从需求、参考和脚本开始整理，确定内容重点、镜头语言与发布场景，让后续制作有清晰的创作坐标。</p>
-            <div class="panel-list">
-              <span>创意梳理</span>
-              <span>脚本前期</span>
-              <span>视觉设定</span>
-            </div>
-          </article>
-          <article class="panel reveal" style="--delay: 140ms;">
-            <div class="step">02 / 制作</div>
-            <h3>把想法制作成有节奏的画面。</h3>
-            <p>围绕 3D、动画、剪辑、调色与包装推进制作，让画面、节奏和信息在同一套视觉语言里完成。</p>
-            <div class="panel-list">
-              <span>3D / 动效</span>
-              <span>剪辑 / 调色</span>
-              <span>节奏包装</span>
-            </div>
-          </article>
-          <article class="panel reveal" style="--delay: 200ms;">
-            <div class="step">03 / 交付</div>
-            <h3>为不同平台准备合适版本。</h3>
-            <p>根据社媒、官网或大屏等实际场景完成横竖版、短切片与最终交付，让作品不止停留在演示阶段。</p>
-            <div class="panel-list">
-              <span>多尺寸输出</span>
-              <span>版本管理</span>
-              <span>快速修改</span>
-            </div>
-          </article>
         </div>
       </section>
 
@@ -1795,6 +1767,10 @@
   </div>
 
   <audio id="bgMusic" src="assets/background-music.mp3" preload="none" loop></audio>
+  <dialog class="work-catalogue" id="workCatalogue" aria-labelledby="catalogueTitle" aria-hidden="true" hidden>
+    <div class="catalogue-top"><div><span>Highstrith / Archive</span><h2 id="catalogueTitle">全部作品</h2></div><button type="button" id="catalogueClose" aria-label="关闭全部作品">关闭 ✕</button></div>
+    <div class="catalogue-grid" id="catalogueGrid"></div>
+  </dialog>
   <div class="social-qr-preview" id="social-qr-preview" aria-hidden="true" hidden>
     <img alt="" />
     <p></p>
@@ -1853,7 +1829,6 @@
         cn: {
           navHome: '首页',
           navWorks: '作品',
-          navProcess: '流程',
           navContact: '联系',
           pageTitle: 'Highstrith | 3D 艺术家与视频剪辑',
           brandRole: '3D 艺术家与视频剪辑',
@@ -1865,7 +1840,7 @@
           heroTitle2: '电影。',
           heroDesc: '3D、动画与剪辑，从脚本前期到多平台交付。',
           heroPrimary: '看作品',
-          heroSecondary: '联系我',
+          heroSecondary: '全部作品',
           worksKicker: '精选作品',
           worksTitle: '精选作品',
           worksNote: '从叙事短片、角色动画与视觉实验，了解我的创作方式。',
@@ -1910,9 +1885,6 @@
           workEdit: '编辑',
           workDelete: '删除',
           uploadUnavailable: '当前本地服务暂时不可用，稍后再试。',
-          processKicker: '制作流程',
-          processTitle: '从脚本前期到最终发布，把一个想法完整做出来。',
-          processNote: '我以一人全流程的方式完成从创意梳理、画面制作到多平台发布适配，让每个作品的表达与交付保持连贯。',
           contactKicker: '联系',
           contactTitle: '聊聊合作。',
           contactNote: '短片、动画或剪辑项目，带上想法和时间计划，直接聊聊。',
@@ -1941,7 +1913,6 @@
         en: {
           navHome: 'Home',
           navWorks: 'Works',
-          navProcess: 'Process',
           navContact: 'Contact',
           pageTitle: 'Highstrith | 3D Artist & Video Editor',
           brandRole: '3D Artist & Video Editor',
@@ -1953,7 +1924,7 @@
           heroTitle2: 'cinematic.',
           heroDesc: '3D, animation and editing, from script development to delivery across platforms.',
           heroPrimary: 'View works',
-          heroSecondary: 'Contact',
+          heroSecondary: 'All works',
           worksKicker: 'Selected Works',
           worksTitle: 'Selected works',
           worksNote: 'Explore my approach through narrative shorts, character animation, and visual experiments.',
@@ -1998,9 +1969,6 @@
           workEdit: 'Edit',
           workDelete: 'Delete',
           uploadUnavailable: 'The local upload service is unavailable right now. Please try again shortly.',
-          processKicker: 'Workflow',
-          processTitle: 'Taking an idea from early script work through to release.',
-          processNote: 'I work across creative development, production, and multi-platform delivery so each project stays coherent from first idea to final upload.',
           contactKicker: 'Contact',
           contactTitle: 'Let’s talk.',
           contactNote: 'Have a film, animation, or editing project? Share your idea and timeline, and let’s talk.',
@@ -2048,6 +2016,21 @@
       ];
 
       const baseWorkData = [
+        {
+          "id": "work-lying-down-20261001",
+          "createdAt": "2026-10-01T07:00:00.000Z",
+          "cnTitle": "趴着办公早该知道",
+          "enTitle": "Should Have Worked Lying Down",
+          "cnSub": "AI 动画 / 喜剧短片",
+          "enSub": "AI ANIMATION / COMEDY",
+          "cnDesc": "甜甜向科学家朋友琪琪分享床式工位，用一本正经的理由解释趴着办公。",
+          "enDesc": "Tiantian introduces her bed workstation to her scientist friend Qiqi, making a straight-faced case for working lying down.",
+          "video": "assets/uploads/lying-down-20261001.mp4",
+          "mobileVideo": "assets/optimized/work-lying-down-20261001/4e6663b8d35374e3-mobile.mp4",
+          "poster": "assets/uploads/posters/lying-down-20261001-16x9.png",
+          "previewVideo": "assets/optimized/work-lying-down-20261001/4e6663b8d35374e3-preview.mp4",
+          "webVideo": "assets/optimized/work-lying-down-20261001/4e6663b8d35374e3-web.mp4"
+        },
         {
           "id": "work-1783863606674-7ta9sp",
           "createdAt": "2026-07-12T13:40:06.674Z",
@@ -2248,8 +2231,18 @@
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
       const coarsePointer = window.matchMedia('(hover: none) and (pointer: coarse)');
       const compactViewport = window.matchMedia('(max-width: 700px)');
+      const desktopMode = window.matchMedia('(min-width: 1024px) and (hover: hover) and (pointer: fine)');
+      document.documentElement.classList.toggle('desktop-experience', desktopMode.matches);
       const isMobilePlayback = () => compactViewport.matches || coarsePointer.matches;
       const worksGrid = document.getElementById('worksGrid');
+      const stageRoot = document.getElementById('worksStage');
+      const stageTrack = document.getElementById('stageTrack');
+      const stageDots = document.getElementById('stageDots');
+      const stageProgress = document.getElementById('stageProgress');
+      const workCatalogue = document.getElementById('workCatalogue');
+      const catalogueGrid = document.getElementById('catalogueGrid');
+      const catalogueClose = document.getElementById('catalogueClose');
+      const viewCursor = document.getElementById('viewCursor');
       const navLinks = [...document.querySelectorAll('.nav a')];
       const sections = [...document.querySelectorAll('main section[id]')];
       const topbar = document.querySelector('.topbar');
@@ -2283,9 +2276,6 @@
       const worksKicker = document.querySelector('#works .kicker');
       const worksTitle = document.querySelector('#works .section-title');
       const worksNote = document.querySelector('#works .section-note');
-      const processKicker = document.querySelector('#process .kicker');
-      const processTitle = document.querySelector('#process .section-title');
-      const processNote = document.querySelector('#process .section-note');
       const contactKicker = document.querySelector('#contact .kicker');
       const contactTitle = document.querySelector('#contact .section-title');
       const contactNote = document.querySelector('#contact .section-note');
@@ -2315,6 +2305,11 @@
       let workPlayerFullscreenRequested = false;
       let workPlayerGeneration = 0;
       let playerSession = null;
+      const featuredWorkIds = ['work-lying-down-20261001', 'work-1783863606674-7ta9sp', 'work-1783246320299-icguu6', 'featured-prove-it', 'featured-giant-wheel'];
+      let stageActiveIndex = 0;
+      let stageFrame = 0;
+      let catalogueReturnFocus = null;
+      let catalogueScrollTop = 0;
 
       // The page stays visible at rest; only a running native animation owns an entrance.
       const stageAnimations = new Set();
@@ -2575,7 +2570,12 @@
       const syncWorkVideos = () => {
         workVideoSyncFrame = 0;
         document.querySelectorAll('.work-video').forEach((video) => {
-          if (!workDataReady || isMobilePlayback() || reduceMotion.matches || document.hidden || activeWorkVideo) {
+          if (!workDataReady || isMobilePlayback() || reduceMotion.matches || document.hidden || activeWorkVideo || !workCatalogue.hidden) {
+            unloadVideo(video);
+            return;
+          }
+          const stageCard = video.closest('.stage-card');
+          if (desktopMode.matches && (!stageCard || stageCard.dataset.workId !== featuredWorkIds[stageActiveIndex])) {
             unloadVideo(video);
             return;
           }
@@ -2664,7 +2664,7 @@
           const anchorTarget = compactViewport && target.id === 'works' && worksGrid
             ? worksGrid
             : target;
-          const offset = compactViewport
+          const offset = desktopMode.matches && ['works', 'about', 'contact'].includes(target.id) ? 0 : compactViewport
             ? (target.id === 'works' ? 12 : 18)
             : topbarHeight + 24;
           const targetTop = anchorTarget.getBoundingClientRect().top + window.scrollY - offset;
@@ -2678,7 +2678,7 @@
       };
 
       const videoSourceFor = (video) => {
-        const id = video?.closest('.work-card')?.dataset.workId;
+        const id = video?.closest('[data-work-id]')?.dataset.workId;
         return workVideoFor(allWorkData().find(item => item.id === id));
       };
 
@@ -2692,7 +2692,7 @@
       };
 
       const stopAllCardPreviews = () => {
-        document.querySelectorAll('.work-card').forEach(stopCardPreview);
+        document.querySelectorAll('.work-card, .stage-card').forEach(stopCardPreview);
       };
 
       const updateWorkPlayerOrientationLabel = () => {
@@ -2841,6 +2841,12 @@
         workPlayer.classList.add('is-open');
         workPlayer.setAttribute('aria-hidden', 'false');
         if (siteShell) siteShell.inert = true;
+        if (!workCatalogue.hidden) {
+          catalogueScrollTop = workCatalogue.scrollTop;
+          workCatalogue.close();
+          workCatalogue.setAttribute('aria-hidden', 'true');
+          workCatalogue.inert = true;
+        }
         document.body.classList.add('has-work-player');
         workPlayerOpenedAt = Date.now();
 
@@ -2854,7 +2860,7 @@
       const closeWorkPlayer = () => {
         if (!workPlayer || !workPlayerVideo || !workPlayer.classList.contains('is-open')) return;
 
-        const returnFocusTo = activeWorkVideo?.closest('.work-card');
+        const returnFocusTo = activeWorkVideo?.closest('[data-work-id]');
         cancelAnimations(playerAnimations);
         disposePlayerSession();
         setPlayerState('idle');
@@ -2864,7 +2870,13 @@
         workPlayer.classList.remove('is-open');
         workPlayer.setAttribute('aria-hidden', 'true');
         workPlayer.inert = true;
-        if (siteShell) siteShell.inert = false;
+        if (siteShell) siteShell.inert = !workCatalogue.hidden;
+        workCatalogue.inert = false;
+        if (!workCatalogue.hidden) {
+          workCatalogue.showModal();
+          workCatalogue.setAttribute('aria-hidden', 'false');
+          workCatalogue.scrollTop = catalogueScrollTop;
+        }
         document.body.classList.remove('has-work-player');
         activeWorkVideo = null;
         returnFocusTo?.focus({ preventScroll: true });
@@ -2878,7 +2890,7 @@
       };
 
       const setupWorkCards = () => {
-        document.querySelectorAll('.work-card').forEach((card) => {
+        document.querySelectorAll('.work-card, .stage-card').forEach((card) => {
           const video = card.querySelector('video');
           if (!video) return;
           setVideoPoster(video);
@@ -2959,6 +2971,152 @@
         scheduleWorkVideoSync();
       };
 
+      const renderDesktopWorks = (works) => {
+        const featured = featuredWorkIds.map(id => works.find(work => work.id === id)).filter(Boolean);
+        stageTrack.innerHTML = featured.map((item) => {
+          const title = escapeHtml(state.lang === 'cn' ? item.cnTitle : item.enTitle);
+          const subtitle = escapeHtml(state.lang === 'cn' ? item.cnSub : item.enSub);
+          const description = escapeHtml(state.lang === 'cn' ? item.cnDesc : item.enDesc);
+          const poster = escapeHtml(workPosterFor(item));
+          return `<article class="stage-card" data-work-id="${escapeHtml(item.id)}" role="button" tabindex="0" aria-label="${state.lang === 'cn' ? '播放作品' : 'Play work'}：${title}">
+            <div class="video-shell"><img class="work-poster" src="${poster}" alt="" loading="lazy" decoding="async" />
+              <video class="work-video" data-autoplay-video muted loop playsinline preload="none" poster="${poster}"><source data-src="${escapeHtml(workPreviewFor(item))}" type="video/mp4" /></video>
+              <div class="play-overlay" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7V5z"></path></svg></div></div>
+            <div class="work-info"><h3>${title}</h3><div class="work-meta"><p>${subtitle}</p></div><p class="work-description">${description}</p></div></article>`;
+        }).join('');
+        stageDots.innerHTML = featured.map((item, index) => `<button type="button" data-stage-jump="${index}" aria-label="${state.lang === 'cn' ? '跳到作品' : 'Go to work'} ${index + 1}"></button>`).join('');
+        catalogueGrid.innerHTML = works.map((item) => {
+          const title = escapeHtml(state.lang === 'cn' ? item.cnTitle : item.enTitle);
+          const subtitle = escapeHtml(state.lang === 'cn' ? item.cnSub : item.enSub);
+          const poster = escapeHtml(workPosterFor(item));
+          return `<button class="catalogue-card" type="button" data-work-id="${escapeHtml(item.id)}" aria-label="${state.lang === 'cn' ? '播放作品' : 'Play work'}：${title}">
+            <img src="${poster}" alt="" loading="lazy" decoding="async" /><video class="catalogue-video" hidden preload="none" poster="${poster}"></video><h3>${title}</h3><p>${subtitle}</p></button>`;
+        }).join('');
+        catalogueGrid.querySelectorAll('.catalogue-card').forEach(card => card.addEventListener('click', () => openWorkPlayer(card.querySelector('video'))));
+        requestAnimationFrame(syncStage);
+      };
+
+      const stageMetrics = () => {
+        const cards = [...stageTrack.children];
+        const distance = cards.length > 1 ? cards.at(-1).offsetLeft - cards[0].offsetLeft : 0;
+        const top = stageRoot.getBoundingClientRect().top + window.scrollY;
+        return { cards, distance, top, step: cards.length > 1 ? distance / (cards.length - 1) : 1 };
+      };
+      const syncStage = () => {
+        stageFrame = 0;
+        if (!desktopMode.matches || !stageTrack.children.length) return;
+        const { cards, distance, top, step } = stageMetrics();
+        if (reduceMotion.matches) {
+          stageRoot.style.height = '';
+          stageTrack.style.transform = '';
+          return;
+        }
+        stageRoot.style.height = `${window.innerHeight + distance}px`;
+        const x = Math.max(0, Math.min(distance, window.scrollY - top));
+        stageTrack.style.transform = `translate3d(${-x}px,0,0)`;
+        const next = Math.max(0, Math.min(cards.length - 1, Math.round(x / step)));
+        if (stageActiveIndex !== next) {
+          stageActiveIndex = next;
+          scheduleWorkVideoSync();
+        }
+        stageRoot.dataset.activeIndex = String(next);
+        stageProgress.textContent = `${String(next + 1).padStart(2, '0')} / ${String(cards.length).padStart(2, '0')}`;
+        stageDots.querySelectorAll('button').forEach((dot, index) => {
+          dot.classList.toggle('is-active', index === next);
+          dot.setAttribute('aria-current', index === next ? 'true' : 'false');
+        });
+        stageRoot.querySelector('[data-stage-step="-1"]').disabled = next === 0;
+        stageRoot.querySelector('[data-stage-step="1"]').disabled = next === cards.length - 1;
+        cards.forEach((card, index) => {
+          card.style.setProperty('--stage-distance', `${(index - x / step) * 18}px`);
+          card.style.setProperty('--stage-sub-distance', `${(index - x / step) * -9}px`);
+          card.tabIndex = index === next ? 0 : -1;
+        });
+      };
+      const scheduleStageSync = () => {
+        if (!stageFrame) stageFrame = requestAnimationFrame(syncStage);
+      };
+      const jumpStage = (index) => {
+        const { cards, top, step } = stageMetrics();
+        const target = Math.max(0, Math.min(cards.length - 1, index));
+        if (reduceMotion.matches) cards[target]?.scrollIntoView({ behavior: 'auto', block: 'center' });
+        else window.scrollTo({ top: top + target * step, behavior: 'smooth' });
+      };
+      stageRoot.addEventListener('click', (event) => {
+        const jump = event.target.closest('[data-stage-jump]');
+        const step = event.target.closest('[data-stage-step]');
+        if (jump) jumpStage(Number(jump.dataset.stageJump));
+        if (step) jumpStage(stageActiveIndex + Number(step.dataset.stageStep));
+      });
+
+      const openCatalogue = (trigger) => {
+        catalogueReturnFocus = trigger;
+        workCatalogue.hidden = false;
+        workCatalogue.showModal();
+        workCatalogue.scrollTop = catalogueScrollTop;
+        workCatalogue.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('has-catalogue');
+        siteShell.inert = true;
+        stopAllCardPreviews();
+        scheduleWorkVideoSync();
+        catalogueClose.focus({ preventScroll: true });
+      };
+      const closeCatalogue = () => {
+        if (workCatalogue.hidden || workPlayer.classList.contains('is-open')) return;
+        workCatalogue.close();
+        workCatalogue.hidden = true;
+        workCatalogue.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('has-catalogue');
+        siteShell.inert = false;
+        catalogueReturnFocus?.focus({ preventScroll: true });
+        scheduleWorkVideoSync();
+      };
+      document.querySelectorAll('[data-open-catalogue]').forEach(button => button.addEventListener('click', () => openCatalogue(button)));
+      catalogueClose.addEventListener('click', closeCatalogue);
+      workCatalogue.addEventListener('cancel', (event) => { event.preventDefault(); closeCatalogue(); });
+      const hero = document.querySelector('.hero');
+      const heroVisual = hero.querySelector('.hero-visual');
+      const magneticAction = hero.querySelector('.magnetic-action');
+      let pointerX = 0;
+      let pointerY = 0;
+      let heroFrame = 0;
+      const syncHero = () => {
+        heroFrame = 0;
+        if (!desktopMode.matches || reduceMotion.matches || document.hidden) {
+          heroVisual.style.transform = '';
+          heroTitleLines.forEach(line => { line.style.transform = ''; });
+          return;
+        }
+        const progress = Math.max(0, Math.min(1, window.scrollY / Math.max(1, hero.offsetHeight)));
+        heroVisual.style.transform = `translate3d(${pointerX * -24}px,${pointerY * -14}px,0) rotateY(${pointerX * -3}deg) scale(${1 - progress * .12})`;
+        heroTitleLines.forEach((line, index) => {
+          line.style.transform = `translate3d(${pointerX * (index ? -12 : 12) - progress * (index ? -95 : 95)}px,${pointerY * (index ? 8 : -8) - progress * (index ? 45 : 85)}px,0)`;
+          line.style.opacity = String(1 - progress * .8);
+        });
+      };
+      const scheduleHero = () => { if (!heroFrame) heroFrame = requestAnimationFrame(syncHero); };
+      hero.addEventListener('pointermove', (event) => {
+        if (!desktopMode.matches || reduceMotion.matches) return;
+        const rect = hero.getBoundingClientRect();
+        pointerX = Math.max(-1, Math.min(1, (event.clientX - rect.left - rect.width / 2) / (rect.width / 2)));
+        pointerY = Math.max(-1, Math.min(1, (event.clientY - rect.top - rect.height / 2) / (rect.height / 2)));
+        scheduleHero();
+      }, { passive: true });
+      hero.addEventListener('pointerleave', () => { pointerX = 0; pointerY = 0; scheduleHero(); });
+      magneticAction?.addEventListener('pointermove', (event) => {
+        if (!desktopMode.matches || reduceMotion.matches) return;
+        const rect = magneticAction.getBoundingClientRect();
+        magneticAction.style.transform = `translate(${(event.clientX - rect.left - rect.width / 2) * .13}px,${(event.clientY - rect.top - rect.height / 2) * .13}px)`;
+      });
+      magneticAction?.addEventListener('pointerleave', () => { magneticAction.style.transform = ''; });
+      stageRoot.addEventListener('pointermove', (event) => {
+        if (!desktopMode.matches || reduceMotion.matches) return;
+        viewCursor.style.left = `${event.clientX}px`;
+        viewCursor.style.top = `${event.clientY}px`;
+        viewCursor.classList.toggle('is-visible', !!event.target.closest('.stage-card .video-shell'));
+      }, { passive: true });
+      stageRoot.addEventListener('pointerleave', () => viewCursor.classList.remove('is-visible'));
+
       const renderWorks = () => {
         for (const animation of stageAnimations) {
           if (worksGrid.contains(animation.effect?.target)) {
@@ -3023,6 +3181,7 @@
           });
         }
 
+        renderDesktopWorks(works);
         setupWorkCards();
         refreshObservers();
       };
@@ -3040,6 +3199,7 @@
         };
         setNavText('#home', copy.navHome);
         setNavText('#works', copy.navWorks);
+        setNavText('#about', lang === 'cn' ? '关于' : 'About');
         setNavText('#contact', copy.navContact);
 
         if (adminEntryLink) {
@@ -3068,6 +3228,9 @@
         if (heroLede) heroLede.textContent = copy.heroDesc;
         if (heroButtons[0]) heroButtons[0].querySelector('span').textContent = copy.heroPrimary;
         if (heroButtons[1]) heroButtons[1].querySelector('span').textContent = copy.heroSecondary;
+        document.getElementById('catalogueTitle').textContent = lang === 'cn' ? '全部作品' : 'All works';
+        stageRoot.querySelector('[data-open-catalogue]').textContent = lang === 'cn' ? '全部作品' : 'All works';
+        viewCursor.textContent = lang === 'cn' ? '观看' : 'View';
 
         if (worksKicker) worksKicker.textContent = copy.worksKicker;
         if (worksTitle) worksTitle.innerHTML = copy.worksTitle;
@@ -3075,9 +3238,6 @@
         if (aboutKicker) aboutKicker.textContent = copy.aboutKicker;
         if (aboutTitle) aboutTitle.textContent = copy.aboutTitle;
         if (aboutCopy) aboutCopy.textContent = copy.aboutCopy;
-        if (processKicker) processKicker.textContent = copy.processKicker;
-        if (processTitle) processTitle.textContent = copy.processTitle;
-        if (processNote) processNote.textContent = copy.processNote;
         if (contactKicker) contactKicker.textContent = copy.contactKicker;
         if (contactTitle) contactTitle.textContent = copy.contactTitle;
         if (contactNote) contactNote.textContent = copy.contactNote;
@@ -3187,7 +3347,18 @@
       });
 
       window.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') closeWorkPlayer();
+        if (event.key !== 'Escape') return;
+        if (workPlayer.classList.contains('is-open')) closeWorkPlayer();
+        else closeCatalogue();
+      });
+      document.addEventListener('focusin', (event) => {
+        if (!workCatalogue.hidden && !workPlayer.classList.contains('is-open') && !workCatalogue.contains(event.target)) catalogueClose.focus();
+      });
+      workCatalogue.addEventListener('keydown', (event) => {
+        if (event.key !== 'Tab' || workPlayer.classList.contains('is-open')) return;
+        const focusable = [catalogueClose, ...catalogueGrid.querySelectorAll('button')];
+        if (event.shiftKey && document.activeElement === focusable[0]) { event.preventDefault(); focusable.at(-1).focus(); }
+        else if (!event.shiftKey && document.activeElement === focusable.at(-1)) { event.preventDefault(); focusable[0].focus(); }
       });
 
       if (langSwitch) {
@@ -3210,11 +3381,17 @@
         releaseTimer = window.setTimeout(scheduleWorkVideoSync, 180);
         scheduleWorkVideoSync();
         updateActiveNav();
+        scheduleStageSync();
+        scheduleHero();
+        topbar?.classList.toggle('is-scrolled', window.scrollY > 30);
       }, { passive: true });
 
       window.addEventListener('resize', () => {
+        document.documentElement.classList.toggle('desktop-experience', desktopMode.matches);
         scheduleWorkVideoSync();
         updateActiveNav();
+        scheduleStageSync();
+        scheduleHero();
       }, { passive: true });
 
       updateActiveNav();
@@ -3231,6 +3408,8 @@
       reduceMotion.addEventListener('change', () => {
         if (reduceMotion.matches) finishDecorativeMotion();
         refreshObservers();
+        scheduleStageSync();
+        scheduleHero();
       });
 
       applyLanguage(state.lang);

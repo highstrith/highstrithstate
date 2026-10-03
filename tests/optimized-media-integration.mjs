@@ -71,4 +71,4 @@ for (const work of works) {
 }
 const mib = bytes => (bytes / 1024 / 1024).toFixed(2);
 const firstEight = works.slice(0, 8).reduce((sum, work) => sum + fs.statSync(path.join(root, work.previewVideo)).size, 0);
-console.log(`13 works PASS; originals ${mib(originals)} MiB, previews ${mib(previews)} MiB (first 8: ${mib(firstEight)} MiB), mobile ${mib(mobiles)} MiB. Decode, full durations, faststart and source integrity verified.`);
+console.log(`${works.length} works PASS; originals ${mib(originals)} MiB, previews ${mib(previews)} MiB (first 8: ${mib(firstEight)} MiB), mobile ${mib(mobiles)} MiB. Decode, full durations, faststart and source integrity verified.`);

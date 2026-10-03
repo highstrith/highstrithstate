@@ -27,6 +27,7 @@ class QuietStaticHandler(http.server.SimpleHTTPRequestHandler):
 with tempfile.TemporaryDirectory(prefix="portfolio-static-") as directory:
     public = Path(directory)
     shutil.copy(ROOT / "index.html", public / "index.html")
+    shutil.copy(ROOT / "desktop-experience.css", public / "desktop-experience.css")
     shutil.copytree(ROOT / "data", public / "data")
     (public / "assets").symlink_to(ROOT / "assets", target_is_directory=True)
     server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(QuietStaticHandler, directory=directory))
@@ -42,12 +43,13 @@ with tempfile.TemporaryDirectory(prefix="portfolio-static-") as directory:
             page.on("request", lambda request: media.append(request.url) if ".mp4" in request.url else None)
             page.on("response", lambda response: missing.append(response.url) if response.status == 404 and "/assets/" in response.url else None)
             page.goto(address + "/#works", wait_until="domcontentloaded")
-            page.wait_for_function("[...document.querySelectorAll('.work-video')].every(v => !v.paused && v.currentTime > 0)")
-            assert len(page.locator(".work-card").all()) == 8
+            page.wait_for_function("document.querySelector('.stage-card .work-video')?.currentTime > 0")
+            assert page.locator(".stage-card").count() == 5
+            assert page.locator(".catalogue-card").count() == 14
             assert media and all(url.endswith("-preview.mp4") for url in media)
-            page.locator(".work-card").nth(2).click()
+            page.locator(".stage-card").first.click()
             page.wait_for_function("document.querySelector('#workPlayerVideo').currentTime > 0")
-            assert page.locator("#workPlayerVideo").get_attribute("src") == CATALOG[2]["webVideo"]
+            assert page.locator("#workPlayerVideo").get_attribute("src") == CATALOG[0]["webVideo"]
             page.keyboard.press("Escape")
             page.locator("#langSwitch").click()
             assert "narrative shorts" in page.locator("#featuredWorks").inner_text()
@@ -65,7 +67,7 @@ with tempfile.TemporaryDirectory(prefix="portfolio-static-") as directory:
                 mobile.close()
             nojs = browser.new_page(viewport={"width": 390, "height": 844}, java_script_enabled=False)
             nojs.goto(address, wait_until="domcontentloaded")
-            assert nojs.locator(".no-js-work").count() == 13
+            assert nojs.locator(".no-js-work").count() == 14
             for index, work in enumerate(CATALOG):
                 assert nojs.locator(".no-js-work").nth(index).get_attribute("href") == (work["webVideo"] or work["video"])
             assert not missing, missing

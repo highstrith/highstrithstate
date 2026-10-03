@@ -3,6 +3,15 @@
   "toolHash": "a90e3db6a3fd35f6074b013f948b1aa45b31c6375489d39e572bea3f18336584",
   "previews": [
     {
+      "id": "work-lying-down-20261001",
+      "source": "assets/uploads/lying-down-20261001.mp4",
+      "sourceHash": "a4f97a005e244a6e37baf9fc1e63d23a958a337635dbbacf1c6b5d5393901778",
+      "previewSeconds": 20,
+      "previewBytes": 1609772,
+      "mobileBytes": 3187888,
+      "webRemux": true
+    },
+    {
       "id": "work-1783863606674-7ta9sp",
       "source": "assets/uploads/work-1783863596658-desktop.mp4",
       "sourceHash": "f3a154b6c6b70ac91eb5f8b5317c725e2ec22bf47466dfeb295bc257ffc4b434",

@@ -36,30 +36,30 @@ class PlaybackOptimization(unittest.TestCase):
 
     def ready(self, page):
         page.goto("http://127.0.0.1:3000/#works", wait_until="domcontentloaded")
-        page.wait_for_function("document.querySelector('.work-card h3')?.textContent === 'Fixture AI患者'")
+        page.wait_for_function("document.querySelector('.work-card h3')?.textContent === 'Fixture 趴着办公早该知道'")
         self.assertEqual(page.locator(".work-card source").first.get_attribute("data-src"), PREVIEW, 'gallery must load the preview instead of the original')
 
-    def test_all_visible_desktop_previews_use_preview_source(self):
+    def test_only_current_desktop_work_previews_and_player_uses_full_source(self):
         page = self.page(viewport={"width": 1440, "height": 1500})
         requested = []
         page.on("request", lambda request: requested.append(request.url) if ".mp4" in request.url else None)
         self.ready(page)
-        page.locator("#works").scroll_into_view_if_needed()
-        page.wait_for_function("[...document.querySelectorAll('.work-video')].length === 8 && [...document.querySelectorAll('.work-video')].every(v => !v.paused && v.currentTime > 0)")
+        page.wait_for_function("document.querySelector('.stage-card .work-video')?.currentTime > 0")
+        self.assertEqual(page.locator(".stage-card .work-video source[src]").count(), 1)
         self.assertTrue(all(url.endswith(PREVIEW) for url in requested), requested)
-        page.locator(".work-card").first.click()
+        page.locator(".stage-card").first.click()
         page.wait_for_function("document.querySelector('#workPlayerVideo').currentSrc.endsWith('assets/works/prove-it.mp4')")
         self.assertTrue(page.locator(".work-video").evaluate_all("vs => vs.every(v => v.paused)"))
         page.evaluate("window.dispatchEvent(new Event('scroll'))")
         self.assertTrue(page.locator(".work-video").evaluate_all("vs => vs.every(v => v.paused)"))
         page.keyboard.press("Escape")
-        page.wait_for_function("[...document.querySelectorAll('.work-video')].every(v => !v.paused)")
+        page.wait_for_function("document.querySelector('.stage-card .work-video')?.currentTime > 0")
         page.set_viewport_size({"width": 390, "height": 844})
         page.wait_for_function("[...document.querySelectorAll('.work-video')].every(v => v.paused && v.readyState === 0 && !v.querySelector('source').getAttribute('src'))")
         page.set_viewport_size({"width": 1440, "height": 1500})
         page.emulate_media(reduced_motion="reduce")
         page.wait_for_function("[...document.querySelectorAll('.work-video')].every(v => v.paused && !v.querySelector('source').getAttribute('src'))")
-        page.locator(".work-card").first.click()
+        page.locator(".stage-card").first.click()
         page.wait_for_function("document.querySelector('#workPlayerVideo').currentTime > 0")
 
     def test_mobile_and_reduced_motion_manual_full_playback(self):
@@ -82,9 +82,9 @@ class PlaybackOptimization(unittest.TestCase):
         requested = []
         page.on("request", lambda request: requested.append(request.url) if ".mp4" in request.url else None)
         page.goto("http://127.0.0.1:3000/#works", wait_until="domcontentloaded")
-        page.wait_for_function("document.querySelector('.work-card source')?.dataset.src === ''")
+        page.wait_for_function("document.querySelector('.stage-card source')?.dataset.src === ''")
         self.assertEqual(requested, [])
-        page.locator(".work-card").first.click()
+        page.locator(".stage-card").first.click()
         page.wait_for_function("document.querySelector('#workPlayerVideo').currentTime > 0")
 
     def test_failed_full_video_can_retry_and_switch_without_stale_state(self):
@@ -148,7 +148,7 @@ class PlaybackOptimization(unittest.TestCase):
         page.goto("http://127.0.0.1:3000/", wait_until="domcontentloaded")
         self.assertEqual(page.locator(".hero-copy").evaluate("e => getComputedStyle(e).opacity"), "1")
         self.assertEqual(page.locator(".topbar").evaluate("e => getComputedStyle(e).opacity"), "1")
-        self.assertEqual(page.locator(".no-js-work").count(), 13)
+        self.assertEqual(page.locator(".no-js-work").count(), 14)
         self.assertTrue(page.locator(".no-js-work").first.get_attribute("href").endswith(".mp4"))
         self.assertFalse(page.evaluate("document.documentElement.scrollWidth > innerWidth"))
 

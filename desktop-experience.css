@@ -1,0 +1,105 @@
+/* The exhibition exists only when desktop-enhanced JavaScript is active. */
+.stage-root, .work-catalogue[hidden] { display: none; }
+.work-catalogue {
+  position: fixed; inset: 0; z-index: 100; overflow: auto;
+  width: 100vw; height: 100vh; max-width: none; max-height: none; margin: 0; border: 0; border-radius: 0;
+  padding: 36px clamp(28px, 5vw, 90px) 70px;
+  background: rgba(8, 8, 11, .985); color: #f4f2f0;
+}
+.catalogue-top { display: flex; justify-content: space-between; align-items: start; gap: 30px; margin-bottom: 44px; }
+.catalogue-top span { color: #ed4050; font-size: .85rem; }
+.catalogue-top h2 { margin: 8px 0 0; font-size: clamp(3rem, 6vw, 7rem); line-height: 1; letter-spacing: -.065em; }
+.catalogue-top button { border: 1px solid #57545b; border-radius: 100px; background: transparent; color: #f4f2f0; padding: 14px 22px; cursor: pointer; }
+.catalogue-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; }
+.catalogue-card { border: 0; padding: 0; text-align: left; background: transparent; color: #f4f2f0; cursor: pointer; }
+.catalogue-card img { display: block; width: 100%; aspect-ratio: 16/9; object-fit: contain; background: #17171c; border-radius: 3px; }
+.catalogue-card h3 { margin: 14px 0 3px; font-size: clamp(1.1rem,1.6vw,1.6rem); }
+.catalogue-card p { margin: 0; color: #b2afb7; }
+.catalogue-card:hover img, .catalogue-card:focus-visible img { outline: 2px solid #ed4050; outline-offset: 3px; }
+.catalogue-card:focus-visible, .catalogue-top button:focus-visible { outline: 2px solid #ed4050; outline-offset: 4px; }
+body.has-catalogue { overflow: hidden; }
+@media (max-width: 1100px) { .catalogue-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (max-width: 700px) { .catalogue-grid { grid-template-columns: 1fr; } .nav a[href="#about"] { display: none; } }
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  html.desktop-experience { scroll-behavior: auto; }
+  .desktop-experience body { background: #08080b; }
+  .desktop-experience .shell { width: 100%; padding: 0; }
+  .desktop-experience .topbar, .desktop-experience .topbar.is-public {
+    position: fixed; top: 18px; left: 3vw; right: 3vw; width: auto; z-index: 80;
+    margin: 0; padding: 10px 17px; border: 1px solid transparent; border-radius: 3px;
+    background: transparent; backdrop-filter: none; box-shadow: none; transition: background .25s, border-color .25s;
+  }
+  .desktop-experience .topbar.is-scrolled { background: rgba(8,8,11,.88); border-color: rgba(255,255,255,.14); backdrop-filter: blur(18px); }
+  .desktop-experience .brand-mark { border-radius: 2px; }
+  .desktop-experience .hero {
+    display: block;
+    width: 100%; height: 100svh; min-height: 680px; margin: 0; border: 0; border-radius: 0;
+    background: #08080b url('assets/hero-studio-red.jpg') center/cover no-repeat; overflow: hidden;
+    perspective: 1000px;
+  }
+  .desktop-experience .hero::before {
+    z-index: 3; background: linear-gradient(90deg,rgba(8,8,11,.92),rgba(8,8,11,.42) 45%,rgba(8,8,11,.1) 76%),linear-gradient(0deg,#08080b,transparent 19%);
+  }
+  .desktop-experience .hero-visual { position: absolute; width: 72%; height: 100%; inset: 0 -2% auto auto; -webkit-mask-image: linear-gradient(90deg,transparent 0%,#000 22%); mask-image: linear-gradient(90deg,transparent 0%,#000 22%); }
+  .desktop-experience .hero-avatar { object-position: 50% 0%; filter: saturate(.75) contrast(1.15) brightness(.8); transform: scale(1.04); }
+  .desktop-experience .hero-copy { position: absolute; inset: 0 auto auto 0; z-index: 4; width: 82%; height: 100%; padding: clamp(150px,18vh,260px) 0 8vh 6vw; justify-content: start; gap: 20px; }
+  .desktop-experience .hero h1 { margin: 0; max-width: none; font-size: clamp(6rem,10vw,11.5rem); line-height: .97; letter-spacing: -.075em; }
+  .desktop-experience .hero-title-line { display: inline-block; white-space: nowrap; }
+  .desktop-experience .hero-title-accent { color: #ed4050; background: none; -webkit-text-fill-color: #ed4050; }
+  .desktop-experience .hero .lede { max-width: none; font-size: clamp(1rem,1.4vw,1.3rem); color: #f4f2f0; }
+  .desktop-experience .hero .cta-row { margin-top: 26px; }
+  .desktop-experience .hero .btn { border-radius: 3px; padding-inline: 28px; }
+  .desktop-experience .hero [data-open-catalogue] { cursor: pointer; }
+  .desktop-experience #works { padding: 0; margin: 0; max-width: none; }
+  .desktop-experience #works > .section-head, .desktop-experience #works > .works-grid, .desktop-experience #works > .works-pagination { display: none; }
+  .desktop-experience .stage-root { display: block; position: relative; background: #08080b; }
+  .desktop-experience .stage-viewport { position: sticky; top: 0; height: 100svh; min-height: 650px; overflow: hidden; padding-top: 12vh; }
+  .desktop-experience .stage-viewport::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 55% 60%,#301018 0%,#17171c 40%,#08080b 75%); opacity: .7; }
+  .desktop-experience .stage-heading, .desktop-experience .stage-controls { position: absolute; z-index: 4; left: 6vw; right: 6vw; display: flex; justify-content: space-between; align-items: center; }
+  .desktop-experience .stage-heading { top: 11vh; color: #b2afb7; font-size: .95rem; letter-spacing: .05em; }
+  .desktop-experience .stage-heading #stageProgress { color: #f4f2f0; font-size: 1.4rem; }
+  .desktop-experience .stage-track { position: relative; z-index: 2; display: flex; gap: 2vw; width: max-content; margin-left: 9vw; padding-top: 7vh; will-change: transform; }
+  .desktop-experience .stage-card { width: 82vw; flex: 0 0 82vw; min-width: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; cursor: pointer; transform: none; }
+  .desktop-experience .stage-card:hover, .desktop-experience .stage-card:focus-visible { transform: none; border: 0; box-shadow: none; }
+  .desktop-experience .stage-card:focus-visible { outline: 2px solid #ed4050; outline-offset: 8px; }
+  .desktop-experience .stage-card .video-shell { width: 100%; height: min(56vh,48vw); aspect-ratio: auto; border-radius: 2px; background: #17171c; }
+  .desktop-experience .stage-card .work-poster, .desktop-experience .stage-card .work-video { width: 100%; height: 100%; object-fit: contain; filter: none; transform: none; }
+  .desktop-experience .stage-card .work-info { display: grid; grid-template-columns: 1fr 22vw; align-items: end; column-gap: 3vw; min-height: 120px; padding: 20px 0; }
+  .desktop-experience .stage-card h3 { grid-column: 1; margin: 0; font-size: clamp(3rem,5vw,6rem); line-height: 1; letter-spacing: -.055em; }
+  .desktop-experience .stage-card h3 { transform: translateX(var(--stage-distance,0px)); }
+  .desktop-experience .stage-card .work-meta { grid-column: 2; grid-row: 1; }
+  .desktop-experience .stage-card .work-meta p { color: #ed4050; font-size: 1rem; }
+  .desktop-experience .stage-card .work-description { grid-column: 1 / -1; max-width: 65ch; margin-top: 10px; color: #b2afb7; font-size: 1rem; }
+  .desktop-experience .stage-card .work-description { transform: translateX(var(--stage-sub-distance,0px)); }
+  .desktop-experience .stage-card .play-overlay { left: auto; right: 24px; bottom: 24px; width: 58px; height: 58px; }
+  .desktop-experience .stage-controls { bottom: 6vh; }
+  .desktop-experience .stage-dots, .desktop-experience .stage-actions { display: flex; align-items: center; gap: 10px; }
+  .desktop-experience .stage-dots button { width: 28px; height: 5px; padding: 0; border: 0; background: #727078; cursor: pointer; transition: width .2s,background .2s; }
+  .desktop-experience .stage-dots button.is-active { width: 56px; background: #ed4050; }
+  .desktop-experience .stage-actions button { padding: 12px 18px; border: 1px solid #6d6970; border-radius: 2px; background: rgba(8,8,11,.7); color: #f4f2f0; cursor: pointer; }
+  .desktop-experience .stage-actions button:hover { border-color: #ed4050; }
+  .desktop-experience .stage-actions button:disabled { opacity: .35; cursor: default; }
+  .desktop-experience .stage-actions button:focus-visible, .desktop-experience .stage-dots button:focus-visible { outline: 2px solid #ed4050; outline-offset: 4px; }
+  .desktop-experience .view-cursor { position: fixed; z-index: 7; left: 0; top: 0; display: grid; place-items: center; width: 84px; height: 84px; border-radius: 50%; background: #ed4050; color: white; font-size: .9rem; pointer-events: none; opacity: 0; transform: translate(-50%,-50%); transition: opacity .15s; }
+  .desktop-experience .stage-viewport:hover .view-cursor.is-visible { opacity: 1; }
+  .desktop-experience #about, .desktop-experience #contact { width: 100%; max-width: none; margin: 0; padding: 14vh 7vw; background: #08080b; }
+  .desktop-experience .about-panel { min-height: 60vh; grid-template-columns: minmax(0,1.15fr) minmax(0,.85fr); gap: 6vw; align-items: center; }
+  .desktop-experience .about-panel .section-title { max-width: none; font-size: clamp(3.2rem,5.2vw,6.5rem); line-height: 1.14; letter-spacing: -.06em; }
+  .desktop-experience .about-copy { font-size: clamp(1.1rem,1.5vw,1.6rem); }
+  .desktop-experience #contact { min-height: 100svh; display: flex; align-items: center; padding-block: 10vh 22vh; }
+  .desktop-experience .contact-card.featured { width: 100%; border: 0; border-radius: 0; background: #17171c; }
+  .desktop-experience .contact-column .section-title { font-size: clamp(4.5rem,8vw,9rem); letter-spacing: -.07em; }
+  .desktop-experience .contact-column { padding: clamp(35px,5vw,90px); }
+  .desktop-experience .footer { padding-inline: 7vw; }
+  .desktop-experience .work-player-panel { width: min(95vw,1700px); max-width: none; height: min(88vh,960px); border-radius: 3px; background: #08080b; }
+  .desktop-experience .work-player-video { max-height: 86vh; }
+}
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
+  .desktop-experience .stage-root { height: auto !important; }
+  .desktop-experience .stage-viewport { position: relative; height: auto; min-height: 0; overflow: visible; padding: 130px 7vw; }
+  .desktop-experience .stage-track { display: grid; grid-template-columns: 1fr; width: auto; margin: 0; padding: 60px 0; transform: none !important; gap: 90px; }
+  .desktop-experience .stage-card { width: 100%; }
+  .desktop-experience .stage-heading { top: 70px; }
+  .desktop-experience .stage-controls, .desktop-experience .view-cursor { display: none; }
+}
