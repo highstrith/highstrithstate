@@ -9,5 +9,6 @@
 - `after-about.png`：作者介绍区。
 - `after-contact.png`：联系区。
 - `desktop-walkthrough.webm`：首屏、主展跳转、目录和联系区的操作录屏。
+- `typography-stage-cn.png`、`typography-stage-en.png`：排版修正后的 1280×720 中文与 1440×900 英文主展，文字区与控制区独立留白。
 
 截图与录屏来自本地 Chromium；线上站点尚未更新。

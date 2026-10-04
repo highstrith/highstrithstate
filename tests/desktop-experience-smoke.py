@@ -51,6 +51,47 @@ class DesktopExperience(unittest.TestCase):
         finally:
             page.close()
 
+    def test_stage_text_stays_above_controls_in_both_languages(self):
+        # A taller media frame or unbounded title must not cover navigation.
+        for width, height in [(1280, 720), (1440, 900), (1920, 1080)]:
+            page = self.browser.new_page(viewport={"width": width, "height": height})
+            try:
+                page.goto("http://127.0.0.1:3000/", wait_until="domcontentloaded")
+                page.locator(".stage-card").first.wait_for()
+                page.evaluate("() => Promise.race([document.fonts.ready, new Promise(resolve => setTimeout(resolve, 5000))])")
+                for language in ["zh-CN", "en"]:
+                    if language == "en":
+                        page.locator('button[aria-label="切换语言"]').click()
+                    page.locator('.nav a[href="#works"]').click()
+                    for index in range(5):
+                        with self.subTest(width=width, language=language, work=index):
+                            page.locator(f'[data-stage-jump="{index}"]').click()
+                            page.wait_for_function("i => document.querySelector('.stage-root').dataset.activeIndex === String(i)", arg=index)
+                            bounds = page.evaluate("""i => {
+                                const card = document.querySelectorAll('.stage-card')[i];
+                                const texts = [...card.querySelectorAll('h3, .work-meta, .work-description')];
+                                return {
+                                    bottom: Math.max(...texts.map(e => e.getBoundingClientRect().bottom)),
+                                    controls: document.querySelector('.stage-controls').getBoundingClientRect().top,
+                                    overflow: texts.some(e => e.scrollWidth > e.clientWidth + 1)
+                                };
+                            }""", index)
+                            self.assertLessEqual(bounds["bottom"] + 16, bounds["controls"], bounds)
+                            self.assertFalse(bounds["overflow"], bounds)
+            finally:
+                page.close()
+
+    def test_repeated_works_anchor_keeps_controls_in_view(self):
+        page = self.browser.new_page(viewport={"width": 1280, "height": 720})
+        try:
+            page.goto("http://127.0.0.1:3000/#works", wait_until="domcontentloaded")
+            page.locator(".stage-card").first.wait_for()
+            page.locator('.nav a[href="#works"]').click()
+            bounds = page.locator(".stage-controls").bounding_box()
+            self.assertLessEqual(bounds["y"] + bounds["height"], 720)
+        finally:
+            page.close()
+
 
 if __name__ == "__main__":
     unittest.main()
