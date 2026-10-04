@@ -1591,7 +1591,7 @@
       .brand-copy { display: none; }
     }
   </style>
-  <link rel="stylesheet" href="desktop-experience.css?v=20261004-typography-2" />
+  <link rel="stylesheet" href="desktop-experience.css?v=20261004-pointer-light" />
 </head>
 <body>
   <a class="skip-link" href="#home">跳到内容</a>
@@ -3079,15 +3079,23 @@
       const magneticAction = hero.querySelector('.magnetic-action');
       let pointerX = 0;
       let pointerY = 0;
+      let heroPointerInside = false;
       let heroFrame = 0;
       const syncHero = () => {
         heroFrame = 0;
         if (!desktopMode.matches || reduceMotion.matches || document.hidden) {
+          hero.classList.remove('has-pointer-light');
+          heroPointerInside = false;
           heroVisual.style.transform = '';
           heroTitleLines.forEach(line => { line.style.transform = ''; });
           return;
         }
         const progress = Math.max(0, Math.min(1, window.scrollY / Math.max(1, hero.offsetHeight)));
+        hero.classList.toggle('has-pointer-light', heroPointerInside && progress < 1);
+        if (heroPointerInside) {
+          hero.style.setProperty('--hero-light-x', `${(pointerX + 1) * 50}%`);
+          hero.style.setProperty('--hero-light-y', `${(pointerY + 1) * 50}%`);
+        }
         heroVisual.style.transform = `translate3d(${pointerX * -24}px,${pointerY * -14}px,0) rotateY(${pointerX * -3}deg) scale(${1 - progress * .12})`;
         heroTitleLines.forEach((line, index) => {
           line.style.transform = `translate3d(${pointerX * (index ? -12 : 12) - progress * (index ? -95 : 95)}px,${pointerY * (index ? 8 : -8) - progress * (index ? 45 : 85)}px,0)`;
@@ -3096,13 +3104,22 @@
       };
       const scheduleHero = () => { if (!heroFrame) heroFrame = requestAnimationFrame(syncHero); };
       hero.addEventListener('pointermove', (event) => {
-        if (!desktopMode.matches || reduceMotion.matches) return;
+        if (!desktopMode.matches || reduceMotion.matches || event.pointerType === 'touch') return;
+        heroPointerInside = true;
         const rect = hero.getBoundingClientRect();
         pointerX = Math.max(-1, Math.min(1, (event.clientX - rect.left - rect.width / 2) / (rect.width / 2)));
         pointerY = Math.max(-1, Math.min(1, (event.clientY - rect.top - rect.height / 2) / (rect.height / 2)));
         scheduleHero();
       }, { passive: true });
-      hero.addEventListener('pointerleave', () => { pointerX = 0; pointerY = 0; scheduleHero(); });
+      const resetHeroPointer = () => {
+        heroPointerInside = false;
+        hero.classList.remove('has-pointer-light');
+        pointerX = 0;
+        pointerY = 0;
+        scheduleHero();
+      };
+      hero.addEventListener('pointerleave', resetHeroPointer);
+      window.addEventListener('blur', resetHeroPointer);
       magneticAction?.addEventListener('pointermove', (event) => {
         if (!desktopMode.matches || reduceMotion.matches) return;
         const rect = magneticAction.getBoundingClientRect();
@@ -3398,6 +3415,7 @@
 
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
+          resetHeroPointer();
           stopAllCardPreviews();
           finishDecorativeMotion();
         }

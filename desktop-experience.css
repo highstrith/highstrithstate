@@ -41,6 +41,13 @@ body.has-catalogue { overflow: hidden; }
   .desktop-experience .hero::before {
     z-index: 3; background: linear-gradient(90deg,rgba(8,8,11,.92),rgba(8,8,11,.42) 45%,rgba(8,8,11,.1) 76%),linear-gradient(0deg,#08080b,transparent 19%);
   }
+  .desktop-experience .hero::after {
+    content: ''; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+    background: radial-gradient(circle 340px at var(--hero-light-x,50%) var(--hero-light-y,50%),rgba(244,242,240,.12),rgba(237,64,80,.065) 38%,rgba(237,64,80,0) 75%);
+    mix-blend-mode: screen; opacity: 0; transition: opacity .45s ease;
+  }
+  .desktop-experience .hero.has-pointer-light::after { opacity: 1; }
+  .desktop-experience body:is(.has-catalogue,.has-work-player) .hero::after { opacity: 0; }
   .desktop-experience .hero-visual { position: absolute; width: 72%; height: 100%; inset: 0 -2% auto auto; -webkit-mask-image: linear-gradient(90deg,transparent 0%,#000 22%); mask-image: linear-gradient(90deg,transparent 0%,#000 22%); }
   .desktop-experience .hero-avatar { object-position: 50% 0%; filter: saturate(.75) contrast(1.15) brightness(.8); transform: scale(1.04); }
   .desktop-experience .hero-copy { position: absolute; inset: 0 auto auto 0; z-index: 4; width: 82%; height: 100%; padding: clamp(150px,18vh,260px) 0 8vh 6vw; justify-content: start; gap: 20px; }
@@ -97,6 +104,7 @@ body.has-catalogue { overflow: hidden; }
   .desktop-experience .work-player-video { max-height: 86vh; }
 }
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
+  .desktop-experience .hero::after { display: none; transition: none; }
   .desktop-experience .stage-root { height: auto !important; }
   .desktop-experience .stage-viewport { position: relative; height: auto; min-height: 0; overflow: visible; padding: 130px 7vw; }
   .desktop-experience .stage-track { display: grid; grid-template-columns: 1fr; width: auto; height: auto; margin: 0; padding: 60px 0; transform: none !important; gap: 90px; }

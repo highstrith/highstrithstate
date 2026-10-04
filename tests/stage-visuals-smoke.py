@@ -42,6 +42,26 @@ class StageVisuals(unittest.TestCase):
         page.locator(".nav a[href='#contact']").click()
         page.wait_for_function("document.querySelector('#contact').getBoundingClientRect().top < innerHeight")
 
+    def test_hero_light_tracks_pointer_and_disables_when_inactive(self):
+        page = self.page(viewport={"width": 1440, "height": 900})
+        light = "getComputedStyle(document.querySelector('.hero'), '::after')"
+        page.mouse.move(1050, 420)
+        page.wait_for_function(f"Number({light}.opacity) > .9")
+        first = page.evaluate(f"{light}.backgroundImage")
+        self.assertIn("radial-gradient", first)
+        self.assertEqual(page.evaluate(f"{light}.pointerEvents"), "none")
+        page.mouse.move(450, 650)
+        page.wait_for_function(f"() => {light}.backgroundImage !== " + repr(first))
+        page.mouse.move(500, 45)  # Fixed navigation is outside the Hero.
+        page.wait_for_function(f"Number({light}.opacity) === 0")
+        page.mouse.move(1000, 430)
+        page.wait_for_function(f"Number({light}.opacity) > .9")
+        page.emulate_media(reduced_motion="reduce")
+        page.wait_for_function(f"{light}.display === 'none'")
+        page.emulate_media(reduced_motion="no-preference")
+        page.set_viewport_size({"width": 390, "height": 844})
+        self.assertEqual(page.evaluate(f"{light}.content"), "none")
+
     def test_player_focus_survives_fast_reopen(self):
         page = self.page(viewport={"width": 1440, "height": 900})
         first = page.locator(".stage-card").first
