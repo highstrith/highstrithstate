@@ -49,6 +49,7 @@ assert.deepEqual(works.map((work) => work.id).slice(0, 3), [
   'work-reset-day-20261007', 'work-lying-down-20261001', 'work-1783863606674-7ta9sp',
 ], 'catalogue must be ordered newest first');
 assert.doesNotMatch(html, /featured-giant-wheel.*stage/i, '巨轮空降 must not be in the desktop feature stage');
+assert.match(html, /const FEATURED_WORK_LIMIT = 5/, 'desktop feature stage must derive a fixed number of newest visible works');
 assert.equal(new Set(works.map((work) => work.id)).size, works.length, 'catalog work ids must be unique');
 assert.ok(works.every((work) => work.cnTitle && work.enTitle && work.cnSub && work.enSub && work.cnDesc && work.enDesc), 'catalog works must include titles, categories, and descriptions');
 assert.ok(works.every((work) => !/新加入|可在管理页|newly added|admin page/i.test(`${work.cnDesc} ${work.enDesc}`)), 'public catalog metadata must not contain editor instructions');

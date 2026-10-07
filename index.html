@@ -2320,8 +2320,8 @@
       let workPlayerFullscreenRequested = false;
       let workPlayerGeneration = 0;
       let playerSession = null;
-      const featuredWorkIds = ['work-lying-down-20261001', 'work-1783863606674-7ta9sp', 'work-1783246320299-icguu6', 'featured-prove-it', 'featured-approach'];
       const hiddenWorkIds = new Set(['featured-giant-wheel']);
+      const FEATURED_WORK_LIMIT = 5;
       let stageActiveIndex = 0;
       let stageFrame = 0;
       let catalogueReturnFocus = null;
@@ -2995,7 +2995,8 @@
       };
 
       const renderDesktopWorks = (works) => {
-        const featured = featuredWorkIds.map(id => works.find(work => work.id === id)).filter(Boolean);
+        const featured = works.slice(0, FEATURED_WORK_LIMIT);
+        const featuredWorkIds = featured.map(work => work.id);
         stageTrack.innerHTML = featured.map((item) => {
           const title = escapeHtml(state.lang === 'cn' ? item.cnTitle : item.enTitle);
           const subtitle = escapeHtml(state.lang === 'cn' ? item.cnSub : item.enSub);
