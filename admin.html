@@ -4,749 +4,92 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Highstrith | 作品管理</title>
-  <style>
-    :root {
-      --bg: #0c0f15;
-      --panel: rgba(19, 24, 35, 0.9);
-      --panel-strong: rgba(13, 17, 26, 0.98);
-      --line: rgba(255, 255, 255, 0.08);
-      --line-strong: rgba(216, 180, 111, 0.38);
-      --text: #f7f3ec;
-      --muted: rgba(247, 243, 236, 0.68);
-      --soft: rgba(247, 243, 236, 0.42);
-      --accent: #d8b46f;
-      --danger: #ff8c78;
-      --success: #c4e39d;
-      --shadow: 0 28px 72px rgba(0, 0, 0, 0.34);
-      --radius: 28px;
-      --pad: clamp(18px, 3vw, 34px);
-      color-scheme: dark;
-      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-    }
-
-    * { box-sizing: border-box; }
-
-    html, body { margin: 0; min-height: 100%; }
-
-    body {
-      background:
-        radial-gradient(circle at top, rgba(216, 180, 111, 0.14), transparent 34%),
-        linear-gradient(180deg, #0e121b 0%, #090c12 100%);
-      color: var(--text);
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button,
-    input {
-      font: inherit;
-    }
-
-    .page {
-      width: min(1320px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 20px 0 48px;
-    }
-
-    .topbar {
-      position: sticky;
-      top: 12px;
-      z-index: 20;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 16px;
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      background: rgba(10, 14, 21, 0.82);
-      backdrop-filter: blur(18px);
-      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.22);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
-      margin-right: auto;
-    }
-
-    .brand-mark {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      background:
-        linear-gradient(135deg, rgba(216, 180, 111, 0.36), rgba(216, 180, 111, 0.08)),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
-      border: 1px solid rgba(216, 180, 111, 0.18);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .brand-mark::after {
-      content: "";
-      position: absolute;
-      inset: 8px;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-    }
-
-    .brand-copy {
-      display: grid;
-      gap: 3px;
-      min-width: 0;
-    }
-
-    .brand-copy strong {
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-size: 0.82rem;
-    }
-
-    .brand-copy span {
-      color: var(--muted);
-      font-size: 0.88rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .topbar-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .chip-btn,
-    .btn {
-      min-height: 44px;
-      padding: 0 14px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.04);
-      color: var(--text);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-    }
-
-    .chip-btn:hover,
-    .btn:hover {
-      transform: translateY(-1px);
-      border-color: rgba(255, 255, 255, 0.16);
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    .btn.primary {
-      border-color: rgba(216, 180, 111, 0.28);
-      background: linear-gradient(135deg, rgba(216, 180, 111, 0.24), rgba(216, 180, 111, 0.08));
-    }
-
-    .btn.danger {
-      border-color: rgba(255, 140, 120, 0.24);
-      background: rgba(255, 140, 120, 0.08);
-    }
-
-    .btn:disabled,
-    .chip-btn:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
-      gap: 18px;
-      padding: 22px 0 18px;
-    }
-
-    .hero-card,
-    .panel {
-      padding: var(--pad);
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      background:
-        linear-gradient(135deg, rgba(216, 180, 111, 0.1), transparent 38%),
-        linear-gradient(180deg, rgba(18, 23, 33, 0.96), rgba(10, 13, 20, 0.98));
-      box-shadow: var(--shadow);
-    }
-
-    .eyebrow,
-    .section-kicker,
-    .field-label {
-      margin: 0;
-      color: var(--accent);
-      font-size: 0.78rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
-
-    h1,
-    h2,
-    h3,
-    p {
-      margin: 0;
-    }
-
-    h1 {
-      margin-top: 14px;
-      font-size: clamp(2.5rem, 7vw, 4.3rem);
-      line-height: 0.94;
-      letter-spacing: -0.04em;
-    }
-
-    .hero-card p,
-    .panel p,
-    .field-help,
-    .meta-row,
-    .status-note {
-      color: var(--muted);
-      line-height: 1.72;
-    }
-
-    .hero-card .lede {
-      margin-top: 18px;
-      max-width: 58ch;
-      font-size: 1rem;
-    }
-
-    .hero-meta {
-      margin-top: 18px;
-      display: grid;
-      gap: 12px;
-    }
-
-    .hero-meta .stat {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      font-size: 0.94rem;
-    }
-
-    .hero-meta strong {
-      font-size: 1.1rem;
-      letter-spacing: 0.06em;
-    }
-
-    .hero-meta span {
-      color: var(--soft);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 0.72rem;
-    }
-
-    .hero-side {
-      display: grid;
-      gap: 16px;
-    }
-
-    .mini-note {
-      display: grid;
-      gap: 8px;
-      padding: 20px;
-      border-radius: 22px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .content {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 18px;
-    }
-
-    .panel-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      align-items: flex-start;
-      margin-bottom: 18px;
-    }
-
-    .panel-head .copy {
-      display: grid;
-      gap: 10px;
-    }
-
-    .upload-mode-note {
-      color: rgba(216, 180, 111, 0.9);
-      font-size: 0.86rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .upload-form {
-      display: grid;
-      gap: 16px;
-    }
-
-    .upload-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .upload-field {
-      display: grid;
-      gap: 8px;
-    }
-
-    .upload-input {
-      width: 100%;
-      min-height: 50px;
-      padding: 12px 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.04);
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
-    }
-
-    .upload-input:focus {
-      border-color: rgba(216, 180, 111, 0.52);
-      background: rgba(255, 255, 255, 0.06);
-      transform: translateY(-1px);
-    }
-
-    .upload-input::placeholder {
-      color: rgba(247, 243, 236, 0.34);
-    }
-
-    .upload-input::file-selector-button {
-      margin-right: 12px;
-      padding: 10px 14px;
-      border: 0;
-      border-radius: 999px;
-      background: rgba(216, 180, 111, 0.16);
-      color: var(--text);
-      cursor: pointer;
-      font: inherit;
-    }
-
-    .upload-actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .upload-hint,
-    .upload-status {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.72;
-    }
-
-    .upload-status {
-      min-height: 1.6em;
-    }
-
-    .upload-status[data-tone="pending"] { color: #f0d18f; }
-    .upload-status[data-tone="success"] { color: var(--success); }
-    .upload-status[data-tone="error"] { color: #ffb0a0; }
-
-    .manage-list {
-      display: grid;
-      gap: 14px;
-    }
-
-    .manage-empty {
-      padding: 22px;
-      border-radius: 22px;
-      border: 1px dashed rgba(255, 255, 255, 0.14);
-      color: var(--muted);
-      background: rgba(255, 255, 255, 0.02);
-      text-align: center;
-      line-height: 1.72;
-    }
-
-    .manage-card {
-      display: grid;
-      grid-template-columns: minmax(250px, 0.72fr) minmax(0, 1.5fr);
-      gap: 22px;
-      padding: 18px;
-      border-radius: 22px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.03);
-      transition: border-color 0.25s ease, background 0.25s ease;
-    }
-
-    .manage-card:hover {
-      border-color: rgba(216, 180, 111, 0.28);
-      background: rgba(255, 255, 255, 0.045);
-    }
-
-    .manage-preview {
-      position: relative;
-      overflow: hidden;
-      border-radius: 16px;
-      aspect-ratio: 16 / 9;
-      align-self: start;
-      background:
-        linear-gradient(160deg, rgba(216, 180, 111, 0.18), rgba(216, 180, 111, 0.04)),
-        linear-gradient(180deg, rgba(20, 25, 36, 0.94), rgba(10, 13, 20, 0.98));
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .manage-preview video,
-    .manage-preview img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .manage-preview video {
-      opacity: 0;
-      transition: opacity 0.2s ease;
-    }
-
-    .manage-card.is-previewing .manage-preview video { opacity: 1; }
-
-    .manage-preview-action {
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      display: grid;
-      place-items: center;
-      border: 0;
-      background: linear-gradient(180deg, transparent 42%, rgba(0, 0, 0, 0.42));
-      color: white;
-      cursor: pointer;
-    }
-
-    .manage-preview-action span {
-      align-self: end;
-      justify-self: start;
-      margin: 0 12px 12px;
-      padding: 8px 12px;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      border-radius: 999px;
-      background: rgba(8, 10, 15, 0.72);
-      font-size: 0.78rem;
-      backdrop-filter: blur(10px);
-    }
-
-    .manage-preview-action:hover span { border-color: var(--accent); }
-
-    .preview-fallback {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      padding: 18px;
-      text-align: center;
-      color: var(--soft);
-      font-size: 0.82rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .manage-copy {
-      display: grid;
-      gap: 12px;
-      min-width: 0;
-    }
-
-    .manage-title-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-
-    .manage-title {
-      display: grid;
-      gap: 6px;
-      min-width: 0;
-    }
-
-    .manage-title h3 {
-      font-size: 1.12rem;
-      line-height: 1.18;
-    }
-
-    .manage-title p {
-      color: var(--soft);
-      letter-spacing: 0.12em;
-      font-size: 0.74rem;
-      text-transform: uppercase;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 0 10px;
-      min-height: 30px;
-      border-radius: 999px;
-      border: 1px solid rgba(216, 180, 111, 0.24);
-      color: var(--accent);
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .meta-grid {
-      display: grid;
-      gap: 8px;
-    }
-
-    .meta-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      padding-top: 8px;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-      font-size: 0.88rem;
-    }
-
-    .meta-row strong {
-      color: var(--text);
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .manage-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .manage-form-panel.is-editing {
-      border-color: var(--line-strong);
-      box-shadow: 0 0 0 1px rgba(216, 180, 111, 0.12), var(--shadow);
-    }
-
-    .manage-video-dialog {
-      width: min(1080px, calc(100vw - 28px));
-      max-width: none;
-      padding: 0;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 18px;
-      background: #07090e;
-      color: var(--text);
-      box-shadow: var(--shadow);
-    }
-
-    .manage-video-dialog::backdrop { background: rgba(2, 4, 8, 0.84); backdrop-filter: blur(8px); }
-
-    .manage-video-dialog video {
-      display: block;
-      width: 100%;
-      max-height: min(78vh, 720px);
-      background: #030407;
-      object-fit: contain;
-    }
-
-    .manage-video-close {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      z-index: 3;
-      width: 42px;
-      height: 42px;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      border-radius: 50%;
-      background: rgba(7, 9, 14, 0.78);
-      color: white;
-      font-size: 1.4rem;
-      cursor: pointer;
-    }
-
-    @media (max-width: 1080px) {
-      .hero,
-      .content {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 760px) {
-      .page {
-        width: min(100% - 20px, 1320px);
-        padding-top: 10px;
-      }
-
-      .topbar {
-        top: 8px;
-        padding: 12px;
-      }
-
-      .topbar-actions {
-        width: 100%;
-      }
-
-      .topbar-actions .btn,
-      .topbar-actions .chip-btn {
-        flex: 1 1 0;
-      }
-
-      .upload-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .manage-card {
-        grid-template-columns: 1fr;
-      }
-
-      .manage-preview { width: 100%; }
-
-      .panel-head {
-        flex-direction: column;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="admin.css?v=20261007-2" />
 </head>
 <body>
   <div class="page">
     <header class="topbar">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true"></div>
-        <div class="brand-copy">
-          <strong>Highstrith</strong>
-          <span id="brandRole">作品管理</span>
-        </div>
-      </div>
-
+      <a class="brand" href="/" aria-label="Highstrith 橘小桔">
+        <span class="brand-name">Highstrith<span>橘小桔</span></span>
+        <span class="brand-role" id="brandRole">作品管理</span>
+      </a>
       <div class="topbar-actions">
-        <a class="btn" id="publicSiteLink" href="/">
-          <span id="publicSiteLinkLabel">查看展示站</span>
+        <a class="btn public-site-link" id="publicSiteLink" href="/">
+          <span id="publicSiteLinkLabel">查看作品集</span>
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" stroke="currentColor" stroke-width="1.4"/></svg>
         </a>
-        <button class="chip-btn" id="langSwitch" type="button" aria-pressed="false">
-          <strong id="langCurrent">CN</strong>
-          <span>/</span>
-          <strong id="langTarget">EN</strong>
+        <button class="chip-btn" id="langSwitch" type="button" aria-label="Switch to English" aria-pressed="false">
+          <strong id="langCurrent">CN</strong><span>/</span><strong id="langTarget">EN</strong>
         </button>
       </div>
     </header>
-
     <main>
-      <section class="hero">
-        <article class="hero-card">
-          <p class="eyebrow" id="heroEyebrow">Private Admin</p>
-          <h1 id="heroTitle">把上传和作品管理从首页挪到这里。</h1>
-          <p class="lede" id="heroDesc">这个页面保留上传、编辑、删除的完整能力，但不从主页公开暴露。你可以在这里维护作品，首页只负责干净地展示结果。</p>
-          <div class="hero-meta">
-            <div class="stat">
-              <strong id="heroWorkCount">0</strong>
-              <span id="heroWorkCountLabel">已上传作品</span>
-            </div>
-            <div class="stat">
-              <strong>MP4 / JPG / PNG</strong>
-              <span id="heroFormatLabel">支持格式</span>
-            </div>
-          </div>
-        </article>
-
+      <section class="hero" aria-labelledby="heroTitle">
+        <div class="hero-copy">
+          <p class="eyebrow" id="heroEyebrow">创作工作台</p>
+          <h1 id="heroTitle">让好作品，被看见</h1>
+          <p class="lede" id="heroDesc">整理每一次创作，更新你的影像作品集。</p>
+        </div>
         <div class="hero-side">
-          <article class="mini-note">
-            <p class="section-kicker" id="privacyKicker">Access</p>
-            <p id="privacyNote">这个地址不会从首页导航中出现，但它也不是带密码的后台。适合用于你自己维护内容，不适合公开传播。</p>
-          </article>
-          <article class="mini-note">
-            <p class="section-kicker" id="syncKicker">Sync</p>
-            <p id="syncNote">这里提交的作品会写入当前站点目录，并立即影响首页作品列表。刷新首页后就能看到最新内容。</p>
-          </article>
+          <div class="mini-note"><p class="section-kicker" id="privacyKicker">本地管理</p><p id="privacyNote">在这台电脑上维护作品。</p></div>
+          <div class="mini-note"><p class="section-kicker" id="syncKicker">作品同步</p><p id="syncNote">保存后，本地作品集立即更新。线上更新需发布。</p></div>
         </div>
       </section>
-
-      <section class="content">
-        <article class="panel manage-form-panel" id="manageFormPanel">
-          <div class="panel-head">
-            <div class="copy">
-              <p class="section-kicker" id="uploadEyebrow">作品入库</p>
-              <h2 id="uploadPanelTitle">上传新作品，自动加入当前作品集。</h2>
-              <p id="uploadPanelNote">选择视频、封面和标题信息后，网站会把文件保存到当前站点目录，并立即把新作品加入现有网格。</p>
-              <p class="upload-mode-note" id="uploadModeNote">当前为新建模式。</p>
-            </div>
-          </div>
-
+      <section class="content" aria-label="作品管理">
+        <article class="panel manage-form-panel" id="manageFormPanel" aria-labelledby="uploadPanelTitle">
+          <div class="panel-head"><div class="copy">
+            <p class="section-kicker" id="uploadEyebrow">作品编辑器</p>
+            <h2 id="uploadPanelTitle">添加新作品</h2>
+            <p id="uploadPanelNote">填写作品信息，再添加视频与封面。</p>
+            <p class="upload-mode-note" id="uploadModeNote">新作品将加入本地作品集。</p>
+          </div></div>
           <form class="upload-form" id="uploadForm" novalidate>
-            <div class="upload-grid">
-              <label class="upload-field">
-                <span class="field-label" id="uploadCnTitleLabel">中文标题</span>
-                <input class="upload-input" id="uploadCnTitleInput" name="cnTitle" type="text" maxlength="80" placeholder="例如：新品发布短片" />
-              </label>
-              <label class="upload-field">
-                <span class="field-label" id="uploadEnTitleLabel">English Title</span>
-                <input class="upload-input" id="uploadEnTitleInput" name="enTitle" type="text" maxlength="80" placeholder="For example: Product Launch Film" />
-              </label>
-              <label class="upload-field">
-                <span class="field-label" id="uploadCnSubLabel">中文副标题</span>
-                <input class="upload-input" id="uploadCnSubInput" name="cnSub" type="text" maxlength="64" placeholder="例如：品牌 / 剪辑" />
-              </label>
-              <label class="upload-field">
-                <span class="field-label" id="uploadEnSubLabel">English Subtitle</span>
-                <input class="upload-input" id="uploadEnSubInput" name="enSub" type="text" maxlength="64" placeholder="For example: BRAND / EDIT" />
-              </label>
-              <label class="upload-field">
-                <span class="field-label" id="uploadCnDescLabel">中文描述</span>
-                <textarea class="upload-input" id="uploadCnDescInput" name="cnDesc" maxlength="180" rows="3" placeholder="例如：一支强调节奏和视觉质感的短片。"></textarea>
-              </label>
-              <label class="upload-field">
-                <span class="field-label" id="uploadEnDescLabel">English Description</span>
-                <textarea class="upload-input" id="uploadEnDescInput" name="enDesc" maxlength="180" rows="3" placeholder="For example: A short film built around rhythm and visual texture."></textarea>
-              </label>
-              <label class="upload-field">
-                <span class="field-label" id="uploadVideoLabel">作品视频（MP4）</span>
-                <input class="upload-input" id="uploadVideoInput" name="videoFile" type="file" accept=".mp4,video/mp4" />
-                <small class="field-help" id="uploadVideoHelp">目前支持 MP4，建议上传压缩后的成片，减少浏览时的加载压力。</small>
-              </label>
-              <label class="upload-field">
-                <span class="field-label" id="uploadPosterLabel">封面图（可选）</span>
-                <input class="upload-input" id="uploadPosterInput" name="posterFile" type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" />
-                <small class="field-help" id="uploadPosterHelp">支持 PNG、JPG、JPEG、WEBP；如果不传，卡片会先用默认背景显示。</small>
-              </label>
-            </div>
-
+            <fieldset class="upload-group">
+              <legend id="detailsGroupLabel">作品信息</legend>
+              <div class="upload-grid">
+                <label class="upload-field"><span class="field-label" id="uploadCnTitleLabel">中文标题</span><input class="upload-input" id="uploadCnTitleInput" name="cnTitle" type="text" maxlength="80" placeholder="作品名称" /></label>
+                <label class="upload-field"><span class="field-label" id="uploadEnTitleLabel">英文标题</span><input class="upload-input" id="uploadEnTitleInput" name="enTitle" type="text" maxlength="80" placeholder="Project title" /></label>
+                <label class="upload-field"><span class="field-label" id="uploadCnSubLabel">中文分类</span><input class="upload-input" id="uploadCnSubInput" name="cnSub" type="text" maxlength="64" placeholder="品牌 / 剪辑" /></label>
+                <label class="upload-field"><span class="field-label" id="uploadEnSubLabel">英文分类</span><input class="upload-input" id="uploadEnSubInput" name="enSub" type="text" maxlength="64" placeholder="Brand / Editing" /></label>
+                <label class="upload-field"><span class="field-label" id="uploadCnDescLabel">中文简介</span><textarea class="upload-input" id="uploadCnDescInput" name="cnDesc" maxlength="180" rows="3" placeholder="这部作品的故事与创作想法"></textarea></label>
+                <label class="upload-field"><span class="field-label" id="uploadEnDescLabel">英文简介</span><textarea class="upload-input" id="uploadEnDescInput" name="enDesc" maxlength="180" rows="3" placeholder="The story behind this project"></textarea></label>
+              </div>
+            </fieldset>
+            <fieldset class="upload-group">
+              <legend id="mediaGroupLabel">视频与封面</legend>
+              <div class="upload-grid media-grid">
+                <label class="upload-field">
+                  <span class="field-label" id="uploadVideoLabel">作品视频</span>
+                  <input class="upload-input" id="uploadVideoInput" name="videoFile" type="file" accept=".mp4,video/mp4" aria-describedby="uploadVideoHelp" />
+                  <small class="field-help" id="uploadVideoHelp">选择 MP4 成片，建议先压缩以便流畅播放。</small>
+                </label>
+                <label class="upload-field">
+                  <span class="field-label" id="uploadPosterLabel">封面图（可选）</span>
+                  <input class="upload-input" id="uploadPosterInput" name="posterFile" type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" aria-describedby="uploadPosterHelp" />
+                  <small class="field-help" id="uploadPosterHelp">支持 JPG、PNG、WEBP；留空则从新视频自动生成。</small>
+                </label>
+              </div>
+            </fieldset>
+            <div class="format-note"><span id="heroFormatLabel">支持格式</span><strong>MP4 / JPG / PNG / WEBP</strong></div>
             <div class="upload-actions">
-              <button class="btn primary" id="uploadSubmit" type="submit">
-                <span id="uploadSubmitLabel">上传并加入作品集</span>
-              </button>
-              <button class="btn" id="uploadCancelEdit" type="button" hidden>
-                <span id="uploadCancelEditLabel">取消编辑</span>
-              </button>
-              <p class="upload-hint" id="uploadHint">上传成功后，作品会保存在本地 `assets/uploads`，刷新页面后仍会保留。</p>
+              <button class="btn primary" id="uploadSubmit" type="submit"><span id="uploadSubmitLabel">添加到作品集</span></button>
+              <button class="btn" id="uploadCancelEdit" type="button" hidden><span id="uploadCancelEditLabel">取消编辑</span></button>
+              <p class="upload-hint" id="uploadHint">保存后可继续编辑，刷新页面不会丢失。</p>
             </div>
-
             <p class="upload-status" id="uploadStatus" aria-live="polite"></p>
           </form>
         </article>
-
-        <article class="panel">
-          <div class="panel-head">
-            <div class="copy">
-              <p class="section-kicker" id="manageKicker">Managed Works</p>
-              <h2 id="manageTitle">已上传作品管理</h2>
-              <p id="manageNote">看封面、悬浮预览视频；编辑名称、分类和描述。</p>
-            </div>
-          </div>
-
+        <article class="panel library-panel" aria-labelledby="manageTitle">
+          <div class="panel-head"><div class="copy">
+            <p class="section-kicker" id="manageKicker">每一帧，都值得留存</p>
+            <div class="library-heading"><h2 id="manageTitle">作品库</h2><span class="work-count"><strong id="heroWorkCount">0</strong><span id="heroWorkCountLabel">部作品</span></span></div>
+            <p id="manageNote">点击封面观看视频，或编辑作品信息。</p>
+          </div></div>
           <div class="manage-list" id="manageList"></div>
         </article>
       </section>
     </main>
   </div>
-
   <dialog class="manage-video-dialog" id="manageVideoDialog" aria-label="作品视频预览">
     <button class="manage-video-close" id="manageVideoClose" type="button" aria-label="关闭视频">×</button>
     <video id="manageVideoPlayer" controls playsinline preload="metadata"></video>
@@ -761,42 +104,50 @@
         cn: {
           pageTitle: 'Highstrith | 作品管理',
           brandRole: '作品管理',
-          publicSiteLink: '查看展示站',
-          heroEyebrow: 'Private Admin',
-          heroTitle: '把上传和作品管理从首页挪到这里。',
-          heroDesc: '这个页面保留上传、编辑、删除的完整能力，但不从主页公开暴露。你可以在这里维护作品，首页只负责干净地展示结果。',
-          heroWorkCountLabel: '已管理作品',
+          publicSiteLink: '查看作品集',
+          heroEyebrow: '创作工作台',
+          heroTitle: '让好作品，被看见',
+          heroDesc: '整理每一次创作，更新你的影像作品集。',
+          heroWorkCountLabel: '部作品',
           heroFormatLabel: '支持格式',
-          privacyKicker: 'Access',
-          privacyNote: '这个地址不会从首页导航中出现，但它也不是带密码的后台。适合用于你自己维护内容，不适合公开传播。',
-          syncKicker: 'Sync',
-          syncNote: '这里提交的作品会写入当前站点目录，并立即影响首页作品列表。刷新首页后就能看到最新内容。',
-          uploadEyebrow: '作品入库',
-          uploadTitle: '上传新作品，自动加入当前作品集。',
-          uploadNote: '选择视频、封面和标题信息后，网站会把文件保存到当前站点目录，并立即把新作品加入现有网格。',
-          uploadModeCreate: '当前为新建模式。',
-          uploadModeEdit: '当前为编辑模式，你可以修改标题，也可以替换视频或封面。',
+          privacyKicker: '本地管理',
+          privacyNote: '在这台电脑上维护作品。',
+          syncKicker: '作品同步',
+          syncNote: '保存后，本地作品集立即更新。线上更新需发布。',
+          uploadEyebrow: '作品编辑器',
+          uploadTitle: '添加新作品',
+          uploadTitleEdit: '编辑作品',
+          uploadNote: '填写作品信息，再添加视频与封面。',
+          uploadNoteEdit: '更新作品信息，保存后即可预览。',
+          uploadModeCreate: '新作品将加入本地作品集。',
+          uploadModeEdit: '可修改文字，或选择新文件替换媒体。',
+          uploadModeBuiltIn: '精选作品：可编辑文字，视频与封面已锁定。',
+          detailsGroupLabel: '作品信息',
+          mediaGroupLabel: '视频与封面',
           uploadCnTitleLabel: '中文标题',
           uploadEnTitleLabel: '英文标题',
-          uploadCnSubLabel: '中文副标题',
-          uploadEnSubLabel: '英文副标题',
-          uploadCnTitlePlaceholder: '例如：新品发布短片',
-          uploadEnTitlePlaceholder: 'For example: Product Launch Film',
-          uploadCnSubPlaceholder: '例如：品牌 / 剪辑',
-          uploadEnSubPlaceholder: 'For example: BRAND / EDIT',
-          uploadCnDescLabel: '中文描述',
-          uploadEnDescLabel: '英文描述',
-          uploadCnDescPlaceholder: '例如：一支强调节奏和视觉质感的短片。',
-          uploadEnDescPlaceholder: 'For example: A short film built around rhythm and visual texture.',
-          uploadVideoLabel: '作品视频（MP4）',
+          uploadCnSubLabel: '中文分类',
+          uploadEnSubLabel: '英文分类',
+          uploadCnTitlePlaceholder: '作品名称',
+          uploadEnTitlePlaceholder: 'Project title',
+          uploadCnSubPlaceholder: '品牌 / 剪辑',
+          uploadEnSubPlaceholder: 'Brand / Editing',
+          uploadCnDescLabel: '中文简介',
+          uploadEnDescLabel: '英文简介',
+          uploadCnDescPlaceholder: '这部作品的故事与创作想法',
+          uploadEnDescPlaceholder: 'The story behind this project',
+          uploadVideoLabel: '作品视频',
           uploadPosterLabel: '封面图（可选）',
-          uploadVideoHelp: '目前支持 MP4，建议上传压缩后的成片，减少浏览时的加载压力。',
-          uploadPosterHelp: '支持 PNG、JPG、JPEG、WEBP；如果不传，卡片会先用默认背景显示。',
-          uploadSubmit: '上传并加入作品集',
+          uploadVideoHelp: '选择 MP4 成片，建议先压缩以便流畅播放。',
+          uploadPosterHelp: '支持 JPG、PNG、WEBP；留空则从新视频自动生成。',
+          uploadVideoHelpEdit: '留空保留当前视频；选择新 MP4 即可替换。',
+          uploadPosterHelpEdit: '留空保留当前封面；选择新图片即可替换。',
+          uploadMediaLocked: '此精选作品的媒体不可在这里替换。',
+          uploadSubmit: '添加到作品集',
           uploadUpdate: '保存作品修改',
           uploadCancelEdit: '取消编辑',
-          uploadHint: '上传成功后，作品会保存在本地 assets/uploads，刷新页面后仍会保留。',
-          uploadIdle: '上传面板已准备好。',
+          uploadHint: '保存在本机，刷新不会丢失；线上更新需发布。',
+          uploadIdle: '可以开始了。',
           uploadNeedVideo: '请先选择一个 MP4 视频文件。',
           uploadGeneratingPoster: '正在从视频自动生成封面…',
           uploadUploadingVideo: '正在上传视频文件…',
@@ -809,16 +160,16 @@
           uploadDeleted: '作品已删除。',
           uploadDeleteConfirm: '确定删除这条已上传作品吗？对应的视频和封面也会一并移除。',
           uploadUnavailable: '当前本地服务暂时不可用，稍后再试。',
-          manageKicker: '管理列表',
-          manageTitle: '全部作品管理',
-          manageNote: '悬浮预览，点击查看视频；编辑名称、分类和描述。',
+          manageKicker: '每一帧，都值得留存',
+          manageTitle: '作品库',
+          manageNote: '点击封面观看视频，或编辑作品信息。',
           manageEmpty: '还没有作品。上传一条作品后，它会立刻出现在这里。',
           manageItemTag: '已上传',
           manageBuiltInTag: '精选作品',
           manageCreated: '创建时间',
           manageVideo: '视频路径',
           managePoster: '封面路径',
-          manageDescription: '描述',
+          manageDescription: '简介',
           manageNoPoster: '暂未设置封面',
           manageEdit: '编辑信息',
           manageView: '查看视频',
@@ -829,42 +180,50 @@
         en: {
           pageTitle: 'Highstrith | Work Admin',
           brandRole: 'Work Admin',
-          publicSiteLink: 'View Public Site',
-          heroEyebrow: 'Private Admin',
-          heroTitle: 'Move upload and work management off the homepage.',
-          heroDesc: 'This page keeps the full upload, edit, and delete workflow without exposing it on the public homepage. Maintain the portfolio here, and let the homepage stay presentation-only.',
-          heroWorkCountLabel: 'Managed Works',
-          heroFormatLabel: 'Supported Formats',
-          privacyKicker: 'Access',
-          privacyNote: 'This page is intentionally absent from the homepage navigation, but it is not password-protected. It is suitable for your own maintenance flow, not for public distribution.',
-          syncKicker: 'Sync',
-          syncNote: 'Anything saved here writes into the current site directory and immediately affects the homepage work list. Refresh the public site to see the latest state.',
-          uploadEyebrow: 'Work Intake',
-          uploadTitle: 'Upload a new project and add it to the current portfolio.',
-          uploadNote: 'Choose a video, poster, and titles, then the site will save the files into this project folder and add the new work to the existing grid right away.',
-          uploadModeCreate: 'Create mode is active.',
-          uploadModeEdit: 'Edit mode is active. You can change titles or replace the video and poster.',
-          uploadCnTitleLabel: 'Chinese Title',
-          uploadEnTitleLabel: 'English Title',
-          uploadCnSubLabel: 'Chinese Subtitle',
-          uploadEnSubLabel: 'English Subtitle',
-          uploadCnTitlePlaceholder: 'For example: Product Launch Film',
-          uploadEnTitlePlaceholder: 'For example: Product Launch Film',
-          uploadCnSubPlaceholder: 'For example: BRAND / EDIT',
-          uploadEnSubPlaceholder: 'For example: BRAND / EDIT',
-          uploadCnDescLabel: 'Chinese Description',
-          uploadEnDescLabel: 'English Description',
-          uploadCnDescPlaceholder: 'For example: A short film built around rhythm and visual texture.',
-          uploadEnDescPlaceholder: 'For example: A short film built around rhythm and visual texture.',
-          uploadVideoLabel: 'Project Video (MP4)',
-          uploadPosterLabel: 'Poster Image (Optional)',
-          uploadVideoHelp: 'MP4 is supported for now. Uploading a compressed deliverable will keep browsing smoother.',
-          uploadPosterHelp: 'PNG, JPG, JPEG, and WEBP are supported. If you skip it, the card falls back to the default background.',
-          uploadSubmit: 'Upload and Add to Portfolio',
+          publicSiteLink: 'View portfolio',
+          heroEyebrow: 'Creative workspace',
+          heroTitle: 'Make room for great work',
+          heroDesc: 'A home for every project. Keep your film portfolio up to date.',
+          heroWorkCountLabel: 'projects',
+          heroFormatLabel: 'Supported formats',
+          privacyKicker: 'Local studio',
+          privacyNote: 'Manage your projects on this computer.',
+          syncKicker: 'Updates',
+          syncNote: 'Saves update your local portfolio. Publish to update the live site.',
+          uploadEyebrow: 'Project editor',
+          uploadTitle: 'Add a new project',
+          uploadTitleEdit: 'Edit project',
+          uploadNote: 'Add the details, then choose your film and cover.',
+          uploadNoteEdit: 'Update the details and save to see your changes.',
+          uploadModeCreate: 'New work joins your local portfolio.',
+          uploadModeEdit: 'Edit the details or choose files to replace your media.',
+          uploadModeBuiltIn: 'Featured project: edit the details. Video and cover are locked.',
+          detailsGroupLabel: 'Project details',
+          mediaGroupLabel: 'Film and cover',
+          uploadCnTitleLabel: 'Chinese title',
+          uploadEnTitleLabel: 'English title',
+          uploadCnSubLabel: 'Chinese category',
+          uploadEnSubLabel: 'English category',
+          uploadCnTitlePlaceholder: 'Project title',
+          uploadEnTitlePlaceholder: 'Project title',
+          uploadCnSubPlaceholder: 'Brand / Editing',
+          uploadEnSubPlaceholder: 'Brand / Editing',
+          uploadCnDescLabel: 'Chinese description',
+          uploadEnDescLabel: 'English description',
+          uploadCnDescPlaceholder: 'The story behind this project',
+          uploadEnDescPlaceholder: 'The story behind this project',
+          uploadVideoLabel: 'Project video',
+          uploadPosterLabel: 'Cover image (optional)',
+          uploadVideoHelp: 'Choose an MP4 film. Compress it first for smoother playback.',
+          uploadPosterHelp: 'JPG, PNG or WEBP. Leave blank to generate a cover from the new video.',
+          uploadVideoHelpEdit: 'Leave blank to keep the video, or choose a new MP4 to replace it.',
+          uploadPosterHelpEdit: 'Leave blank to keep the cover, or choose a new image to replace it.',
+          uploadMediaLocked: 'Media for this featured project cannot be replaced here.',
+          uploadSubmit: 'Add to portfolio',
           uploadUpdate: 'Save Changes',
           uploadCancelEdit: 'Cancel Edit',
-          uploadHint: 'Successful uploads are stored under assets/uploads and stay available after a refresh.',
-          uploadIdle: 'The upload panel is ready.',
+          uploadHint: 'Saved on this computer, including after refresh. Publish to update the live site.',
+          uploadIdle: 'Ready when you are.',
           uploadNeedVideo: 'Please choose an MP4 video file first.',
           uploadGeneratingPoster: 'Generating a poster from the selected video…',
           uploadUploadingVideo: 'Uploading the video file…',
@@ -877,9 +236,9 @@
           uploadDeleted: 'The work has been deleted.',
           uploadDeleteConfirm: 'Delete this uploaded work? Its video and poster files will be removed as well.',
           uploadUnavailable: 'The local upload service is unavailable right now. Please try again shortly.',
-          manageKicker: 'Manage',
-          manageTitle: 'All Work Controls',
-          manageNote: 'Hover to preview or open a video. Edit titles, categories, and descriptions here.',
+          manageKicker: 'Every frame has a place',
+          manageTitle: 'Project library',
+          manageNote: 'Open a cover to watch the film, or edit the project details.',
           manageEmpty: 'No works yet. Add one and it will appear here immediately.',
           manageItemTag: 'Uploaded',
           manageBuiltInTag: 'Featured',
@@ -943,6 +302,8 @@
       const uploadPosterLabel = document.getElementById('uploadPosterLabel');
       const uploadVideoHelp = document.getElementById('uploadVideoHelp');
       const uploadPosterHelp = document.getElementById('uploadPosterHelp');
+      const detailsGroupLabel = document.getElementById('detailsGroupLabel');
+      const mediaGroupLabel = document.getElementById('mediaGroupLabel');
       const uploadCnTitleInput = document.getElementById('uploadCnTitleInput');
       const uploadEnTitleInput = document.getElementById('uploadEnTitleInput');
       const uploadCnSubInput = document.getElementById('uploadCnSubInput');
@@ -1034,7 +395,14 @@
 
       const syncUploadModeUi = () => {
         const copy = translations[state.lang];
-        uploadModeNote.textContent = copy[uploadMode === 'edit' ? 'uploadModeEdit' : 'uploadModeCreate'];
+        const isEditing = uploadMode === 'edit';
+        const currentWork = isEditing ? findUploadedWork(editingWorkId) : null;
+        const mediaLocked = currentWork && !isManagedWork(currentWork);
+        uploadPanelTitle.textContent = copy[isEditing ? 'uploadTitleEdit' : 'uploadTitle'];
+        uploadPanelNote.textContent = copy[isEditing ? 'uploadNoteEdit' : 'uploadNote'];
+        uploadModeNote.textContent = copy[mediaLocked ? 'uploadModeBuiltIn' : isEditing ? 'uploadModeEdit' : 'uploadModeCreate'];
+        uploadVideoHelp.textContent = copy[mediaLocked ? 'uploadMediaLocked' : isEditing ? 'uploadVideoHelpEdit' : 'uploadVideoHelp'];
+        uploadPosterHelp.textContent = copy[mediaLocked ? 'uploadMediaLocked' : isEditing ? 'uploadPosterHelpEdit' : 'uploadPosterHelp'];
         uploadSubmitLabel.textContent = copy[uploadMode === 'edit' ? 'uploadUpdate' : 'uploadSubmit'];
         uploadCancelEdit.hidden = uploadMode !== 'edit';
         uploadCancelEditLabel.textContent = copy.uploadCancelEdit;
@@ -1297,6 +665,11 @@
         state.lang = lang;
         localStorage.setItem('site-lang', lang);
         document.documentElement.lang = lang === 'cn' ? 'zh-CN' : 'en';
+        langSwitch.setAttribute('aria-pressed', String(lang === 'en'));
+        langSwitch.setAttribute('aria-label', lang === 'cn' ? 'Switch to English' : '切换为中文');
+        document.querySelector('.content').setAttribute('aria-label', lang === 'cn' ? '作品管理' : 'Project management');
+        manageVideoDialog.setAttribute('aria-label', lang === 'cn' ? '作品视频预览' : 'Project video preview');
+        manageVideoClose.setAttribute('aria-label', lang === 'cn' ? '关闭视频' : 'Close video');
 
         const copy = translations[lang];
         document.title = copy.pageTitle;
@@ -1325,6 +698,8 @@
         uploadPosterLabel.textContent = copy.uploadPosterLabel;
         uploadVideoHelp.textContent = copy.uploadVideoHelp;
         uploadPosterHelp.textContent = copy.uploadPosterHelp;
+        detailsGroupLabel.textContent = copy.detailsGroupLabel;
+        mediaGroupLabel.textContent = copy.mediaGroupLabel;
         uploadHint.textContent = copy.uploadHint;
         uploadCnTitleInput.placeholder = copy.uploadCnTitlePlaceholder;
         uploadEnTitleInput.placeholder = copy.uploadEnTitlePlaceholder;
