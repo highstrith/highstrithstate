@@ -31,7 +31,7 @@ for (const asset of [...media, ...posters]) {
 assert.ok(fs.statSync(path.join(root, 'assets/hero-studio-red.jpg')).size < 500_000, 'hero background should stay below 500 KB for mobile');
 assert.doesNotMatch(html, /<link[^>]+rel="preload"[^>]+hero-studio-red/i, 'decorative hero background should not be preloaded');
 
-assert.equal(works.length, 15, '重置日 and all fourteen existing works must remain in the catalog');
+assert.equal(works.length, 15, 'catalogue data retains all works, including hidden legacy entries');
 const lyingDownFilm = works.find((work) => work.id === 'work-lying-down-20261001');
 assert.equal(lyingDownFilm?.cnTitle, '趴着办公早该知道');
 assert.equal(lyingDownFilm?.video, 'assets/uploads/lying-down-20261001.mp4');
@@ -45,6 +45,10 @@ assert.equal(resetDay?.video, 'assets/uploads/reset-day-20261007.mp4');
 assert.equal(resetDay?.poster, 'assets/uploads/posters/reset-day-20261007-16x9.png');
 assert.match(html, /work-reset-day-20261007/, 'offline catalog must include 重置日');
 assert.ok(fs.existsSync(path.join(root, resetDay.poster)), '重置日封面 must exist');
+assert.deepEqual(works.map((work) => work.id).slice(0, 3), [
+  'work-reset-day-20261007', 'work-lying-down-20261001', 'work-1783863606674-7ta9sp',
+], 'catalogue must be ordered newest first');
+assert.doesNotMatch(html, /featured-giant-wheel.*stage/i, '巨轮空降 must not be in the desktop feature stage');
 assert.equal(new Set(works.map((work) => work.id)).size, works.length, 'catalog work ids must be unique');
 assert.ok(works.every((work) => work.cnTitle && work.enTitle && work.cnSub && work.enSub && work.cnDesc && work.enDesc), 'catalog works must include titles, categories, and descriptions');
 assert.ok(works.every((work) => !/新加入|可在管理页|newly added|admin page/i.test(`${work.cnDesc} ${work.enDesc}`)), 'public catalog metadata must not contain editor instructions');
@@ -58,4 +62,5 @@ for (const work of works) {
 }
 const snapshot = vm.runInNewContext(html.match(/const baseWorkData = (\[[\s\S]*?\n      \]);/)[1]);
 assert.equal(JSON.stringify(snapshot), JSON.stringify(works), 'static fallback snapshot must retain all current media and metadata');
-assert.equal((html.match(/class="no-js-work"/g) || []).length, works.length, 'all works must remain accessible without JavaScript');
+assert.equal((html.match(/class="no-js-work"/g) || []).length, works.length - 1, 'visible works must remain accessible without JavaScript');
+assert.doesNotMatch(html, /<h3>巨轮空降<\/h3>/, '巨轮空降 must not appear in the primary works content');

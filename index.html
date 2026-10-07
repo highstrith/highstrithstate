@@ -1695,7 +1695,6 @@
 <a class="no-js-work" href="assets/uploads/desktop/work-1783436201027-desktop.mp4"><img src="assets/uploads/posters/poster-1783246320293.png" alt="" loading="lazy" /><h3>街头篮球</h3><p>运动 / 节奏 · 播放完整作品</p></a>
 <a class="no-js-work" href="assets/optimized/featured-prove-it/1476460cc117075e-web.mp4"><img src="assets/posters/prove-it.jpg" alt="" loading="lazy" /><h3>Prove It</h3><p>广告 / 剪辑 · 播放完整作品</p></a>
 <a class="no-js-work" href="assets/optimized/featured-approach/ebd7e20914383cac-web.mp4"><img src="assets/posters/approach.jpg" alt="" loading="lazy" /><h3>搭讪</h3><p>叙事 / 剪辑 · 播放完整作品</p></a>
-<a class="no-js-work" href="assets/optimized/featured-giant-wheel/518efbc9db3347e2-web.mp4"><img src="assets/posters/giant-wheel.jpg" alt="" loading="lazy" /><h3>巨轮空降</h3><p>特效 / 合成 · 播放完整作品</p></a>
 <a class="no-js-work" href="assets/optimized/featured-exported-film/33eef9ca7328cfea-web.mp4"><img src="assets/posters/exported-film.jpg" alt="" loading="lazy" /><h3>Two Seconds</h3><p>剪辑 / 后期 · 播放完整作品</p></a>
 <a class="no-js-work" href="assets/works/timeline-vertical.mp4"><img src="assets/posters/timeline-vertical.jpg" alt="" loading="lazy" /><h3>AI 之后</h3><p>竖版 / 节奏 · 播放完整作品</p></a>
 <a class="no-js-work" href="assets/optimized/added-creative-3/defe29806e1f9157-web.mp4"><img src="assets/posters/creative-3.jpg" alt="" loading="lazy" /><h3>动作预演</h3><p>角色 / 动画 · 播放完整作品</p></a>
@@ -2321,7 +2320,8 @@
       let workPlayerFullscreenRequested = false;
       let workPlayerGeneration = 0;
       let playerSession = null;
-      const featuredWorkIds = ['work-lying-down-20261001', 'work-1783863606674-7ta9sp', 'work-1783246320299-icguu6', 'featured-prove-it', 'featured-giant-wheel'];
+      const featuredWorkIds = ['work-lying-down-20261001', 'work-1783863606674-7ta9sp', 'work-1783246320299-icguu6', 'featured-prove-it', 'featured-approach'];
+      const hiddenWorkIds = new Set(['featured-giant-wheel']);
       let stageActiveIndex = 0;
       let stageFrame = 0;
       let catalogueReturnFocus = null;
@@ -2428,7 +2428,14 @@
         };
       };
 
-      const allWorkData = () => (uploadedWorkData.length ? uploadedWorkData : baseWorkData).map(normalizeWork);
+      const allWorkData = () => (uploadedWorkData.length ? uploadedWorkData : baseWorkData)
+        .map((work, index) => ({ work: normalizeWork(work), index }))
+        .filter(({ work }) => !hiddenWorkIds.has(work.id))
+        .sort((a, b) => {
+          const dateDiff = Date.parse(b.work.createdAt || '') - Date.parse(a.work.createdAt || '');
+          return (Number.isNaN(dateDiff) ? 0 : dateDiff) || a.index - b.index;
+        })
+        .map(({ work }) => work);
       const WORKS_PER_PAGE = 8;
       let worksPage = 1;
 

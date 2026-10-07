@@ -10,6 +10,7 @@ with sync_playwright() as p:
         page.locator(".stage-card").first.wait_for()
         assert page.locator(".stage-card").count() == 5
         assert page.locator(".catalogue-card").count() == 14
+        assert page.locator(".catalogue-card", has_text="巨轮空降").count() == 0
         assert page.locator(".hero-avatar").evaluate("image => image.naturalWidth") == 1792
         assert page.locator(".hero .cta-row").bounding_box()["y"] + page.locator(".hero .cta-row").bounding_box()["height"] < height
         assert not page.evaluate("document.documentElement.scrollWidth > innerWidth")
@@ -40,5 +41,6 @@ with sync_playwright() as p:
     file_page.goto((Path(__file__).resolve().parents[1] / "index.html").as_uri(), wait_until="domcontentloaded")
     file_page.locator(".catalogue-card").first.wait_for(state="attached")
     assert file_page.locator(".catalogue-card").count() == 14
+    assert file_page.locator(".catalogue-card", has_text="巨轮空降").count() == 0
     file_page.close()
     browser.close()
