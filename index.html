@@ -2322,6 +2322,7 @@
       let playerSession = null;
       const hiddenWorkIds = new Set(['featured-giant-wheel']);
       const FEATURED_WORK_LIMIT = 5;
+      const LEGACY_FEATURED_WORK_IDS = ['featured-prove-it', 'featured-approach', 'featured-exported-film'];
       let stageActiveIndex = 0;
       let stageFrame = 0;
       let catalogueReturnFocus = null;
@@ -2995,7 +2996,9 @@
       };
 
       const renderDesktopWorks = (works) => {
-        const featured = works.slice(0, FEATURED_WORK_LIMIT);
+        const newest = works.slice(0, 2);
+        const legacy = LEGACY_FEATURED_WORK_IDS.map(id => works.find(work => work.id === id)).filter(Boolean);
+        const featured = [...newest, ...legacy].slice(0, FEATURED_WORK_LIMIT);
         const featuredWorkIds = featured.map(work => work.id);
         stageTrack.innerHTML = featured.map((item) => {
           const title = escapeHtml(state.lang === 'cn' ? item.cnTitle : item.enTitle);
