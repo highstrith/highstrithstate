@@ -1,5 +1,20 @@
 [
   {
+    "id": "work-reset-day-20261007",
+    "createdAt": "2026-10-07T00:00:00.000Z",
+    "cnTitle": "重置日",
+    "enTitle": "Reset Day",
+    "cnSub": "剧情 / AI 短片",
+    "enSub": "NARRATIVE / AI SHORT",
+    "cnDesc": "当生活在变故前归零，他决定不再把未知挡在门外。",
+    "enDesc": "When life resets before every turning point, he chooses to stop keeping the unknown outside.",
+    "video": "assets/uploads/reset-day-20261007.mp4",
+    "mobileVideo": "assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-mobile.mp4",
+    "poster": "assets/uploads/posters/reset-day-20261007-16x9.png",
+    "previewVideo": "assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-preview.mp4",
+    "webVideo": "assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-web.mp4"
+  },
+  {
     "id": "work-lying-down-20261001",
     "createdAt": "2026-10-01T07:00:00.000Z",
     "cnTitle": "趴着办公早该知道",

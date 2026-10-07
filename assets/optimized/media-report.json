@@ -3,6 +3,15 @@
   "toolHash": "a90e3db6a3fd35f6074b013f948b1aa45b31c6375489d39e572bea3f18336584",
   "previews": [
     {
+      "id": "work-reset-day-20261007",
+      "source": "assets/uploads/reset-day-20261007.mp4",
+      "sourceHash": "d9297698f85eacea90d731381efbb064f2d16fde7d08f518bfbdd30f74835fff",
+      "previewSeconds": 20,
+      "previewBytes": 1709887,
+      "mobileBytes": 9875160,
+      "webRemux": true
+    },
+    {
       "id": "work-lying-down-20261001",
       "source": "assets/uploads/lying-down-20261001.mp4",
       "sourceHash": "a4f97a005e244a6e37baf9fc1e63d23a958a337635dbbacf1c6b5d5393901778",
