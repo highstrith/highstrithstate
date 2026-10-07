@@ -27,7 +27,7 @@ with sync_playwright() as p:
 
     admin = browser.new_page(viewport={"width": 1440, "height": 900})
     admin.goto("http://127.0.0.1:3000/admin.html", wait_until="domcontentloaded")
-    admin.wait_for_function("document.querySelectorAll('.manage-card').length === 14")
+    admin.wait_for_function("document.querySelectorAll('.manage-card').length === 15")
     assert admin.locator("#uploadCnDescInput").count() == 1
     assert admin.locator("#uploadEnDescInput").count() == 1
     admin.close()

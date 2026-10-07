@@ -2322,7 +2322,7 @@
       let playerSession = null;
       const hiddenWorkIds = new Set(['featured-giant-wheel']);
       const FEATURED_WORK_LIMIT = 5;
-      const LEGACY_FEATURED_WORK_IDS = ['featured-prove-it', 'featured-approach', 'featured-exported-film'];
+      let featuredWorkIds = [];
       let stageActiveIndex = 0;
       let stageFrame = 0;
       let catalogueReturnFocus = null;
@@ -2609,7 +2609,9 @@
             && bounds.top <= window.innerHeight + WORK_VIDEO_MARGIN;
 
           if (inPlaybackRange) {
-            if (loadVideo(video)) tryPlay(video);
+            if (loadVideo(video)) {
+              if (video.paused) tryPlay(video);
+            }
           } else {
             unloadVideo(video);
           }
@@ -2712,6 +2714,15 @@
         if (card?.dataset.previewHold === 'true') {
           delete card.dataset.previewHold;
           releaseBackgroundMusic();
+        }
+      };
+
+      const resumeActiveStagePreview = () => {
+        if (!desktopMode.matches || isMobilePlayback() || reduceMotion.matches || document.hidden || activeWorkVideo || !workCatalogue.hidden) return;
+        const card = document.querySelector(`.stage-card[data-work-id="${CSS.escape(featuredWorkIds[stageActiveIndex] || '')}"]`);
+        const video = card?.querySelector('.work-video');
+        if (video) {
+          if (loadVideo(video)) tryPlay(video);
         }
       };
 
@@ -2909,6 +2920,7 @@
         if (!animateElement(workPlayer, [{ opacity: 1 }, { opacity: 0 }], { duration: 140 }, playerAnimations,
           () => workPlayer.classList.remove('is-exiting'))) workPlayer.classList.remove('is-exiting');
         scheduleWorkVideoSync();
+        setTimeout(resumeActiveStagePreview, 120);
         releaseWorkPlayerOrientation();
         releaseBackgroundMusic();
       };
@@ -2968,7 +2980,7 @@
 
         videoObserver = typeof window.IntersectionObserver === 'function'
           ? new IntersectionObserver((entries) => {
-              if (entries.length) scheduleWorkVideoSync();
+          if (entries.length) scheduleWorkVideoSync();
             }, { rootMargin: `${WORK_VIDEO_MARGIN}px 0px`, threshold: 0.01 })
           : null;
 
@@ -2997,9 +3009,8 @@
 
       const renderDesktopWorks = (works) => {
         const newest = works.slice(0, 2);
-        const legacy = LEGACY_FEATURED_WORK_IDS.map(id => works.find(work => work.id === id)).filter(Boolean);
-        const featured = [...newest, ...legacy].slice(0, FEATURED_WORK_LIMIT);
-        const featuredWorkIds = featured.map(work => work.id);
+        const featured = works.slice(0, FEATURED_WORK_LIMIT);
+        featuredWorkIds = featured.map(work => work.id);
         stageTrack.innerHTML = featured.map((item) => {
           const title = escapeHtml(state.lang === 'cn' ? item.cnTitle : item.enTitle);
           const subtitle = escapeHtml(state.lang === 'cn' ? item.cnSub : item.enSub);
