@@ -4,12 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Highstrith | 作品管理</title>
-  <link rel="stylesheet" href="admin.css?v=20261007-2" />
+  <link rel="icon" type="image/svg+xml" href="assets/studio-mark.svg" />
+  <link rel="stylesheet" href="admin.css?v=20261008-refined" />
 </head>
 <body>
   <div class="page">
     <header class="topbar">
       <a class="brand" href="/" aria-label="Highstrith 橘小桔">
+        <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V5h4.8l4.7 6.1V5H19v14h-4.5l-5-6.5V19H5Z" /></svg>
         <span class="brand-name">Highstrith<span>橘小桔</span></span>
         <span class="brand-role" id="brandRole">作品管理</span>
       </a>
@@ -320,6 +322,7 @@
       const manageVideoDialog = document.getElementById('manageVideoDialog');
       const manageVideoPlayer = document.getElementById('manageVideoPlayer');
       const manageVideoClose = document.getElementById('manageVideoClose');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
       let uploadedWorkData = [];
       let uploadMode = 'create';
@@ -773,14 +776,18 @@
 
       manageList.addEventListener('pointerover', (event) => {
         const preview = event.target.closest('.manage-preview');
-        if (!preview || event.pointerType === 'touch') return;
+        if (!preview || preview.contains(event.relatedTarget) || event.pointerType === 'touch' || reducedMotion.matches) return;
         const card = preview.closest('.manage-card');
         const video = preview.querySelector('video');
-        if (!video || video.dataset.loaded === 'true') return;
-        video.src = preview.dataset.previewVideo;
-        video.dataset.loaded = 'true';
-        video.load();
-        video.play().then(() => card.classList.add('is-previewing')).catch(() => {});
+        if (!video) return;
+        if (video.dataset.loaded !== 'true') {
+          video.src = preview.dataset.previewVideo;
+          video.dataset.loaded = 'true';
+          video.load();
+        }
+        video.play().then(() => {
+          if (!video.paused) card.classList.add('is-previewing');
+        }).catch(() => {});
       });
 
       manageList.addEventListener('pointerout', (event) => {
@@ -793,6 +800,15 @@
           try { video.currentTime = 0; } catch (_) {}
         }
         card?.classList.remove('is-previewing');
+      });
+
+      reducedMotion.addEventListener('change', () => {
+        if (!reducedMotion.matches) return;
+        manageList.querySelectorAll('.manage-preview video').forEach((video) => {
+          video.pause();
+          try { video.currentTime = 0; } catch (_) {}
+          video.closest('.manage-card')?.classList.remove('is-previewing');
+        });
       });
 
       manageVideoClose.addEventListener('click', closeWorkPreview);

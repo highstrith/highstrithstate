@@ -14,6 +14,7 @@
 }
 
 * { box-sizing: border-box; }
+.brand-mark { width: 36px; height: 36px; padding: 5px; border: 1px solid var(--ink); fill: none; stroke: var(--ink); stroke-width: 1.5px; flex-shrink: 0; }
 [hidden] { display: none !important; }
 html { scroll-padding-top: 100px; }
 body { min-width: 0; margin: 0; }
@@ -75,7 +76,7 @@ h1, h2, h3, p { margin: 0; }
 .hero-copy { max-width: 650px; }
 .eyebrow { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
 .eyebrow::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--orange); }
-h1 { margin-top: 17px; font-size: clamp(36px, 3.8vw, 54px); line-height: 1.15; font-weight: 500; letter-spacing: -2px; }
+h1 { margin-top: 17px; font-size: 36px; line-height: 1.4; font-weight: 500; letter-spacing: -.7px; }
 .lede { margin-top: 16px; font-size: 14px; line-height: 1.8; color: var(--muted); max-width: 48ch; }
 .hero-side { max-width: 290px; display: grid; gap: 14px; padding-bottom: 2px; }
 .mini-note { display: grid; grid-template-columns: 68px 1fr; gap: 16px; font-size: 12px; line-height: 1.65; }
