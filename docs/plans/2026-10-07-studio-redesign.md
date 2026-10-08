@@ -13,7 +13,7 @@
 ## 文件与步骤
 
 - [x] `tests/studio-redesign-smoke.py`：先在旧站验证新交互尚未实现，再验证新版筛选、搜索、播放器、手机与临时目录真实上传流程。
-- [x] `index.html`：重写语义页面，保留 `baseWorkData` 与 generated-works 标记供离线快照同步；`studio.css` 负责全部新视觉；`studio.js` 负责目录、过滤、单视频预览、播放器、语言与二维码。
+- [x] `index.html`：重写语义页面，保留 `baseWorkData` 与 generated-works 标记供离线快照同步；`assets/studio.css` 负责全部新视觉；`assets/studio.js` 负责目录、过滤、单视频预览、播放器、语言与二维码。
 - [x] `admin.html` / `admin.css`：重做管理页面并保留 API 合约。`serve.js`、媒体、works.json 不因视觉改版变更。
 - [x] 保留手机 mobileVideo、桌面 webVideo、原片 video 三级选源；预览只用 previewVideo，最多一个预览，触屏和减少动态时不开启。原生 dialog 提供焦点约束、Esc 与焦点返回，失败和等待可重试。
 - [x] 验证 320/390/820/1440/1920 宽度、中英、无脚本与静态部署。运行媒体、目录同步和 API 集成检查、JavaScript 语法检查、真实浏览器回归并检查截图。

@@ -1,6 +1,6 @@
 # 当代影像工作室改版交付
 
-完成日期：2026-10-08。当前为本地交付，尚未发布 GitHub Pages。
+完成日期：2026-10-08。用户已授权推送白色版，正在验证 Pages 打包与部署。此前黑色 V1 已保存在远程 [v1-black 标签](https://github.com/highstrith/highstrithstate/tree/v1-black)。
 
 ## 设计和研究
 
@@ -29,7 +29,8 @@ python3 -u tests/studio-redesign-smoke.py -v
 node --test tests/works-api-integration.mjs tests/catalogue-sync-integration.mjs
 node tests/media-integration.mjs
 node tests/optimized-media-integration.mjs
-node --check studio.js
+node --test tests/pages-artifact-integration.mjs
+node --check assets/studio.js
 node --check serve.js
 git diff --check
 ```
