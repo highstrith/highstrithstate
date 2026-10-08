@@ -1,6 +1,6 @@
-# 当代影像工作室改版交付
+# V2 白色版 · 当代影像工作室改版交付
 
-完成日期：2026-10-08。白色版已[发布上线](https://highstrith.github.io/highstrithstate/)，[部署运行](https://github.com/highstrith/highstrithstate/actions/runs/37785688145)成功。此前黑色 V1 已保存在远程 [v1-black 标签](https://github.com/highstrith/highstrithstate/tree/v1-black)，白色发布点为 [v2-white-20261008](https://github.com/highstrith/highstrithstate/tree/v2-white-20261008)。
+完成日期：2026-10-08。用户正式将白色版命名为 V2，已[发布上线](https://highstrith.github.io/highstrithstate/)，[部署运行](https://github.com/highstrith/highstrithstate/actions/runs/37785688145)成功。此前黑色 V1 已保存在远程 [v1-black 标签](https://github.com/highstrith/highstrithstate/tree/v1-black)，白色 V2 的正式标签为 [v2-white](https://github.com/highstrith/highstrithstate/tree/v2-white)，同时保留 [v2-white-20261008](https://github.com/highstrith/highstrithstate/tree/v2-white-20261008) 发布点。
 
 ## 设计和研究
 
