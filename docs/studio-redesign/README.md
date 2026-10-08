@@ -1,6 +1,6 @@
 # 当代影像工作室改版交付
 
-完成日期：2026-10-08。用户已授权推送白色版，正在验证 Pages 打包与部署。此前黑色 V1 已保存在远程 [v1-black 标签](https://github.com/highstrith/highstrithstate/tree/v1-black)。
+完成日期：2026-10-08。白色版已[发布上线](https://highstrith.github.io/highstrithstate/)，[部署运行](https://github.com/highstrith/highstrithstate/actions/runs/37785688145)成功。此前黑色 V1 已保存在远程 [v1-black 标签](https://github.com/highstrith/highstrithstate/tree/v1-black)，白色发布点为 [v2-white-20261008](https://github.com/highstrith/highstrithstate/tree/v2-white-20261008)。
 
 ## 设计和研究
 
@@ -16,8 +16,10 @@
 - [手机首页](public-mobile.png)
 - [作品目录](works-desktop.png)
 - [联系与页脚](contact-desktop.png)
+- [线上第 05 部精选](public-live-hero-05.png)
+- [线上手机页面](public-live-mobile.png)
 
-截图为整体改版完成时的实际浏览器页面（第 05 项随后改为《AI 之后》）；公开页截图使用减少动态效果，展示稳定海报。通常桌面访问会自动播放当前轻量预览，作品悬停/聚焦时切换到唯一预览；手机不主动加载预览。
+前四张截图为整体改版完成时的实际浏览器页面（第 05 项随后改为《AI 之后》）；后两张为最终实际线上页面。公开页截图使用减少动态效果，展示稳定海报。通常桌面访问会自动播放当前轻量预览，作品悬停/聚焦时切换到唯一预览；手机不主动加载预览。
 
 ## 验证
 
