@@ -43,4 +43,4 @@ git diff --check
 
 维护或发布目录后运行 `node scripts/sync-work-catalogue.mjs`，以同步无脚本和离线目录。此前桌面横向展厅/舞台测试描述旧设计，新版使用上述回归。
 
-2026-10-08 手机加载优化：初始图片从约 5.2 MB 降为 167 KB，原始封面与完整播放保留；新增或替换封面后先运行 `node scripts/optimize-images.mjs`，再同步目录。测量条件、截图与完整验收见 [手机加载优化](../手机加载优化.md)。
+2026-10-08 手机加载优化已随 `a704483` [部署成功](https://github.com/highstrith/highstrithstate/actions/runs/37799655539)：初始图片从约 5.2 MB 降为 167 KB，原始封面与完整播放保留；线上手机主封面与完整播放已验收。新增或替换封面后先运行 `node scripts/optimize-images.mjs`，再同步目录。测量条件、截图与完整验收见 [手机加载优化](../手机加载优化.md)。
