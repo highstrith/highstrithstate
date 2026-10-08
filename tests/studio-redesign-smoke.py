@@ -36,6 +36,7 @@ FEATURE_REPLACEMENTS = {
     "work-lying-down-20261001": "featured-prove-it",
     "added-creative-3": "work-1783863606674-7ta9sp",
     "added-visual-study": "featured-exported-film",
+    "added-title-render": "featured-timeline-1",
 }
 FEATURED = []
 for work in VISIBLE:

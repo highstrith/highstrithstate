@@ -190,6 +190,7 @@
       'work-lying-down-20261001': 'featured-prove-it',
       'added-creative-3': 'work-1783863606674-7ta9sp',
       'added-visual-study': 'featured-exported-film',
+      'added-title-render': 'featured-timeline-1',
     };
     const candidates = works.map((work) => works.find((item) => item.id === featureReplacements[work.id]) || work);
     featuredWorks = [...new Map(candidates.map((work) => [work.id, work])).values()].slice(0, 5);
