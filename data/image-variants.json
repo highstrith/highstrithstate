@@ -1,0 +1,284 @@
+{
+  "assets/hero-digital-human-full.jpg": [
+    {
+      "src": "assets/optimized-images/70e3ae512b666f5e-a0066563-160w.webp",
+      "width": 160,
+      "height": 214
+    },
+    {
+      "src": "assets/optimized-images/70e3ae512b666f5e-a0066563-480w.webp",
+      "width": 480,
+      "height": 643
+    },
+    {
+      "src": "assets/optimized-images/70e3ae512b666f5e-a0066563-960w.webp",
+      "width": 960,
+      "height": 1286
+    },
+    {
+      "src": "assets/optimized-images/70e3ae512b666f5e-a0066563-1600w.webp",
+      "width": 1600,
+      "height": 2143
+    }
+  ],
+  "assets/posters/approach.jpg": [
+    {
+      "src": "assets/optimized-images/275d0ff36d09dc0c-a0066563-160w.webp",
+      "width": 160,
+      "height": 90
+    },
+    {
+      "src": "assets/optimized-images/275d0ff36d09dc0c-a0066563-480w.webp",
+      "width": 480,
+      "height": 270
+    },
+    {
+      "src": "assets/optimized-images/275d0ff36d09dc0c-a0066563-568w.webp",
+      "width": 568,
+      "height": 320
+    }
+  ],
+  "assets/posters/completed-film.jpg": [
+    {
+      "src": "assets/optimized-images/6d2f85fc57c178c2-a0066563-160w.webp",
+      "width": 160,
+      "height": 284
+    },
+    {
+      "src": "assets/optimized-images/6d2f85fc57c178c2-a0066563-480w.webp",
+      "width": 480,
+      "height": 853
+    },
+    {
+      "src": "assets/optimized-images/6d2f85fc57c178c2-a0066563-960w.webp",
+      "width": 960,
+      "height": 1706
+    }
+  ],
+  "assets/posters/creative-3.jpg": [
+    {
+      "src": "assets/optimized-images/222086fa98b92ab3-a0066563-160w.webp",
+      "width": 160,
+      "height": 90
+    },
+    {
+      "src": "assets/optimized-images/222086fa98b92ab3-a0066563-480w.webp",
+      "width": 480,
+      "height": 270
+    },
+    {
+      "src": "assets/optimized-images/222086fa98b92ab3-a0066563-960w.webp",
+      "width": 960,
+      "height": 540
+    }
+  ],
+  "assets/posters/exported-film.jpg": [
+    {
+      "src": "assets/optimized-images/1fd3f7c48e33ddaa-a0066563-160w.webp",
+      "width": 160,
+      "height": 90
+    },
+    {
+      "src": "assets/optimized-images/1fd3f7c48e33ddaa-a0066563-480w.webp",
+      "width": 480,
+      "height": 270
+    },
+    {
+      "src": "assets/optimized-images/1fd3f7c48e33ddaa-a0066563-711w.webp",
+      "width": 711,
+      "height": 400
+    }
+  ],
+  "assets/posters/giant-wheel.jpg": [
+    {
+      "src": "assets/optimized-images/03618bc9800ecda4-a0066563-160w.webp",
+      "width": 160,
+      "height": 90
+    },
+    {
+      "src": "assets/optimized-images/03618bc9800ecda4-a0066563-480w.webp",
+      "width": 480,
+      "height": 270
+    },
+    {
+      "src": "assets/optimized-images/03618bc9800ecda4-a0066563-568w.webp",
+      "width": 568,
+      "height": 320
+    }
+  ],
+  "assets/posters/prove-it.jpg": [
+    {
+      "src": "assets/optimized-images/99c48a03afa54602-a0066563-160w.webp",
+      "width": 160,
+      "height": 90
+    },
+    {
+      "src": "assets/optimized-images/99c48a03afa54602-a0066563-480w.webp",
+      "width": 480,
+      "height": 269
+    },
+    {
+      "src": "assets/optimized-images/99c48a03afa54602-a0066563-571w.webp",
+      "width": 571,
+      "height": 320
+    }
+  ],
+  "assets/posters/render-test.jpg": [
+    {
+      "src": "assets/optimized-images/5da0a011cbca2914-a0066563-160w.webp",
+      "width": 160,
+      "height": 90
+    },
+    {
+      "src": "assets/optimized-images/5da0a011cbca2914-a0066563-480w.webp",
+      "width": 480,
+      "height": 270
+    },
+    {
+      "src": "assets/optimized-images/5da0a011cbca2914-a0066563-960w.webp",
+      "width": 960,
+      "height": 540
+    }
+  ],
+  "assets/posters/timeline-vertical.jpg": [
+    {
+      "src": "assets/optimized-images/ddfc97d74e1f0d46-a0066563-160w.webp",
+      "width": 160,
+      "height": 284
+    },
+    {
+      "src": "assets/optimized-images/ddfc97d74e1f0d46-a0066563-320w.webp",
+      "width": 320,
+      "height": 568
+    }
+  ],
+  "assets/posters/title-render.jpg": [
+    {
+      "src": "assets/optimized-images/601cff6a9961ed78-a0066563-160w.webp",
+      "width": 160,
+      "height": 90
+    },
+    {
+      "src": "assets/optimized-images/601cff6a9961ed78-a0066563-480w.webp",
+      "width": 480,
+      "height": 270
+    },
+    {
+      "src": "assets/optimized-images/601cff6a9961ed78-a0066563-960w.webp",
+      "width": 960,
+      "height": 540
+    }
+  ],
+  "assets/posters/v30001-0180.jpg": [
+    {
+      "src": "assets/optimized-images/193ddb83066f2889-a0066563-160w.webp",
+      "width": 160,
+      "height": 90
+    },
+    {
+      "src": "assets/optimized-images/193ddb83066f2889-a0066563-480w.webp",
+      "width": 480,
+      "height": 270
+    },
+    {
+      "src": "assets/optimized-images/193ddb83066f2889-a0066563-960w.webp",
+      "width": 960,
+      "height": 540
+    }
+  ],
+  "assets/posters/visual-study.jpg": [
+    {
+      "src": "assets/optimized-images/e97c6ff097d826f1-a0066563-160w.webp",
+      "width": 160,
+      "height": 90
+    },
+    {
+      "src": "assets/optimized-images/e97c6ff097d826f1-a0066563-480w.webp",
+      "width": 480,
+      "height": 270
+    },
+    {
+      "src": "assets/optimized-images/e97c6ff097d826f1-a0066563-960w.webp",
+      "width": 960,
+      "height": 540
+    }
+  ],
+  "assets/uploads/posters/lying-down-20261001-16x9.png": [
+    {
+      "src": "assets/optimized-images/03ccc84131cda5d1-a0066563-160w.webp",
+      "width": 160,
+      "height": 90
+    },
+    {
+      "src": "assets/optimized-images/03ccc84131cda5d1-a0066563-480w.webp",
+      "width": 480,
+      "height": 270
+    },
+    {
+      "src": "assets/optimized-images/03ccc84131cda5d1-a0066563-960w.webp",
+      "width": 960,
+      "height": 540
+    },
+    {
+      "src": "assets/optimized-images/03ccc84131cda5d1-a0066563-1600w.webp",
+      "width": 1600,
+      "height": 900
+    }
+  ],
+  "assets/uploads/posters/poster-1783246320293.png": [
+    {
+      "src": "assets/optimized-images/8d357111b84eb7ad-a0066563-160w.webp",
+      "width": 160,
+      "height": 90
+    },
+    {
+      "src": "assets/optimized-images/8d357111b84eb7ad-a0066563-480w.webp",
+      "width": 480,
+      "height": 270
+    },
+    {
+      "src": "assets/optimized-images/8d357111b84eb7ad-a0066563-568w.webp",
+      "width": 568,
+      "height": 320
+    }
+  ],
+  "assets/uploads/posters/poster-1783864071336.png": [
+    {
+      "src": "assets/optimized-images/6690d6626117558e-a0066563-160w.webp",
+      "width": 160,
+      "height": 90
+    },
+    {
+      "src": "assets/optimized-images/6690d6626117558e-a0066563-480w.webp",
+      "width": 480,
+      "height": 270
+    },
+    {
+      "src": "assets/optimized-images/6690d6626117558e-a0066563-568w.webp",
+      "width": 568,
+      "height": 320
+    }
+  ],
+  "assets/uploads/posters/reset-day-20261007-16x9.png": [
+    {
+      "src": "assets/optimized-images/9f50ee24bfd4004e-a0066563-160w.webp",
+      "width": 160,
+      "height": 90
+    },
+    {
+      "src": "assets/optimized-images/9f50ee24bfd4004e-a0066563-480w.webp",
+      "width": 480,
+      "height": 270
+    },
+    {
+      "src": "assets/optimized-images/9f50ee24bfd4004e-a0066563-960w.webp",
+      "width": 960,
+      "height": 540
+    },
+    {
+      "src": "assets/optimized-images/9f50ee24bfd4004e-a0066563-1600w.webp",
+      "width": 1600,
+      "height": 900
+    }
+  ]
+}

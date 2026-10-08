@@ -126,6 +126,45 @@
     }
   }
 
+  function imageVariants(source) {
+    const key = text(source).trim().replace(/^\.\//, '');
+    const variants = typeof posterImageData !== 'undefined' ? posterImageData[key] : null;
+    return Array.isArray(variants) ? variants.filter((variant) =>
+      mediaURL(variant.src) && Number.isInteger(variant.width) && variant.width > 0 &&
+      Number.isInteger(variant.height) && variant.height > 0
+    ) : [];
+  }
+
+  function posterSource(source, thumbnail = false) {
+    const variants = imageVariants(source);
+    const variant = thumbnail ? variants[0] : variants.find((item) => item.width >= 960) || variants.at(-1);
+    return mediaURL(variant?.src || source);
+  }
+
+  function setPosterImage(image, source, role) {
+    const variants = imageVariants(source);
+    if (variants.length && role !== 'thumbnail') {
+      image.sizes = role === 'hero'
+        ? '(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) calc(100vw - 64px), (max-width: 1696px) calc(100vw - 96px), 1600px'
+        : '(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) calc((100vw - 96px) / 2), (max-width: 1696px) calc((100vw - 128px) / 2), 784px';
+      image.srcset = variants.map((item) => `${mediaURL(item.src)} ${item.width}w`).join(', ');
+    } else {
+      image.removeAttribute('srcset');
+      image.removeAttribute('sizes');
+    }
+    const variant = variants.at(-1);
+    if (variant) {
+      image.width = variant.width;
+      image.height = variant.height;
+    } else {
+      image.removeAttribute('width');
+      image.removeAttribute('height');
+    }
+    const poster = posterSource(source, role === 'thumbnail');
+    if (poster) image.src = poster;
+    else image.removeAttribute('src');
+  }
+
   function setLines(element, value) {
     if (!element) return;
     const fragment = document.createDocumentFragment();
@@ -205,16 +244,15 @@
     stopPreview();
     hoveredCard = null;
     focusedCard = null;
-    cardRecords = works.map((work, index) => {
+    cardRecords = works.map((work) => {
       const card = create('button', 'work-card');
       card.type = 'button';
       card.dataset.workId = work.id;
       const media = create('span', 'work-media');
       const image = create('img');
-      const poster = mediaURL(work.poster);
-      if (poster) image.src = poster;
-      image.loading = index < 3 ? 'eager' : 'lazy';
+      image.loading = 'lazy';
       image.decoding = 'async';
+      setPosterImage(image, work.poster, 'card');
       const video = create('video');
       video.muted = true;
       video.loop = true;
@@ -293,10 +331,10 @@
       button.setAttribute('aria-label', `${String(index + 1).padStart(2, '0')}: ${workTitle(work)}`);
       button.setAttribute('aria-pressed', String(work.id === selectedFeatureId));
       const image = create('img');
-      const poster = mediaURL(work.poster);
-      if (poster) image.src = poster;
       image.alt = '';
       image.loading = 'lazy';
+      image.decoding = 'async';
+      setPosterImage(image, work.poster, 'thumbnail');
       button.append(image, create('span', '', String(index + 1).padStart(2, '0')));
       button.addEventListener('click', () => {
         if (selectedFeatureId === work.id) return;
@@ -315,10 +353,8 @@
       return;
     }
     const name = workTitle(work);
-    const poster = mediaURL(work.poster);
     if (heroPoster) {
-      if (poster) heroPoster.src = poster;
-      else heroPoster.removeAttribute('src');
+      setPosterImage(heroPoster, work.poster, 'hero');
       heroPoster.alt = language === 'cn' ? `${name}作品画面` : `Still from ${name}`;
     }
     if ($('#featureTitle')) $('#featureTitle').textContent = name;
@@ -469,7 +505,7 @@
     playerReturnFocus = trigger || document.activeElement;
     const mobile = narrowScreen.matches || coarsePointer.matches;
     playerSource = mediaURL(mobile ? (work.mobileVideo || work.video) : (work.webVideo || work.video));
-    const poster = mediaURL(work.poster);
+    const poster = posterSource(work.poster);
     if (poster) playerVideo.poster = poster;
     else playerVideo.removeAttribute('poster');
     stopPreview();

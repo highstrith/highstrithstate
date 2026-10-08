@@ -280,6 +280,74 @@ class StudioRedesign(unittest.TestCase):
                 page.locator("#workPlayerClose").click()
                 self.assert_closed_with_focus(page, card)
 
+    def test_cold_mobile_initial_images_stay_within_network_budget(self):
+        # A new page owns a fresh context. Count real HTTP transfers, including
+        # any duplicate image downloads; no image responses are intercepted.
+        page = self.page(viewport={"width": 390, "height": 844},
+                         device_scale_factor=2, is_mobile=True, has_touch=True)
+        network = page.context.new_cdp_session(page)
+        network.send("Network.enable")
+        network.send("Network.setCacheDisabled", {"cacheDisabled": True})
+        network.send("Network.setBypassServiceWorker", {"bypass": True})
+        requests, images = [], {}
+
+        def requested(event):
+            requests.append(event["request"]["url"])
+            if event.get("type") == "Image":
+                images[event["requestId"]] = {"url": event["request"]["url"], "bytes": 0}
+
+        def received(event):
+            if event.get("type") == "Image":
+                image = images.setdefault(event["requestId"], {"bytes": 0})
+                image.update(url=event["response"]["url"], status=event["response"]["status"])
+
+        def transferred(event):
+            if event["requestId"] in images:
+                images[event["requestId"]]["bytes"] += event.get("encodedDataLength", 0)
+
+        def finished(event):
+            if event["requestId"] in images:
+                images[event["requestId"]].update(bytes=event["encodedDataLength"], finished=True)
+
+        network.on("Network.requestWillBeSent", requested)
+        network.on("Network.responseReceived", received)
+        network.on("Network.dataReceived", transferred)
+        network.on("Network.loadingFinished", finished)
+        self.ready(page)
+        page.locator("#heroPoster").evaluate("image => image.decode()")
+        page.wait_for_load_state("networkidle", timeout=30000)
+        hero_url = page.locator("#heroPoster").evaluate("image => image.currentSrc")
+        hero_id = next((key for key, image in images.items() if image.get("url") == hero_url), None)
+        self.assertIsNotNone(hero_id, "The cold Hero must arrive through the real HTTP network")
+        # naturalWidth is density-corrected with srcset. Decode the response
+        # bytes already received to check physical pixels without another fetch.
+        hero_body = network.send("Network.getResponseBody", {"requestId": hero_id})
+        hero_width = page.evaluate("""async response => {
+            const bytes = response.base64Encoded
+                ? Uint8Array.from(atob(response.body), char => char.charCodeAt(0))
+                : new TextEncoder().encode(response.body);
+            const image = await createImageBitmap(new Blob([bytes]));
+            const width = image.width;
+            image.close();
+            return width;
+        }""", hero_body)
+        image_bytes = sum(image["bytes"] for image in images.values())
+        report = {"imageBytes": image_bytes, "heroPhysicalWidth": hero_width,
+                  "images": list(images.values())}
+        print("Cold mobile initial image network: " + json.dumps(report, ensure_ascii=False), flush=True)
+        self.assertEqual(page.evaluate("window.scrollY"), 0, "Measure the initial view without scrolling")
+        self.assertEqual([url for url in requests if urlsplit(url).path.lower().endswith(".mp4")], [])
+        self.assertGreaterEqual(hero_width, 700, "A lightweight Hero must remain sharp at mobile DPR 2")
+        self.assertTrue(all(image.get("finished") and image.get("status") == 200
+                            for image in images.values()), report)
+        budget = 400 * 1024
+        large_pngs = {work["poster"] for work in CATALOG
+                      if work["poster"].lower().endswith(".png")
+                      and (ROOT / work["poster"]).stat().st_size > budget}
+        self.assertEqual([url for url in requests if any(
+            urlsplit(url).path.endswith("/" + poster) for poster in large_pngs)], [], report)
+        self.assertLessEqual(image_bytes, budget, report)
+
     def test_failed_full_video_retries_same_full_source(self):
         page = self.page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
         blocked = {"value": True}
