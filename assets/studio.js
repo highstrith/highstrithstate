@@ -36,6 +36,8 @@
       loading: '正在加载作品…', buffering: '正在缓冲…', restricted: '点击播放，开始观看这部作品。',
       error: '暂时无法加载这部作品，请重试。', slow: '加载比平时慢，可以继续等待或重试。',
       musicOn: '开', musicOff: '关', playMusic: '播放背景音乐', pauseMusic: '暂停背景音乐',
+      comment: '评论', commentClose: '收起评论', commentCount: '条评论',
+      commentFailed: '评论暂时加载不出来，请稍后再试。',
     },
     en: {
       skip: 'Skip to works', navWorks: 'Works', navAbout: 'About', navContact: 'Contact', admin: 'Manage works',
@@ -61,6 +63,8 @@
       loading: 'Loading the film…', buffering: 'Buffering…', restricted: 'Press play to watch this film.',
       error: 'This film could not be loaded. Please try again.', slow: 'Loading is taking longer than usual. Keep waiting or try again.',
       musicOn: 'On', musicOff: 'Off', playMusic: 'Play background music', pauseMusic: 'Pause background music',
+      comment: 'Comments', commentClose: 'Hide comments', commentCount: 'comments',
+      commentFailed: 'Comments could not be loaded right now. Please try again later.',
     },
   };
 
@@ -102,6 +106,21 @@
   let activeQrButton = null;
   let qrReturnFocus = null;
   let hoveredQrButton = null;
+
+  // 评论由腾讯云开发上的 Twikoo 提供。envId 留空时整段逻辑不启用，
+  // 页面不会多渲染任何节点，也不会向外部请求任何脚本。
+  const commentConfig = window.STUDIO_COMMENT_CONFIG || {};
+  const commentText = (value) => (typeof value === 'string' ? value.trim() : '');
+  const commentEnvId = commentText(commentConfig.envId);
+    const commentsEnabled = commentEnvId !== '';
+  const commentRegion = commentText(commentConfig.region) || undefined;
+  const commentFuncName = commentText(commentConfig.funcName) || undefined;
+  const commentVersion = commentText(commentConfig.version) || 'latest';
+  const commentSource = `https://cdn.jsdelivr.net/npm/twikoo@${commentVersion}/dist/twikoo.all.min.js`;
+  let commentCounts = null;
+  let openCommentCard = null;
+  let widgetLoading = null;
+  let widgetUnreachable = false;
 
   const t = (key) => copy[language][key] || '';
   const text = (value) => typeof value === 'string' ? value : '';
@@ -238,13 +257,16 @@
     renderHeroControls();
     updateHero();
     applyFilters();
+    if (commentsEnabled) prefetchCommentCounts();
   }
 
   function renderCards() {
     stopPreview();
+    closeComments();
     hoveredCard = null;
     focusedCard = null;
     cardRecords = works.map((work) => {
+      const item = create('div', 'work-item');
       const card = create('button', 'work-card');
       card.type = 'button';
       card.dataset.workId = work.id;
@@ -268,7 +290,7 @@
       const description = create('span', 'work-description');
       caption.append(category, title, description);
       card.append(media, caption);
-      const record = { work, card, media, image, video, category, title, description, categories: categories(work) };
+      const record = { work, item, card, media, image, video, category, title, description, categories: categories(work) };
       record.query = ['cnTitle', 'enTitle', 'cnSub', 'enSub', 'cnDesc', 'enDesc']
         .map((key) => text(work[key])).join(' ').normalize('NFKC').toLocaleLowerCase();
       card.addEventListener('pointerenter', (event) => {
@@ -286,9 +308,11 @@
         syncPreview();
       });
       card.addEventListener('click', () => openPlayer(work, card));
+      item.append(card);
+      if (commentsEnabled) attachCommentEntry(record);
       return record;
     });
-    grid?.replaceChildren(...cardRecords.map(({ card }) => card));
+    grid?.replaceChildren(...cardRecords.map(({ item }) => item));
     updateCardText();
     const total = $('.filter-total');
     if (total) total.textContent = String(works.length);
@@ -303,6 +327,7 @@
       image.alt = language === 'cn' ? `${name}作品画面` : `Still from ${name}`;
       card.setAttribute('aria-label', `${t('watch')}: ${name}`);
     });
+    if (commentsEnabled) cardRecords.forEach(updateCommentEntry);
   }
 
   function applyFilters() {
@@ -310,7 +335,8 @@
     let count = 0;
     cardRecords.forEach((record) => {
       const visible = (currentFilter === 'all' || record.categories.has(currentFilter)) && (!query || record.query.includes(query));
-      record.card.hidden = !visible;
+      record.item.hidden = !visible;
+      if (!visible && openCommentCard === record) closeComments();
       if (visible) count++;
     });
     filters?.querySelectorAll('[data-filter]').forEach((button) => {
@@ -321,6 +347,122 @@
     if ($('#worksCount')) $('#worksCount').textContent = language === 'cn' ? `${count} 部作品` : `${count} ${count === 1 ? 'work' : 'works'}`;
     if ($('#emptyState')) $('#emptyState').hidden = count !== 0;
     syncPreview();
+  }
+
+  // 每部作品只保留一个评论线程。Twikoo 会把内容挂到 id 为 twikoo 的容器上，
+  // 因此展开哪一部就把这个 id 交给哪一部，收起时归还，避免出现多个活动线程。
+  const commentThread = (work) => `/works/${encodeURIComponent(text(work.id))}`;
+
+  function commentRequest(urls) {
+    return {
+      envId: commentEnvId,
+      urls,
+      ...(commentRegion ? { region: commentRegion } : {}),
+      ...(commentFuncName ? { funcName: commentFuncName } : {}),
+    };
+  }
+
+  function attachCommentEntry(record) {
+    const toggle = create('button', 'comment-toggle');
+    toggle.type = 'button';
+    toggle.setAttribute('aria-expanded', 'false');
+    const label = create('span', 'comment-toggle-label');
+    const count = create('span', 'comment-toggle-count');
+    count.hidden = true;
+    const panel = create('div', 'comment-panel work-comments');
+    panel.hidden = true;
+    toggle.append(label, count);
+    toggle.addEventListener('click', () => {
+      if (openCommentCard === record) closeComments();
+      else openComments(record);
+    });
+    record.item.append(toggle, panel);
+    Object.assign(record, { toggle, toggleLabel: label, toggleCount: count, panel });
+  }
+
+  function updateCommentEntry(record) {
+    const { toggle, toggleLabel, toggleCount, panel, work } = record;
+    if (!toggle) return;
+    const open = openCommentCard === record;
+    const label = open ? t('commentClose') : t('comment');
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', `${label} — ${workTitle(work)}`);
+    toggleLabel.textContent = label;
+    const total = commentCounts?.get(commentThread(work)) ?? null;
+    toggleCount.textContent = typeof total === 'number' && total > 0 ? String(total) : '';
+    toggleCount.hidden = toggleCount.textContent === '';
+    toggleCount.title = typeof total === 'number' && total > 0 ? `${total} ${t('commentCount')}` : '';
+    panel?.classList.toggle('is-open', open);
+  }
+
+  function openComments(record) {
+    if (widgetUnreachable) return;
+    closeComments();
+    openCommentCard = record;
+    record.panel.hidden = false;
+    record.panel.id = 'twikoo';
+    updateCommentEntry(record);
+    loadCommentWidget()
+      .then((widget) => widget.init({ ...commentRequest([commentThread(record.work)]), el: '#twikoo' }))
+      .catch(() => showCommentError(record));
+  }
+
+  function closeComments() {
+    const record = openCommentCard;
+    if (!record) return;
+    openCommentCard = null;
+    record.panel.hidden = true;
+    record.panel.removeAttribute('id');
+    record.panel.replaceChildren();
+    updateCommentEntry(record);
+  }
+
+  function showCommentError(record) {
+    record.panel.replaceChildren(create('p', 'comment-error', t('commentFailed')));
+  }
+
+  function loadCommentWidget() {
+    if (typeof window.twikoo?.init === 'function') return Promise.resolve(window.twikoo);
+    if (widgetLoading) return widgetLoading;
+    widgetLoading = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = commentSource;
+      script.async = true;
+      script.addEventListener('load', () => {
+        if (typeof window.twikoo?.init === 'function') resolve(window.twikoo);
+        else reject(new Error('comment widget unavailable'));
+      });
+      script.addEventListener('error', () => reject(new Error('comment widget unreachable')));
+      document.head.append(script);
+    }).catch((error) => {
+      widgetLoading = null;
+      throw error;
+    });
+    return widgetLoading;
+  }
+
+  // 计数在浏览器空闲时一次性取回全部作品，避免首屏多发请求；
+  // 服务不可达时静默收起入口，作品目录与播放保持可用。
+  function prefetchCommentCounts() {
+    const urls = works.map(commentThread);
+    if (!urls.length) return;
+    const request = () => loadCommentWidget()
+      .then((widget) => widget.getCommentsCount(commentRequest(urls)))
+      .then((rows) => {
+        if (!Array.isArray(rows)) throw new Error('unexpected comment count payload');
+        commentCounts = new Map(rows.map((row) => [row.url, Number(row.count) || 0]));
+        cardRecords.forEach(updateCommentEntry);
+      })
+      .catch(() => {
+        widgetUnreachable = true;
+        closeComments();
+        cardRecords.forEach((record) => {
+          record.toggle?.remove();
+          if (record.panel) record.panel.hidden = true;
+        });
+      });
+    if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(request, { timeout: 4000 });
+    else window.setTimeout(request, 1200);
   }
 
   function renderHeroControls() {

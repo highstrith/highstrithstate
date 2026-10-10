@@ -90,6 +90,7 @@ a, button, input { touch-action: manipulation; }
 .work-search input::placeholder { color: var(--muted); }
 .result-count { font-size: 11px; color: var(--muted); margin-block: 18px 24px; }
 .works-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); column-gap: 32px; row-gap: 52px; }
+.work-item { min-width: 0; display: flex; flex-direction: column; align-items: stretch; }
 .work-card { text-align: left; padding: 0; width: 100%; min-width: 0; background: transparent; display: block; border-radius: 0; }
 .work-media { position: relative; display: block; overflow: hidden; aspect-ratio: 16/9; background: #111412; }
 .work-media img, .work-media video { position: absolute; width: 100%; height: 100%; inset: 0; object-fit: contain; }
@@ -102,6 +103,36 @@ a, button, input { touch-action: manipulation; }
 .work-title { display: block; font-size: clamp(18px, 1.9vw, 28px); font-weight: 500; letter-spacing: -.04em; line-height: 1.4; overflow-wrap: anywhere; }
 .work-description { display: block; margin-top: 7px; font-size: 13px; color: var(--muted); line-height: 1.75; max-width: 90%; }
 .work-card:hover .work-title { color: var(--orange-dark); }
+/* 作品评论：入口保持一行小字，访客主动展开才占用版面。 */
+.comment-toggle { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; padding: 5px 0; font-size: 12px; line-height: 1; color: var(--muted); background: transparent; border: 0; border-bottom: 1px solid transparent; transition: color .2s, border-color .2s; }
+.comment-toggle:hover { color: var(--ink); border-bottom-color: var(--line); }
+.comment-toggle[aria-expanded="true"] { color: var(--ink); }
+.comment-toggle:focus-visible { outline: 1px solid var(--ink); outline-offset: 4px; }
+.comment-toggle-count { min-width: 17px; height: 17px; padding: 0 5px; display: inline-grid; place-items: center; border-radius: 9px; background: rgba(23,25,24,.07); font-size: 10px; color: var(--muted); }
+.comment-panel { margin-top: 20px; padding-top: 22px; border-top: 1px solid var(--line); }
+.comment-error { margin: 0; font-size: 12px; color: var(--muted); }
+/* Twikoo 默认是社交风格，这里压回网站的黑白极简调性。 */
+#worksGrid .work-comments { font-family: inherit; font-size: 13px; color: var(--ink); }
+#worksGrid .work-comments .twikoo { font-family: inherit; font-size: 13px; color: var(--ink); }
+#worksGrid .work-comments .tk-comments-title { display: none; }
+#worksGrid .work-comments .tk-comments-count { margin: 0 0 16px; font-size: 11px; color: var(--muted); }
+#worksGrid .work-comments .tk-comment { margin: 0; padding: 16px 0; border: 0; border-top: 1px solid var(--line); background: transparent; border-radius: 0; word-break: normal; overflow-wrap: anywhere; }
+#worksGrid .work-comments .tk-comment:first-of-type { border-top: 0; padding-top: 0; }
+#worksGrid .work-comments .tk-avatar-img { width: 30px; height: 30px; border-radius: 50%; }
+#worksGrid .work-comments .tk-nick { font-size: 13px; font-weight: 500; color: var(--ink); }
+#worksGrid .work-comments .tk-master { font-size: 11px; color: var(--muted); }
+#worksGrid .work-comments .tk-time { font-size: 11px; color: var(--muted); }
+#worksGrid .work-comments .tk-content { flex: 1; min-width: 0; font-size: 13px; line-height: 1.8; color: var(--ink); word-break: normal; overflow-wrap: anywhere; }
+#worksGrid .work-comments .tk-action-icon, #worksGrid .work-comments .tk-action-count { color: var(--muted); }
+#worksGrid .work-comments .tk-textarea, #worksGrid .work-comments .tk-input { font-family: inherit; font-size: 13px; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 3px; }
+#worksGrid .work-comments .tk-textarea:focus, #worksGrid .work-comments .tk-input:focus { border-color: var(--ink); outline: none; }
+#worksGrid .work-comments .tk-button, #worksGrid .work-comments .tk-submit { font-family: inherit; font-size: 12px; border-radius: 3px; }
+#worksGrid .work-comments .tk-button--primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+#worksGrid .work-comments .tk-button--primary:hover { background: var(--orange-dark); border-color: var(--orange-dark); }
+#worksGrid .work-comments .tk-sort-item, #worksGrid .work-comments .tk-comments-sort { font-size: 11px; color: var(--muted); }
+#worksGrid .work-comments .tk-pagination { margin-top: 20px; font-size: 11px; color: var(--muted); }
+#worksGrid .work-comments .tk-pagination .tk-pager { font-size: 11px; color: var(--muted); }
+#worksGrid .work-comments .tk-comments-no { font-size: 12px; color: var(--muted); }
 .empty-state { padding: 75px 20px; text-align: center; }
 .empty-state h3 { font-size: 24px; font-weight: 500; }
 .empty-state p { color: var(--muted); margin-block: 16px 24px; font-size: 14px; }
