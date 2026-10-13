@@ -512,7 +512,7 @@
   }
 
   function previewAllowed() {
-    return !narrowScreen.matches && finePointer.matches && !reducedMotion.matches && !document.hidden && !player?.open && !qrDialog?.open;
+    return !reducedMotion.matches && !document.hidden && !player?.open && !qrDialog?.open;
   }
 
   function nearViewport(element) {
@@ -547,6 +547,8 @@
       if (activePreview === session) stopPreview();
     }, { signal: controller.signal });
     video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
     video.src = source;
     video.load();
     video.play()?.catch(() => {
@@ -556,10 +558,12 @@
 
   function syncPreview() {
     if (!previewAllowed()) { stopPreview(); return; }
-    const card = [hoveredCard, focusedCard].find((record) => record && nearViewport(record.card));
+    const card = !narrowScreen.matches && finePointer.matches
+      ? [hoveredCard, focusedCard].find((record) => record && nearViewport(record.card))
+      : null;
     if (card) { startPreview(card.work, card.video, card.card); return; }
     const work = featuredWorks.find((item) => item.id === selectedFeatureId);
-    if (work && heroNearViewport) startPreview(work, heroVideo, hero);
+    if (work && heroNearViewport && nearViewport(heroVideo)) startPreview(work, heroVideo, hero);
     else stopPreview();
   }
 
@@ -882,8 +886,8 @@
     const observer = new IntersectionObserver(([entry]) => {
       heroNearViewport = entry.isIntersecting;
       syncPreview();
-    }, { rootMargin: '100px 0px' });
-    observer.observe(hero);
+    });
+    observer.observe(heroVideo);
   }
 
   setLanguage('cn');

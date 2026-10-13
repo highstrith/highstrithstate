@@ -261,10 +261,57 @@ class StudioRedesign(unittest.TestCase):
                 page.locator("#workPlayerClose").click()
                 self.assert_closed_with_focus(page, hero_button)
 
-    def test_mobile_and_reduced_motion_do_not_load_preview_video(self):
-        for motion in ("no-preference", "reduce"):
-            with self.subTest(motion=motion):
-                page = self.page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True, reduced_motion=motion)
+    def test_mobile_hero_autoplays_switches_and_stops_outside_view(self):
+        page = self.page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+        self.ready(page)
+        def assert_preview(source):
+            page.wait_for_function("""suffix => {
+                const video = document.querySelector('#heroPreview');
+                return video.currentSrc.endsWith(suffix) && video.currentTime > 0 && !video.paused && video.muted && video.playsInline;
+            }""", arg=source)
+            self.assertEqual(page.locator(CARDS + " video").evaluate_all(SOURCE_COUNT), 0)
+        assert_preview(FEATURED[0]["previewVideo"])
+        page.locator("#featureControls button").nth(1).click()
+        assert_preview(FEATURED[1]["previewVideo"])
+        page.locator("[data-hero-play]").click()
+        self.assert_playing(page, FEATURED[1].get("mobileVideo") or FEATURED[1]["video"])
+        self.assertEqual(page.locator("#heroPreview").evaluate_all(SOURCE_COUNT), 0)
+        page.locator("#workPlayerClose").click()
+        assert_preview(FEATURED[1]["previewVideo"])
+        page.locator(CARDS).last.scroll_into_view_if_needed()
+        page.wait_for_function("!document.querySelector('#heroPreview').getAttribute('src')")
+        self.assertEqual(page.locator(CARDS + " video").evaluate_all(SOURCE_COUNT), 0)
+        page.locator("#heroTitle").scroll_into_view_if_needed()
+        assert_preview(FEATURED[1]["previewVideo"])
+        page.emulate_media(reduced_motion="reduce")
+        page.wait_for_function("!document.querySelector('#heroPreview').getAttribute('src')")
+
+    def test_mobile_feature_controls_do_not_overlap_picture_or_title(self):
+        for width in (320, 390, 600, 700, 800):
+            page = self.page(viewport={"width": width, "height": 844}, is_mobile=True, has_touch=True, reduced_motion="reduce")
+            self.ready(page)
+            for language in ("cn", "en"):
+                if language == "en":
+                    page.locator("#langSwitch").click()
+                for index in range(5):
+                    page.locator("#featureControls button").nth(index).click()
+                    poster = page.locator("#heroPoster").bounding_box()
+                    info = page.locator(".feature-info").bounding_box()
+                    controls = page.locator("#featureControls").bounding_box()
+                    self.assertGreaterEqual(info["y"], poster["y"] + poster["height"])
+                    self.assertGreaterEqual(controls["y"], info["y"] + info["height"])
+                    self.assertAlmostEqual(poster["width"] / poster["height"], 16 / 9, places=2)
+                    for button in page.locator("#featureControls button").all():
+                        box = button.bounding_box()
+                        self.assertGreaterEqual(box["width"], 44)
+                        self.assertGreaterEqual(box["height"], 44)
+                self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), width + 1)
+            page.close()
+
+    def test_reduced_motion_does_not_load_preview_video(self):
+        for width in (390, 1440):
+            with self.subTest(width=width):
+                page = self.page(viewport={"width": width, "height": 844}, is_mobile=True, has_touch=True, reduced_motion="reduce")
                 requests = []
                 page.on("request", lambda request: requests.append(request.url) if ".mp4" in request.url else None)
                 self.ready(page)
@@ -336,7 +383,9 @@ class StudioRedesign(unittest.TestCase):
                   "images": list(images.values())}
         print("Cold mobile initial image network: " + json.dumps(report, ensure_ascii=False), flush=True)
         self.assertEqual(page.evaluate("window.scrollY"), 0, "Measure the initial view without scrolling")
-        self.assertEqual([url for url in requests if urlsplit(url).path.lower().endswith(".mp4")], [])
+        video_requests = [url for url in requests if urlsplit(url).path.lower().endswith(".mp4")]
+        self.assertTrue(video_requests, "The mobile Hero should request its lightweight preview")
+        self.assertTrue(all(url.endswith(FEATURED[0]["previewVideo"]) for url in video_requests), video_requests)
         self.assertGreaterEqual(hero_width, 700, "A lightweight Hero must remain sharp at mobile DPR 2")
         self.assertTrue(all(image.get("finished") and image.get("status") == 200
                             for image in images.values()), report)
@@ -511,9 +560,9 @@ class StudioRedesign(unittest.TestCase):
         toggle.click()
         expect(toggle).to_have_attribute("aria-pressed", "false")
         pending = self.hold_media(page, source)
-        page.evaluate("document.querySelector('#bgMusic').load()")
         with page.expect_request("**/" + source):
             off_state = page.evaluate("""() => {
+                document.querySelector('#bgMusic').load();
                 const button = document.querySelector('#musicToggle');
                 button.click();
                 button.click();

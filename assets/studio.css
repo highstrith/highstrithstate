@@ -49,6 +49,7 @@ a, button, input { touch-action: manipulation; }
 .text-link { display: inline-flex; gap: 30px; min-height: 44px; align-items: center; font-size: 14px; margin-top: 16px; }
 .text-link > span:last-child { font-size: 21px; }
 .hero-feature { position: relative; aspect-ratio: 2.2; max-height: 600px; overflow: hidden; background: #101615; isolation: isolate; color: #fff; }
+.feature-screen { position: absolute; inset: 0; }
 .hero-poster, #heroPreview { position: absolute; width: 100%; height: 100%; object-fit: contain; inset: 0; }
 #heroPreview { opacity: 0; transition: opacity .35s; }
 .hero-feature.is-previewing #heroPreview { opacity: 1; }
@@ -231,7 +232,13 @@ html[lang="en"] .contact-section h2 { font-size: 36px; }
   .hero-intro { margin-bottom: 32px; }
   .hero-description .text-link { white-space: nowrap; }
   html[lang="en"] .hero h1 { font-size: 34px; }
-  .feature-info { max-width: 43%; }
+  .hero-feature { aspect-ratio: auto; max-height: none; }
+  .feature-screen { position: relative; inset: auto; aspect-ratio: 16/9; }
+  .feature-play { width: 64px; height: 64px; top: 50%; gap: 7px; }
+  .feature-bottom { position: relative; left: auto; right: auto; bottom: auto; padding: 16px; gap: 16px; align-items: stretch; flex-direction: column; }
+  .feature-info { max-width: 100%; }
+  .feature-controls { width: 100%; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 7px; }
+  .hero-pick { width: 100%; height: 44px; }
   .section-heading { gap: 32px; }
   .work-filters { width: 100%; }
   .work-search { width: 100%; }
@@ -266,18 +273,12 @@ html[lang="en"] .contact-section h2 { font-size: 36px; }
   .hero-description .text-link > span:last-child { font-size: 16px; }
   .hero-intro { gap: 18px; margin-bottom: 26px; }
   html[lang="en"] .hero h1 { font-size: 29px; white-space: normal; line-height: 1.35; }
-  .hero-feature { aspect-ratio: 1/1; }
   .hero-poster, #heroPreview { object-fit: contain; }
   .feature-top { top: 15px; left: 16px; right: 16px; font-size: 10px; }
-  .feature-play { width: 78px; height: 78px; top: 45%; gap: 9px; }
   .feature-play svg { width: 20px; height: 20px; }
   .feature-play span { font-size: 8px; }
-  .feature-bottom { left: 16px; right: 16px; bottom: 16px; gap: 13px; align-items: start; flex-direction: column; }
-  .feature-info { max-width: 100%; }
   .feature-info h2 { font-size: 24px; margin-top: 5px; }
   .feature-info > span { font-size: 9px; }
-  .feature-controls { width: 100%; justify-content: end; gap: 7px; }
-  .hero-pick { width: 44px; height: 44px; }
   .hero-foot { font-size: 9px; padding-block: 17px; gap: 12px; align-items: start; line-height: 1.6; }
   .hero-foot > span { max-width: 65%; }
   .hero-foot a { gap: 6px; white-space: nowrap; }
@@ -286,8 +287,9 @@ html[lang="en"] .contact-section h2 { font-size: 36px; }
   .section-heading h2 { font-size: 28px; }
   .section-label { font-size: 11px; }
   .works-intro { width: 100%; font-size: 12px; }
-  .work-filters { gap: 3px; }
-  .work-filters button { font-size: 11px; padding-inline: 9px; min-height: 44px; }
+  .work-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .work-filters button { font-size: 12px; padding-inline: 10px; min-height: 44px; justify-content: center; }
+  .work-search input { font-size: 16px; }
   .filter-total { font-size: 9px; }
   .result-count { margin-block: 17px 20px; }
   .works-grid { grid-template-columns: minmax(0,1fr); row-gap: 32px; }
