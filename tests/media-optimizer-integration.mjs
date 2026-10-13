@@ -35,7 +35,7 @@ try {
   fs.mkdirSync(path.join(temporary, 'assets/works'), { recursive: true });
   const landscape = path.join(temporary, 'assets/works/landscape.mp4');
   const portrait = path.join(temporary, 'assets/works/portrait.mp4');
-  run(['-v', 'error', '-f', 'lavfi', '-i', 'color=c=red:s=1600x900:r=12', '-f', 'lavfi', '-i', 'sine=frequency=440', '-t', '21', '-c:v', 'libx264', '-preset', 'ultrafast', '-pix_fmt', 'yuv420p', '-c:a', 'aac', landscape]);
+  run(['-v', 'error', '-f', 'lavfi', '-i', 'testsrc2=s=1600x900:r=12', '-f', 'lavfi', '-i', 'sine=frequency=440', '-t', '21', '-c:v', 'libx264', '-preset', 'ultrafast', '-pix_fmt', 'yuv420p', '-c:a', 'aac', landscape]);
   run(['-v', 'error', '-f', 'lavfi', '-i', 'color=c=blue:s=360x640:r=12', '-t', '4', '-c:v', 'libx264', '-preset', 'ultrafast', '-pix_fmt', 'yuv420p', portrait]);
   const originals = new Map([[landscape, digest(landscape)], [portrait, digest(portrait)]]);
   const catalogue = [
@@ -44,13 +44,13 @@ try {
     { id: 'missing', video: 'assets/works/missing.mp4', previewVideo: 'assets/optimized/existing-preview.mp4', mobileVideo: 'assets/optimized/existing-mobile.mp4' },
   ];
   fs.writeFileSync(path.join(temporary, 'data/works.json'), JSON.stringify(catalogue));
-  const generate = () => spawnSync(process.execPath, [path.join(root, 'scripts/optimize-media.mjs'), '--root', temporary], { encoding: 'utf8', env: { ...process.env, FFMPEG_PATH: ffmpeg }, maxBuffer: 8 * 1024 * 1024 });
+  const generate = (extra = []) => spawnSync(process.execPath, [path.join(root, 'scripts/optimize-media.mjs'), '--root', temporary, ...extra], { encoding: 'utf8', env: { ...process.env, FFMPEG_PATH: ffmpeg }, maxBuffer: 8 * 1024 * 1024 });
   const first = generate();
   const output = JSON.parse(fs.readFileSync(path.join(temporary, 'data/works.json')));
   assert.ok(output[0].previewVideo, `valid works should generate despite another failure: ${first.stderr}`);
   assert.equal(first.status, 1, 'partial failure must be reported to the caller');
   const timestamps = new Map();
-  for (const [index, expectedDuration, expectedMobileDimensions] of [[0, 20, '1280x720'], [1, 4, '360x640']]) {
+  for (const [index, expectedDuration, expectedMobileDimensions] of [[0, 20, '960x540'], [1, 4, '360x640']]) {
     const work = output[index];
     for (const key of ['previewVideo', 'mobileVideo', 'webVideo']) {
       const file = path.join(temporary, work[key]);
@@ -67,6 +67,15 @@ try {
     assert.ok(fs.statSync(path.join(temporary, work.previewVideo)).size <= 2 * 1024 * 1024);
     assert.match(info(path.join(temporary, work.mobileVideo)), new RegExp(expectedMobileDimensions));
     assert.ok(Math.abs(duration(info(path.join(temporary, work.mobileVideo))) - duration(info(path.join(temporary, work.video)))) < 0.15);
+    const mobile = path.join(temporary, work.mobileVideo);
+    const mobileSeconds = duration(info(mobile));
+    assert.ok(fs.statSync(mobile).size * 8 / mobileSeconds < 1100000, 'mobile media must fit below a 1.5 Mbps connection with headroom');
+    const keyframes = spawnSync(ffmpeg, ['-hide_banner', '-i', mobile, '-vf', "select='eq(pict_type,I)',showinfo", '-an', '-f', 'null', '-'], { encoding: 'utf8' });
+    assert.equal(keyframes.status, 0, keyframes.stderr);
+    const times = [...keyframes.stderr.matchAll(/pts_time:([\d.]+)/g)].map(match => Number(match[1]));
+    assert.ok(times.length > 0, 'mobile must contain decodable keyframes');
+    for (let i = 1; i < times.length; i++) assert.ok(times[i] - times[i - 1] <= 2.05, 'mobile keyframe intervals must not exceed two seconds');
+    assert.ok(mobileSeconds - times.at(-1) <= 2.15, 'the final keyframe must cover the end without a long undecodable tail');
   }
   assert.equal(output[2].previewVideo, catalogue[2].previewVideo, 'failed work retains prior media');
   assert.equal(output[2].mobileVideo, catalogue[2].mobileVideo);
@@ -80,6 +89,13 @@ try {
   const reconfigured = JSON.parse(fs.readFileSync(path.join(temporary, 'data/works.json')));
   assert.notEqual(reconfigured[0].previewVideo, output[0].previewVideo, 'changing encoding configuration must change its immutable resource URL');
   for (const key of ['previewVideo', 'mobileVideo', 'webVideo']) run(['-v', 'error', '-i', path.join(temporary, reconfigured[0][key]), '-f', 'null', '-']);
+  const retainedFiles = new Map(reconfigured.slice(0, 2).flatMap(work => ['previewVideo', 'webVideo'].map(key => [path.join(temporary, work[key]), digest(path.join(temporary, work[key]))])));
+  generate(['--mobile-only']);
+  const mobileOnlyCatalogue = JSON.parse(fs.readFileSync(path.join(temporary, 'data/works.json')));
+  for (let index = 0; index < 2; index++) {
+    for (const key of ['previewVideo', 'webVideo']) assert.equal(mobileOnlyCatalogue[index][key], reconfigured[index][key], 'mobile-only optimization must retain preview and desktop URLs');
+  }
+  for (const [file, hash] of retainedFiles) assert.equal(digest(file), hash, 'mobile-only must leave other variants unchanged');
   fs.writeFileSync(path.join(temporary, output[0].previewVideo), 'corrupt cached preview');
   const corrupted = generate();
   assert.equal(corrupted.status, 1, 'unreadable cached preview must be reported as a failure');
@@ -87,7 +103,7 @@ try {
   assert.ok(failureReport.failed.some(work => work.id === 'landscape' && /No readable video:/.test(work.error)), 'report must identify the unreadable cached preview');
   assert.ok(!failureReport.previews.some(work => work.id === 'landscape'), 'failed cached media must not be reported as ready');
   const afterFailure = JSON.parse(fs.readFileSync(path.join(temporary, 'data/works.json')));
-  assert.deepEqual(afterFailure[0], reconfigured[0], 'failed cached preview must preserve the complete healthy alternate catalogue entry');
+  assert.deepEqual(afterFailure[0], mobileOnlyCatalogue[0], 'failed cached preview must preserve the complete healthy alternate catalogue entry');
   for (const [file, hash] of originals) assert.equal(digest(file), hash, 'original video must remain unchanged');
   console.log('media optimizer: profiles, twenty-second clips, no-upscale, decode, failure isolation, cache, corrupt-cache retention and originals PASS');
 } finally {

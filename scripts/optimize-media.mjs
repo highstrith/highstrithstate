@@ -8,6 +8,7 @@ import { syncWorkCatalogue } from './sync-work-catalogue.mjs';
 
 const rootArg = process.argv.indexOf('--root');
 const root = fs.realpathSync(path.resolve(rootArg >= 0 ? process.argv[rootArg + 1] : path.join(import.meta.dirname, '..')));
+const mobileOnly = process.argv.includes('--mobile-only');
 const ffmpeg = process.env.FFMPEG_PATH || path.join(os.homedir(), '.cache/portfolio-media-tools/node_modules/ffmpeg-static/ffmpeg');
 if (!fs.existsSync(ffmpeg)) throw new Error('Install ffmpeg-static@5.3.0 in ~/.cache/portfolio-media-tools, or set FFMPEG_PATH.');
 const run = (args, check = true) => {
@@ -58,7 +59,7 @@ const works = JSON.parse(fs.readFileSync(cataloguePath));
 const report = { tool: run(['-version']).stdout.split('\n')[0], toolHash, previews: [], failed: [] };
 // Include the generator itself so changing any fixed encoding option invalidates
 // cached files, even when it is not one of the main profile values below.
-const profile = { version: 1, seconds: 20, previewEdge: 960, previewBitrate: '650k', mobileLongEdge: 1280, mobileShortEdge: 720, mobileCRF: 25, mobileMaxrate: '3M', fpsLimit: 30, toolHash, generatorHash: sha(import.meta.filename) };
+const profile = { version: 2, seconds: 20, previewEdge: 960, previewBitrate: '650k', mobileLongEdge: 960, mobileShortEdge: 540, mobileCRF: 27, mobileMaxrate: '750k', mobileBuffer: '1500k', mobileAudioBitrate: '80k', mobileKeyframeSeconds: 2, fpsLimit: 30, toolHash, generatorHash: sha(import.meta.filename) };
 
 for (const work of works) {
   try {
@@ -84,12 +85,12 @@ for (const work of works) {
       }
       return path.relative(root, output).split(path.sep).join('/');
     };
-    const previewVideo = encode('preview', ['-ss', String(Math.min(info.duration * 0.2, Math.max(0, info.duration - 20))), '-i', source, '-t', '20', '-map', '0:v:0', '-an', '-vf', `scale=${scaled(info, 960)}`, '-r', String(info.fps), '-c:v', 'libx264', '-preset', 'veryfast', '-threads', '2', '-b:v', '650k', '-maxrate', '700k', '-bufsize', '1400k', '-pix_fmt', 'yuv420p', '-movflags', '+faststart']);
-    const mobileVideo = encode('mobile', ['-i', source, '-map', '0:v:0', '-map', '0:a:0?', '-vf', `scale=${scaled(info, 1280, 720)}`, '-r', String(info.fps), '-c:v', 'libx264', '-preset', 'veryfast', '-threads', '2', '-crf', '25', '-maxrate', '3M', '-bufsize', '6M', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '96k', '-movflags', '+faststart']);
-    const webVideo = faststart(source) ? '' : encode('web', ['-i', source, '-map', '0:v:0', '-map', '0:a:0?', '-c', 'copy', '-movflags', '+faststart']);
+    const previewVideo = mobileOnly && work.previewVideo ? work.previewVideo : encode('preview', ['-ss', String(Math.min(info.duration * 0.2, Math.max(0, info.duration - 20))), '-i', source, '-t', '20', '-map', '0:v:0', '-an', '-vf', `scale=${scaled(info, 960)}`, '-r', String(info.fps), '-c:v', 'libx264', '-preset', 'veryfast', '-threads', '2', '-b:v', '650k', '-maxrate', '700k', '-bufsize', '1400k', '-pix_fmt', 'yuv420p', '-movflags', '+faststart']);
+    const mobileVideo = encode('mobile', ['-i', source, '-map', '0:v:0', '-map', '0:a:0?', '-vf', `scale=${scaled(info, profile.mobileLongEdge, profile.mobileShortEdge)}`, '-r', String(info.fps), '-c:v', 'libx264', '-preset', 'medium', '-threads', '2', '-crf', String(profile.mobileCRF), '-maxrate', profile.mobileMaxrate, '-bufsize', profile.mobileBuffer, '-g', String(Math.max(1, Math.round(info.fps * profile.mobileKeyframeSeconds))), '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', profile.mobileAudioBitrate, '-movflags', '+faststart']);
+    const webVideo = mobileOnly && (work.webVideo || faststart(source)) ? (work.webVideo || '') : faststart(source) ? '' : encode('web', ['-i', source, '-map', '0:v:0', '-map', '0:a:0?', '-c', 'copy', '-movflags', '+faststart']);
     if (sha(source) !== sourceHash) throw new Error('Source changed while generating.');
     const previewInfo = inspect(path.join(root, previewVideo));
-    const previewReport = { id: work.id, source: work.video, sourceHash, previewSeconds: previewInfo.duration, previewBytes: fs.statSync(path.join(root, previewVideo)).size, mobileBytes: fs.statSync(path.join(root, mobileVideo)).size, webRemux: !!webVideo };
+    const previewReport = { id: work.id, source: work.video, sourceHash, previewSeconds: previewInfo.duration, previewBytes: fs.statSync(path.join(root, previewVideo)).size, mobileBytes: fs.statSync(path.join(root, mobileVideo)).size, mobileMaxrate: profile.mobileMaxrate, mobileKeyframeSeconds: profile.mobileKeyframeSeconds, webRemux: !!webVideo };
     Object.assign(work, { previewVideo, mobileVideo, webVideo });
     report.previews.push(previewReport);
     console.log(`${work.cnTitle || work.id}: ${previewInfo.duration}s preview; mobile ready${webVideo ? '; desktop faststart' : ''}`);

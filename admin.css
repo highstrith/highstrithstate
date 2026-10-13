@@ -215,3 +215,7 @@ textarea.upload-input { resize: vertical; min-height: 104px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
 }
+.software-choices { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.software-choices label { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--line); font-size: 13px; cursor: pointer; }
+.software-choices label:has(input:checked) { border-color: var(--ink); background: var(--paper); }
+.software-choices input { width: 16px; height: 16px; margin: 0; accent-color: var(--ink); }

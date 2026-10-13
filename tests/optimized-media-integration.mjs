@@ -58,7 +58,8 @@ for (const work of works) {
       assert.ok(fs.statSync(file).size <= 2 * 1024 * 1024);
       previews += fs.statSync(file).size;
     } else {
-      assert.ok(Math.max(metadata.width, metadata.height) <= 1280 && Math.min(metadata.width, metadata.height) <= 720);
+      assert.ok(Math.max(metadata.width, metadata.height) <= 960 && Math.min(metadata.width, metadata.height) <= 540);
+      assert.ok(fs.statSync(file).size * 8 / metadata.seconds < 1000000, 'mobile bitrate must leave room on a 1.5 Mbps connection');
       assert.ok(metadata.width <= source.width && metadata.height <= source.height);
       assert.ok(Math.abs(metadata.seconds - source.seconds) < 0.15);
       if (/Audio:/.test(source.text)) assert.match(metadata.text, /Audio: aac/);

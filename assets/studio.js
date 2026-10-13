@@ -30,7 +30,7 @@
       contactLabel: '从一句「我有个想法」开始', location: '中国 · 南京', contactTitle: '下一个画面，\n一起完成',
       wechatAccount: '微信 Gw1sgdsj_787', elsewhere: '也可以在这里找到我',
       wechat: '微信', douyin: '抖音', red: '小红书', bili: '哔哩哔哩',
-      sound: '背景音乐', backTop: '回到顶部 ↑', playerHint: 'Esc 关闭', qrHint: '打开对应 App 扫码，和我打个招呼',
+      sound: '背景音乐', backTop: '回到顶部', playerHint: 'Esc 关闭', qrHint: '打开对应 App 扫码，和我打个招呼',
       searchPlaceholder: '寻找一部作品', searchLabel: '搜索作品', filterLabel: '作品分类', featureLabel: '选择精选作品',
       closeVideo: '关闭视频', closeQR: '关闭二维码', play: '播放', retry: '重试播放',
       loading: '正在加载作品…', buffering: '正在缓冲…', restricted: '点击播放，开始观看这部作品。',
@@ -38,6 +38,7 @@
       musicOn: '开', musicOff: '关', playMusic: '播放背景音乐', pauseMusic: '暂停背景音乐',
       comment: '评论', commentClose: '收起评论', commentCount: '条评论',
       commentFailed: '评论暂时加载不出来，请稍后再试。',
+      softwareTools: '熟练使用的软件', madeWith: '制作软件',
     },
     en: {
       skip: 'Skip to works', navWorks: 'Works', navAbout: 'About', navContact: 'Contact', admin: 'Manage works',
@@ -57,7 +58,7 @@
       contactLabel: 'It starts with “I have an idea”', location: 'Nanjing · China', contactTitle: 'Let’s make\nthe next image',
       wechatAccount: 'WeChat Gw1sgdsj_787', elsewhere: 'Find me elsewhere',
       wechat: 'WeChat', douyin: 'Douyin', red: 'Xiaohongshu', bili: 'Bilibili',
-      sound: 'Background music', backTop: 'Back to top ↑', playerHint: 'Esc to close', qrHint: 'Scan in the matching app and say hello',
+      sound: 'Background music', backTop: 'Back to top', playerHint: 'Esc to close', qrHint: 'Scan in the matching app and say hello',
       searchPlaceholder: 'Find a work', searchLabel: 'Search works', filterLabel: 'Filter works', featureLabel: 'Choose a featured work',
       closeVideo: 'Close video', closeQR: 'Close QR code', play: 'Play', retry: 'Try again',
       loading: 'Loading the film…', buffering: 'Buffering…', restricted: 'Press play to watch this film.',
@@ -65,6 +66,7 @@
       musicOn: 'On', musicOff: 'Off', playMusic: 'Play background music', pauseMusic: 'Pause background music',
       comment: 'Comments', commentClose: 'Hide comments', commentCount: 'comments',
       commentFailed: 'Comments could not be loaded right now. Please try again later.',
+      softwareTools: 'Tools I work with', madeWith: 'Made with',
     },
   };
 
@@ -89,6 +91,8 @@
   let works = [];
   let featuredWorks = [];
   let selectedFeatureId = '';
+  const featurePreviewSeconds = 10;
+  const featureVisits = new Map();
   let currentFilter = 'all';
   let cardRecords = [];
   let hoveredCard = null;
@@ -126,6 +130,9 @@
   const text = (value) => typeof value === 'string' ? value : '';
   const workText = (work, field) => text(work[(language === 'cn' ? 'cn' : 'en') + field]) || text(work['cn' + field]) || text(work['en' + field]);
   const workTitle = (work) => workText(work, 'Title');
+  const softwareNames = new Map([...document.querySelectorAll('.footer-software [data-software]')]
+    .map(element => [element.dataset.software, { cn: element.dataset.cn, en: element.dataset.en }]));
+  const workSoftware = (work) => [...new Set(Array.isArray(work?.software) ? work.software.filter(id => softwareNames.has(id)) : [])];
   const create = (tag, className, content) => {
     const element = document.createElement(tag);
     if (className) element.className = className;
@@ -134,6 +141,15 @@
   };
 
   // Catalogue text is never interpreted as markup; public media stays inside assets/.
+  function renderSoftware(work, element) {
+    if (!element) return;
+    const ids = workSoftware(work);
+    element.hidden = !ids.length;
+    const tags = create('span', 'software-tags');
+    tags.append(...ids.map(id => create('span', 'software-tag', softwareNames.get(id)[language])));
+    element.replaceChildren(create('span', 'work-software-label', t('madeWith')), tags);
+  }
+
   function mediaURL(value) {
     const path = text(value).trim().replace(/^\.\//, '');
     if (!path.startsWith('assets/') || path.includes('\\') || /(^|\/)\.\.?(\/|$)/.test(path)) return '';
@@ -281,16 +297,16 @@
       video.playsInline = true;
       video.preload = 'none';
       video.setAttribute('aria-hidden', 'true');
-      const playMark = create('span', 'card-play', '↗');
-      playMark.setAttribute('aria-hidden', 'true');
-      media.append(image, video, playMark);
+      media.append(image, video);
       const caption = create('span', 'work-caption');
       const category = create('span', 'work-category');
       const title = create('span', 'work-title');
       const description = create('span', 'work-description');
       caption.append(category, title, description);
+      const software = workSoftware(work).length ? create('span', 'work-software') : null;
+      if (software) caption.append(software);
       card.append(media, caption);
-      const record = { work, item, card, media, image, video, category, title, description, categories: categories(work) };
+      const record = { work, item, card, media, image, video, category, title, description, software, categories: categories(work) };
       record.query = ['cnTitle', 'enTitle', 'cnSub', 'enSub', 'cnDesc', 'enDesc']
         .map((key) => text(work[key])).join(' ').normalize('NFKC').toLocaleLowerCase();
       card.addEventListener('pointerenter', (event) => {
@@ -319,11 +335,12 @@
   }
 
   function updateCardText() {
-    cardRecords.forEach(({ work, card, image, category, title, description }) => {
+    cardRecords.forEach(({ work, card, image, category, title, description, software }) => {
       const name = workTitle(work);
       title.textContent = name;
       category.textContent = workText(work, 'Sub');
       description.textContent = workText(work, 'Desc');
+      renderSoftware(work, software);
       image.alt = language === 'cn' ? `${name}作品画面` : `Still from ${name}`;
       card.setAttribute('aria-label', `${t('watch')}: ${name}`);
     });
@@ -478,14 +495,26 @@
       image.decoding = 'async';
       setPosterImage(image, work.poster, 'thumbnail');
       button.append(image, create('span', '', String(index + 1).padStart(2, '0')));
-      button.addEventListener('click', () => {
-        if (selectedFeatureId === work.id) return;
-        selectedFeatureId = work.id;
-        updateHero();
+      button.addEventListener('click', () => selectFeature(work.id));
+      button.addEventListener('pointerenter', (event) => {
+        if (event.pointerType === 'mouse') selectFeature(work.id);
       });
+      button.addEventListener('focus', () => selectFeature(work.id));
       return button;
     });
     heroControls?.replaceChildren(...controls);
+  }
+
+  function selectFeature(id) {
+    if (id === selectedFeatureId || !featuredWorks.some(work => work.id === id)) return;
+    featureVisits.set(selectedFeatureId, (featureVisits.get(selectedFeatureId) || 0) + 1);
+    selectedFeatureId = id;
+    updateHero();
+  }
+
+  function nextFeature() {
+    const index = featuredWorks.findIndex(work => work.id === selectedFeatureId);
+    selectFeature(featuredWorks[(index + 1) % featuredWorks.length]?.id);
   }
 
   function updateHero() {
@@ -540,6 +569,25 @@
     const controller = new AbortController();
     const session = { video, container, source, controller };
     activePreview = session;
+    if (video === heroVideo) {
+      let segmentStart = 0;
+      video.loop = false;
+      video.addEventListener('loadedmetadata', () => {
+        if (activePreview !== session) return;
+        const segments = Math.max(1, Math.floor((video.duration + .05) / featurePreviewSeconds));
+        segmentStart = ((featureVisits.get(work.id) || 0) % segments) * featurePreviewSeconds;
+        if (segmentStart) video.currentTime = segmentStart;
+      }, { signal: controller.signal });
+      const advance = () => {
+        if (activePreview === session && previewAllowed() && heroNearViewport && nearViewport(video)) nextFeature();
+      };
+      // Media time stops during buffering, backgrounding and pauses. A wall
+      // clock interval would skip films before visitors actually see them.
+      video.addEventListener('timeupdate', () => {
+        if (!video.paused && !video.seeking && video.currentTime >= segmentStart + featurePreviewSeconds) advance();
+      }, { signal: controller.signal });
+      video.addEventListener('ended', advance, { signal: controller.signal });
+    }
     video.addEventListener('playing', () => {
       if (activePreview === session) container.classList.add('is-previewing');
     }, { signal: controller.signal });
@@ -642,6 +690,7 @@
     $('#playerTitle').textContent = workTitle(playerWork);
     $('#playerCategory').textContent = workText(playerWork, 'Sub');
     $('#playerDescription').textContent = workText(playerWork, 'Desc');
+    renderSoftware(playerWork, $('#playerSoftware'));
     showPlayerState(playerState);
   }
 
@@ -768,6 +817,9 @@
 
   function setLanguage(nextLanguage) {
     language = nextLanguage;
+    document.querySelectorAll('.footer-software [data-software]').forEach(element => {
+      element.textContent = softwareNames.get(element.dataset.software)[language];
+    });
     document.documentElement.lang = language === 'cn' ? 'zh-CN' : 'en';
     document.querySelectorAll('[data-i18n]').forEach((element) => {
       const key = element.dataset.i18n;
@@ -775,8 +827,7 @@
     });
     const languageButton = $('#langSwitch');
     if (languageButton) {
-      languageButton.replaceChildren(document.createTextNode(language === 'cn' ? 'EN ' : '中文 '), create('span', '', '↗'));
-      languageButton.lastElementChild.setAttribute('aria-hidden', 'true');
+      languageButton.textContent = language === 'cn' ? 'EN' : '中文';
       languageButton.setAttribute('aria-label', language === 'cn' ? 'Switch to English' : '切换到中文');
       languageButton.setAttribute('aria-pressed', String(language === 'en'));
     }

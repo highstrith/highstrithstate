@@ -93,6 +93,25 @@ test('GET preserves every stored derivative and defaults omitted derivatives to 
   });
 });
 
+test('software tags persist, deduplicate, reject unknown values and survive text-only edits', async () => {
+  await withServer([builtIn], async ({ request, directory }) => {
+    const changed = await request('PUT', '/api/works/built-in', {
+      software: ['blender', 'after-effects', 'blender', '<script>', 12],
+    });
+    assert.equal(changed.status, 200);
+    assert.deepEqual(changed.body.work.software, ['blender', 'after-effects']);
+    const renamed = await request('PUT', '/api/works/built-in', { cnTitle: '软件标签保留' });
+    assert.deepEqual(renamed.body.work.software, ['blender', 'after-effects']);
+    const stored = JSON.parse(await fs.readFile(path.join(directory, 'data/works.json'), 'utf8'));
+    assert.deepEqual(stored[0].software, ['blender', 'after-effects']);
+    for (const field of mediaFields) assert.equal(stored[0][field], builtIn[field]);
+    const cleared = await request('PUT', '/api/works/built-in', { software: [] });
+    assert.deepEqual(cleared.body.work.software, []);
+    const created = await request('POST', '/api/works', { ...uploaded, software: ['chatgpt'] });
+    assert.deepEqual(created.body.work.software, ['chatgpt']);
+  });
+});
+
 test('POST persists optimized derivatives and PUT text edits retain all media', async () => {
   await withServer([], async ({ request }) => {
     const created = await request('POST', '/api/works', uploaded);

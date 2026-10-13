@@ -12,6 +12,7 @@ const uploadDir = path.join(root, "assets", "uploads");
 const posterUploadDir = path.join(uploadDir, "posters");
 const optimizedDir = path.join(root, "assets", "optimized");
 const MEDIA_FIELDS = ["video", "poster", "previewVideo", "webVideo", "mobileVideo"];
+const SOFTWARE_IDS = new Set(["davinci-resolve", "blender", "jianying", "after-effects", "chatgpt"]);
 const DERIVED_VIDEO_FIELDS = ["previewVideo", "webVideo", "mobileVideo"];
 
 const MAX_METADATA_BYTES = 256 * 1024;
@@ -113,6 +114,7 @@ function normalizeStoredWork(value) {
     enSub,
     cnDesc,
     enDesc,
+    ...(Array.isArray(value?.software) ? { software: [...new Set(value.software.filter(id => SOFTWARE_IDS.has(id)))] } : {}),
     video: typeof value?.video === "string" ? value.video : "",
     previewVideo: typeof value?.previewVideo === "string" ? value.previewVideo : "",
     webVideo: typeof value?.webVideo === "string" ? value.webVideo : "",
@@ -284,6 +286,7 @@ function buildWorkFromPayload(payload, existingWork = null) {
     enSub: payload?.enSub ?? existingWork?.enSub,
     cnDesc: payload?.cnDesc ?? existingWork?.cnDesc,
     enDesc: payload?.enDesc ?? existingWork?.enDesc,
+    software: payload?.software ?? existingWork?.software,
     video: payload?.video ?? existingWork?.video,
     previewVideo: payload?.previewVideo ?? existingWork?.previewVideo ?? "",
     webVideo: payload?.webVideo ?? existingWork?.webVideo ?? "",

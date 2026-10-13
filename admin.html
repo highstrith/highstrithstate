@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Highstrith | 作品管理</title>
   <link rel="icon" type="image/svg+xml" href="assets/studio-mark.svg" />
-  <link rel="stylesheet" href="admin.css?v=20261008-refined" />
+  <link rel="stylesheet" href="admin.css?v=20261013-software" />
 </head>
 <body>
   <div class="page">
@@ -55,6 +55,17 @@
                 <label class="upload-field"><span class="field-label" id="uploadEnSubLabel">英文分类</span><input class="upload-input" id="uploadEnSubInput" name="enSub" type="text" maxlength="64" placeholder="Brand / Editing" /></label>
                 <label class="upload-field"><span class="field-label" id="uploadCnDescLabel">中文简介</span><textarea class="upload-input" id="uploadCnDescInput" name="cnDesc" maxlength="180" rows="3" placeholder="这部作品的故事与创作想法"></textarea></label>
                 <label class="upload-field"><span class="field-label" id="uploadEnDescLabel">英文简介</span><textarea class="upload-input" id="uploadEnDescInput" name="enDesc" maxlength="180" rows="3" placeholder="The story behind this project"></textarea></label>
+              </div>
+            </fieldset>
+            <fieldset class="upload-group" aria-describedby="softwareHelp">
+              <legend id="softwareGroupLabel">制作软件</legend>
+              <p class="field-help" id="softwareHelp">选择这部作品实际使用的软件，可多选；未选择时不显示标记。</p>
+              <div class="software-choices" id="softwareChoices">
+                <label><input type="checkbox" name="software" value="davinci-resolve"><span>DaVinci Resolve</span></label>
+                <label><input type="checkbox" name="software" value="blender"><span>Blender</span></label>
+                <label><input type="checkbox" name="software" value="jianying"><span id="jianyingLabel">剪映</span></label>
+                <label><input type="checkbox" name="software" value="after-effects"><span>After Effects</span></label>
+                <label><input type="checkbox" name="software" value="chatgpt"><span>ChatGPT</span></label>
               </div>
             </fieldset>
             <fieldset class="upload-group">
@@ -124,6 +135,7 @@
           uploadModeCreate: '新作品将加入本地作品集。',
           uploadModeEdit: '可修改文字，或选择新文件替换媒体。',
           uploadModeBuiltIn: '精选作品：可编辑文字，视频与封面已锁定。',
+          softwareGroup: '制作软件', softwareHelp: '选择这部作品实际使用的软件，可多选；未选择时不显示标记。',
           detailsGroupLabel: '作品信息',
           mediaGroupLabel: '视频与封面',
           uploadCnTitleLabel: '中文标题',
@@ -200,6 +212,7 @@
           uploadModeCreate: 'New work joins your local portfolio.',
           uploadModeEdit: 'Edit the details or choose files to replace your media.',
           uploadModeBuiltIn: 'Featured project: edit the details. Video and cover are locked.',
+          softwareGroup: 'Made with', softwareHelp: 'Choose the software actually used for this project. Leave empty to show no tags.',
           detailsGroupLabel: 'Project details',
           mediaGroupLabel: 'Film and cover',
           uploadCnTitleLabel: 'Chinese title',
@@ -358,6 +371,7 @@
           webVideo: typeof item?.webVideo === 'string' ? item.webVideo : '',
           mobileVideo: item?.mobileVideo || '',
           poster: item?.poster || '',
+          software: Array.isArray(item?.software) ? item.software : [],
         };
       };
 
@@ -427,6 +441,9 @@
           uploadEnSubInput.value = work.enSub || '';
           uploadCnDescInput.value = work.cnDesc || '';
           uploadEnDescInput.value = work.enDesc || '';
+          document.querySelectorAll('#softwareChoices input').forEach(input => {
+            input.checked = (work.software || []).includes(input.value);
+          });
         }
 
         const editingBuiltInWork = uploadMode === 'edit' && work && !isManagedWork(work);
@@ -697,6 +714,9 @@
         uploadEnSubLabel.textContent = copy.uploadEnSubLabel;
         uploadCnDescLabel.textContent = copy.uploadCnDescLabel;
         uploadEnDescLabel.textContent = copy.uploadEnDescLabel;
+        document.getElementById('softwareGroupLabel').textContent = copy.softwareGroup;
+        document.getElementById('softwareHelp').textContent = copy.softwareHelp;
+        document.getElementById('jianyingLabel').textContent = state.lang === 'cn' ? '剪映' : 'Jianying';
         uploadVideoLabel.textContent = copy.uploadVideoLabel;
         uploadPosterLabel.textContent = copy.uploadPosterLabel;
         uploadVideoHelp.textContent = copy.uploadVideoHelp;
@@ -868,6 +888,7 @@
             enSub: uploadEnSubInput.value || '',
             cnDesc: uploadCnDescInput.value || '',
             enDesc: uploadEnDescInput.value || '',
+            software: [...document.querySelectorAll('#softwareChoices input:checked')].map(input => input.value),
             video,
             previewVideo: videoFile ? '' : (currentWork?.previewVideo || ''),
             webVideo: videoFile ? '' : (currentWork?.webVideo || ''),

@@ -8,7 +8,9 @@
       "sourceHash": "d9297698f85eacea90d731381efbb064f2d16fde7d08f518bfbdd30f74835fff",
       "previewSeconds": 20,
       "previewBytes": 1709887,
-      "mobileBytes": 9875160,
+      "mobileBytes": 9827119,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
       "webRemux": true
     },
     {
@@ -17,7 +19,9 @@
       "sourceHash": "a4f97a005e244a6e37baf9fc1e63d23a958a337635dbbacf1c6b5d5393901778",
       "previewSeconds": 20,
       "previewBytes": 1609772,
-      "mobileBytes": 3187888,
+      "mobileBytes": 3349245,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
       "webRemux": true
     },
     {
@@ -26,7 +30,9 @@
       "sourceHash": "f3a154b6c6b70ac91eb5f8b5317c725e2ec22bf47466dfeb295bc257ffc4b434",
       "previewSeconds": 20,
       "previewBytes": 1635085,
-      "mobileBytes": 12344296,
+      "mobileBytes": 8420950,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
       "webRemux": false
     },
     {
@@ -35,7 +41,9 @@
       "sourceHash": "bd24842da77abbec287ad4770d6406258f083913e604a4e67b3bf65648d50273",
       "previewSeconds": 15.04,
       "previewBytes": 1183158,
-      "mobileBytes": 3896553,
+      "mobileBytes": 1632581,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
       "webRemux": false
     },
     {
@@ -44,7 +52,9 @@
       "sourceHash": "bfdaced374f473e19e49174d29d571c8f5fe66cb589451043f6a56d0d067272b",
       "previewSeconds": 20,
       "previewBytes": 1571447,
-      "mobileBytes": 4352697,
+      "mobileBytes": 4451330,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
       "webRemux": true
     },
     {
@@ -53,7 +63,9 @@
       "sourceHash": "21842d8b8a4214930d17a680abf12c1519f060ca5d62c1135e99c3a10e4dc567",
       "previewSeconds": 20,
       "previewBytes": 1594859,
-      "mobileBytes": 5359529,
+      "mobileBytes": 3541296,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
       "webRemux": true
     },
     {
@@ -62,7 +74,9 @@
       "sourceHash": "e0228684971f5ab2de7793d105473f1d37e1e621345e1ecbca6b47df5c7b5a9d",
       "previewSeconds": 20,
       "previewBytes": 1587886,
-      "mobileBytes": 2796584,
+      "mobileBytes": 1762315,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
       "webRemux": true
     },
     {
@@ -71,7 +85,9 @@
       "sourceHash": "918e9df609aaaef5b8601fc00436cc972c18f47387549c7d8bf70b9eb465a946",
       "previewSeconds": 20,
       "previewBytes": 1569126,
-      "mobileBytes": 5998234,
+      "mobileBytes": 3389386,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
       "webRemux": true
     },
     {
@@ -80,7 +96,9 @@
       "sourceHash": "df1d8232da6eb0cc54fdac8c42169bf8aea9d9bb60daabc6e7e55a2dc6a3ea6b",
       "previewSeconds": 20,
       "previewBytes": 1563846,
-      "mobileBytes": 3091231,
+      "mobileBytes": 1972759,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
       "webRemux": false
     },
     {
@@ -89,7 +107,9 @@
       "sourceHash": "46d6e4f780895c8feb6053dde09be9b8ab7c8353309abb3a7f0138361d88b660",
       "previewSeconds": 10.2,
       "previewBytes": 628153,
-      "mobileBytes": 1122129,
+      "mobileBytes": 668596,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
       "webRemux": true
     },
     {
@@ -98,7 +118,9 @@
       "sourceHash": "6fd6189ceb7395ec8e2572a8df02ccb569987125aab5b1aecdcef30c8c461012",
       "previewSeconds": 5,
       "previewBytes": 254238,
-      "mobileBytes": 441015,
+      "mobileBytes": 276143,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
       "webRemux": false
     },
     {
@@ -107,7 +129,9 @@
       "sourceHash": "a401f3f44f217a4cc8b8c76a743ab6441214fde014f940fd756d09467b9b3dae",
       "previewSeconds": 13.52,
       "previewBytes": 973770,
-      "mobileBytes": 3162186,
+      "mobileBytes": 1341876,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
       "webRemux": false
     },
     {
@@ -116,7 +140,9 @@
       "sourceHash": "ba681b583f1d285c5511284e19cea643987937a6e3596d09fee383ab0a4042b2",
       "previewSeconds": 7.2,
       "previewBytes": 500503,
-      "mobileBytes": 353540,
+      "mobileBytes": 265469,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
       "webRemux": true
     },
     {
@@ -125,7 +151,9 @@
       "sourceHash": "8074dd13a694cb582fd134a84c0c963d3a96c71c3a0d2cab1dba2d2fa2cc7a9d",
       "previewSeconds": 2.23,
       "previewBytes": 239285,
-      "mobileBytes": 341850,
+      "mobileBytes": 194363,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
       "webRemux": true
     },
     {
@@ -134,7 +162,9 @@
       "sourceHash": "eceb45f7040e186d855ca355e50314f3a68d876e00cd9825f49928640f21c4bb",
       "previewSeconds": 20,
       "previewBytes": 1541622,
-      "mobileBytes": 1276645,
+      "mobileBytes": 1074434,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
       "webRemux": true
     }
   ],

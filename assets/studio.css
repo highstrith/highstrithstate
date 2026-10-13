@@ -47,7 +47,6 @@ a, button, input { touch-action: manipulation; }
 .hero-description { padding-bottom: 9px; }
 .hero-description p { font-size: 14px; line-height: 1.9; color: #525853; }
 .text-link { display: inline-flex; gap: 30px; min-height: 44px; align-items: center; font-size: 14px; margin-top: 16px; }
-.text-link > span:last-child { font-size: 21px; }
 .hero-feature { position: relative; aspect-ratio: 2.2; max-height: 600px; overflow: hidden; background: #101615; isolation: isolate; color: #fff; }
 .feature-screen { position: absolute; inset: 0; }
 .hero-poster, #heroPreview { position: absolute; width: 100%; height: 100%; object-fit: contain; inset: 0; }
@@ -97,8 +96,6 @@ a, button, input { touch-action: manipulation; }
 .work-media img, .work-media video { position: absolute; width: 100%; height: 100%; inset: 0; object-fit: contain; }
 .work-media video { opacity: 0; transition: opacity .25s; }
 .work-card.is-previewing video { opacity: 1; }
-.card-play { width: 43px; height: 43px; position: absolute; right: 16px; bottom: 16px; display: grid; place-items: center; border-radius: 50%; background: rgba(0,0,0,.5); border: 1px solid rgba(255,255,255,.5); color: #fff; font-size: 15px; }
-.card-play svg { width: 18px; height: 18px; fill: currentColor; }
 .work-caption { display: block; padding-top: 18px; position: relative; }
 .work-category { display: block; font-size: 11px; line-height: 1.5; color: var(--muted); margin-bottom: 7px; }
 .work-title { display: block; font-size: clamp(18px, 1.9vw, 28px); font-weight: 500; letter-spacing: -.04em; line-height: 1.4; overflow-wrap: anywhere; }
@@ -162,7 +159,6 @@ a, button, input { touch-action: manipulation; }
 .contact-section h2 { margin-top: 28px; font-size: 36px; font-weight: 500; line-height: 1.55; letter-spacing: -.025em; }
 .contact-bottom { display: flex; justify-content: space-between; align-items: end; gap: 32px; padding-block: 30px 32px; border-bottom: 1px solid var(--line); }
 .contact-email { font-size: clamp(18px, 2vw, 26px); font-weight: 400; letter-spacing: -.015em; display: inline-flex; align-items: center; gap: 20px; }
-.contact-email > span { color: var(--orange-dark); }
 .contact-email:hover { color: var(--orange-dark); }
 .contact-details { display: flex; flex-direction: column; gap: 12px; font-size: 12px; color: var(--muted); }
 .social-row { display: flex; justify-content: space-between; gap: 24px; align-items: center; padding-top: 28px; font-size: 12px; color: var(--muted); }
@@ -170,6 +166,15 @@ a, button, input { touch-action: manipulation; }
 .social-links button, .social-links a { display: flex; gap: 13px; min-height: 44px; align-items: center; padding: 0; background: transparent; font-size: 13px; color: var(--ink); }
 .social-links button:hover, .social-links a:hover { color: var(--orange-dark); }
 .site-footer { border-top: 1px solid var(--line); padding-top: 27px; overflow: hidden; }
+.footer-software { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; padding-bottom: 28px; margin-bottom: 24px; border-bottom: 1px solid var(--line); }
+.footer-software > p, .work-software-label { font-size: 11px; color: var(--muted); line-height: 1.6; }
+.software-tags { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
+.software-tag { display: inline-block; padding: 6px 10px; border: 1px solid var(--line); font-size: 11px; font-weight: 400; line-height: 1.4; overflow-wrap: anywhere; }
+.work-software { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+.work-software .software-tag { padding: 4px 8px; }
+.player-copy { flex: 1; min-width: 0; }
+.player-copy .software-tag { border-color: #3c403d; color: #c0c5c0; }
+.player-copy .work-software-label { color: #878f88; }
 .footer-top { display: flex; justify-content: space-between; gap: 24px; align-items: center; color: var(--muted); font-size: 11px; }
 .footer-top > div { display: flex; gap: 28px; align-items: center; }
 #musicToggle { min-height: 44px; padding: 0; display: inline-flex; gap: 10px; align-items: center; background: transparent; font-size: 11px; color: var(--muted); }

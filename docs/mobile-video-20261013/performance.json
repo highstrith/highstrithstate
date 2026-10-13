@@ -1,0 +1,303 @@
+{
+  "date": "2026-10-13",
+  "network": {
+    "downloadBitsPerSecond": 1500000,
+    "latencyMs": 150,
+    "cacheDisabled": true,
+    "browser": "Ego Lite Chromium",
+    "viewport": {
+      "width": 390,
+      "height": 844,
+      "deviceScaleFactor": 2
+    },
+    "samplesPerVariantPerWork": 3,
+    "scope": "Local server; catalogue fetch overrides select retained before sources. Media requests are real, with identical network throttling. Startup measures time from immediately before the click until playing; this is not a physical-device or production-host speed guarantee."
+  },
+  "bytes": {
+    "before": 57599537,
+    "after": 42167862
+  },
+  "works": [
+    {
+      "id": "work-reset-day-20261007",
+      "name": "重置日",
+      "beforeBytes": 9875160,
+      "afterBytes": 9827119,
+      "beforeSource": "assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-mobile.mp4",
+      "afterSource": "assets/optimized/work-reset-day-20261007/3966cb994c809129-mobile.mp4",
+      "sourceHash": "d9297698f85eacea90d731381efbb064f2d16fde7d08f518bfbdd30f74835fff"
+    },
+    {
+      "id": "work-lying-down-20261001",
+      "name": "趴着办公早该知道",
+      "beforeBytes": 3187888,
+      "afterBytes": 3349245,
+      "beforeSource": "assets/optimized/work-lying-down-20261001/4e6663b8d35374e3-mobile.mp4",
+      "afterSource": "assets/optimized/work-lying-down-20261001/8e4190467daa4f39-mobile.mp4",
+      "sourceHash": "a4f97a005e244a6e37baf9fc1e63d23a958a337635dbbacf1c6b5d5393901778"
+    },
+    {
+      "id": "work-1783863606674-7ta9sp",
+      "name": "AI患者",
+      "beforeBytes": 12344296,
+      "afterBytes": 8420950,
+      "beforeSource": "assets/optimized/work-1783863606674-7ta9sp/1a84334206c2df30-mobile.mp4",
+      "afterSource": "assets/optimized/work-1783863606674-7ta9sp/240c8076714385bc-mobile.mp4",
+      "sourceHash": "f3a154b6c6b70ac91eb5f8b5317c725e2ec22bf47466dfeb295bc257ffc4b434"
+    },
+    {
+      "id": "work-1783246320299-icguu6",
+      "name": "街头篮球",
+      "beforeBytes": 3896553,
+      "afterBytes": 1632581,
+      "beforeSource": "assets/optimized/work-1783246320299-icguu6/b63a523befeb430f-mobile.mp4",
+      "afterSource": "assets/optimized/work-1783246320299-icguu6/71f4212dc1b81cd5-mobile.mp4",
+      "sourceHash": "bd24842da77abbec287ad4770d6406258f083913e604a4e67b3bf65648d50273"
+    },
+    {
+      "id": "featured-prove-it",
+      "name": "Prove It",
+      "beforeBytes": 4352697,
+      "afterBytes": 4451330,
+      "beforeSource": "assets/optimized/featured-prove-it/1476460cc117075e-mobile.mp4",
+      "afterSource": "assets/optimized/featured-prove-it/358502c2d2293fa7-mobile.mp4",
+      "sourceHash": "bfdaced374f473e19e49174d29d571c8f5fe66cb589451043f6a56d0d067272b"
+    },
+    {
+      "id": "featured-approach",
+      "name": "搭讪",
+      "beforeBytes": 5359529,
+      "afterBytes": 3541296,
+      "beforeSource": "assets/optimized/featured-approach/ebd7e20914383cac-mobile.mp4",
+      "afterSource": "assets/optimized/featured-approach/0fd6a87d3ee4abca-mobile.mp4",
+      "sourceHash": "21842d8b8a4214930d17a680abf12c1519f060ca5d62c1135e99c3a10e4dc567"
+    },
+    {
+      "id": "featured-giant-wheel",
+      "name": "巨轮空降",
+      "beforeBytes": 2796584,
+      "afterBytes": 1762315,
+      "beforeSource": "assets/optimized/featured-giant-wheel/518efbc9db3347e2-mobile.mp4",
+      "afterSource": "assets/optimized/featured-giant-wheel/98478d1edcca4ab3-mobile.mp4",
+      "sourceHash": "e0228684971f5ab2de7793d105473f1d37e1e621345e1ecbca6b47df5c7b5a9d"
+    },
+    {
+      "id": "featured-exported-film",
+      "name": "Two Seconds",
+      "beforeBytes": 5998234,
+      "afterBytes": 3389386,
+      "beforeSource": "assets/optimized/featured-exported-film/33eef9ca7328cfea-mobile.mp4",
+      "afterSource": "assets/optimized/featured-exported-film/c61f546e201ee6c3-mobile.mp4",
+      "sourceHash": "918e9df609aaaef5b8601fc00436cc972c18f47387549c7d8bf70b9eb465a946"
+    },
+    {
+      "id": "featured-timeline-1",
+      "name": "AI 之后",
+      "beforeBytes": 3091231,
+      "afterBytes": 1972759,
+      "beforeSource": "assets/optimized/featured-timeline-1/4cac536c20796da6-mobile.mp4",
+      "afterSource": "assets/optimized/featured-timeline-1/4958ef95913cf7c9-mobile.mp4",
+      "sourceHash": "df1d8232da6eb0cc54fdac8c42169bf8aea9d9bb60daabc6e7e55a2dc6a3ea6b"
+    },
+    {
+      "id": "added-creative-3",
+      "name": "动作预演",
+      "beforeBytes": 1122129,
+      "afterBytes": 668596,
+      "beforeSource": "assets/optimized/added-creative-3/defe29806e1f9157-mobile.mp4",
+      "afterSource": "assets/optimized/added-creative-3/ee003d159e604eb7-mobile.mp4",
+      "sourceHash": "46d6e4f780895c8feb6053dde09be9b8ab7c8353309abb3a7f0138361d88b660"
+    },
+    {
+      "id": "added-visual-study",
+      "name": "产品视觉实验",
+      "beforeBytes": 441015,
+      "afterBytes": 276143,
+      "beforeSource": "assets/optimized/added-visual-study/4c2c73e2729f9128-mobile.mp4",
+      "afterSource": "assets/optimized/added-visual-study/5dee365fca910073-mobile.mp4",
+      "sourceHash": "6fd6189ceb7395ec8e2572a8df02ccb569987125aab5b1aecdcef30c8c461012"
+    },
+    {
+      "id": "added-title-render",
+      "name": "特运尖兵片头",
+      "beforeBytes": 3162186,
+      "afterBytes": 1341876,
+      "beforeSource": "assets/optimized/added-title-render/1b371f0c07884b56-mobile.mp4",
+      "afterSource": "assets/optimized/added-title-render/2838f38f9f476cd0-mobile.mp4",
+      "sourceHash": "a401f3f44f217a4cc8b8c76a743ab6441214fde014f940fd756d09467b9b3dae"
+    },
+    {
+      "id": "added-v30001-0180",
+      "name": "街巷角色动画",
+      "beforeBytes": 353540,
+      "afterBytes": 265469,
+      "beforeSource": "assets/optimized/added-v30001-0180/8a46db64910c1909-mobile.mp4",
+      "afterSource": "assets/optimized/added-v30001-0180/1f43587df3305716-mobile.mp4",
+      "sourceHash": "ba681b583f1d285c5511284e19cea643987937a6e3596d09fee383ab0a4042b2"
+    },
+    {
+      "id": "added-render-test",
+      "name": "能量实验",
+      "beforeBytes": 341850,
+      "afterBytes": 194363,
+      "beforeSource": "assets/optimized/added-render-test/691a1bf6da2dbbec-mobile.mp4",
+      "afterSource": "assets/optimized/added-render-test/b82417ec6ca19502-mobile.mp4",
+      "sourceHash": "8074dd13a694cb582fd134a84c0c963d3a96c71c3a0d2cab1dba2d2fa2cc7a9d"
+    },
+    {
+      "id": "added-completed-film",
+      "name": "花与兔子",
+      "beforeBytes": 1276645,
+      "afterBytes": 1074434,
+      "beforeSource": "assets/optimized/added-completed-film/bb09a3da3e160a0d-mobile.mp4",
+      "afterSource": "assets/optimized/added-completed-film/19ae45e24e13a4ba-mobile.mp4",
+      "sourceHash": "eceb45f7040e186d855ca355e50314f3a68d876e00cd9825f49928640f21c4bb"
+    }
+  ],
+  "startupSamples": [
+    {
+      "variant": "before",
+      "id": "work-reset-day-20261007",
+      "sample": 0,
+      "name": "重置日",
+      "startupMs": 4378,
+      "src": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-mobile.mp4"
+    },
+    {
+      "variant": "before",
+      "id": "work-reset-day-20261007",
+      "sample": 1,
+      "name": "重置日",
+      "startupMs": 2492,
+      "src": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-mobile.mp4"
+    },
+    {
+      "variant": "before",
+      "id": "work-reset-day-20261007",
+      "sample": 2,
+      "name": "重置日",
+      "startupMs": 3251,
+      "src": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-mobile.mp4"
+    },
+    {
+      "variant": "before",
+      "id": "work-1783246320299-icguu6",
+      "sample": 0,
+      "name": "街头篮球",
+      "startupMs": 2667,
+      "src": "http://127.0.0.1:3000/assets/optimized/work-1783246320299-icguu6/b63a523befeb430f-mobile.mp4"
+    },
+    {
+      "variant": "before",
+      "id": "work-1783246320299-icguu6",
+      "sample": 1,
+      "name": "街头篮球",
+      "startupMs": 2737,
+      "src": "http://127.0.0.1:3000/assets/optimized/work-1783246320299-icguu6/b63a523befeb430f-mobile.mp4"
+    },
+    {
+      "variant": "before",
+      "id": "work-1783246320299-icguu6",
+      "sample": 2,
+      "name": "街头篮球",
+      "startupMs": 2638,
+      "src": "http://127.0.0.1:3000/assets/optimized/work-1783246320299-icguu6/b63a523befeb430f-mobile.mp4"
+    },
+    {
+      "variant": "before",
+      "id": "featured-exported-film",
+      "sample": 0,
+      "name": "Two Seconds",
+      "startupMs": 3342,
+      "src": "http://127.0.0.1:3000/assets/optimized/featured-exported-film/33eef9ca7328cfea-mobile.mp4"
+    },
+    {
+      "variant": "before",
+      "id": "featured-exported-film",
+      "sample": 1,
+      "name": "Two Seconds",
+      "startupMs": 3489,
+      "src": "http://127.0.0.1:3000/assets/optimized/featured-exported-film/33eef9ca7328cfea-mobile.mp4"
+    },
+    {
+      "variant": "before",
+      "id": "featured-exported-film",
+      "sample": 2,
+      "name": "Two Seconds",
+      "startupMs": 2496,
+      "src": "http://127.0.0.1:3000/assets/optimized/featured-exported-film/33eef9ca7328cfea-mobile.mp4"
+    },
+    {
+      "variant": "after",
+      "id": "work-reset-day-20261007",
+      "sample": 0,
+      "name": "重置日",
+      "startupMs": 3995,
+      "src": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/3966cb994c809129-mobile.mp4"
+    },
+    {
+      "variant": "after",
+      "id": "work-reset-day-20261007",
+      "sample": 1,
+      "name": "重置日",
+      "startupMs": 3236,
+      "src": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/3966cb994c809129-mobile.mp4"
+    },
+    {
+      "variant": "after",
+      "id": "work-reset-day-20261007",
+      "sample": 2,
+      "name": "重置日",
+      "startupMs": 3257,
+      "src": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/3966cb994c809129-mobile.mp4"
+    },
+    {
+      "variant": "after",
+      "id": "work-1783246320299-icguu6",
+      "sample": 0,
+      "name": "街头篮球",
+      "startupMs": 2425,
+      "src": "http://127.0.0.1:3000/assets/optimized/work-1783246320299-icguu6/71f4212dc1b81cd5-mobile.mp4"
+    },
+    {
+      "variant": "after",
+      "id": "work-1783246320299-icguu6",
+      "sample": 1,
+      "name": "街头篮球",
+      "startupMs": 2522,
+      "src": "http://127.0.0.1:3000/assets/optimized/work-1783246320299-icguu6/71f4212dc1b81cd5-mobile.mp4"
+    },
+    {
+      "variant": "after",
+      "id": "work-1783246320299-icguu6",
+      "sample": 2,
+      "name": "街头篮球",
+      "startupMs": 2482,
+      "src": "http://127.0.0.1:3000/assets/optimized/work-1783246320299-icguu6/71f4212dc1b81cd5-mobile.mp4"
+    },
+    {
+      "variant": "after",
+      "id": "featured-exported-film",
+      "sample": 0,
+      "name": "Two Seconds",
+      "startupMs": 2506,
+      "src": "http://127.0.0.1:3000/assets/optimized/featured-exported-film/c61f546e201ee6c3-mobile.mp4"
+    },
+    {
+      "variant": "after",
+      "id": "featured-exported-film",
+      "sample": 1,
+      "name": "Two Seconds",
+      "startupMs": 2535,
+      "src": "http://127.0.0.1:3000/assets/optimized/featured-exported-film/c61f546e201ee6c3-mobile.mp4"
+    },
+    {
+      "variant": "after",
+      "id": "featured-exported-film",
+      "sample": 2,
+      "name": "Two Seconds",
+      "startupMs": 2455,
+      "src": "http://127.0.0.1:3000/assets/optimized/featured-exported-film/c61f546e201ee6c3-mobile.mp4"
+    }
+  ]
+}

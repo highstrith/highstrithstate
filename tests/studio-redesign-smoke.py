@@ -191,6 +191,51 @@ class StudioRedesign(unittest.TestCase):
         page.locator("#workSearch").fill(VISIBLE[0]["enTitle"])
         self.assert_count(page, 1)
 
+    def test_footer_software_and_confirmed_work_tags_are_readable_in_both_languages(self):
+        page = self.page(viewport={"width": 320, "height": 844}, is_mobile=True, has_touch=True, reduced_motion="reduce")
+        fixture = [dict(work, software=['blender', 'after-effects', 'blender', '<script>']) if work['id'] == VISIBLE[0]['id'] else work for work in CATALOG]
+        page.route("**/api/works", lambda route: route.fulfill(json={"works": fixture}))
+        self.ready(page)
+        expect(page.locator(".footer-software .software-tag")).to_have_count(5)
+        card = page.locator(CARDS).first
+        expect(card.locator(".work-software .software-tag")).to_have_text(['Blender', 'After Effects · AE'])
+        expect(card.locator(".work-software-label")).to_have_text('制作软件')
+        expect(page.locator(CARDS).nth(1).locator(".work-software")).to_have_count(0)
+        page.locator("#langSwitch").click()
+        expect(card.locator(".work-software-label")).to_have_text('Made with')
+        expect(card.locator(".work-software .software-tag")).to_have_text(['Blender', 'After Effects'])
+        expect(page.locator('.footer-software [data-software="jianying"]')).to_have_text('Jianying')
+        card.click()
+        expect(page.locator('#playerSoftware .software-tag')).to_have_text(['Blender', 'After Effects'])
+        expect(page.locator('#playerSoftware .work-software-label')).to_have_text('Made with')
+        page.locator('#workPlayerClose').click()
+        page.locator(CARDS).nth(1).click()
+        expect(page.locator('#playerSoftware')).not_to_be_visible()
+        page.locator('#workPlayerClose').click()
+        page.locator(".footer-software").scroll_into_view_if_needed()
+        self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), 321)
+
+    def test_admin_software_selection_persists_and_can_be_cleared(self):
+        with disposable_admin([CATALOG[-1]]) as (root, address):
+            page = self.page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+            page.goto(address + "/admin.html", wait_until="domcontentloaded")
+            page.locator('[data-edit-work]').click()
+            page.locator('#softwareChoices input[value="blender"]').check()
+            page.locator('#softwareChoices input[value="after-effects"]').check()
+            page.locator('#uploadSubmit').click()
+            expect(page.locator('#uploadStatus')).to_have_attribute('data-tone', 'success')
+            stored = json.loads((root / 'data/works.json').read_text())[0]
+            self.assertEqual(stored['software'], ['blender', 'after-effects'])
+            page.reload(wait_until="domcontentloaded")
+            page.locator('[data-edit-work]').click()
+            expect(page.locator('#softwareChoices input[value="blender"]')).to_be_checked()
+            page.locator('#softwareChoices input[value="blender"]').uncheck()
+            page.locator('#softwareChoices input[value="after-effects"]').uncheck()
+            page.locator('#uploadSubmit').click()
+            expect(page.locator('#uploadStatus')).to_have_attribute('data-tone', 'success')
+            self.assertEqual(json.loads((root / 'data/works.json').read_text())[0]['software'], [])
+            self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'), 391)
+
     def test_desktop_cards_preview_only_on_hover_or_focus(self):
         page = self.page(viewport={"width": 1440, "height": 1000})
         self.ready(page)
@@ -285,6 +330,81 @@ class StudioRedesign(unittest.TestCase):
         assert_preview(FEATURED[1]["previewVideo"])
         page.emulate_media(reduced_motion="reduce")
         page.wait_for_function("!document.querySelector('#heroPreview').getAttribute('src')")
+
+    def test_hero_rotates_after_ten_seconds_of_real_muted_mobile_playback(self):
+        page = self.page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+        self.ready(page)
+        page.wait_for_function("document.querySelector('#heroPreview').currentTime > 0")
+        first = page.locator('#featureControls button').first
+        expect(first).to_have_attribute('aria-pressed', 'true')
+        started = time.monotonic()
+        page.wait_for_function("""suffix => {
+          const video = document.querySelector('#heroPreview');
+          return video.currentSrc.endsWith(suffix) && video.currentTime > 0 && !video.paused;
+        }""", arg=FEATURED[1]['previewVideo'], timeout=15000)
+        elapsed = time.monotonic() - started
+        self.assertGreater(elapsed, 8.5)
+        self.assertLess(elapsed, 13.5)
+        expect(page.locator('#featureTitle')).to_have_text(FEATURED[1]['cnTitle'])
+        expect(page.locator('#featureControls button').nth(1)).to_have_attribute('aria-pressed', 'true')
+        self.assertTrue(page.locator('#heroPreview').evaluate('v => v.muted && v.defaultMuted && v.playsInline'))
+        self.assertEqual(page.locator(CARDS + ' video').evaluate_all(SOURCE_COUNT), 0)
+
+    def test_hero_hover_changes_film_and_revisits_use_another_moving_segment(self):
+        page = self.page(viewport={"width": 1440, "height": 900})
+        self.ready(page)
+        page.wait_for_function("document.querySelector('#heroPreview').currentTime > 0")
+        picks = page.locator('#featureControls button')
+        picks.nth(3).hover()
+        expect(picks.nth(3)).to_have_attribute('aria-pressed', 'true')
+        page.wait_for_function("""suffix => {
+          const video = document.querySelector('#heroPreview');
+          return video.currentSrc.endsWith(suffix) && video.currentTime > 0 && !video.paused;
+        }""", arg=FEATURED[3]['previewVideo'])
+        picks.first.hover()
+        expect(picks.first).to_have_attribute('aria-pressed', 'true')
+        page.wait_for_function("document.querySelector('#heroPreview').currentTime > 10 && !document.querySelector('#heroPreview').paused")
+        # The second window must continue moving, and pausing must not consume
+        # its ten-second screening allowance through a wall-clock timer.
+        paused_at = page.locator('#heroPreview').evaluate('v => { v.pause(); return v.currentTime; }')
+        page.wait_for_timeout(10300)
+        expect(picks.first).to_have_attribute('aria-pressed', 'true')
+        self.assertAlmostEqual(page.locator('#heroPreview').evaluate('v => v.currentTime'), paused_at, delta=.1)
+        page.locator('#heroPreview').evaluate('v => { v.playbackRate = 4; return v.play(); }')
+        page.wait_for_function("document.querySelector('#featureControls button:nth-child(2)').getAttribute('aria-pressed') === 'true'")
+        page.locator('#heroPreview').evaluate('v => { v.pause(); }')
+        picks.nth(4).focus()
+        expect(picks.nth(4)).to_have_attribute('aria-pressed', 'true')
+        picks.nth(4).click()
+        expect(page.locator('#workPlayer')).not_to_be_visible()
+        self.assertLessEqual(page.locator('video:not(#workPlayerVideo)').evaluate_all(SOURCE_COUNT), 1)
+        page.wait_for_function("document.querySelector('#heroPreview').currentTime > 0 && !document.querySelector('#heroPreview').paused")
+        page.locator('#heroPreview').evaluate('v => { v.playbackRate = 4; }')
+        page.wait_for_function("document.querySelector('#featureControls button:first-child').getAttribute('aria-pressed') === 'true'")
+        expect(page.locator('#featureTitle')).to_have_text(FEATURED[0]['cnTitle'])
+
+    def test_short_hero_preview_advances_when_real_clip_ends(self):
+        page = self.page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+        short = next(work for work in CATALOG if work['id'] == 'added-render-test')
+        fixture = [dict(work, previewVideo=short['previewVideo']) if work['id'] == FEATURED[0]['id'] else work for work in CATALOG]
+        page.route('**/api/works', lambda route: route.fulfill(json={'works': fixture}))
+        self.ready(page)
+        page.wait_for_function("document.querySelector('#heroPreview').currentTime > 0")
+        duration = page.locator('#heroPreview').evaluate('v => v.duration')
+        self.assertLess(duration, 10)
+        page.wait_for_function("document.querySelector('#featureControls button:nth-child(2)').getAttribute('aria-pressed') === 'true'", timeout=int((duration + 3) * 1000))
+        expect(page.locator('#featureTitle')).to_have_text(FEATURED[1]['cnTitle'])
+
+    def test_public_links_and_work_cards_have_no_decorative_arrows(self):
+        page = self.page(viewport={"width": 390, "height": 844}, reduced_motion='reduce')
+        self.ready(page)
+        for language in ('cn', 'en'):
+            if language == 'en':
+                page.locator('#langSwitch').click()
+            self.assertNotRegex(page.locator('body').inner_text(), '[↗↘→←↑↓↖↙⟶➜➝]')
+            expect(page.locator('.card-play')).to_have_count(0)
+        expect(page.locator('.contact-email')).to_have_attribute('href', 'mailto:highstrith@gmail.com')
+        expect(page.locator('.footer-top a')).to_have_attribute('href', '#home')
 
     def test_mobile_feature_controls_do_not_overlap_picture_or_title(self):
         for width in (320, 390, 600, 700, 800):
