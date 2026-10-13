@@ -1,6 +1,8 @@
 # 手机视频、软件标签与首页放映
 
-本轮在本地实现并验证，未推送或发布到 GitHub Pages。
+本轮在本地实现并验证，2026-10-13 经用户授权推送至 main / release/white-pages，代码提交为 `28025a5`。GitHub Pages [38361637338](https://github.com/highstrith/highstrithstate/actions/runs/38361637338) 发布成功，正式站为 https://highstrith.github.io/highstrithstate/。
+
+线上 HTML/CSS/JS/目录与本地发布文件逐字节一致；15 部新手机版均正常返回 Range 响应并匹配文件长度。已通过手机静音自动轮播、新手机版完整播放和桌面缩略图悬停切换验收；5 种软件页尾标记、14 部公开作品、无装饰箭头、无手机横向溢出均确认。管理页继续由本地服务提供。
 
 ## 手机完整视频
 
