@@ -231,6 +231,9 @@ html[lang="en"] .contact-section h2 { font-size: 36px; }
   .about-portrait { height: 500px; }
 }
 @media (max-width: 800px) {
+  .site-header { height: auto; min-height: 86px; flex-wrap: wrap; padding-block: 16px; gap: 12px 24px; }
+  .header-actions { margin-left: auto; }
+  .main-nav { order: 3; width: 100%; justify-content: space-between; gap: 12px; margin-left: 0; border-top: 1px solid var(--line); padding-top: 4px; }
   .hero-intro { grid-template-columns: 1fr; gap: 22px; }
   .hero-description { display: flex; justify-content: space-between; align-items: end; gap: 20px; padding-bottom: 0; }
   .hero h1 { font-size: 34px; letter-spacing: -.025em; }

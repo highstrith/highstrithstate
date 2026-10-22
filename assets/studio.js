@@ -13,7 +13,7 @@
 
   const copy = {
     cn: {
-      skip: '跳转到作品', navWorks: '作品', navAbout: '关于', navContact: '联系', admin: '作品管理',
+      skip: '跳转到作品', navWorks: '作品', navProjects: '项目与应用', navAbout: '关于', navContact: '联系', admin: '作品管理',
       intro: '独立影像创作者 · 南京', heroTitle: '想象，在此成片',
       heroDesc: '用三维构建世界，用影像讲述故事。\n从一个念头，到让人记住的画面。',
       explore: '探索作品', selected: '精选放映', watch: '观看完整作品',
@@ -41,7 +41,7 @@
       softwareTools: '熟练使用的软件', madeWith: '制作软件',
     },
     en: {
-      skip: 'Skip to works', navWorks: 'Works', navAbout: 'About', navContact: 'Contact', admin: 'Manage works',
+      skip: 'Skip to works', navWorks: 'Works', navProjects: 'Projects', navAbout: 'About', navContact: 'Contact', admin: 'Manage works',
       intro: 'Independent image maker · Nanjing', heroTitle: 'Imagination, in motion',
       heroDesc: 'Building worlds in 3D. Telling stories through film.\nFrom a first thought to an image that stays with you.',
       explore: 'Explore the works', selected: 'Selected screening', watch: 'Watch the full film',
@@ -817,6 +817,7 @@
 
   function setLanguage(nextLanguage) {
     language = nextLanguage;
+    document.querySelector('[data-projects-link]')?.setAttribute('href', language === 'en' ? 'projects.html?lang=en' : 'projects.html');
     document.querySelectorAll('.footer-software [data-software]').forEach(element => {
       element.textContent = softwareNames.get(element.dataset.software)[language];
     });
@@ -941,6 +942,6 @@
     observer.observe(heroVideo);
   }
 
-  setLanguage('cn');
+  setLanguage(new URLSearchParams(window.location.search).get('lang') === 'en' ? 'en' : 'cn');
   loadCatalogue();
 })();

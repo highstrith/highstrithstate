@@ -1,0 +1,1257 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#edf3fa">
+  <link rel="icon" href="data:,">
+  <title>AA计算器 · 玩得尽兴，账也清楚</title>
+  <style>
+:root{--bg:#edf3fa;--paper:#fff;--ink:#18314f;--muted:#61738b;--line:#d9e3ef;--accent:#255bc4;--accent-dark:#19459c;--coral:#d85c41;--soft:#f5f8fc;--receive:#247256;--error:#b52e34;--radius:20px;font-family:"Microsoft YaHei UI","PingFang SC",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-synthesis:none}
+*{box-sizing:border-box}body{margin:0}button,input,textarea{font:inherit}button,a,input,textarea{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:4px}input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px}button{touch-action:manipulation}a{color:inherit}h1,h2,h3,p{margin:0}h2{font-size:23px;letter-spacing:-.6px}h3{font-size:16px}button{transition:background .15s}.site-header{max-width:1120px;margin:auto;padding:30px 24px;display:flex;justify-content:space-between;align-items:center}.brand{display:flex;gap:10px;align-items:center;text-decoration:none;font-size:16px;font-weight:700}.brand-mark{display:grid;place-items:center;background:var(--ink);color:white;width:34px;height:34px;border-radius:10px;font-family:Georgia,serif;font-size:16px;letter-spacing:-1px}.mode{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:8px 12px}main{max-width:1120px;margin:auto;padding:26px 24px 0}.intro{margin-bottom:42px}.eyebrow{font-size:11px;letter-spacing:1.2px;color:var(--muted);line-height:1.6}.intro .eyebrow{color:var(--accent);font-weight:700;margin-bottom:14px}h1{font-size:clamp(34px,4.6vw,52px);font-weight:800;letter-spacing:-2px;line-height:1.35}.intro-copy{font-size:14px;line-height:1.9;margin-top:15px;color:var(--muted)}.mobile-break{display:none}.workspace{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);align-items:start;gap:28px}.entry-panel{background:var(--paper);padding:30px;border-radius:var(--radius)}.section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.section-heading h2{margin-top:4px}.count{font-size:12px;background:var(--soft);padding:7px 11px;border-radius:999px;white-space:nowrap}.hint{font-size:12px;line-height:1.8;color:var(--muted)}.entry-panel>.hint{margin:-4px 0 22px}.column-head{display:grid;grid-template-columns:minmax(0,1fr) 145px 42px;gap:10px;padding:0 0 10px 30px;font-size:11px;color:var(--muted)}.entry-row{display:grid;grid-template-columns:20px minmax(0,1fr) 145px 42px;align-items:center;gap:10px;margin-bottom:12px}.row-number{font:12px ui-monospace,Consolas,monospace;color:#91a0b2}.entry-row input{width:100%;min-width:0;height:48px;border:1px solid var(--line);background:var(--soft);border-radius:10px;padding:10px 12px;color:var(--ink);font-size:14px}.entry-row input::placeholder{color:#9aa8b9}.entry-row .amount{font-variant-numeric:tabular-nums;text-align:right}.remove{border:0;background:transparent;font-size:11px;color:var(--muted);padding:10px 0;min-height:44px}.remove:hover,.text-button:hover{color:var(--accent)}.add-person{width:100%;margin:0 0 24px;padding:13px;border:1px dashed #a9bbd2;border-radius:10px;color:var(--accent);background:transparent;font-size:13px}.add-person:hover{background:var(--soft)}.primary,.secondary{border-radius:10px;min-height:46px;padding:12px 16px;font-size:13px;font-weight:600;border:1px solid transparent}.primary{color:white;background:var(--accent)}.primary:hover{background:var(--accent-dark)}.secondary{background:transparent;color:var(--ink);border-color:var(--line)}.secondary:hover{background:var(--soft)}.calculate{display:flex;align-items:center;justify-content:space-between;width:100%;font-size:15px;height:54px}.calculate span{font-size:23px;font-weight:400}.form-bottom{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:16px}.text-button{border:0;background:none;color:var(--muted);padding:6px 0;font-size:11px}.form-bottom>span{font-size:10px;color:var(--muted);margin-left:auto;line-height:1.6}.error{background:#fff1f0;border-radius:8px;color:var(--error);font-size:12px;line-height:1.8;padding:10px 12px;margin-bottom:14px}.receipt{background:var(--paper);border-radius:4px 4px 15px 15px;position:relative;padding:28px 28px 24px;border-top:5px solid var(--ink);box-shadow:0 8px 30px #18314f0a}.receipt:after{content:"";position:absolute;left:12px;right:12px;bottom:-6px;height:12px;background:radial-gradient(circle at 6px 11px,var(--bg) 6px,transparent 6.5px) repeat-x;background-size:16px 12px}.receipt-top{position:relative;border-bottom:1px solid var(--line);padding-bottom:20px}.receipt-top h2{font-size:29px;letter-spacing:3px;margin-top:2px}.receipt-stamp{position:absolute;right:0;top:0;width:44px;height:44px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;font-family:Georgia,serif;color:#a5b1bf;font-size:18px}.result-empty{padding:42px 0 45px;text-align:center}.empty-symbol{font-size:46px;color:#a9bddb;font-weight:300;margin-bottom:12px}.result-empty h3{font-size:15px}.result-empty p{font-size:12px;line-height:1.9;margin-top:12px;color:var(--muted)}.total-block{padding:24px 0 18px}.total-block>span{font-size:12px;color:var(--muted)}.total-block>div{display:flex;gap:8px;align-items:baseline;margin-top:7px;overflow-wrap:anywhere}.currency{font-size:22px}.total-block strong{font:600 clamp(28px,3.6vw,40px) ui-monospace,Consolas,monospace;letter-spacing:-1.5px}.receipt-stat{display:flex;justify-content:space-between;gap:15px;margin-top:12px;font-size:12px}.receipt-stat>span{color:var(--muted)}.receipt-stat strong{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}.rounding-note{font-size:11px;line-height:1.8;color:var(--muted);background:var(--soft);padding:10px;border-radius:7px;margin-top:14px}.receipt-divider{border-top:1px dashed #bac9d9;margin:24px 0 20px}.compact{margin-bottom:15px}.compact h3{font-size:14px}.transfer-list{list-style:none;padding:0;margin:0 0 20px}.transfer-item{border-bottom:1px solid var(--line);padding:13px 0;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px}.transfer-item:first-child{padding-top:0}.transfer-path{font-size:14px;font-weight:600;overflow-wrap:anywhere;line-height:1.8}.transfer-path .arrow{color:var(--coral);padding:0 9px;font-size:16px}.transfer-amount{font:600 15px ui-monospace,Consolas,monospace;white-space:nowrap}.balanced{font-size:13px;color:var(--receive);margin-bottom:22px;line-height:1.8}.receipt-actions{display:grid;grid-template-columns:1fr;gap:9px}.receipt-footnote{font-size:10px;color:var(--muted);text-align:center;line-height:1.7;margin-top:14px}.calculation,.personal{margin-top:36px;background:var(--paper);border-radius:var(--radius);padding:30px}.method-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding-bottom:24px;border-bottom:1px solid var(--line)}.method{position:relative;padding-left:32px;min-width:0}.step{position:absolute;left:0;top:0;width:21px;height:21px;border:1px solid var(--line);border-radius:50%;font:11px/19px ui-monospace,Consolas,monospace;text-align:center;color:var(--accent)}.method h3{font-size:13px;margin-bottom:10px}.formula{font:13px/1.9 ui-monospace,Consolas,"Microsoft YaHei",monospace;color:var(--muted);overflow-wrap:anywhere}.person-method{margin:24px 0 16px}.person-method h3{margin-bottom:4px}.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}table{border-collapse:collapse;width:100%;font-size:12px;text-align:left}th,td{padding:14px 12px;border-bottom:1px solid var(--line);vertical-align:top}th{background:var(--soft);font-size:11px;color:var(--muted);white-space:nowrap;font-weight:500}td{font-variant-numeric:tabular-nums}td:first-child{font-weight:600;overflow-wrap:anywhere;min-width:70px}td:not(:first-child){white-space:nowrap}.outcome{font-weight:600}.receive{color:var(--receive)}.pay{color:var(--coral)}.transfer-method{margin-top:24px}.transfer-method p{font-size:12px;line-height:1.9;color:var(--muted)}.personal-list{display:grid;grid-template-columns:1fr 1fr;gap:14px}.person-card{border:1px solid var(--line);border-radius:12px;padding:18px;min-width:0}.person-card>div{display:flex;justify-content:space-between;gap:14px;align-items:start}.person-card h3{font-size:14px;overflow-wrap:anywhere}.person-card button{font-size:11px;padding:2px 0;min-width:26px}.person-card small{display:block;font-size:10px;color:var(--muted);line-height:1.8;margin-top:7px}.person-card p{font-size:12px;line-height:1.9;margin-top:10px;overflow-wrap:anywhere}.page-footnote{font-size:11px;color:var(--muted);text-align:center;padding:40px 0 28px;line-height:1.9}.notice{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:10;max-width:90vw;background:var(--ink);color:white;font-size:13px;line-height:1.8;padding:12px 20px;border-radius:10px;box-shadow:0 4px 20px #18314f22}dialog{border:1px solid var(--line);border-radius:18px;padding:26px;width:min(560px,calc(100% - 30px));color:var(--ink)}dialog::backdrop{background:#18314f66}dialog h2{font-size:20px}dialog p{font-size:12px;color:var(--muted);line-height:1.8;margin:12px 0}dialog textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:12px;font-size:12px;line-height:1.9;resize:vertical}dialog form{margin-top:12px;display:flex;justify-content:flex-end}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}[hidden]{display:none!important}
+.optimization-note{font-size:11px;line-height:1.8;color:var(--receive);margin:-2px 0 18px}.settlement-groups{padding-left:16px;font-size:11px;line-height:1.9;color:var(--muted);margin:10px 0 0}.settlement-groups li{overflow-wrap:anywhere}
+.evidence-upload{border-top:1px solid var(--line);margin-top:24px;padding-top:22px}
+.bill-meta{margin:18px 0 22px;border:1px dashed #c6d4e4;border-radius:10px;padding:0 14px;background:var(--soft)}
+.bill-meta summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none;padding:12px 0;font-size:12px;color:var(--muted)}
+.bill-meta summary::-webkit-details-marker{display:none}
+.bill-meta summary::before{content:"＋";color:var(--accent);font-weight:700;margin-right:7px;flex-shrink:0}
+.bill-meta[open] summary::before{content:"－"}
+.bill-meta-title{font-weight:600;color:var(--ink)}
+.bill-meta-state{font-size:11px;color:#8b9bb0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:62%;text-align:right}
+.bill-meta-state.filled{color:var(--accent);font-weight:600}
+.bill-fields{display:grid;grid-template-columns:145px minmax(0,1fr);gap:12px;padding:0 0 14px}
+/* details 收起时浏览器只会隐藏"没有自定义 display"的子元素，这里必须显式关掉 */
+.bill-meta:not([open]) .bill-fields{display:none}
+/* 算完账平滑滚到结算单时留一点呼吸空间 */
+.receipt{scroll-margin-top:14px}
+.bill-fields label{display:block;font-size:12px;color:var(--muted)}
+.bill-fields label>span{font-size:10px;color:#8b9bb0;margin-left:5px}
+.bill-fields input{display:block;width:100%;min-width:0;border:1px solid var(--line);border-radius:8px;background:var(--soft);color:var(--ink);font-size:12px;height:43px;margin-top:8px;padding:9px}
+.bill-summary{font-size:13px;line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--soft);padding:12px;border-radius:8px;margin-top:16px}
+@media(max-width:520px){.bill-fields{grid-template-columns:1fr}}
+.evidence-upload>.hint{margin-bottom:12px}
+.upload-label{display:inline-flex;align-items:center;min-height:40px;cursor:pointer;border:1px dashed #a9bbd2;border-radius:8px;padding:11px 14px;color:var(--accent);font-size:12px}
+/* 原生 file 控件藏起来（仍可聚焦、仍由 label 触发），页面只留一个自定义按钮 */
+#evidence-files:focus-visible+.upload-label{outline:2px solid var(--accent);outline-offset:2px}
+.evidence-list{display:grid;gap:12px;margin-top:14px}
+/* 电脑上拖到这块区域时给个可放手的位置提示；手机不出现 */
+.evidence-upload.dragging{position:relative}
+/* 用覆盖层画提示框，不挤动文字，也不挡掉落事件 */
+.evidence-upload.dragging:after{content:'';position:absolute;inset:-10px;border:2px dashed var(--accent);border-radius:12px;background:rgba(37,99,235,.10);box-shadow:0 0 0 4px rgba(37,99,235,.08);pointer-events:none}
+.drop-hint{margin:10px 0 0}
+#evidence-files:disabled+.upload-label{opacity:.45;cursor:not-allowed}
+@media(max-width:520px){.upload-label{min-height:46px;font-size:13px;padding:12px 16px}}
+.evidence-card{display:grid;grid-template-columns:88px minmax(0,1fr);gap:12px;border:1px solid var(--line);border-radius:10px;padding:10px}
+.evidence-image-button{padding:0;border:0;background:var(--soft);border-radius:6px;overflow:hidden;align-self:start}
+.evidence-card img{display:block;width:88px;height:112px;object-fit:contain}
+.evidence-card label{display:block;margin-bottom:5px}
+.evidence-card input{width:100%;min-width:0;border:1px solid var(--line);border-radius:6px;padding:9px;font-size:12px;color:var(--ink)}
+.evidence-filename{display:block;overflow-wrap:anywhere;font-size:10px;color:var(--muted);margin-top:6px}
+.export-panel{margin-top:30px;background:white;border-radius:var(--radius);padding:30px}
+.export-panel>.hint{max-width:660px}
+.export-more{margin-top:22px;border-top:1px solid var(--line);padding-top:16px}
+.export-more summary{cursor:pointer;font-size:12px;color:var(--muted);list-style:none}
+.export-more summary::-webkit-details-marker{display:none}
+.export-more summary::before{content:"▸";color:var(--accent);margin-right:6px}
+.export-more[open] summary::before{content:"▾"}
+.export-more .export-buttons{margin-top:14px}
+.export-buttons{display:flex;gap:8px;flex-wrap:wrap}
+.export-dialog{width:min(860px,calc(100% - 24px));max-height:90vh;overflow-y:auto;padding:24px}
+.export-dialog .section-heading{align-items:center}
+.export-dialog .section-heading form{margin:0;flex-shrink:0}
+.export-dialog h2{font-size:18px}
+.export-body{display:grid;gap:22px;margin-top:16px}
+.export-sheet{background:var(--bg);border-radius:10px;padding:14px}
+.export-sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.export-sheet-head h3{font-size:15px}
+.export-sheet-actions{display:flex;gap:8px;flex-wrap:wrap}
+.export-sheet img{display:block;width:100%;height:auto;border:1px solid var(--line);background:white;border-radius:4px}
+.download-link{display:inline-block;text-decoration:none;text-align:center;font-size:12px;padding:9px 14px}
+@media(max-width:600px){.export-panel{padding:22px 18px;border-radius:16px}.export-sheet{padding:10px}.export-sheet-head{flex-direction:column;align-items:stretch;gap:8px}.export-sheet-head .download-link{width:100%}.export-buttons>button{flex:1 1 45%}.export-dialog{padding:18px 12px}.export-dialog h2{font-size:15px}.export-dialog .secondary{font-size:11px;padding:9px;min-height:38px}.export-dialog .section-heading{gap:7px}}
+@media(max-width:850px){.workspace{grid-template-columns:1fr}.receipt{max-width:none}.total-block strong{font-size:40px}.receipt-actions{grid-template-columns:1fr 1fr}.intro{margin-bottom:28px}.site-header{padding-top:22px}main{padding-top:12px}}
+@media(max-width:520px){.site-header{padding:18px 18px}.brand{font-size:14px}.mode{font-size:10px;padding:7px 9px}main{padding:10px 16px 0}.intro{margin-bottom:14px}.intro .eyebrow{margin-bottom:0;font-size:11px}.intro h1,.intro-copy,.mobile-break{display:none}.entry-panel,.calculation,.personal{padding:20px 16px;border-radius:16px}.entry-panel>.hint{font-size:11px;margin:-2px 0 16px}h2{font-size:20px}.workspace{gap:20px}.entry-row{grid-template-columns:14px minmax(0,1fr) 84px 44px;gap:8px}.entry-row input{font-size:14px;padding:10px;height:48px}.remove{width:44px;min-height:48px;font-size:17px;padding:0;line-height:1}.column-head{grid-template-columns:minmax(0,1fr) 84px 44px;gap:8px;padding-left:22px}.entry-row input:focus,.bill-fields input:focus{scroll-margin-bottom:140px}.receipt{padding:22px 18px}.receipt-actions{grid-template-columns:1fr}.method-grid{grid-template-columns:1fr;gap:22px}.personal-list{grid-template-columns:1fr}.calculation,.personal{margin-top:24px}.form-bottom{gap:12px}.form-bottom>span{width:100%;margin:0}.eyebrow{font-size:10px}th,td{padding:12px 10px}.transfer-item{gap:8px}.transfer-amount{font-size:14px}.page-footnote{font-size:10px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+dialog:not([open]){display:none}
+@media print{body{background:white;color:#000}.site-header,.intro,.entry-panel,.receipt-actions,.page-footnote,.person-card button,.notice,dialog{display:none!important}main{max-width:100%;padding:0}.workspace{display:block}.receipt{box-shadow:none;border:1px solid #aaa;padding:22px}.receipt:after{display:none}.calculation,.personal{padding:16px 0;margin-top:20px}.personal-list{grid-template-columns:1fr 1fr}.person-card,.method,.transfer-item,tr{break-inside:avoid}.table-scroll{overflow:visible}table{font-size:10px}th,td{padding:9px 6px}.method-grid{gap:18px}.receipt-stamp{display:none}}
+/* 清空入口：不再是一行小灰字，做成看得见的按钮，但也不抢主按钮的位置 */
+.reset-button{border:1px solid var(--line);background:transparent;color:var(--coral);border-radius:8px;padding:8px 11px;font-size:11px;line-height:1;min-height:34px}
+.reset-button:hover{background:#fff1f0;border-color:var(--coral)}
+.dialog-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+.dialog-actions>button{min-width:108px}
+/* 清空是不可逆动作，用红色系而不是主色蓝，避免手滑点到 */
+.danger{border-radius:10px;min-height:46px;padding:12px 16px;font-size:13px;font-weight:600;border:1px solid transparent;background:var(--coral);color:#fff}
+.danger:hover{background:#c14e34}
+@media(max-width:520px){.reset-button{min-height:40px;padding:9px 13px;font-size:12px}.dialog-actions>button{min-width:0;flex:1 1 0}}
+
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#"><span class="brand-mark" aria-hidden="true">AA</span><span>AA计算器</span></a>
+    <span class="mode">全员均分 · 人民币</span>
+  </header>
+  <main>
+    <div class="intro">
+      <p class="eyebrow">聚会结束，把账算清楚。</p>
+      <h1>玩得尽兴，<br class="mobile-break">账也清楚。</h1>
+      <p class="intro-copy">填上每个人垫付的总额，剩下的交给计算器。<br>谁该转给谁、为什么是这个数，一起算明白。</p>
+    </div>
+    <div class="workspace">
+      <section class="entry-panel" aria-labelledby="entry-title">
+        <div class="section-heading"><div><p class="eyebrow">先把人和钱记下来</p><h2 id="entry-title">今天都有谁？</h2></div><span id="person-count" class="count"></span></div>
+        <p class="hint">没垫付的朋友也要加进来，金额填 0。多次付款先加总。</p>
+        <form id="expense-form" novalidate>
+          <div class="column-head" aria-hidden="true"><span>参与者</span><span>已垫付 / 元</span><span></span></div>
+          <div id="entries"></div>
+          <button id="add-person" class="add-person" type="button">＋ 添加一位朋友</button>
+          <details id="bill-meta" class="bill-meta">
+            <summary><span class="bill-meta-title">日期与活动内容</span><span id="bill-meta-state" class="bill-meta-state">选填，不填也能算</span></summary>
+            <div id="bill-fields" class="bill-fields">
+              <label for="bill-date">日期<input id="bill-date" type="date"></label>
+              <label for="bill-content">当天活动内容<input id="bill-content" type="text" maxlength="120" placeholder="例如：朋友聚餐＋桌游"></label>
+            </div>
+          </details>
+          <p id="form-error" class="error" role="alert" hidden></p>
+          <button type="submit" class="primary calculate">算清这笔账 <span aria-hidden="true">→</span></button>
+          <div class="form-bottom"><button id="example" class="text-button" type="button">看看示例</button><button id="reset" class="reset-button" type="button">清空重来</button><span id="save-status">名单和金额会自动记住，只存在这台设备</span></div>
+        </form>
+        <section id="evidence-drop" class="evidence-upload" aria-labelledby="evidence-title">
+          <div class="section-heading compact"><h3 id="evidence-title">付款截图 / 图片凭证</h3><span id="evidence-count" class="hint">还没有图片</span></div>
+          <p class="hint">可选，仅放进“计算依据”。金额按账目填写，图片不自动算钱。</p>
+          <input id="evidence-files" class="sr-only" type="file" accept="image/png,image/jpeg,image/webp" multiple disabled>
+          <label id="evidence-label" class="upload-label" for="evidence-files">＋ 添加凭证图片</label>
+          <p id="evidence-drop-hint" class="hint drop-hint" hidden>电脑上也可以直接把图片拖进这块区域，支持一次拖多张。</p>
+          <p id="evidence-status" class="hint" role="status">正在读取本机凭证…</p>
+          <div id="evidence-list" class="evidence-list"></div>
+        </section>
+      </section>
+      <aside class="receipt" aria-labelledby="receipt-title">
+        <div class="receipt-top"><span class="eyebrow">这次聚会的</span><h2 id="receipt-title">结算单</h2><span class="receipt-stamp" aria-hidden="true">AA</span></div>
+        <p id="bill-summary" class="bill-summary" hidden></p>
+        <div id="result-empty" class="result-empty"><div class="empty-symbol" aria-hidden="true">＝</div><h3>每一笔，都算明白。</h3><p id="empty-hint">填好参与者和金额，<br>点“算清这笔账”生成结算单。</p></div>
+        <div id="result" hidden>
+          <div class="total-block"><span>总支出</span><div><span class="currency">¥</span><strong id="total"></strong></div></div>
+          <div class="receipt-stat"><span>参与人数</span><strong id="result-count"></strong></div>
+          <div class="receipt-stat"><span>每人应摊</span><strong id="per-share"></strong></div>
+          <p id="rounding-note" class="rounding-note" hidden></p>
+          <div class="receipt-divider"></div>
+          <div class="section-heading compact"><h3>照着转就好</h3><span id="transfer-count" class="hint"></span></div>
+          <p id="optimization-note" class="optimization-note"></p>
+          <ul id="transfers" class="transfer-list"></ul>
+          <p id="no-transfer" class="balanced" hidden>大家已经平摊，无需转账。</p>
+          <div class="receipt-actions"><button id="save-both" class="primary" type="button">保存两张单子</button><button id="copy-all" class="secondary" type="button">复制结算清单</button></div>
+          <p class="receipt-footnote">按这份清单完成转账后，所有人的账就结清了。</p>
+        </div>
+      </aside>
+    </div>
+    <section id="calculation" class="calculation" aria-labelledby="calculation-title" hidden>
+      <div class="section-heading"><div><p class="eyebrow">结果有依据，大家都放心</p><h2 id="calculation-title">这笔账，怎么算出来的？</h2></div></div>
+      <div class="method-grid">
+        <div class="method"><span class="step">1</span><h3>先加总所有垫付</h3><p id="total-formula" class="formula"></p></div>
+        <div class="method"><span class="step">2</span><h3>再按人数平均分</h3><p id="share-formula" class="formula"></p></div>
+      </div>
+      <div class="method person-method"><span class="step">3</span><h3>逐人算差额</h3><p class="hint">已垫付 − 个人应摊 = 差额。正数应收，负数应付。</p></div>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="个人计算明细，窄屏可横向滚动"><table><caption class="sr-only">每个人的垫付、应摊和差额计算</caption><thead><tr><th scope="col">参与者</th><th scope="col">已垫付</th><th scope="col">应摊</th><th scope="col">计算过程</th><th scope="col">结算</th></tr></thead><tbody id="calculation-rows"></tbody></table></div>
+      <div class="method transfer-method"><span class="step">4</span><h3>用更少的转账结清</h3><p id="optimization-method"></p><p>让还需补钱的人，直接转给多垫钱的人；每转一笔，就从双方的待付、待收金额中扣掉同样的数，直到所有差额归零。</p><ul id="settlement-groups" class="settlement-groups"></ul></div>
+    </section>
+    <section id="exports" class="export-panel" aria-labelledby="export-title" hidden>
+      <div class="section-heading"><div><p class="eyebrow">备用格式</p><h2 id="export-title">只存一张，或存成 PDF</h2></div></div>
+      <p class="hint">两张一起存用上方结算单里的「保存两张单子」。这里只给需要单张图片或 PDF 的场合。</p>
+      <details class="export-more">
+        <summary>展开：单张图片 / PDF</summary>
+        <div class="export-buttons">
+          <button type="button" class="secondary" data-export data-report="settlement" data-format="png">结算单 · 图片</button>
+          <button type="button" class="secondary" data-export data-report="settlement" data-format="pdf">结算单 · PDF</button>
+          <button type="button" class="secondary" data-export data-report="evidence" data-format="png">依据单 · 图片</button>
+          <button type="button" class="secondary" data-export data-report="evidence" data-format="pdf">依据单 · PDF</button>
+        </div>
+        <p class="hint">生成后在弹窗里点保存；手机可长按图片保存。</p>
+      </details>
+    </section>
+    <p class="page-footnote">全员平均分摊 · 精确到分 · 本机保存，不同步到其他设备<br>计算器生成结算建议，不代为转账。</p>
+  </main>
+  <dialog id="reset-dialog" aria-labelledby="reset-title">
+    <h2 id="reset-title">清空这一笔？</h2>
+    <p>会删掉：名单与金额、日期与活动内容、本机保存的图片凭证。清空后无法恢复，链接和页面都还在，直接重新填就行。</p>
+    <div class="dialog-actions">
+      <button id="reset-cancel" class="secondary" type="button">再想想</button>
+      <button id="reset-confirm" class="danger" type="button">清空重来</button>
+    </div>
+  </dialog>
+  <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+  <dialog id="copy-dialog" aria-labelledby="copy-title"><h2 id="copy-title">手动复制结算文字</h2><p>当前浏览器未能自动复制。长按或全选下方文字后复制。</p><label class="sr-only" for="copy-text">结算文字</label><textarea id="copy-text" readonly rows="14"></textarea><form method="dialog"><button class="primary">完成</button></form></dialog>
+  <dialog id="export-dialog" class="export-dialog" aria-labelledby="export-dialog-title"><div class="section-heading"><h2 id="export-dialog-title">导出预览</h2><form method="dialog"><button class="secondary">关闭预览</button></form></div><p id="export-description"></p><div id="export-body" class="export-body"></div></dialog>
+  <script type="module">
+export function normalizeBillMetadata(value={}) {
+  const date=String(value?.date ?? '').trim();
+  const content=String(value?.content ?? '').trim();
+  if (content.length>120) throw new Error('当天活动内容最多120个字符。');
+  if (date) {
+    const time=Date.parse(`${date}T00:00:00Z`);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(time) || new Date(time).toISOString().slice(0,10)!==date) {
+      throw new Error('请选择有效的活动日期，或留空。');
+    }
+  }
+  return { date,content };
+}
+
+
+/** Convert yuan text to integer cents without floating-point multiplication. */
+export function parseAmount(value) {
+  let text = String(value ?? '').trim();
+  if (!text) return 0;
+  if (text.startsWith('.')) text = `0${text}`;
+  if (!/^\d{1,8}(?:\.\d{1,2})?$/.test(text)) {
+    throw new Error('金额须为 0 至 99,999,999.99 元，最多两位小数。');
+  }
+  const [yuan, decimal = ''] = text.split('.');
+  return Number(yuan) * 100 + Number(decimal.padEnd(2, '0'));
+}
+
+export function formatMoney(cents) {
+  const absolute = Math.abs(cents);
+  return `${cents < 0 ? '-' : ''}${Math.floor(absolute / 100)}.${String(absolute % 100).padStart(2, '0')}`;
+}
+
+export function calculateSettlement(entries) {
+  if (!Array.isArray(entries) || !entries.length) throw new Error('请至少添加一位参与者。');
+  if (entries.length > 100) throw new Error('一次最多支持 100 位参与者。');
+  const names = new Set();
+  const paid = entries.map((entry, index) => {
+    const name = String(entry.name ?? '').trim();
+    if (!name) throw new Error(`请填写第 ${index + 1} 位参与者的姓名。`);
+    if (names.has(name)) throw new Error(`姓名“${name}”重复，请用不同称呼区分。`);
+    names.add(name);
+    try {
+      return { name, paidCents: parseAmount(entry.amount) };
+    } catch (error) {
+      throw new Error(`${name}：${error.message}`);
+    }
+  });
+  const totalCents = paid.reduce((sum, person) => sum + person.paidCents, 0);
+  const baseShareCents = Math.floor(totalCents / paid.length);
+  const remainderCents = totalCents % paid.length;
+  const people = paid.map((person, index) => {
+    const shareCents = baseShareCents + (index < remainderCents ? 1 : 0);
+    return { ...person, shareCents, balanceCents: person.paidCents - shareCents };
+  });
+  const active = people.map((p,index) => ({ ...p,index })).filter(p => p.balanceCents !== 0);
+  const exact = active.length <= 20;
+  const groups = exact ? findZeroSumGroups(active) : (active.length ? [active] : []);
+  const transfers = groups.flatMap(matchBalances);
+  const optimization = {
+    exact,
+    activeCount:active.length,
+    minimumTransfers:exact ? active.length - groups.length : null,
+    groups:exact ? groups.map(group => group.map(p => p.name)) : [],
+  };
+  return { totalCents, baseShareCents, remainderCents, people, transfers, optimization };
+}
+
+/** Maximise zero-sum components. The minimum number of edges is N - components.
+ * dp[mask] counts zero-sum prefixes in the best ordering of that subset.
+ * Each ordering visits one predecessor, and a zero sum closes one component.
+ * Time O(N * 2^N); bound N at 20 non-zero balances, independently of party size.
+ */
+function findZeroSumGroups(active) {
+  if (!active.length) return [];
+  const size = 1 << active.length;
+  const sums = new Float64Array(size);
+  const counts = new Uint8Array(size);
+  const parent = new Uint8Array(size);
+  for (let mask=1;mask<size;mask++) {
+    const first = mask & -mask;
+    sums[mask] = sums[mask ^ first] + active[31-Math.clz32(first)].balanceCents;
+    let best = -1;
+    for (let remaining=mask;remaining;remaining &= remaining-1) {
+      const bit = remaining & -remaining;
+      const candidate = counts[mask ^ bit];
+      if (candidate > best) {
+        best = candidate;
+        parent[mask] = 31-Math.clz32(bit);
+      }
+    }
+    counts[mask] = best + (sums[mask] === 0 ? 1 : 0);
+  }
+  const groups = [];
+  let mask = size-1;
+  let current = [];
+  while (mask) {
+    const index = parent[mask];
+    current.push(active[index]);
+    mask ^= 1 << index;
+    if (sums[mask] === 0) {
+      groups.push(current.sort((a,b) => a.index-b.index));
+      current = [];
+    }
+  }
+  return groups.sort((a,b) => a[0].index-b[0].index);
+}
+
+function matchBalances(people) {
+  const creditors = people.filter(p => p.balanceCents > 0).map(p => ({ name:p.name, remaining:p.balanceCents }));
+  const debtors = people.filter(p => p.balanceCents < 0).map(p => ({ name:p.name, remaining:-p.balanceCents }));
+  creditors.sort((a, b) => b.remaining - a.remaining);
+  debtors.sort((a, b) => b.remaining - a.remaining);
+  const transfers = [];
+  let creditor = 0;
+  let debtor = 0;
+  while (creditor < creditors.length && debtor < debtors.length) {
+    const receiver = creditors[creditor];
+    const payer = debtors[debtor];
+    const amountCents = Math.min(receiver.remaining, payer.remaining);
+    transfers.push({ from: payer.name, to: receiver.name, amountCents });
+    receiver.remaining -= amountCents;
+    payer.remaining -= amountCents;
+    if (!receiver.remaining) creditor++;
+    if (!payer.remaining) debtor++;
+  }
+  return transfers;
+}
+
+export function describePerson(person, transfers) {
+  if (!person.balanceCents) return `${person.name}：已付金额刚好，无需转账。`;
+  if (person.balanceCents < 0) {
+    const payments = transfers.filter(t => t.from === person.name)
+      .map(t => `向${t.to}支付 ${formatMoney(t.amountCents)} 元`);
+    return `${person.name}：${payments.join('；')}。`;
+  }
+  const receipts = transfers.filter(t => t.to === person.name)
+    .map(t => `${t.from} ${formatMoney(t.amountCents)} 元`);
+  return `${person.name}：应收${receipts.join('、')}。`;
+}
+
+export function createTotalFormula(result) {
+  return `${result.people.map(p => `${formatMoney(p.paidCents)} 元（${p.name}）`).join(' + ')} = ${formatMoney(result.totalCents)} 元`;
+}
+
+export function createSummary(result,metadata={}) {
+  const bill=normalizeBillMetadata(metadata);
+  const lines = ['AA结算清单'];
+  if (bill.content) lines.push(`内容：${bill.content}`);
+  if (bill.date) lines.push(`日期：${bill.date}`);
+  lines.push(`共 ${result.people.length} 人，总支出 ${formatMoney(result.totalCents)} 元。`);
+  lines.push(`总额：${createTotalFormula(result)}。`);
+  if (result.remainderCents) {
+    lines.push(`均分计算：${result.totalCents} 分 ÷ ${result.people.length} 人 = ${result.baseShareCents} 分 / 人，余 ${result.remainderCents} 分。`);
+    lines.push(`前 ${result.remainderCents} 人各摊 ${formatMoney(result.baseShareCents + 1)} 元，其余每人 ${formatMoney(result.baseShareCents)} 元（按名单顺序分配余分）。`);
+  } else {
+    lines.push(`每人应摊：${formatMoney(result.totalCents)} ÷ ${result.people.length} = ${formatMoney(result.baseShareCents)} 元。`);
+  }
+  lines.push('', '个人计算（已垫付 - 应摊 = 差额；正数应收，负数应付）');
+  result.people.forEach(p => lines.push(`${p.name}：${formatMoney(p.paidCents)} - ${formatMoney(p.shareCents)} = ${formatMoney(p.balanceCents)} 元（${p.balanceCents > 0 ? '应收' : p.balanceCents < 0 ? '应付' : '无需转账'}）。`));
+  lines.push('', '转账清单');
+  lines.push(result.optimization.exact
+    ? `按以上应摊金额，最少需要 ${result.transfers.length} 笔转账（精确求解）。`
+    : `本次 ${result.transfers.length} 笔转账（非零余额超过 20 人，使用快速合并，不保证全局最少）。`);
+  if (result.optimization.exact) lines.push(`最少笔数依据：${result.optimization.activeCount} 位有余额的人 - ${result.optimization.groups.length} 个可分别结清的小组 = ${result.transfers.length} 笔。`);
+  lines.push('配对方法：由应付者直接转给应收者；每转一笔，从双方的待付和待收中扣掉同样的金额，直到全部差额归零。');
+  if (result.transfers.length) {
+    result.transfers.forEach(t => lines.push(`${t.from} → ${t.to}：${formatMoney(t.amountCents)} 元`));
+  } else lines.push('所有人无需转账。');
+  return lines.join('\n');
+}
+
+
+export function createReport(data,kind,{ evidence=[],includeEvidence=false,metadata={},date=new Date().toLocaleString('zh-CN') }={}) {
+  if (!['settlement','evidence'].includes(kind)) throw new Error('未知报告类型。');
+  const blocks = [];
+  const add = (type,text) => blocks.push({ type,text });
+  const title = kind==='settlement' ? '结算单' : '计算依据';
+  const bill=normalizeBillMetadata(metadata);
+  if (bill.content) add('summary',`内容：${bill.content}`);
+  if (bill.date) add('text',`日期：${bill.date}`);
+  add('summary',`总支出 ¥ ${formatMoney(data.totalCents)}   ·   ${data.people.length} 人参与`);
+  add('text',data.remainderCents
+    ? `每人应摊 ${formatMoney(data.baseShareCents)}–${formatMoney(data.baseShareCents+1)} 元，余分分配详见计算依据。`
+    : `每人应摊 ¥ ${formatMoney(data.baseShareCents)}`);
+  const optimal = data.optimization.exact
+    ? `按已列明的应摊金额，最少 ${data.transfers.length} 笔转账即可结清。`
+    : `快速合并后共 ${data.transfers.length} 笔；非零余额超过20人，不保证全局最少。`;
+  if (kind==='settlement') {
+    add('section','照着转就好');
+    add('text',optimal);
+    for (const t of data.transfers) blocks.push({ type:'transfer',text:`${t.from} → ${t.to}`,amount:`¥ ${formatMoney(t.amountCents)}` });
+    if (!data.transfers.length) add('summary','大家已经平摊，无需转账。');
+    const balanced = data.people.filter(p=>p.balanceCents===0).map(p=>p.name);
+    if (data.transfers.length && balanced.length) add('text',`无需转账：${balanced.join('、')}。`);
+    add('note','按以上清单完成转账后，本次费用结清。');
+  } else {
+    add('section','1. 总支出怎么来的');
+    add('text',createTotalFormula(data));
+    add('section','2. 所有人平均分');
+    if (data.remainderCents) {
+      add('text',`${data.totalCents} 分 ÷ ${data.people.length} 人 = ${data.baseShareCents} 分 / 人，余 ${data.remainderCents} 分。`);
+      add('text',`按名单顺序，前 ${data.remainderCents} 位各摊 ${formatMoney(data.baseShareCents+1)} 元，其余各摊 ${formatMoney(data.baseShareCents)} 元，确保总额不差一分。`);
+    } else add('text',`${formatMoney(data.totalCents)} 元 ÷ ${data.people.length} 人 = ${formatMoney(data.baseShareCents)} 元 / 人`);
+    add('section','3. 逐人计算差额');
+    add('note','已垫付 − 应摊 = 差额；正数应收，负数应付。');
+    for (const p of data.people) add('text',`${p.name}：${formatMoney(p.paidCents)} − ${formatMoney(p.shareCents)} = ${formatMoney(p.balanceCents)} 元（${p.balanceCents>0 ? '应收' : p.balanceCents<0 ? '应付' : '无需转账'}）`);
+    add('section','4. 转账方案的依据');
+    add('text',optimal);
+    if (data.optimization.exact) {
+      add('text',`最少笔数 = ${data.optimization.activeCount} 位有余额的人 − ${data.optimization.groups.length} 个可独立结清的小组 = ${data.transfers.length} 笔。`);
+      data.optimization.groups.forEach((group,i)=>add('text',`第 ${i+1} 组：${group.join('、')}，组内差额和为0，需 ${group.length-1} 笔。`));
+    }
+    const balances = new Map(data.people.map(p=>[p.name,p.balanceCents]));
+    for (const [i,t] of data.transfers.entries()) {
+      balances.set(t.from,balances.get(t.from)+t.amountCents);
+      balances.set(t.to,balances.get(t.to)-t.amountCents);
+      add('text',`${i+1}. ${t.from} → ${t.to}：${formatMoney(t.amountCents)} 元。转后，${t.from}剩余应付 ${formatMoney(-balances.get(t.from))} 元；${t.to}剩余应收 ${formatMoney(balances.get(t.to))} 元。`);
+    }
+    if (includeEvidence && evidence.length) {
+      add('section',`5. 图片凭证（${evidence.length} 张）`);
+      add('note','以下图片作为凭证附入；计算金额以已录入账目为准。');
+      evidence.forEach((item,i)=>blocks.push({ ...item,type:'image',text:`凭证 ${i+1} · ${item.label || item.fileName}` }));
+    } else add('note','此份计算依据未附图片凭证。');
+  }
+  return { kind,title,generatedAt:date,blocks };
+}
+
+/**
+ * 一次生成用户真正需要的两张单子：结算单 + 计算依据。
+ * 依据单是否需要附图不交给用户选——有凭证就带，没凭证就不带。
+ */
+export function createBothReports(data,{ evidence=[],metadata={},date }={}) {
+  const includeEvidence = evidence.length>0;
+  const options = { evidence,includeEvidence,metadata,date };
+  return [createReport(data,'settlement',options),createReport(data,'evidence',options)];
+}
+
+export function wrapText(text,measure,maxWidth) {
+  const lines = [];
+  for (const paragraph of String(text).split('\n')) {
+    let line = '';
+    for (const char of paragraph) {
+      if (line && measure(line+char)>maxWidth) { lines.push(line);line=''; }
+      line += char;
+    }
+    lines.push(line);
+  }
+  return lines;
+}
+
+export function layoutReport(report,measure,{ width=1200,maxHeight=14000 }={}) {
+  const margin = 64;
+  const contentWidth = width-2*margin;
+  const top = 146;
+  const bottom = 74;
+  // 凭证是要拼成一张长图的：张数越多，每张压得越紧，尽量都留在同一张里而不是被切成两页
+  const imageCount = report.blocks.filter(block=>block.type==='image').length;
+  // 凭证是要拼成一张长图的：张数越多每张压得越紧，尽量都留在同一张里。
+  // 1800 是给标题、算式、转账清单等正文留的位置，避免算漏了又被挤到第二页。
+  const imageCap = imageCount
+    ? Math.min(1100,Math.max(380,Math.floor((maxHeight-top-bottom-1800)/imageCount)-74))
+    : 1100;
+  const pages = [];
+  let items = [];
+  let y = top;
+  const flush = () => { pages.push({ width,height:Math.max(320,y+bottom),items });items=[];y=top; };
+  const place = item => {
+    item.y=y;
+    items.push(item);
+    y+=item.height;
+  };
+  // 小节标题先挂起，等它引导的内容就位后再落版
+  let pending = null;
+  const placePending = () => {
+    if (!pending) return;
+    const sectionHeight = pending.lines.length*pending.lineHeight+18;
+    if (y+sectionHeight>maxHeight-bottom && items.length) flush();
+    y+=18;
+    pending.lines.forEach((line,i)=>place({ type:'section',text:line,fontSize:pending.fontSize,
+      height:pending.lineHeight+(i===pending.lines.length-1 ? 10:0) }));
+    pending = null;
+  };
+  // 大块内容放不下时，把页尾属于它的标题组（小节标题、说明文字）一起搬到新页，避免标题孤立
+  const flushKeepingGroup = () => {
+    let cut = items.length;
+    while (cut>0 && (items[cut-1].type==='section' || items[cut-1].type==='note')) cut--;
+    if (cut===0 || cut===items.length) { flush();return; }
+    const moved = items.slice(cut);
+    items = items.slice(0,cut);
+    y = items.length ? items[items.length-1].y+items[items.length-1].height : top;
+    flush();
+    moved.forEach(item=>place(item));
+  };
+  for (const block of report.blocks) {
+    if (block.type==='section') {
+      const fontSize=29,lineHeight=44;
+      pending={ lines:wrapText(block.text,t=>measure(t,fontSize,600),contentWidth),fontSize,lineHeight };
+      continue;
+    }
+    if (block.type==='image') {
+      const labelLines=wrapText(block.text,t=>measure(t,23,600),contentWidth);
+      const labelHeight=labelLines.length*34+18;
+      const scale=Math.min(contentWidth/block.width,Math.min(imageCap,maxHeight-top-bottom-labelHeight-22)/block.height);
+      const imageWidth=Math.max(1,Math.round(block.width*scale));
+      const imageHeight=Math.max(1,Math.round(block.height*scale));
+      const item={ ...block,labelLines,imageWidth,imageHeight,height:labelHeight+imageHeight+22,labelHeight };
+      placePending();
+      if (y+item.height>maxHeight-bottom && items.length) flushKeepingGroup();
+      place(item);
+      continue;
+    }
+    if (block.type==='transfer') {
+      const amountWidth=Math.max(260,measure(block.amount,32,700)+28);
+      const lines=wrapText(block.text,t=>measure(t,30,600),contentWidth-amountWidth-20);
+      const item={ ...block,lines,fontSize:30,amountWidth,height:Math.max(82,lines.length*43+28) };
+      placePending();
+      if (y+item.height>maxHeight-bottom && items.length) flushKeepingGroup();
+      place(item);
+      continue;
+    }
+    const fontSize=block.type==='summary' ? 28 : block.type==='note' ? 21 : 25;
+    const lineHeight=fontSize+15;
+    const lines=wrapText(block.text,t=>measure(t,fontSize,block.type==='summary' ? 600:400),contentWidth);
+    placePending();
+    lines.forEach((line,i)=>{
+      const item={ type:block.type,text:line,fontSize,height:lineHeight+(i===lines.length-1 ? 10:0) };
+      if (y+item.height>maxHeight-bottom && items.length) flush();
+      place(item);
+    });
+  }
+  if (pending) placePending(0);
+  if (items.length || !pages.length) flush();
+  return pages;
+}
+
+export function validateEvidenceFile(file,count) {
+  // 与 app.js 的 MAX_EVIDENCE 保持一致：不再卡 8 张，改成 30 张的长图上限
+  if (count>=30) throw new Error('最多添加 30 张凭证，再多一张长图就太长了。');
+  if (!['image/png','image/jpeg','image/webp'].includes(file.type)) throw new Error('只认 PNG / JPEG / WebP；iPhone 的 HEIC 请先截图或存成 JPEG 再传。');
+  if (file.size>10*1024*1024) throw new Error('单张图片不能超过10MB。');
+}
+
+export function fitImage(width,height) {
+  if (!(width>0 && height>0 && Number.isFinite(width) && Number.isFinite(height))) throw new Error('无法读取图片尺寸。');
+  const scale=Math.min(1,1600/width,2400/height);
+  return { width:Math.max(1,Math.round(width*scale)),height:Math.max(1,Math.round(height*scale)) };
+}
+
+// crypto.randomUUID 只在安全上下文可用；旧内核或非 https 环境会直接 undefined，这里做降级
+function createEvidenceId() {
+  try {
+    if (typeof crypto!=='undefined' && typeof crypto.randomUUID==='function') return crypto.randomUUID();
+  } catch {}
+  return `p-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,10)}`;
+}
+
+export async function prepareEvidence(file,count) {
+  validateEvidenceFile(file,count);
+  const source=URL.createObjectURL(file);
+  try {
+    const image=new Image();
+    image.src=source;
+    await image.decode();
+    const size=fitImage(image.naturalWidth,image.naturalHeight);
+    const canvas=document.createElement('canvas');
+    canvas.width=size.width;canvas.height=size.height;
+    const ctx=canvas.getContext('2d');
+    if (!ctx) throw new Error('当前浏览器无法处理图片。');
+    ctx.fillStyle='white';ctx.fillRect(0,0,size.width,size.height);
+    ctx.drawImage(image,0,0,size.width,size.height);
+    return { id:createEvidenceId(),fileName:file.name.slice(0,120),label:'',...size,dataUrl:canvas.toDataURL('image/jpeg',0.9) };
+  } finally { URL.revokeObjectURL(source); }
+}
+
+async function evidenceDatabase() {
+  return new Promise((resolve,reject)=>{
+    const request=indexedDB.open('aa-calculator-evidence',1);
+    request.onupgradeneeded=()=>request.result.createObjectStore('documents');
+    request.onsuccess=()=>resolve(request.result);
+    request.onerror=()=>reject(request.error);
+    request.onblocked=()=>reject(new Error('图片存储被其他页面占用。'));
+  });
+}
+
+export async function loadEvidence() {
+  const db=await evidenceDatabase();
+  try {
+    return await new Promise((resolve,reject)=>{
+      const transaction=db.transaction('documents','readonly');
+      const request=transaction.objectStore('documents').get('current');
+      request.onsuccess=()=>{
+        const items=request.result ?? [];
+        const valid=Array.isArray(items) && items.length<=8 && items.every(item=>item && typeof item.id==='string'
+          && typeof item.label==='string' && item.label.length<=80 && typeof item.fileName==='string'
+          && typeof item.dataUrl==='string' && item.dataUrl.startsWith('data:image/jpeg;base64,')
+          && item.width>0 && item.width<=1600 && item.height>0 && item.height<=2400);
+        if (!valid) reject(new Error('保存的凭证数据损坏，请重新添加。'));
+        else resolve(items);
+      };
+      request.onerror=()=>reject(request.error);
+    });
+  } finally { db.close(); }
+}
+
+export async function saveEvidence(items) {
+  const db=await evidenceDatabase();
+  try {
+    await new Promise((resolve,reject)=>{
+      const transaction=db.transaction('documents','readwrite');
+      transaction.objectStore('documents').put(items,'current');
+      transaction.oncomplete=()=>resolve();
+      transaction.onerror=()=>reject(transaction.error);
+      transaction.onabort=()=>reject(transaction.error || new Error('图片未能保存。'));
+    });
+  } finally { db.close(); }
+}
+
+
+/** A small, byte-accurate PDF writer for locally rendered RGB JPEG pages. */
+export function createImagePdf(pages) {
+  if (!pages.length) throw new Error('PDF至少需要一个页面。');
+  const encoder=new TextEncoder();
+  const chunks=[];
+  let length=0;
+  const append=value=>{ const bytes=typeof value==='string' ? encoder.encode(value):value;chunks.push(bytes);length+=bytes.length; };
+  const offsets=[0];
+  const object=(id,parts)=>{
+    offsets[id]=length;
+    append(`${id} 0 obj\n`);
+    parts.forEach(append);
+    append('\nendobj\n');
+  };
+  append('%PDF-1.4\n%AA-REPORT\n');
+  object(1,['<< /Type /Catalog /Pages 2 0 R >>']);
+  object(2,[`<< /Type /Pages /Count ${pages.length} /Kids [${pages.map((_,i)=>`${3+i*3} 0 R`).join(' ')}] >>`]);
+  pages.forEach((page,i)=>{
+    const id=3+i*3;
+    const pageWidth=595.28,pageHeight=841.89;
+    const scale=Math.min(pageWidth/page.width,pageHeight/page.height);
+    const targetWidth=(page.width*scale).toFixed(3),targetHeight=(page.height*scale).toFixed(3);
+    // 页面内容在 A4 纸面上居中，避免横向留白全挤在右侧
+    const offsetX=((pageWidth-page.width*scale)/2).toFixed(3);
+    const offsetY=((pageHeight-page.height*scale)/2).toFixed(3);
+    const commands=`q\n${targetWidth} 0 0 ${targetHeight} ${offsetX} ${offsetY} cm\n/Im0 Do\nQ`;
+    object(id,[`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /XObject << /Im0 ${id+1} 0 R >> >> /Contents ${id+2} 0 R >>`]);
+    object(id+1,[`<< /Type /XObject /Subtype /Image /Width ${page.width} /Height ${page.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${page.jpeg.length} >>\nstream\n`,page.jpeg,'\nendstream']);
+    object(id+2,[`<< /Length ${encoder.encode(commands).length} >>\nstream\n`,commands,'\nendstream']);
+  });
+  const xref=length;
+  append(`xref\n0 ${offsets.length}\n0000000000 65535 f \n`);
+  offsets.slice(1).forEach(offset=>append(`${String(offset).padStart(10,'0')} 00000 n \n`));
+  append(`trailer\n<< /Size ${offsets.length} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`);
+  const result=new Uint8Array(length);
+  let cursor=0;
+  for (const chunk of chunks) { result.set(chunk,cursor);cursor+=chunk.length; }
+  return result;
+}
+
+const reportFont=(size,weight=400)=>`${weight} ${size}px "Microsoft YaHei","PingFang SC",sans-serif`;
+
+async function renderReportCanvases(report,format) {
+  await document.fonts.ready;
+  const measureCanvas=document.createElement('canvas');
+  const measureContext=measureCanvas.getContext('2d');
+  if (!measureContext) throw new Error('当前浏览器不支持图片导出。');
+  const measure=(text,size=25,weight=400)=>{ measureContext.font=reportFont(size,weight);return measureContext.measureText(text).width; };
+  const pages=layoutReport(report,measure,{ maxHeight:format==='pdf' ? 1754:14000 });
+  const images=new Map();
+  for (const block of report.blocks.filter(b=>b.type==='image')) {
+    const image=new Image();image.src=block.dataUrl;
+    try { await image.decode(); } catch { throw new Error(`无法读取凭证“${block.label || block.fileName}”，请删除后重新添加。`); }
+    images.set(block.id,image);
+  }
+  return pages.map((page,index)=>{
+    const canvas=document.createElement('canvas');canvas.width=page.width;canvas.height=format==='pdf' ? 1754:page.height;
+    const ctx=canvas.getContext('2d');
+    if (!ctx) throw new Error('导出图片内存不足，请减少凭证数量后重试。');
+    ctx.fillStyle='white';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.textBaseline='top';
+    ctx.fillStyle='#18314f';ctx.font=reportFont(43,700);ctx.fillText(report.title,64,42);
+    ctx.fillStyle='#61738b';ctx.font=reportFont(19);ctx.fillText(`AA计算器 · 导出时间：${report.generatedAt}`,64,105);
+    ctx.fillStyle='#255bc4';ctx.fillRect(64,130,canvas.width-128,3);
+    for (const item of page.items) {
+      if (item.type==='image') {
+        ctx.fillStyle='#18314f';ctx.font=reportFont(23,600);
+        item.labelLines.forEach((line,i)=>ctx.fillText(line,64,item.y+i*34));
+        const x=(canvas.width-item.imageWidth)/2;
+        ctx.drawImage(images.get(item.id),x,item.y+item.labelHeight,item.imageWidth,item.imageHeight);
+      } else if (item.type==='transfer') {
+        ctx.fillStyle='#f2f6fc';ctx.fillRect(56,item.y,canvas.width-112,item.height-8);
+        ctx.fillStyle='#18314f';ctx.font=reportFont(item.fontSize,600);
+        item.lines.forEach((line,i)=>ctx.fillText(line,76,item.y+14+i*43));
+        ctx.textAlign='right';ctx.font=reportFont(32,700);ctx.fillStyle='#255bc4';
+        ctx.fillText(item.amount,canvas.width-76,item.y+16);ctx.textAlign='left';
+      } else {
+        ctx.font=reportFont(item.fontSize,item.type==='section' || item.type==='summary' ? 600:400);
+        ctx.fillStyle=item.type==='note' ? '#61738b':item.type==='section' ? '#255bc4':'#18314f';
+        ctx.fillText(item.text,64,item.y);
+      }
+    }
+    ctx.fillStyle='#61738b';ctx.font=reportFont(17);
+    ctx.fillText(`AA计算器 · 全员均分 · 第 ${index+1} / ${pages.length} 页`,64,canvas.height-42);
+    return canvas;
+  });
+}
+
+function exportCanvasBlob(canvas,type='image/png',quality) {
+  return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob ? resolve(blob):reject(new Error('图片导出失败，请减少内容后重试。')),type,quality));
+}
+
+export async function generateReportFiles(report,format) {
+  if (!['png','pdf'].includes(format)) throw new Error('请选择PNG或PDF格式。');
+  const canvases=await renderReportCanvases(report,format);
+  const now=new Date();
+  const pad=value=>String(value).padStart(2,'0');
+  const stamp=`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}-${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
+  const base=`${report.kind==='settlement' ? '01-结算单':'02-计算依据'}-${stamp}`;
+  const previews=await Promise.all(canvases.map(canvas=>exportCanvasBlob(canvas)));
+  if (format==='png') return { previews,files:previews.map((blob,i)=>({ name:`${base}${previews.length>1 ? `-${i+1}`:''}.png`,blob })) };
+  const pages=canvases.map(canvas=>({ width:canvas.width,height:canvas.height,
+    jpeg:Uint8Array.from(atob(canvas.toDataURL('image/jpeg',0.94).split(',')[1]),char=>char.charCodeAt(0)) }));
+  return { previews,files:[{ name:`${base}.pdf`,blob:new Blob([createImagePdf(pages)],{ type:'application/pdf' }) }] };
+}
+
+
+const byId = id => document.getElementById(id);
+const storageKey = 'aa-calculator.v1';
+// 凭证不设「只能 8 张」这种硬门槛，加多少张都往下拼；30 张是长图可读性的上限
+const MAX_EVIDENCE = 30;
+let result = null;
+let noticeTimer;
+let evidenceItems=[];
+let evidenceBusy=false;
+let evidenceLoading=true;
+let evidenceNoteTimer;
+let exportBusy=false;
+let evidenceRevision=0;
+let evidenceWrites=Promise.resolve();
+let exportUrls=[];
+let billRevision=0;
+const blankEntries = () => Array.from({ length:3 }, () => ({ name:'', amount:'' }));
+
+function element(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
+// 旧内核（部分微信内置浏览器）没有 dialog.showModal，直接调用会抛错并中断整段交互
+function openDialog(node) {
+  if (!node) return;
+  if (typeof node.showModal==='function') { try { node.showModal();return; } catch {} }
+  node.setAttribute('open','');
+}
+function closeDialog(node) {
+  if (!node) return;
+  if (typeof node.close==='function') { try { node.close();return; } catch {} }
+  node.removeAttribute('open');
+}
+function isDialogOpen(node) { return !!node && (node.open===true || node.hasAttribute('open')); }
+
+function readEntries() {
+  return [...byId('entries').children].map(row => ({
+    name:row.querySelector('.name').value,
+    amount:row.querySelector('.amount').value,
+  }));
+}
+
+function readBillMetadata() {
+  return normalizeBillMetadata({ date:byId('bill-date').value,content:byId('bill-content').value });
+}
+
+function renderBillMetadata() {
+  const bill=readBillMetadata();
+  byId('bill-summary').hidden=!bill.date && !bill.content;
+  byId('bill-summary').textContent=[bill.content,bill.date].filter(Boolean).join('\n');
+  // 收起状态也要能一眼看到填了什么，省得为了确认再展开
+  const filled=[bill.date,bill.content].filter(Boolean).join(' · ');
+  const state=byId('bill-meta-state');
+  state.textContent=filled || '选填，不填也能算';
+  state.classList.toggle('filled',Boolean(filled));
+}
+
+function saveBillState() {
+  try {
+    localStorage.setItem(storageKey,JSON.stringify({ version:1,entries:readEntries(),metadata:readBillMetadata() }));
+    byId('save-status').textContent='已自动记住，只在这台设备';
+  } catch {
+    byId('save-status').textContent='本次无法自动保存，关闭前请先导出结算结果';
+  }
+}
+
+function renderEntries(entries) {
+  byId('entries').replaceChildren();
+  entries.forEach((entry,index) => {
+    const row = element('div','entry-row');
+    row.append(element('span','row-number',String(index+1).padStart(2,'0')));
+    const name = element('input','name');
+    name.type = 'text'; name.value = entry.name; name.placeholder = '朋友的名字'; name.maxLength = 40;
+    name.setAttribute('aria-label',`第 ${index+1} 位姓名`);
+    name.autocomplete = 'off';
+    const amount = element('input','amount');
+    amount.type = 'text'; amount.inputMode = 'decimal'; amount.value = entry.amount; amount.placeholder = '0.00';
+    amount.setAttribute('aria-label',`第 ${index+1} 位垫付金额`);
+    amount.autocomplete = 'off'; amount.maxLength = 12;
+    const remove = element('button','remove','×');
+    remove.type = 'button'; remove.dataset.index = String(index);
+    remove.setAttribute('aria-label',`删除第 ${index+1} 位参与者`);
+    row.append(name,amount,remove);
+    byId('entries').append(row);
+  });
+  updateFormState();
+}
+
+function updateFormState() {
+  const entries = readEntries();
+  byId('person-count').textContent = `${entries.length} 位朋友`;
+  byId('add-person').disabled = entries.length >= 100;
+  byId('example').hidden = entries.some(p => p.name.trim() || p.amount.trim());
+}
+
+function invalidate() {
+  const hadResult = result !== null;
+  result = null;
+  byId('result').hidden = true;
+  byId('result-empty').hidden = false;
+  byId('calculation').hidden = true;
+  byId('exports').hidden = true;
+  if (isDialogOpen(byId('export-dialog'))) closeDialog(byId('export-dialog'));
+  byId('form-error').hidden = true;
+  if (hadResult) byId('empty-hint').textContent = '名单或金额已修改，请重新点击“算清这笔账”。';
+  updateFormState();
+  saveBillState();
+}
+
+function restore() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey));
+    if (saved === null) return blankEntries();
+    if (saved?.version !== 1 || !Array.isArray(saved.entries) || !saved.entries.length || saved.entries.length > 100
+      || !saved.entries.every(p => p && typeof p.name === 'string' && p.name.length <= 40 && typeof p.amount === 'string' && p.amount.length <= 12)) {
+      throw new Error('invalid saved data');
+    }
+    byId('save-status').textContent = '已恢复上次填的名单和金额（只在这台设备）';
+    try {
+      const metadata=normalizeBillMetadata(saved.metadata);
+      byId('bill-date').value=metadata.date;byId('bill-content').value=metadata.content;
+    } catch {
+      byId('save-status').textContent='已恢复账目，保存的日期或内容格式无效，请重新填写选填项';
+    }
+    return saved.entries;
+  } catch {
+    byId('save-status').textContent = '未能恢复本机数据，可直接重新填写';
+    return blankEntries();
+  }
+}
+
+// 有没有需要用户确认的内容：填过名字/金额、加过图、填过日期或活动内容、或已经算出结果
+function hasAnyInput() {
+  return readEntries().some(p => p.name.trim() || p.amount.trim())
+    || evidenceItems.length > 0
+    || Boolean(byId('bill-date').value)
+    || Boolean(byId('bill-content').value.trim());
+}
+
+// 一键清空：表单、选填项、本机记忆的图片、已算出的结果，最后连 localStorage 一起抹掉
+function clearEverything() {
+  byId('bill-date').value='';
+  byId('bill-content').value='';
+  byId('bill-meta').open=false;
+  billRevision++;
+  renderBillMetadata();
+  evidenceItems=[];
+  evidenceChanged();
+  renderEvidence();
+  renderEntries(blankEntries());
+  invalidate();                                   // 结果、计算说明、导出面板、弹窗一并收起
+  try { localStorage.removeItem(storageKey); } catch {}  // 下次打开是干净的，不残留上一笔
+  byId('empty-hint').textContent='填好参与者和金额，点“算清这笔账”生成结算单。';
+  byId('entries').querySelector('.name').focus();
+  byId('save-status').textContent='已清空，本机没有留下这一笔';
+  notify('已清空，可以重新开一笔。');
+}
+
+function notify(text) {
+  clearTimeout(noticeTimer);
+  byId('notice').textContent = text;
+  byId('notice').hidden = false;
+  noticeTimer = setTimeout(() => { byId('notice').hidden = true; },4000);
+}
+
+async function copyText(text) {
+  try {
+    if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+    await navigator.clipboard.writeText(text);
+    notify('已复制，可以粘贴发给朋友了。');
+  } catch {
+    byId('copy-text').value = text;
+    openDialog(byId('copy-dialog'));
+    byId('copy-text').focus();
+    byId('copy-text').select();
+  }
+}
+
+function renderCalculation(data) {
+  byId('total-formula').textContent = createTotalFormula(data);
+  byId('share-formula').textContent = data.remainderCents
+    ? `${formatMoney(data.totalCents)} 元 ÷ ${data.people.length} 人。先每人 ${formatMoney(data.baseShareCents)} 元，余 ${data.remainderCents} 分，按名单顺序给前 ${data.remainderCents} 人各多分 1 分。`
+    : `${formatMoney(data.totalCents)} 元 ÷ ${data.people.length} 人 = ${formatMoney(data.baseShareCents)} 元 / 人`;
+  byId('calculation-rows').replaceChildren();
+  for (const p of data.people) {
+    const row = element('tr');
+    row.append(element('td','',p.name),element('td','',formatMoney(p.paidCents)),element('td','',formatMoney(p.shareCents)),
+      element('td','formula',`${formatMoney(p.paidCents)} − ${formatMoney(p.shareCents)} = ${formatMoney(p.balanceCents)}`),
+      element('td',`outcome ${p.balanceCents > 0 ? 'receive' : p.balanceCents < 0 ? 'pay' : ''}`,p.balanceCents > 0 ? `应收 ${formatMoney(p.balanceCents)}` : p.balanceCents < 0 ? `应付 ${formatMoney(-p.balanceCents)}` : '无需转账'));
+    byId('calculation-rows').append(row);
+  }
+  byId('optimization-method').textContent = data.optimization.exact
+    ? `本次 ${data.optimization.activeCount} 位朋友有应收或应付余额。程序精确寻找最多组“内部差额加起来为 0”的人，再分别结清。按当前应摊金额，最少笔数 = ${data.optimization.activeCount} 位有余额的人 − ${data.optimization.groups.length} 组 = ${data.transfers.length} 笔。已经平衡的人不需要转账。`
+    : '本次有余额的人超过 20 位，为保持计算流畅，采用大额应付与大额应收优先配对的快速方案。保证结清，但不保证全局最少笔数。';
+  byId('settlement-groups').replaceChildren();
+  for (const group of data.optimization.groups) {
+    byId('settlement-groups').append(element('li','',`${group.join('、')}：可在组内结清，${group.length} 人需要 ${group.length-1} 笔转账。`));
+  }
+}
+
+function renderResult(data) {
+  byId('result-empty').hidden = true;
+  byId('result').hidden = false;
+  byId('calculation').hidden = false;
+  byId('exports').hidden = false;
+  byId('total').textContent = formatMoney(data.totalCents);
+  byId('result-count').textContent = `${data.people.length} 人`;
+  byId('per-share').textContent = data.remainderCents ? `${formatMoney(data.baseShareCents)}–${formatMoney(data.baseShareCents+1)} 元` : `${formatMoney(data.baseShareCents)} 元`;
+  byId('rounding-note').hidden = !data.remainderCents;
+  byId('rounding-note').textContent = `总额除不尽时，前 ${data.remainderCents} 位各摊 ${formatMoney(data.baseShareCents+1)} 元，其余各摊 ${formatMoney(data.baseShareCents)} 元。按名单顺序分配余分，总账分毫不差。`;
+  byId('transfer-count').textContent = `${data.transfers.length} 笔转账`;
+  byId('optimization-note').textContent = data.optimization.exact
+    ? `按当前应摊金额，已找到最少 ${data.transfers.length} 笔转账方案。`
+    : '已尽量合并转账；有余额的人超过 20 位，本次不保证全局最少。';
+  byId('transfers').replaceChildren();
+  byId('no-transfer').hidden = data.transfers.length !== 0;
+  for (const transfer of data.transfers) {
+    const row = element('li','transfer-item');
+    const path = element('span','transfer-path');
+    path.append(document.createTextNode(transfer.from),element('span','arrow','→'),document.createTextNode(transfer.to));
+    row.append(path,element('strong','transfer-amount',`¥ ${formatMoney(transfer.amountCents)}`));
+    byId('transfers').append(row);
+  }
+  renderCalculation(data);
+  // 手机上结算单排在表单下方，不主动带过去的话，按下按钮屏幕上什么都不会变
+  const narrow = typeof window.matchMedia==='function' && window.matchMedia('(max-width: 850px)').matches;
+  if (narrow) {
+    setTimeout(() => {
+      const receipt=document.querySelector('.receipt');
+      if (receipt && typeof receipt.scrollIntoView==='function') receipt.scrollIntoView({ behavior:'smooth',block:'start' });
+    },120);
+  }
+}
+
+function renderEvidence() {
+  // 不再显示「/ 8 张」这种上限暗示：加多少张都会依次拼进同一张长图
+  const count=evidenceItems.length;
+  byId('evidence-count').textContent=count ? `${count} 张 · 拼成长图` : '还没有图片';
+  byId('evidence-files').disabled=evidenceLoading || evidenceBusy;
+  byId('reset').disabled=evidenceLoading || evidenceBusy;
+  byId('evidence-list').replaceChildren();
+  evidenceItems.forEach((item,index)=>{
+    const card=element('article','evidence-card');
+    const image=element('img');image.src=item.dataUrl;image.alt=`凭证${index+1}：${item.label || item.fileName}`;
+    const preview=element('button','evidence-image-button');preview.type='button';preview.dataset.previewEvidence=item.id;
+    preview.setAttribute('aria-label',`预览凭证${index+1}`);preview.append(image);
+    const info=element('div');
+    const label=element('label','hint',`凭证 ${index+1} 的备注`);
+    label.htmlFor=`evidence-label-${item.id}`;
+    const input=element('input');input.id=label.htmlFor;input.value=item.label;input.placeholder='例如：小王晚饭付款';input.maxLength=80;input.dataset.evidenceId=item.id;input.disabled=evidenceBusy;
+    const fileName=element('span','evidence-filename',item.fileName);
+    const remove=element('button','text-button','删除这张');remove.type='button';remove.dataset.removeEvidence=item.id;remove.disabled=evidenceBusy;
+    remove.setAttribute('aria-label',`删除凭证${index+1}`);
+    info.append(label,input,fileName,remove);card.append(preview,info);byId('evidence-list').append(card);
+  });
+}
+
+function evidenceChanged() {
+  clearTimeout(evidenceNoteTimer);
+  evidenceRevision++;
+  if (isDialogOpen(byId('export-dialog'))) closeDialog(byId('export-dialog'));
+  return persistEvidence();
+}
+
+function persistEvidence() {
+  const snapshot=evidenceItems.map(item=>({ ...item }));
+  evidenceWrites=evidenceWrites.catch(()=>{}).then(()=>saveEvidence(snapshot)).then(()=>{
+    byId('evidence-status').textContent='凭证已保存在本机，不上传到服务器。';
+  }).catch(()=>{
+    byId('evidence-status').textContent='本次无法自动保存图片，刷新或关闭前请先导出。';
+  });
+  return evidenceWrites;
+}
+
+async function restoreEvidence() {
+  const revision=evidenceRevision;
+  try {
+    const saved=await loadEvidence();
+    if (revision===evidenceRevision) { evidenceItems=saved;evidenceRevision++; }
+    byId('evidence-status').textContent=evidenceItems.length ? '已恢复本机保存的凭证图片。':'支持 PNG / JPEG / WebP，每张≤10MB；加几张都会按顺序拼进同一张长图。';
+  } catch {
+    byId('evidence-status').textContent='本机图片存储不可用，可本次添加，刷新前请导出。';
+  } finally { evidenceLoading=false; }
+  renderEvidence();
+}
+
+function clearExportPreview() {
+  byId('export-body').replaceChildren();
+  exportUrls.forEach(url=>URL.revokeObjectURL(url));exportUrls=[];
+}
+
+// 一张单子一块：标题 + 保存按钮 + 预览图，避免用户在两处找下载入口
+function buildSheet(report,output) {
+  const sheet=element('section','export-sheet');
+  const head=element('div','export-sheet-head');
+  head.append(element('h3','',report.title));
+  const actions=element('div','export-sheet-actions');
+  output.files.forEach((file,index)=>{
+    const url=URL.createObjectURL(file.blob);exportUrls.push(url);
+    const link=element('a','primary download-link',output.files.length>1 ? `保存第 ${index+1} 张` : '保存这张');
+    link.href=url;link.download=file.name;
+    actions.append(link);
+  });
+  head.append(actions);sheet.append(head);
+  output.previews.forEach((blob,index)=>{
+    const url=URL.createObjectURL(blob);exportUrls.push(url);
+    const image=element('img');image.src=url;
+    image.alt=`${report.title}第 ${index+1} 张预览`;
+    sheet.append(image);
+  });
+  return sheet;
+}
+
+function setExportBusy(busy) {
+  document.querySelectorAll('[data-export]').forEach(button=>{ button.disabled=busy; });
+}
+
+const exportStale=snapshot=>result!==snapshot;
+
+// 主入口：一次生成用户要的两张单子，依据单有无附图由凭证自动决定
+async function openBoth() {
+  if (!result || exportBusy) return;
+  if (evidenceLoading) { notify('正在读取本机凭证，请稍后再导出。');return; }
+  if (evidenceBusy) { notify('正在处理凭证图片，请稍后再导出。');return; }
+  const snapshot=result,revision=evidenceRevision,billVersion=billRevision;
+  const evidence=evidenceItems.map(item=>({ ...item }));
+  const metadata=readBillMetadata();
+  exportBusy=true;setExportBusy(true);
+  notify('正在生成两张单子…');
+  try {
+    const outputs=[];
+    for (const report of createBothReports(snapshot,{ evidence,metadata })) {
+      outputs.push({ report,output:await generateReportFiles(report,'png') });
+    }
+    if (exportStale(snapshot) || revision!==evidenceRevision || billVersion!==billRevision) { notify('账目或凭证已修改，请重新导出。');return; }
+    clearExportPreview();
+    const counts=outputs.map(item=>item.output.files.length);
+    byId('export-dialog-title').textContent='两张单子 · 预览';
+    byId('export-description').textContent=`结算单 ${counts[0]} 张、计算依据 ${counts[1]} 张。`
+      + (evidence.length ? `依据单已把 ${evidence.length} 张付款截图按顺序拼成一张长图。` : '依据单只有文字，没有附图。');
+    outputs.forEach(item=>byId('export-body').append(buildSheet(item.report,item.output)));
+    openDialog(byId('export-dialog'));
+    notify('两张单子已生成，分别在预览里保存。');
+  } catch (error) { notify(`导出未完成：${error.message}`); }
+  finally { exportBusy=false;setExportBusy(false); }
+}
+
+async function openExport(kind,format) {
+  if (!result || exportBusy) return;
+  if (evidenceLoading) { notify('正在读取本机凭证，请稍后再导出。');return; }
+  if (evidenceBusy) { notify('正在处理凭证图片，请稍后再导出。');return; }
+  const snapshot=result,revision=evidenceRevision,billVersion=billRevision;
+  let report;
+  try {
+    report=createReport(snapshot,kind,{ evidence:evidenceItems.map(item=>({ ...item })),
+      includeEvidence:evidenceItems.length>0,metadata:readBillMetadata() });
+  } catch (error) { notify(error.message);return; }
+  exportBusy=true;setExportBusy(true);
+  notify('正在生成独立报告…');
+  try {
+    const output=await generateReportFiles(report,format);
+    if (exportStale(snapshot) || revision!==evidenceRevision || billVersion!==billRevision) { notify('账目或凭证已修改，请重新导出。');return; }
+    clearExportPreview();
+    byId('export-dialog-title').textContent=`${report.title} · ${format.toUpperCase()} 预览`;
+    byId('export-description').textContent=format==='png'
+      ? `共 ${output.files.length} 张图片。${output.files.length>1 ? '内容较长，已自动分张，请分别保存。':'保存后可直接发群；手机也可长按图片保存。'}`
+      : `共 ${output.previews.length} 页，保存为一个独立 PDF 文件。`;
+    byId('export-body').append(buildSheet(report,output));
+    openDialog(byId('export-dialog'));
+    notify('报告已生成，可在预览中保存。');
+  } catch (error) { notify(`导出未完成：${error.message}`); }
+  finally { exportBusy=false;setExportBusy(false); }
+}
+
+byId('expense-form').addEventListener('submit',event => {
+  event.preventDefault();
+  try {
+    result = calculateSettlement(readEntries());
+    byId('form-error').hidden = true;
+    renderResult(result);
+    notify('结算单已生成，下方可查看完整计算过程。');
+  } catch (error) {
+    byId('form-error').textContent = error.message;
+    byId('form-error').hidden = false;
+  }
+});
+byId('entries').addEventListener('input',invalidate);
+byId('entries').addEventListener('click',event => {
+  const button = event.target.closest('.remove');
+  if (!button) return;
+  const entries = readEntries();
+  entries.splice(Number(button.dataset.index),1);
+  renderEntries(entries.length ? entries : [{ name:'',amount:'' }]);
+  invalidate();
+});
+byId('add-person').addEventListener('click',() => {
+  const entries = readEntries();
+  if (entries.length >= 100) return;
+  renderEntries([...entries,{ name:'',amount:'' }]);
+  invalidate();
+  byId('entries').lastElementChild.querySelector('.name').focus();
+});
+byId('example').addEventListener('click',() => {
+  renderEntries([{ name:'小王',amount:'300' },{ name:'小李',amount:'100' },{ name:'小张',amount:'0' },{ name:'小陈',amount:'0' }]);
+  invalidate();
+  byId('expense-form').requestSubmit();
+});
+byId('reset').addEventListener('click',() => {
+  if (hasAnyInput() || result) { openDialog(byId('reset-dialog'));return; }  // 有内容才拦一道，空表直接清
+  clearEverything();
+});
+byId('reset-cancel').addEventListener('click',() => closeDialog(byId('reset-dialog')));
+byId('reset-confirm').addEventListener('click',() => {
+  closeDialog(byId('reset-dialog'));
+  clearEverything();
+});
+byId('copy-all').addEventListener('click',() => {
+  if (!result) return;
+  try { copyText(createSummary(result,readBillMetadata())); } catch (error) { notify(error.message); }
+});
+byId('bill-fields').addEventListener('input',()=>{
+  billRevision++;
+  if (isDialogOpen(byId('export-dialog'))) closeDialog(byId('export-dialog'));
+  try { renderBillMetadata();saveBillState(); } catch (error) { notify(error.message); }
+});
+byId('save-both').addEventListener('click',openBoth);
+// 保存入口全页唯一，就长在结算单里；导出面板只留备用格式，不再重复同一个动作
+byId('exports').addEventListener('click',event=>{
+  const button=event.target.closest('[data-report]');
+  if (button) openExport(button.dataset.report,button.dataset.format);
+});
+byId('export-dialog').addEventListener('close',clearExportPreview);
+// 手机默认走相册（accept 放开到 image/*，不加 capture，避免一上来就跳相机）；
+// 电脑保持严格图片类型，并支持把文件直接拖进来。
+const coarsePointer = typeof window.matchMedia==='function'
+  && window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
+if (coarsePointer) {
+  byId('evidence-files').accept='image/*';
+  byId('evidence-label').textContent='＋ 从相册选凭证图片';
+} else {
+  byId('evidence-drop-hint').hidden=false;
+}
+
+async function addEvidenceFiles(files) {
+  let list=[...files];
+  if (!list.length) return;
+  if (byId('evidence-files').disabled) {
+    notify('凭证还在处理，等这一批读完再加。');
+    return;
+  }
+  const remaining=Math.max(0,MAX_EVIDENCE-evidenceItems.length);
+  if (!remaining) { notify(`最多 ${MAX_EVIDENCE} 张凭证，再多长图就太长了，先删掉不需要的。`);return; }
+  const overflow=list.length>remaining;
+  if (overflow) list=list.slice(0,remaining);
+  evidenceBusy=true;renderEvidence();
+  const errors=[];
+  try {
+    for (const file of list) {
+      try { evidenceItems.push(await prepareEvidence(file,evidenceItems.length)); }
+      catch (error) { errors.push(`${file.name}：${error.message}`); }
+    }
+    await evidenceChanged();
+  } finally {
+    evidenceBusy=false;renderEvidence();
+  }
+  if (errors.length) {
+    byId('evidence-status').textContent=errors.join(' ');
+    notify(errors[0]);
+  } else if (overflow) {
+    notify(`只收下了前 ${MAX_EVIDENCE} 张，多出来的没有添加。`);
+  }
+}
+
+byId('evidence-files').addEventListener('change',async event=>{
+  const files=[...event.target.files];
+  event.target.value='';  // 清空才能连续选同一张
+  await addEvidenceFiles(files);
+});
+
+// 拖拽只服务电脑：整页接住文件，避免浏览器直接把图片当页面打开
+const dropZone=byId('evidence-drop');
+function carriesFiles(event) {
+  const transfer=event.dataTransfer;
+  if (!transfer) return false;
+  const types=transfer.types ? [...transfer.types] : [];
+  return types.indexOf('Files')!==-1;
+}
+['dragenter','dragover','drop'].forEach(type=>{
+  document.addEventListener(type,event=>{
+    if (!carriesFiles(event)) return;
+    event.preventDefault();
+    if (event.dataTransfer && type!=='drop') event.dataTransfer.dropEffect=coarsePointer ? 'none' : 'copy';
+  });
+});
+dropZone.addEventListener('dragover',event=>{
+  if (coarsePointer || !carriesFiles(event)) return;
+  event.preventDefault();
+  if (event.dataTransfer) event.dataTransfer.dropEffect='copy';
+  dropZone.classList.add('dragging');
+});
+dropZone.addEventListener('dragleave',event=>{
+  if (!dropZone.contains(event.relatedTarget)) dropZone.classList.remove('dragging');
+});
+dropZone.addEventListener('drop',event=>{
+  if (!carriesFiles(event)) return;
+  event.preventDefault();
+  dropZone.classList.remove('dragging');
+  if (coarsePointer) return;
+  addEvidenceFiles(event.dataTransfer.files);
+});
+byId('evidence-list').addEventListener('input',event=>{
+  const item=evidenceItems.find(item=>item.id===event.target.dataset.evidenceId);
+  if (!item) return;
+  item.label=event.target.value;
+  evidenceRevision++;
+  if (isDialogOpen(byId('export-dialog'))) closeDialog(byId('export-dialog'));
+  clearTimeout(evidenceNoteTimer);
+  evidenceNoteTimer=setTimeout(persistEvidence,400);
+});
+byId('evidence-list').addEventListener('click',event=>{
+  const preview=event.target.closest('[data-preview-evidence]');
+  if (preview) {
+    const item=evidenceItems.find(item=>item.id===preview.dataset.previewEvidence);
+    if (!item) return;
+    clearExportPreview();
+    byId('export-dialog-title').textContent=item.label || item.fileName;
+    byId('export-description').textContent='凭证预览，图片仅在本机处理。';
+    const sheet=element('section','export-sheet');
+    const head=element('div','export-sheet-head');
+    head.append(element('h3','',item.label || '凭证预览'));
+    const image=element('img');image.src=item.dataUrl;image.alt=item.label || item.fileName;
+    sheet.append(head,image);byId('export-body').append(sheet);
+    openDialog(byId('export-dialog'));
+    return;
+  }
+  const button=event.target.closest('[data-remove-evidence]');
+  if (!button) return;
+  evidenceItems=evidenceItems.filter(item=>item.id!==button.dataset.removeEvidence);
+  evidenceChanged();renderEvidence();
+});
+renderEntries(restore());
+renderBillMetadata();
+restoreEvidence();
+
+</script>
+</body>
+</html>
