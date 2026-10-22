@@ -50,8 +50,10 @@ a, button, input { touch-action: manipulation; }
 .hero-feature { position: relative; aspect-ratio: 2.2; max-height: 600px; overflow: hidden; background: #101615; isolation: isolate; color: #fff; }
 .feature-screen { position: absolute; inset: 0; }
 .hero-poster, #heroPreview { position: absolute; width: 100%; height: 100%; object-fit: contain; inset: 0; }
-#heroPreview { opacity: 0; transition: opacity .35s; }
+#heroPreview { opacity: 0; transition: opacity .5s ease; }
 .hero-feature.is-previewing #heroPreview { opacity: 1; }
+.hero-freeze { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 1; transition: opacity .5s ease; }
+.hero-freeze.is-leaving { opacity: 0; }
 .feature-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.34), transparent 24%, transparent 48%, rgba(0,0,0,.7)); pointer-events: none; }
 .feature-top { position: absolute; top: 25px; left: 30px; right: 30px; display: flex; justify-content: space-between; font-size: 12px; color: #eee; }
 .feature-play { position: absolute; top: 45%; left: 50%; transform: translate(-50%,-50%); width: 104px; height: 104px; border: 1px solid rgba(255,255,255,.55); border-radius: 50%; background: rgba(0,0,0,.18); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; transition: background .2s, border-color .2s; backdrop-filter: blur(4px); }

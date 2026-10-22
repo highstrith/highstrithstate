@@ -78,6 +78,8 @@
   const hero = $('.hero-feature');
   const heroVideo = $('#heroPreview');
   const heroPoster = $('#heroPoster');
+  let heroFreeze = null;
+  let heroFreezeTimer = 0;
   const heroControls = $('#featureControls');
   const player = $('#workPlayer');
   const playerVideo = $('#workPlayerVideo');
@@ -552,7 +554,61 @@
     return rect.bottom > 0 && rect.top < window.innerHeight && rect.width > 0;
   }
 
+  // A single <video> cannot hold the outgoing frame while the next clip loads, so
+  // snapshot the current frame into a canvas and dissolve from it. Without this the
+  // element goes blank the moment the source changes and the cut reads as a jump.
+  function captureHeroFrame() {
+    if (!heroVideo || reducedMotion.matches) return null;
+    if (heroVideo.readyState < 2 || !heroVideo.videoWidth || !heroVideo.videoHeight) return null;
+    const box = heroVideo.getBoundingClientRect();
+    if (!box.width || !box.height) return null;
+    const ratio = Math.min(window.devicePixelRatio || 1, 2);
+    const canvas = document.createElement('canvas');
+    canvas.className = 'hero-freeze';
+    canvas.setAttribute('aria-hidden', 'true');
+    canvas.width = Math.max(1, Math.round(box.width * ratio));
+    canvas.height = Math.max(1, Math.round(box.height * ratio));
+    const context = canvas.getContext('2d');
+    if (!context) return null;
+    // Keep the film's own aspect ratio so the frozen frame lines up with the live one.
+    const scale = Math.min(canvas.width / heroVideo.videoWidth, canvas.height / heroVideo.videoHeight);
+    const width = heroVideo.videoWidth * scale;
+    const height = heroVideo.videoHeight * scale;
+    try {
+      context.drawImage(heroVideo, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
+    } catch (error) {
+      return null; // Cross-origin media taints the canvas; fall back to an instant swap.
+    }
+    return canvas;
+  }
+
+  function attachHeroFreeze(canvas) {
+    if (!canvas || !heroVideo?.isConnected) return;
+    clearHeroFreeze();
+    heroFreeze = canvas;
+    heroVideo.after(canvas);
+    // Dissolve straight away: the new still is already behind the canvas, so the
+    // outgoing frame gives the swap something to fade from instead of a hard cut.
+    window.requestAnimationFrame(() => {
+      if (heroFreeze !== canvas) return;
+      canvas.classList.add('is-leaving');
+      heroFreezeTimer = window.setTimeout(() => {
+        heroFreeze = null;
+        canvas.remove();
+      }, 520);
+    });
+  }
+
+  function clearHeroFreeze() {
+    const canvas = heroFreeze;
+    heroFreeze = null;
+    window.clearTimeout(heroFreezeTimer);
+    heroFreezeTimer = 0;
+    if (canvas) canvas.remove();
+  }
+
   function stopPreview() {
+    clearHeroFreeze();
     if (!activePreview) return;
     const { video, container, controller } = activePreview;
     activePreview = null;
@@ -567,7 +623,9 @@
     const source = mediaURL(work?.previewVideo);
     if (!source || !video || !container) { stopPreview(); return; }
     if (activePreview?.video === video && activePreview.source === source) return;
+    const frozenFrame = video === heroVideo ? captureHeroFrame() : null;
     stopPreview();
+    if (frozenFrame) attachHeroFreeze(frozenFrame);
     const controller = new AbortController();
     const session = { video, container, source, controller };
     activePreview = session;
@@ -591,7 +649,8 @@
       video.addEventListener('ended', advance, { signal: controller.signal });
     }
     video.addEventListener('playing', () => {
-      if (activePreview === session) container.classList.add('is-previewing');
+      if (activePreview !== session) return;
+      container.classList.add('is-previewing');
     }, { signal: controller.signal });
     video.addEventListener('error', () => {
       if (activePreview === session) stopPreview();
@@ -602,7 +661,9 @@
     video.src = source;
     video.load();
     video.play()?.catch(() => {
-      if (activePreview === session) container.classList.remove('is-previewing');
+      if (activePreview !== session) return;
+      container.classList.remove('is-previewing');
+      if (video === heroVideo) clearHeroFreeze();
     });
   }
 
