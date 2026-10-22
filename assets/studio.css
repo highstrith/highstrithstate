@@ -60,6 +60,10 @@ a, button, input { touch-action: manipulation; }
 .feature-play svg { height: 25px; width: 25px; fill: currentColor; transform: translateX(2px); }
 .feature-play span { font-size: 10px; }
 .feature-play:hover { background: var(--orange-dark); border-color: var(--orange); }
+/* While the badge trails the pointer it also sits under it, so the orange hover
+   fill would stay on for the whole time the visitor is over the frame. */
+.hero-feature.is-play-follow .feature-play { will-change: transform; }
+.hero-feature.is-play-follow .feature-play:hover { background: rgba(0,0,0,.18); border-color: rgba(255,255,255,.55); }
 .feature-play:focus-visible { outline-color: #fff; }
 .feature-bottom { position: absolute; left: 30px; right: 30px; bottom: 27px; display: flex; justify-content: space-between; align-items: end; gap: 24px; }
 .feature-info { max-width: 55%; }

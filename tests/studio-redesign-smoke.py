@@ -331,6 +331,54 @@ class StudioRedesign(unittest.TestCase):
         page.emulate_media(reduced_motion="reduce")
         page.wait_for_function("!document.querySelector('#heroPreview').getAttribute('src')")
 
+    def test_hero_play_badge_follows_pointer_and_returns_home(self):
+        page = self.page(viewport={"width": 1440, "height": 900})
+        self.ready(page)
+        screen = page.locator(".feature-screen").bounding_box()
+        badge = page.locator("[data-hero-play]").first
+        home = badge.bounding_box()
+        self.assertAlmostEqual(home["x"] + home["width"] / 2, screen["x"] + screen["width"] / 2, delta=1)
+        self.assertAlmostEqual(home["y"] + home["height"] / 2, screen["y"] + screen["height"] * .45, delta=1)
+
+        target = (screen["x"] + screen["width"] * .3, screen["y"] + screen["height"] * .35)
+        page.mouse.move(*target, steps=4)
+        page.wait_for_function("""([x, y]) => {
+            const box = document.querySelector('[data-hero-play]').getBoundingClientRect();
+            return Math.abs(box.x + box.width / 2 - x) < 1.5 && Math.abs(box.y + box.height / 2 - y) < 1.5;
+        }""", arg=[target[0], target[1]])
+
+        page.mouse.move(screen["x"] + screen["width"] - 4, screen["y"] + screen["height"] - 4, steps=3)
+        page.wait_for_timeout(700)
+        corner = badge.bounding_box()
+        self.assertGreaterEqual(corner["x"], screen["x"])
+        self.assertGreaterEqual(corner["y"], screen["y"])
+        self.assertLessEqual(corner["x"] + corner["width"], screen["x"] + screen["width"] + .5)
+        self.assertLessEqual(corner["y"] + corner["height"], screen["y"] + screen["height"] + .5)
+
+        badge.click()
+        expect(page.locator("#social-qr-dialog")).not_to_be_visible()
+        expect(page.locator("#workPlayer")).to_be_visible()
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(200)
+
+        page.mouse.move(5, 5, steps=3)
+        page.wait_for_function("""() => {
+            const badge = document.querySelector('[data-hero-play]');
+            const hero = document.querySelector('.hero-feature');
+            return !badge.getAttribute('style') && !hero.classList.contains('is-play-follow');
+        }""")
+        back = badge.bounding_box()
+        self.assertAlmostEqual(back["x"] + back["width"] / 2, screen["x"] + screen["width"] / 2, delta=1.5)
+
+    def test_hero_play_badge_stays_put_for_touch_input(self):
+        page = self.page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+        self.ready(page)
+        box = page.locator(".feature-screen").bounding_box()
+        page.touchscreen.tap(box["x"] + 24, box["y"] + 24)
+        page.wait_for_timeout(300)
+        self.assertFalse(page.locator(".hero-feature.is-play-follow").count())
+        self.assertFalse(page.locator("[data-hero-play]").first.get_attribute("style"))
+
     def test_hero_rotates_after_ten_seconds_of_real_muted_mobile_playback(self):
         page = self.page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
         self.ready(page)

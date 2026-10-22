@@ -935,6 +935,92 @@
     const work = featuredWorks.find((item) => item.id === selectedFeatureId);
     if (work) openPlayer(work, button);
   }));
+
+  // The play badge trails the pointer so it never covers the corner of the frame a
+  // visitor is looking at, then eases back to the middle once the pointer leaves.
+  (function trackHeroPlay() {
+    const screen = hero?.querySelector('.feature-screen');
+    const badge = hero?.querySelector('[data-hero-play]');
+    if (!screen || !badge) return;
+    const follow = { x: 0, y: 0, toX: 0, toY: 0, halfW: 0, halfH: 0, frame: 0, active: false };
+
+    function place() {
+      badge.style.left = '0px';
+      badge.style.top = '0px';
+      badge.style.transform = `translate3d(${follow.x - follow.halfW}px, ${follow.y - follow.halfH}px, 0)`;
+    }
+
+    function park() {
+      hero.classList.remove('is-play-follow');
+      badge.style.left = '';
+      badge.style.top = '';
+      badge.style.transform = '';
+    }
+
+    function step() {
+      follow.frame = 0;
+      const dx = follow.toX - follow.x;
+      const dy = follow.toY - follow.y;
+      if (Math.abs(dx) < .4 && Math.abs(dy) < .4) {
+        follow.x = follow.toX;
+        follow.y = follow.toY;
+        if (follow.active) place();
+        else park();
+        return;
+      }
+      follow.x += dx * .22;
+      follow.y += dy * .22;
+      place();
+      follow.frame = window.requestAnimationFrame(step);
+    }
+
+    function aim(x, y) {
+      follow.toX = x;
+      follow.toY = y;
+      if (!follow.frame) follow.frame = window.requestAnimationFrame(step);
+    }
+
+    function measure() {
+      follow.halfW = badge.offsetWidth / 2;
+      follow.halfH = badge.offsetHeight / 2;
+    }
+
+    screen.addEventListener('pointermove', (event) => {
+      if (event.pointerType !== 'mouse' || reducedMotion.matches) return;
+      const rect = hero.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      measure();
+      if (!follow.active) {
+        // Start from wherever the badge sits so following never jumps.
+        const box = badge.getBoundingClientRect();
+        follow.x = box.left - rect.left + box.width / 2;
+        follow.y = box.top - rect.top + box.height / 2;
+        follow.active = true;
+        hero.classList.add('is-play-follow');
+      }
+      const pad = 12;
+      aim(
+        Math.min(Math.max(event.clientX - rect.left, follow.halfW + pad), rect.width - follow.halfW - pad),
+        Math.min(Math.max(event.clientY - rect.top, follow.halfH + pad), rect.height - follow.halfH - pad),
+      );
+    });
+
+    screen.addEventListener('pointerleave', () => {
+      if (!follow.active) return;
+      const rect = hero.getBoundingClientRect();
+      follow.active = false;
+      measure();
+      aim(rect.width / 2, rect.height * .45);
+    });
+
+    window.addEventListener('resize', () => {
+      if (!follow.active) {
+        window.cancelAnimationFrame(follow.frame);
+        follow.frame = 0;
+        park();
+      }
+    }, { passive: true });
+  })();
   $('#workPlayerClose')?.addEventListener('click', closePlayer);
   player?.addEventListener('cancel', (event) => { event.preventDefault(); closePlayer(); });
   player?.addEventListener('close', finishPlayer);
