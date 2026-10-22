@@ -1,0 +1,38 @@
+/* ── Shared tokens & reset ── */
+:root {
+  --paper: #f4f4f0;
+  --ink: #171918;
+  --muted: #686d69;
+  --line: #d6d9d2;
+  --orange: #e46740;
+  --orange-dark: #a53c1c;
+  /* Dark surface palette */
+  --surface-dark: #151817;
+  --on-dark: #f4f4f0;
+  --on-dark-body: #c0c5c0;
+  --on-dark-muted: #878f88;
+  --text-secondary: #525853;
+  font-family: "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", sans-serif;
+  color-scheme: light;
+  color: var(--ink);
+  background: var(--paper);
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; min-width: 0; }
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+button, a, input, textarea { -webkit-tap-highlight-color: transparent; }
+h1, h2, h3, p { margin: 0; }
+::selection { background: var(--orange); color: var(--ink); }
+:focus-visible { outline: 3px solid var(--orange-dark); outline-offset: 5px; }
+img, video { display: block; max-width: 100%; }
+a, button, input { touch-action: manipulation; }
+.brand-mark { width: 36px; height: 36px; padding: 5px; border: 1px solid var(--ink); fill: none; stroke: var(--ink); stroke-width: 1.5px; flex-shrink: 0; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

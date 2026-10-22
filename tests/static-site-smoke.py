@@ -27,7 +27,6 @@ class QuietStaticHandler(http.server.SimpleHTTPRequestHandler):
 with tempfile.TemporaryDirectory(prefix="portfolio-static-") as directory:
     public = Path(directory)
     shutil.copy(ROOT / "index.html", public / "index.html")
-    shutil.copy(ROOT / "desktop-experience.css", public / "desktop-experience.css")
     shutil.copytree(ROOT / "data", public / "data")
     (public / "assets").symlink_to(ROOT / "assets", target_is_directory=True)
     server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(QuietStaticHandler, directory=directory))

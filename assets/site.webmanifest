@@ -1,0 +1,17 @@
+{
+  "name": "Highstrith · 橘小桔",
+  "short_name": "Highstrith",
+  "description": "独立影像创作者橘小桔的作品集。AI 短片、3D 动画、动态视觉与剪辑。",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f4f0",
+  "theme_color": "#f4f4f0",
+  "icons": [
+    {
+      "src": "studio-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

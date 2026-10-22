@@ -2,10 +2,11 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Highstrith | 作品管理</title>
   <link rel="icon" type="image/svg+xml" href="assets/studio-mark.svg" />
-  <link rel="stylesheet" href="admin.css?v=20261013-software" />
+  <link rel="stylesheet" href="assets/base.css?v=20261023-optimize">
+  <link rel="stylesheet" href="admin.css?v=20261023-optimize">
 </head>
 <body>
   <div class="page">
@@ -93,11 +94,16 @@
           </form>
         </article>
         <article class="panel library-panel" aria-labelledby="manageTitle">
-          <div class="panel-head"><div class="copy">
-            <p class="section-kicker" id="manageKicker">每一帧，都值得留存</p>
-            <div class="library-heading"><h2 id="manageTitle">作品库</h2><span class="work-count"><strong id="heroWorkCount">0</strong><span id="heroWorkCountLabel">部作品</span></span></div>
-            <p id="manageNote">点击封面观看视频，或编辑作品信息。</p>
-          </div></div>
+          <div class="panel-head">
+            <div class="copy">
+              <p class="section-kicker" id="manageKicker">每一帧，都值得留存</p>
+              <div class="library-heading"><h2 id="manageTitle">作品库</h2><span class="work-count"><strong id="heroWorkCount">0</strong><span id="heroWorkCountLabel">部作品</span></span></div>
+              <p id="manageNote">点击封面观看视频，或编辑作品信息。</p>
+            </div>
+            <div class="library-search-wrap">
+              <input type="search" class="upload-input library-search" id="adminWorkSearch" placeholder="搜索作品…" aria-label="搜索已上传作品" autocomplete="off" />
+            </div>
+          </div>
           <div class="manage-list" id="manageList"></div>
         </article>
       </section>
@@ -178,6 +184,8 @@
           manageTitle: '作品库',
           manageNote: '点击封面观看视频，或编辑作品信息。',
           manageEmpty: '还没有作品。上传一条作品后，它会立刻出现在这里。',
+          manageNoMatch: '未找到匹配的作品。',
+          manageSearchPlaceholder: '搜索作品…',
           manageItemTag: '已上传',
           manageBuiltInTag: '精选作品',
           manageCreated: '创建时间',
@@ -255,6 +263,8 @@
           manageTitle: 'Project library',
           manageNote: 'Open a cover to watch the film, or edit the project details.',
           manageEmpty: 'No works yet. Add one and it will appear here immediately.',
+          manageNoMatch: 'No matching works found.',
+          manageSearchPlaceholder: 'Search works…',
           manageItemTag: 'Uploaded',
           manageBuiltInTag: 'Featured',
           manageCreated: 'Created',
@@ -331,6 +341,7 @@
       const manageTitle = document.getElementById('manageTitle');
       const manageNote = document.getElementById('manageNote');
       const manageList = document.getElementById('manageList');
+      const adminWorkSearch = document.getElementById('adminWorkSearch');
       const manageFormPanel = document.getElementById('manageFormPanel');
       const manageVideoDialog = document.getElementById('manageVideoDialog');
       const manageVideoPlayer = document.getElementById('manageVideoPlayer');
@@ -629,6 +640,11 @@
       const renderManagedWorks = () => {
         const copy = translations[state.lang];
         const works = managedWorks();
+        const query = (adminWorkSearch?.value || '').trim().toLowerCase();
+        const displayWorks = query ? works.filter((item) => {
+          const fields = [item.cnTitle, item.enTitle, item.cnSub, item.enSub, item.cnDesc, item.enDesc, item.id, ...(item.software || [])];
+          return fields.some((field) => String(field || '').toLowerCase().includes(query));
+        }) : works;
 
         if (!works.length) {
           manageList.innerHTML = `<div class="manage-empty">${escapeHtml(copy.manageEmpty)}</div>`;
@@ -636,7 +652,15 @@
           return;
         }
 
-        manageList.innerHTML = works.map((item) => {
+        if (query && !displayWorks.length) {
+          manageList.innerHTML = `<div class="manage-empty">${escapeHtml(copy.manageNoMatch)}</div>`;
+          heroWorkCount.textContent = '0';
+          return;
+        }
+
+        heroWorkCount.textContent = query ? `${displayWorks.length} / ${works.length}` : String(works.length);
+
+        manageList.innerHTML = displayWorks.map((item) => {
           const title = escapeHtml(state.lang === 'cn' ? item.cnTitle : item.enTitle);
           const subtitle = escapeHtml(state.lang === 'cn' ? item.cnSub : item.enSub);
           const description = escapeHtml(state.lang === 'cn' ? item.cnDesc : item.enDesc);
@@ -733,6 +757,7 @@
         manageKicker.textContent = copy.manageKicker;
         manageTitle.textContent = copy.manageTitle;
         manageNote.textContent = copy.manageNote;
+        if (adminWorkSearch) adminWorkSearch.placeholder = copy.manageSearchPlaceholder;
         langCurrent.textContent = copy.langCurrent;
         langTarget.textContent = copy.langTarget;
         syncUploadModeUi();
@@ -743,6 +768,8 @@
       langSwitch.addEventListener('click', () => {
         applyLanguage(state.lang === 'cn' ? 'en' : 'cn');
       });
+
+      adminWorkSearch?.addEventListener('input', renderManagedWorks);
 
       uploadCancelEdit.addEventListener('click', () => {
         setUploadMode('create');

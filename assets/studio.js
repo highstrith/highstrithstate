@@ -1024,6 +1024,34 @@
   $('#workPlayerClose')?.addEventListener('click', closePlayer);
   player?.addEventListener('cancel', (event) => { event.preventDefault(); closePlayer(); });
   player?.addEventListener('close', finishPlayer);
+  player?.addEventListener('keydown', (event) => {
+    if (event.target && (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA')) return;
+    if (event.code === 'Space') {
+      event.preventDefault();
+      if (!playerVideo) return;
+      if (playerVideo.paused) playerVideo.play()?.catch(() => {});
+      else playerVideo.pause();
+    } else if (event.code === 'ArrowLeft') {
+      event.preventDefault();
+      if (playerVideo && Number.isFinite(playerVideo.currentTime)) {
+        playerVideo.currentTime = Math.max(0, playerVideo.currentTime - 5);
+      }
+    } else if (event.code === 'ArrowRight') {
+      event.preventDefault();
+      if (playerVideo && Number.isFinite(playerVideo.currentTime)) {
+        const duration = Number.isFinite(playerVideo.duration) ? playerVideo.duration : Infinity;
+        playerVideo.currentTime = Math.min(duration, playerVideo.currentTime + 5);
+      }
+    } else if (event.code === 'KeyM') {
+      if (playerVideo) playerVideo.muted = !playerVideo.muted;
+    } else if (event.code === 'KeyF') {
+      if (document.fullscreenElement) {
+        document.exitFullscreen?.().catch(() => {});
+      } else {
+        (playerVideo?.requestFullscreen || playerVideo?.webkitRequestFullscreen)?.call(playerVideo)?.catch(() => {});
+      }
+    }
+  });
   playerAction?.addEventListener('click', () => {
     if (playerState === 'restricted' && playerController) {
       showPlayerState('loading');

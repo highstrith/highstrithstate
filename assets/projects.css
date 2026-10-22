@@ -12,7 +12,7 @@
 .project-info { display: flex; flex-direction: column; flex: 1; padding-top: 22px; }
 .project-kind { color: var(--muted); font-size: 12px; margin-bottom: 8px; }
 .project-info h2 { font-size: 26px; font-weight: 500; line-height: 1.4; letter-spacing: -.02em; }
-.project-description { color: #525853; font-size: 14px; line-height: 1.9; max-width: 52ch; margin-block: 16px 24px; }
+.project-description { color: var(--text-secondary); font-size: 14px; line-height: 1.9; max-width: 52ch; margin-block: 16px 24px; }
 .project-bottom { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: auto; }
 .project-bottom .button { min-height: 44px; font-size: 13px; padding: 12px 24px; }
 .project-note, .project-version { color: var(--muted); font-size: 11px; line-height: 1.8; }
