@@ -702,6 +702,80 @@ class StudioRedesign(unittest.TestCase):
         page.wait_for_function("document.querySelector('#bgMusic').paused")
         expect(toggle).to_have_attribute("aria-pressed", "false")
 
+    def test_contact_social_links_switch_qr_on_hover_and_click(self):
+        page = self.page(viewport={"width": 1440, "height": 900}, reduced_motion="reduce")
+        requests = []
+        page.on("request", lambda request: requests.append(request.url) if "/assets/social/" in request.url else None)
+        self.ready(page)
+        links = page.locator("#contact [data-qr-image]")
+        self.assertEqual(links.count(), 3)
+        self.assertEqual(requests, [], "QR images must remain lazy until interaction")
+        self.assertGreaterEqual(
+            page.locator("#contact .social-name").first.evaluate("el => parseFloat(getComputedStyle(el).fontSize)"),
+            17, "Contact social names must stay visually prominent",
+        )
+        wechat = page.locator('#contact [data-qr-title="微信"]')
+        red = page.locator('#contact [data-qr-title="小红书"]')
+        preview = page.locator("#social-qr-preview")
+        expect(preview).not_to_be_visible()
+        page.locator("#contact").scroll_into_view_if_needed()
+        page.wait_for_timeout(200)
+        wechat.hover()
+        expect(preview).to_be_visible()
+        expect(preview.locator("img")).to_have_attribute("src", re.compile(r"wechat-qr\.png$"))
+        red.hover()
+        expect(preview.locator("img")).to_have_attribute("src", re.compile(r"xiaohongshu-qr\.jpg$"))
+        page.wait_for_function("document.querySelector('#social-qr-preview img').naturalWidth > 0")
+        red.click()
+        dialog = page.locator("#social-qr-dialog")
+        expect(dialog).to_be_visible()
+        expect(page.locator("#social-qr-title")).to_have_text("小红书")
+        self.assertTrue(page.locator("#social-qr-dialog img").evaluate("img => img.complete && img.naturalWidth > 0"))
+        page.keyboard.press("Escape")
+        expect(dialog).not_to_be_visible()
+        expect(red).to_be_focused()
+        page.locator("#langSwitch").click()
+        expect(wechat).to_contain_text("WeChat")
+        expect(wechat.locator(".social-hint")).to_have_text("Scan the code")
+        bili = page.locator('#contact a[href="https://b23.tv/VFqS3Tj"]')
+        expect(bili).to_contain_text("Bilibili")
+        expect(bili.locator(".social-hint")).to_have_text("Open profile")
+
+    def test_contact_social_links_mobile_bilingual_layout(self):
+        expected_names = {
+            "cn": ["微信", "抖音", "小红书", "哔哩哔哩"],
+            "en": ["WeChat", "Douyin", "Xiaohongshu", "Bilibili"],
+        }
+        for width in (320, 390, 820):
+            with self.subTest(width=width):
+                page = self.page(viewport={"width": width, "height": 900}, has_touch=True,
+                                 is_mobile=width < 700, reduced_motion="reduce")
+                self.ready(page)
+                links = page.locator("#contact .social-links > *")
+                self.assertEqual(links.count(), 4)
+                self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), width + 1)
+                for language in ("cn", "en"):
+                    if language == "en":
+                        page.locator("#langSwitch").click()
+                    self.assertEqual(
+                        [links.nth(index).locator(".social-name").inner_text() for index in range(4)],
+                        expected_names[language],
+                    )
+                    last = links.nth(3).bounding_box()
+                    self.assertGreaterEqual(last["x"], -0.5)
+                    self.assertLessEqual(last["x"] + last["width"], width + 1)
+                    first = links.first.bounding_box()
+                    self.assertGreaterEqual(first["height"], 44, "Social tap targets must stay at least 44px tall")
+                    qr = page.locator('#contact [data-qr-title="微信"]')
+                    qr.click()
+                    expect(page.locator("#social-qr-dialog")).to_be_visible()
+                    self.assertLessEqual(
+                        page.locator("#social-qr-dialog").bounding_box()["width"], width,
+                    )
+                    page.locator("#socialQrClose").click()
+                    expect(qr).to_be_focused()
+                page.close()
+
     def test_layout_and_contacts_at_supported_widths(self):
         for width in (320, 390, 820, 1440, 1920):
             with self.subTest(width=width):
@@ -715,9 +789,9 @@ class StudioRedesign(unittest.TestCase):
                         self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), width + 1)
                         expect(page.locator("#workSearch")).to_be_visible()
                         expect(page.locator("#adminEntryLink")).to_be_visible()
-                self.assertEqual(page.locator("[data-qr-image]").count(), 3)
-                self.assertEqual(page.locator('a[href="https://b23.tv/VFqS3Tj"]').count(), 1)
-                qr = page.locator("[data-qr-image]").first
+                self.assertEqual(page.locator("#contact [data-qr-image]").count(), 3)
+                self.assertEqual(page.locator('#contact a[href="https://b23.tv/VFqS3Tj"]').count(), 1)
+                qr = page.locator("#contact [data-qr-image]").first
                 qr.click()
                 expect(page.locator("#social-qr-dialog")).to_be_visible()
                 image = page.locator("#social-qr-dialog img")

@@ -161,10 +161,13 @@ a, button, input { touch-action: manipulation; }
 .contact-email { font-size: clamp(18px, 2vw, 26px); font-weight: 400; letter-spacing: -.015em; display: inline-flex; align-items: center; gap: 20px; }
 .contact-email:hover { color: var(--orange-dark); }
 .contact-details { display: flex; flex-direction: column; gap: 12px; font-size: 12px; color: var(--muted); }
-.social-row { display: flex; justify-content: space-between; gap: 24px; align-items: center; padding-top: 28px; font-size: 12px; color: var(--muted); }
-.social-links { display: flex; gap: 28px; }
-.social-links button, .social-links a { display: flex; gap: 13px; min-height: 44px; align-items: center; padding: 0; background: transparent; font-size: 13px; color: var(--ink); }
-.social-links button:hover, .social-links a:hover { color: var(--orange-dark); }
+.social-row { display: flex; justify-content: space-between; gap: 32px; align-items: center; padding-top: 34px; font-size: 12px; color: var(--muted); }
+.social-links { display: flex; gap: clamp(30px, 3.2vw, 60px); align-items: stretch; }
+.social-links button, .social-links a { display: flex; flex-direction: column; justify-content: center; gap: 8px; min-height: 44px; padding: 0; background: transparent; text-align: left; color: var(--ink); }
+.social-name { font-size: clamp(17px, 1.5vw, 21px); font-weight: 500; line-height: 1.25; letter-spacing: -.015em; transition: color .2s; }
+.social-hint { font-size: 11px; line-height: 1.4; letter-spacing: .02em; color: var(--muted); }
+.social-links button:hover .social-name, .social-links a:hover .social-name,
+.social-links button:focus-visible .social-name, .social-links a:focus-visible .social-name { color: var(--orange-dark); }
 .site-footer { border-top: 1px solid var(--line); padding-top: 27px; overflow: hidden; }
 .footer-software { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; padding-bottom: 28px; margin-bottom: 24px; border-bottom: 1px solid var(--line); }
 .footer-software > p, .work-software-label { font-size: 11px; color: var(--muted); line-height: 1.6; }
@@ -258,7 +261,7 @@ html[lang="en"] .contact-section h2 { font-size: 36px; }
   .practice-list { gap: 12px; font-size: 11px; }
   .contact-bottom { align-items: start; flex-direction: column; }
   .contact-details { flex-direction: row; gap: 24px; flex-wrap: wrap; }
-  .social-links { gap: 20px; }
+  .social-links { gap: 28px; }
 }
 @media (max-width: 600px) {
   html { scroll-padding-top: 24px; }
@@ -320,9 +323,11 @@ html[lang="en"] .contact-section h2 { font-size: 36px; }
   .contact-bottom { padding-block: 30px; gap: 20px; }
   .contact-email { font-size: 18px; gap: 13px; }
   .contact-details { font-size: 11px; gap: 10px 20px; }
-  .social-row { align-items: start; flex-direction: column; gap: 13px; padding-top: 24px; font-size: 11px; }
+  .social-row { align-items: start; flex-direction: column; gap: 14px; padding-top: 26px; font-size: 11px; }
   .social-links { width: 100%; justify-content: space-between; gap: 8px; }
-  .social-links button, .social-links a { font-size: 11px; gap: 5px; }
+  .social-links button, .social-links a { gap: 6px; }
+  .social-name { font-size: 15px; }
+  .social-hint { font-size: 10px; }
   .site-footer { padding-top: 18px; }
   .footer-top { flex-direction: column; align-items: start; gap: 12px; font-size: 10px; }
   .footer-top > div { width: 100%; justify-content: space-between; }
