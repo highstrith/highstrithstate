@@ -742,7 +742,18 @@
     listen('pause', () => {
       if (playerVideo.readyState >= 3 && ['loading', 'buffering', 'slow'].includes(playerState)) showPlayerState('restricted');
     });
-    listen('error', () => { clearPlayerTimer(); showPlayerState('error'); });
+    listen('error', () => {
+      const fallback = mediaURL(playerWork?.mobileVideo || playerWork?.video);
+      if (playerWork && playerSource !== fallback && fallback) {
+        playerSource = fallback;
+        playerVideo.src = playerSource;
+        playerVideo.load();
+        attemptPlayerPlay(controller);
+        return;
+      }
+      clearPlayerTimer();
+      showPlayerState('error');
+    });
     showPlayerState('loading');
     schedulePlayerWait(controller);
     playerVideo.src = playerSource;
@@ -764,7 +775,7 @@
     playerWork = work;
     playerReturnFocus = trigger || document.activeElement;
     const mobile = narrowScreen.matches || coarsePointer.matches;
-    playerSource = mediaURL(mobile ? (work.mobileVideo || work.video) : (work.webVideo || work.video));
+    playerSource = mediaURL(mobile ? (work.mobileVideo || work.video) : (work.webVideo || work.mobileVideo || work.video));
     const poster = posterSource(work.poster);
     if (poster) playerVideo.poster = poster;
     else playerVideo.removeAttribute('poster');
