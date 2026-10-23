@@ -430,9 +430,9 @@
     });
   });
 
-  // Print button
-  if (printBtn) {
-    printBtn.addEventListener('click', () => {
+  // Print buttons
+  document.querySelectorAll('#printBtn, #printBtn2').forEach(btn => {
+    btn.addEventListener('click', () => {
       if (currentView !== 'resume') {
         switchView('resume');
       }
@@ -440,7 +440,7 @@
         window.print();
       }, 150);
     });
-  }
+  });
 
   // Category filters
   filterBtns.forEach(btn => {

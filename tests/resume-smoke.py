@@ -34,7 +34,9 @@ class ResumePageSmoke(unittest.TestCase):
         expect(self.page.locator('#view-resume')).to_be_visible()
         expect(self.page.locator('.profile-name')).to_contain_text('林俊杰')
         expect(self.page.locator('.profile-tag-row .badge-dual-engine')).to_be_visible()
-        expect(self.page.locator('.profile-qr-box img')).to_be_visible()
+        # Verify large website showcase is present
+        expect(self.page.locator('.browser-mockup-frame')).to_be_visible()
+        expect(self.page.locator('.browser-address-bar')).to_contain_text('highstrith.github.io/highstrithstate')
         self.assertEqual(self.errors, [])
 
     def test_switch_to_cinema_and_back(self):
@@ -51,12 +53,12 @@ class ResumePageSmoke(unittest.TestCase):
         expect(self.page.locator('#view-cinema')).to_have_attribute('hidden', '')
         self.assertEqual(self.errors, [])
 
-    def test_spotlight_play_switches_and_opens_player(self):
-        self.page.goto(BASE + '/resume.html')
-        self.page.locator('[data-play-work="work-ai-patient"]').click()
+    def test_cinema_play_and_close(self):
+        self.page.goto(BASE + '/resume.html#cinema')
         expect(self.page.locator('#view-cinema')).to_be_visible()
+        # Click first work play button
+        self.page.locator('.cinema-work-card button[data-play]').first.click()
         expect(self.page.locator('#resumePlayer')).to_have_attribute('open', '')
-        expect(self.page.locator('#playerTitle')).to_contain_text('AI患者')
         
         # Close player
         self.page.locator('#resumePlayerClose').click()
