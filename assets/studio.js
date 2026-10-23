@@ -13,7 +13,7 @@
 
   const copy = {
     cn: {
-      skip: '跳转到作品', navWorks: '作品', navProjects: '项目与应用', navAbout: '关于', navContact: '联系', admin: '作品管理',
+      skip: '跳转到作品', navWorks: '作品', navProjects: '项目与应用', navResume: '创作者档案', navAbout: '关于', navContact: '联系', admin: '作品管理',
       intro: '独立影像创作者 · 南京', heroTitle: '想象，在此成片',
       heroDesc: '用三维构建世界，用影像讲述故事。\n从一个念头，到让人记住的画面。',
       explore: '探索作品', selected: '精选放映', watch: '观看完整作品',
@@ -27,6 +27,7 @@
       aboutCopy: '我在南京，创作 AI 短片、三维动画和动态影像。从脚本、角色到剪辑与成片，我喜欢把不同的工具放在一起，让脑海里的世界有自己的光线、节奏和情绪。',
       aboutSecond: '这里既有完整的故事，也有尚在探索的视觉实验。比起固定的风格，我更在意每一次创作是否带来新的表达。',
       practiceOne: '故事与影像', practiceTwo: '三维与角色', practiceThree: '剪辑与后期', aboutContact: '聊聊你的想法',
+      aboutResume: '创作者档案与简历 ↗',
       contactLabel: '从一句「我有个想法」开始', location: '中国 · 南京', contactTitle: '下一个画面，\n一起完成',
       wechatAccount: '微信 Gw1sgdsj_787', elsewhere: '也可以在这里找到我',
       wechat: '微信', douyin: '抖音', red: '小红书', bili: '哔哩哔哩',
@@ -42,7 +43,7 @@
       softwareTools: '熟练使用的软件', madeWith: '制作软件',
     },
     en: {
-      skip: 'Skip to works', navWorks: 'Works', navProjects: 'Projects', navAbout: 'About', navContact: 'Contact', admin: 'Manage works',
+      skip: 'Skip to works', navWorks: 'Works', navProjects: 'Projects', navResume: 'Resume', navAbout: 'About', navContact: 'Contact', admin: 'Manage works',
       intro: 'Independent image maker · Nanjing', heroTitle: 'Imagination, in motion',
       heroDesc: 'Building worlds in 3D. Telling stories through film.\nFrom a first thought to an image that stays with you.',
       explore: 'Explore the works', selected: 'Selected screening', watch: 'Watch the full film',
@@ -56,6 +57,7 @@
       aboutCopy: 'Based in Nanjing, I make AI short films, 3D animation and moving images. From scripts and characters to editing and the finished film, I enjoy bringing different tools together to give imagined worlds their own light, rhythm and emotion.',
       aboutSecond: 'Some of these works tell complete stories; others are visual experiments still being explored. Each project is a chance to find a new way to express an idea.',
       practiceOne: 'Stories & images', practiceTwo: '3D & characters', practiceThree: 'Editing & post', aboutContact: 'Share your idea',
+      aboutResume: 'Profile & Resume ↗',
       contactLabel: 'It starts with “I have an idea”', location: 'Nanjing · China', contactTitle: 'Let’s make\nthe next image',
       wechatAccount: 'WeChat Gw1sgdsj_787', elsewhere: 'Find me elsewhere',
       wechat: 'WeChat', douyin: 'Douyin', red: 'Xiaohongshu', bili: 'Bilibili',
@@ -881,6 +883,9 @@
   function setLanguage(nextLanguage) {
     language = nextLanguage;
     document.querySelector('[data-projects-link]')?.setAttribute('href', language === 'en' ? 'projects.html?lang=en' : 'projects.html');
+    document.querySelectorAll('[data-resume-link]').forEach(el => {
+      el.setAttribute('href', language === 'en' ? 'resume.html?lang=en' : 'resume.html');
+    });
     document.querySelectorAll('.footer-software [data-software]').forEach(element => {
       element.textContent = softwareNames.get(element.dataset.software)[language];
     });
@@ -1024,31 +1029,63 @@
   $('#workPlayerClose')?.addEventListener('click', closePlayer);
   player?.addEventListener('cancel', (event) => { event.preventDefault(); closePlayer(); });
   player?.addEventListener('close', finishPlayer);
+  let playerHudTimer = null;
+  function showPlayerHud(icon, text) {
+    if (!player) return;
+    let hud = $('#playerHud');
+    if (!hud) {
+      hud = create('div', 'player-hud', '');
+      hud.id = 'playerHud';
+      player.querySelector('.player-screen')?.appendChild(hud);
+    }
+    if (!hud) return;
+    hud.innerHTML = `<span class="hud-icon">${icon}</span>${text ? `<span class="hud-text">${text}</span>` : ''}`;
+    hud.classList.remove('show');
+    void hud.offsetWidth;
+    hud.classList.add('show');
+    clearTimeout(playerHudTimer);
+    playerHudTimer = setTimeout(() => {
+      hud.classList.remove('show');
+    }, 650);
+  }
+
   player?.addEventListener('keydown', (event) => {
     if (event.target && (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA')) return;
     if (event.code === 'Space') {
       event.preventDefault();
       if (!playerVideo) return;
-      if (playerVideo.paused) playerVideo.play()?.catch(() => {});
-      else playerVideo.pause();
+      if (playerVideo.paused) {
+        playerVideo.play()?.catch(() => {});
+        showPlayerHud('▶', language === 'en' ? 'Play' : '播放');
+      } else {
+        playerVideo.pause();
+        showPlayerHud('❚❚', language === 'en' ? 'Pause' : '暂停');
+      }
     } else if (event.code === 'ArrowLeft') {
       event.preventDefault();
       if (playerVideo && Number.isFinite(playerVideo.currentTime)) {
         playerVideo.currentTime = Math.max(0, playerVideo.currentTime - 5);
+        showPlayerHud('⏪', '-5s');
       }
     } else if (event.code === 'ArrowRight') {
       event.preventDefault();
       if (playerVideo && Number.isFinite(playerVideo.currentTime)) {
         const duration = Number.isFinite(playerVideo.duration) ? playerVideo.duration : Infinity;
         playerVideo.currentTime = Math.min(duration, playerVideo.currentTime + 5);
+        showPlayerHud('⏩', '+5s');
       }
     } else if (event.code === 'KeyM') {
-      if (playerVideo) playerVideo.muted = !playerVideo.muted;
+      if (playerVideo) {
+        playerVideo.muted = !playerVideo.muted;
+        showPlayerHud(playerVideo.muted ? '🔇' : '🔊', playerVideo.muted ? (language === 'en' ? 'Mute' : '静音') : (language === 'en' ? 'Sound' : '原声'));
+      }
     } else if (event.code === 'KeyF') {
       if (document.fullscreenElement) {
         document.exitFullscreen?.().catch(() => {});
+        showPlayerHud('⛶', language === 'en' ? 'Exit Fullscreen' : '退出全屏');
       } else {
         (playerVideo?.requestFullscreen || playerVideo?.webkitRequestFullscreen)?.call(playerVideo)?.catch(() => {});
+        showPlayerHud('⛶', language === 'en' ? 'Fullscreen' : '全屏');
       }
     }
   });
@@ -1117,6 +1154,28 @@
       syncPreview();
     });
     observer.observe(heroVideo);
+  }
+
+  // ScrollSpy for main-nav sections (#works, #about, #contact)
+  const navSectionLinks = [...document.querySelectorAll('.main-nav a[href^="#"]')];
+  if (navSectionLinks.length > 0 && typeof IntersectionObserver === 'function') {
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          navSectionLinks.forEach(link => {
+            const isMatch = link.getAttribute('href') === `#${id}`;
+            if (isMatch) link.setAttribute('aria-current', 'true');
+            else link.removeAttribute('aria-current');
+          });
+        }
+      });
+    }, { rootMargin: '-20% 0px -60% 0px', threshold: 0.05 });
+
+    navSectionLinks.forEach(link => {
+      const section = document.querySelector(link.getAttribute('href'));
+      if (section) sectionObserver.observe(section);
+    });
   }
 
   setLanguage(new URLSearchParams(window.location.search).get('lang') === 'en' ? 'en' : 'cn');

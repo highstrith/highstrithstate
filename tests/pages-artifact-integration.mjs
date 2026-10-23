@@ -25,8 +25,10 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
   const projectFiles = [...projects.matchAll(/(?:href|src)="(assets\/[^"]+)"/g)].map(match => match[1].split('?')[0]);
   const fixture = fs.mkdtempSync(path.join(os.tmpdir(), 'highstrith-pages-'));
   try {
-    for (const file of ['index.html', 'projects.html', 'admin.html', 'admin.css', 'serve.js']) {
-      fs.copyFileSync(path.join(root, file), path.join(fixture, file));
+    for (const file of ['index.html', 'projects.html', 'resume.html', 'admin.html', 'admin.css', 'serve.js']) {
+      if (fs.existsSync(path.join(root, file))) {
+        fs.copyFileSync(path.join(root, file), path.join(fixture, file));
+      }
     }
     for (const folder of ['assets', 'data']) fs.mkdirSync(path.join(fixture, folder));
     for (const file of [...references, ...projectFiles]) {

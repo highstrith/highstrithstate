@@ -30,7 +30,7 @@ class ResumePageSmoke(unittest.TestCase):
 
     def test_resume_default_view_loads(self):
         self.page.goto(BASE + '/resume.html')
-        expect(self.page).to_have_title('林俊杰 · 个人简历与作品展厅 — Highstrith')
+        expect(self.page).to_have_title('林俊杰 · 创作者档案与个人简历 — Highstrith')
         expect(self.page.locator('#view-resume')).to_be_visible()
         expect(self.page.locator('.profile-name')).to_contain_text('林俊杰')
         expect(self.page.locator('.profile-tag-row .badge-dual-engine')).to_be_visible()
@@ -63,7 +63,7 @@ class ResumePageSmoke(unittest.TestCase):
         # Toggle language to EN
         self.page.locator('#langSwitch').click()
         expect(self.page.locator('#langSwitch')).to_have_text('中文')
-        expect(self.page).to_have_title('Junjie Lin (Highstrith) · Interactive Resume & Works')
+        expect(self.page).to_have_title('Junjie Lin (Highstrith) · Creator Profile & Resume')
         
         # Toggle back to CN
         self.page.locator('#langSwitch').click()

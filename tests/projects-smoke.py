@@ -91,6 +91,13 @@ class ProjectPages(unittest.TestCase):
                     boxes = self.page.locator('.main-nav a').evaluate_all('(links) => links.map(link => { const r = link.getBoundingClientRect(); return {left:r.left, right:r.right}; })')
                     self.assertTrue(all(a['right'] <= b['left'] for a, b in zip(boxes, boxes[1:])), (width, language, route))
         self.page.goto((ROOT / 'projects.html').as_uri())
+        expect(self.page.locator('.project-bottom').get_by_role('link', name='打开 AI 无限画布')).to_be_visible()
+        with self.page.expect_popup() as popup:
+            self.page.locator('.project-bottom').get_by_role('link', name='打开 AI 无限画布').click()
+        app = popup.value
+        app.wait_for_load_state('load')
+        expect(app.get_by_role('heading', name='你的创作工作台', exact=True)).to_be_visible()
+        app.close()
         expect(self.page.locator('.project-bottom').get_by_role('link', name='打开积分比价系统')).to_be_visible()
         self.page.locator('#langSwitch').click()
         expect(self.page.get_by_role('heading', name='AI infinite canvas', exact=True)).to_be_visible()
@@ -100,7 +107,7 @@ class ProjectPages(unittest.TestCase):
     def test_canvas_entry_opens_working_app(self):
         self.page.goto(BASE + '/projects.html')
         link = self.page.locator('.project-bottom').get_by_role('link', name='打开 AI 无限画布')
-        expect(link).to_have_attribute('href', 'assets/apps/ai-infinite-canvas/index.html')
+        expect(link).to_have_attribute('href', 'assets/apps/ai-infinite-canvas.html')
         expect(link).to_have_attribute('target', '_blank')
         self.assertIn('noopener', link.get_attribute('rel'))
         with self.page.expect_popup() as popup:
@@ -108,7 +115,7 @@ class ProjectPages(unittest.TestCase):
         app = popup.value
         app.wait_for_load_state('load')
         expect(app.get_by_role('heading', name='你的创作工作台', exact=True)).to_be_visible()
-        self.assertIn('/assets/apps/ai-infinite-canvas/index.html', app.url)
+        self.assertIn('/assets/apps/ai-infinite-canvas.html', app.url)
         self.assertEqual(self.errors, [])
 
     def test_project_entries_work_without_javascript(self):
@@ -116,7 +123,7 @@ class ProjectPages(unittest.TestCase):
         try:
             page = context.new_page()
             page.goto(BASE + '/projects.html')
-            expect(page.locator('.project-bottom').get_by_role('link', name='打开 AI 无限画布')).to_have_attribute('href', 'assets/apps/ai-infinite-canvas/index.html')
+            expect(page.locator('.project-bottom').get_by_role('link', name='打开 AI 无限画布')).to_have_attribute('href', 'assets/apps/ai-infinite-canvas.html')
             expect(page.locator('.project-bottom').get_by_role('link', name='打开积分比价系统')).to_have_attribute('href', 'assets/apps/points-comparison.html')
             expect(page.locator('.project-bottom').get_by_role('link', name='打开 AA 计算器')).to_have_attribute('href', 'assets/apps/aa-calculator.html')
         finally:

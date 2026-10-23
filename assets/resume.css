@@ -45,8 +45,8 @@
   margin-left: 4px;
 }
 
-/* Mode Segmented Control */
-.mode-segmented {
+/* Navigation Links */
+.dual-nav-links {
   display: inline-flex;
   align-items: center;
   background: #e6e8e2;
@@ -54,47 +54,55 @@
   border-radius: 999px;
   border: 1px solid var(--line);
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
+  gap: 2px;
 }
-.segment-btn {
+.dual-nav-link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 18px;
-  font-size: 14px;
+  padding: 7px 16px;
+  font-size: 13.5px;
   font-weight: 500;
   color: var(--text-secondary);
-  border: none;
-  background: transparent;
+  text-decoration: none;
   border-radius: 999px;
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-  cursor: pointer;
   white-space: nowrap;
 }
-.segment-btn svg {
-  width: 16px;
-  height: 16px;
+.dual-nav-link svg {
+  width: 15px;
+  height: 15px;
   fill: currentColor;
 }
-.segment-btn:hover {
+.dual-nav-link:hover {
   color: var(--ink);
+  background: rgba(255, 255, 255, 0.6);
 }
-.segment-btn[aria-selected="true"] {
+.dual-nav-link.active,
+.dual-nav-link[aria-current="page"] {
   background: #ffffff;
   color: var(--ink);
   font-weight: 600;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
-.segment-btn[aria-selected="true"] .segment-badge {
+.dual-nav-link.active .segment-badge,
+.dual-nav-link[aria-current="page"] .segment-badge {
   background: var(--resume-accent);
   color: #fff;
 }
 .segment-badge {
   font-size: 11px;
   font-weight: 600;
-  padding: 2px 7px;
+  padding: 1px 6px;
   border-radius: 10px;
   background: #d6d9d2;
   color: var(--ink);
+  margin-left: -1px;
+}
+.link-arrow {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-left: -1px;
 }
 
 .nav-actions {
@@ -917,28 +925,22 @@ dialog::backdrop {
 @media print {
   @page {
     size: A4;
-    margin: 12mm 15mm;
+    margin: 10mm 12mm;
   }
   body {
     background: #ffffff !important;
-    color: #000000 !important;
-    font-size: 10.5pt;
-    line-height: 1.45;
+    color: #111111 !important;
+    font-size: 10pt;
+    line-height: 1.4;
   }
   .dual-nav,
-  .cinema-banner,
-  .cinema-toolbar,
-  .cinema-grid,
   .nav-actions,
-  .browser-mockup-frame,
+  .website-showcase-section,
   .hero-contacts-bar,
-  .mode-segmented,
+  .pdf-refer-note,
   dialog,
   .toast-msg,
   [data-no-print] {
-    display: none !important;
-  }
-  #view-cinema {
     display: none !important;
   }
   #view-resume {
@@ -946,16 +948,23 @@ dialog::backdrop {
     padding: 0 !important;
     max-width: 100% !important;
   }
-  .resume-hero-clean,
-  .summary-card {
+  .resume-hero-clean {
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
-    margin-bottom: 14px !important;
+    margin-bottom: 12px !important;
     background: transparent !important;
   }
   .resume-hero-clean::before {
     display: none;
+  }
+  .profile-name {
+    font-size: 18pt !important;
+    margin-bottom: 2pt !important;
+  }
+  .profile-subhead {
+    font-size: 11pt !important;
+    color: #333 !important;
   }
   .print-only {
     display: block !important;
@@ -964,15 +973,59 @@ dialog::backdrop {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    border-bottom: 2pt solid #000;
-    padding-bottom: 10px;
-    margin-bottom: 14px;
+    border-bottom: 2pt solid #111;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+  .print-meta p {
+    margin: 2px 0;
+    font-size: 9.5pt;
   }
   .print-qr-code {
-    width: 75px;
-    height: 75px;
+    width: 70px;
+    height: 70px;
     border: 1px solid #999;
     padding: 2px;
+  }
+  .metrics-strip {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-block: 8px 12px !important;
+    border: 1px solid #dcdfd8 !important;
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    background: #fbfbf9 !important;
+  }
+  .metric-pill-num {
+    font-size: 15pt !important;
+    color: #111 !important;
+  }
+  .metric-pill-label {
+    font-size: 8.5pt !important;
+    color: #444 !important;
+  }
+  .resume-summary-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 16px !important;
+    page-break-inside: avoid;
+    margin-bottom: 0 !important;
+  }
+  .summary-card {
+    border: 1px solid #e0e4dd !important;
+    border-radius: 8px !important;
+    padding: 12px 14px !important;
+    background: transparent !important;
+    page-break-inside: avoid;
+  }
+  .summary-card-title {
+    font-size: 11.5pt !important;
+    border-bottom: 1px solid #ccc !important;
+    padding-bottom: 4px !important;
+    margin-bottom: 10px !important;
+  }
+  .concise-timeline-item {
+    page-break-inside: avoid;
   }
   a {
     color: #000 !important;
@@ -985,15 +1038,18 @@ dialog::backdrop {
   .dual-nav {
     flex-wrap: wrap;
     padding: 10px 14px;
+    gap: 10px;
   }
-  .mode-segmented {
+  .dual-nav-links {
     order: 3;
     width: 100%;
     justify-content: center;
   }
-  .segment-btn {
+  .dual-nav-link {
     flex: 1;
     justify-content: center;
+    padding: 6px 10px;
+    font-size: 12.5px;
   }
   .showcase-info-bar {
     flex-direction: column;

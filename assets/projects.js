@@ -17,6 +17,9 @@
       url.search = language === 'en' ? '?lang=en' : '';
       link.setAttribute('href', `index.html${url.search}${url.hash}`);
     });
+    document.querySelectorAll('[data-resume-link]').forEach(link => {
+      link.setAttribute('href', language === 'en' ? 'resume.html?lang=en' : 'resume.html');
+    });
     document.querySelector('[aria-current="page"]').setAttribute('href', language === 'en' ? 'projects.html?lang=en' : 'projects.html');
     button.textContent = language === 'en' ? '中文' : 'EN';
     button.setAttribute('aria-label', language === 'en' ? '切换到中文' : 'Switch to English');
