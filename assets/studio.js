@@ -27,7 +27,7 @@
       aboutCopy: '我在南京，创作 AI 短片、三维动画和动态影像。从脚本、角色到剪辑与成片，我喜欢把不同的工具放在一起，让脑海里的世界有自己的光线、节奏和情绪。',
       aboutSecond: '这里既有完整的故事，也有尚在探索的视觉实验。比起固定的风格，我更在意每一次创作是否带来新的表达。',
       practiceOne: '故事与影像', practiceTwo: '三维与角色', practiceThree: '剪辑与后期', aboutContact: '聊聊你的想法',
-      aboutResume: '创作者档案与简历 ↗',
+      aboutResume: '创作者档案与简历',
       contactLabel: '从一句「我有个想法」开始', location: '中国 · 南京', contactTitle: '下一个画面，\n一起完成',
       wechatAccount: '微信 Gw1sgdsj_787', elsewhere: '也可以在这里找到我',
       wechat: '微信', douyin: '抖音', red: '小红书', bili: '哔哩哔哩',
@@ -57,7 +57,7 @@
       aboutCopy: 'Based in Nanjing, I make AI short films, 3D animation and moving images. From scripts and characters to editing and the finished film, I enjoy bringing different tools together to give imagined worlds their own light, rhythm and emotion.',
       aboutSecond: 'Some of these works tell complete stories; others are visual experiments still being explored. Each project is a chance to find a new way to express an idea.',
       practiceOne: 'Stories & images', practiceTwo: '3D & characters', practiceThree: 'Editing & post', aboutContact: 'Share your idea',
-      aboutResume: 'Profile & Resume ↗',
+      aboutResume: 'Profile & Resume',
       contactLabel: 'It starts with “I have an idea”', location: 'Nanjing · China', contactTitle: 'Let’s make\nthe next image',
       wechatAccount: 'WeChat Gw1sgdsj_787', elsewhere: 'Find me elsewhere',
       wechat: 'WeChat', douyin: 'Douyin', red: 'Xiaohongshu', bili: 'Bilibili',
@@ -299,9 +299,12 @@
       setPosterImage(image, work.poster, 'card');
       const video = create('video');
       video.muted = true;
+      video.defaultMuted = true;
       video.loop = true;
       video.playsInline = true;
       video.preload = 'none';
+      video.setAttribute('muted', '');
+      video.setAttribute('playsinline', '');
       video.setAttribute('aria-hidden', 'true');
       media.append(image, video);
       const caption = create('span', 'work-caption');
@@ -646,6 +649,9 @@
       // Media time stops during buffering, backgrounding and pauses. A wall
       // clock interval would skip films before visitors actually see them.
       video.addEventListener('timeupdate', () => {
+        if (activePreview === session && video.currentTime > 0 && !container.classList.contains('is-previewing')) {
+          container.classList.add('is-previewing');
+        }
         if (!video.paused && !video.seeking && video.currentTime >= segmentStart + featurePreviewSeconds) advance();
       }, { signal: controller.signal });
       video.addEventListener('ended', advance, { signal: controller.signal });
@@ -660,13 +666,30 @@
     video.muted = true;
     video.defaultMuted = true;
     video.playsInline = true;
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
     video.src = source;
     video.load();
-    video.play()?.catch(() => {
-      if (activePreview !== session) return;
-      container.classList.remove('is-previewing');
-      if (video === heroVideo) clearHeroFreeze();
-    });
+    const playAttempt = video.play();
+    if (playAttempt && typeof playAttempt.catch === 'function') {
+      playAttempt.catch(() => {
+        if (activePreview !== session) return;
+        container.classList.remove('is-previewing');
+        if (video === heroVideo) clearHeroFreeze();
+
+        // Autoplay recovery on user interaction if restricted by browser policy
+        const resumeOnGesture = () => {
+          if (activePreview === session && video.paused) {
+            video.play()?.then(() => {
+              container.classList.add('is-previewing');
+            }).catch(() => {});
+          }
+        };
+        ['pointerdown', 'touchstart', 'scroll', 'keydown'].forEach((evt) => {
+          window.addEventListener(evt, resumeOnGesture, { once: true, passive: true });
+        });
+      });
+    }
   }
 
   function syncPreview() {
@@ -676,7 +699,7 @@
       : null;
     if (card) { startPreview(card.work, card.video, card.card); return; }
     const work = featuredWorks.find((item) => item.id === selectedFeatureId);
-    if (work && heroNearViewport && nearViewport(heroVideo)) startPreview(work, heroVideo, hero);
+    if (work && heroNearViewport && nearViewport(hero)) startPreview(work, heroVideo, hero);
     else stopPreview();
   }
 
@@ -775,7 +798,7 @@
     playerWork = work;
     playerReturnFocus = trigger || document.activeElement;
     const mobile = narrowScreen.matches || coarsePointer.matches;
-    playerSource = mediaURL(mobile ? (work.mobileVideo || work.video) : (work.webVideo || work.mobileVideo || work.video));
+    playerSource = mediaURL(mobile ? (work.mobileVideo || work.video) : (work.webVideo || work.video));
     const poster = posterSource(work.poster);
     if (poster) playerVideo.poster = poster;
     else playerVideo.removeAttribute('poster');
@@ -1164,7 +1187,7 @@
       heroNearViewport = entry.isIntersecting;
       syncPreview();
     });
-    observer.observe(heroVideo);
+    observer.observe(hero);
   }
 
   // ScrollSpy for main-nav sections (#works, #about, #contact)
