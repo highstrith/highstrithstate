@@ -8,8 +8,9 @@
 
 ## 应用来源
 
-| 站内文件 | 原成品 | SHA-256 |
+| 站内文件 / 目标链接 | 原成品 / 源码 | 说明 |
 | --- | --- | --- |
+| `assets/apps/ai-infinite-canvas/index.html` | `/Users/linjunjie/画布/ai-infinite-canvas/dist` | AI 无限画布独立前端应用，支持自配 API 与多工作区创作；封面截图为新海诚项目电影感节点视图 |
 | `assets/apps/points-comparison.html` | `/Users/linjunjie/Downloads/积分比价/frontend/dist/index.html` | `08ef261ebc91c99edb5c597d8795399b1cb3f68d68e5eb67e7c45970009ef232` |
 | `assets/apps/aa-calculator.html` | `/Volumes/E61--/AA计算器/site/index.html` | `df96b34523bd04c3736f34a02bc0b7202d0faffef899200a752a0ae8942cdb77` |
 

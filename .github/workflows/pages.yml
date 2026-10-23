@@ -30,6 +30,7 @@ jobs:
           mkdir -p public/assets public/data
           cp index.html public/index.html
           cp projects.html public/projects.html
+          cp resume.html public/resume.html
           rsync -a --exclude 'originals/' assets/ public/assets/
           cp -R data/. public/data/
           touch public/.nojekyll
