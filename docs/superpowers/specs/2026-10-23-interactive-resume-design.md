@@ -66,7 +66,7 @@ flowchart LR
    - **60%+ 效率跃升**：AIGC 结合 3D 管线，将概念验证与预演周期大幅压缩。
    - **100% 单兵全闭环**：编剧、分镜、生成、Blender 资产到调色音效一体化交付。
 3. **互动式技能矩阵**：
-   - **AIGC 视觉栈**：Seedance 2.0、可灵 O3、Runway、Luma、MiniMax、Midjourney、ComfyUI、Nano Banana Pro 等。
+   - **AIGC 视觉栈**：Seedance 2.5、可灵 Kling 4.0、Runway、Luma、MiniMax、Midjourney、ComfyUI、Nano Banana Pro 等。
    - **三维与空间栈**：Blender（建模/材质/渲染/绑定/动力学/动画）、UE5（场景搭建/电影运镜）、Cascadeur（AI 动力学辅助）。
    - **剪辑调色与后期**：DaVinci Resolve（色彩科学/ACES/调色）、After Effects（复杂包装/跟踪合成）、Premiere Pro、Photoshop。
 4. **履历与商业实战时间轴**：

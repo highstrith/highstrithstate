@@ -1,4 +1,4 @@
-"""Tests for the interactive dual-mode resume page."""
+"""Tests for the creator resume page."""
 import os
 import unittest
 from pathlib import Path
@@ -37,32 +37,25 @@ class ResumePageSmoke(unittest.TestCase):
         # Verify large website showcase is present
         expect(self.page.locator('.browser-mockup-frame')).to_be_visible()
         expect(self.page.locator('.browser-address-bar')).to_contain_text('highstrith.github.io/highstrithstate')
+        # Verify top nav links are removed
+        expect(self.page.locator('.dual-nav-links')).not_to_be_attached()
         self.assertEqual(self.errors, [])
 
-    def test_switch_to_cinema_and_back(self):
+    def test_actions_and_links(self):
         self.page.goto(BASE + '/resume.html')
-        # Switch to cinema via segmented tab
-        self.page.locator('#tabCinema').click()
-        expect(self.page.locator('#view-cinema')).to_be_visible()
-        expect(self.page.locator('#view-resume')).to_have_attribute('hidden', '')
-        expect(self.page.locator('.cinema-work-card').first).to_be_visible()
+        # Check brand link to index.html
+        brand_link = self.page.locator('.dual-brand')
+        expect(brand_link).to_have_attribute('href', 'index.html')
         
-        # Switch back to resume via top back button in cinema
-        self.page.locator('.cinema-back-btn').click()
-        expect(self.page.locator('#view-resume')).to_be_visible()
-        expect(self.page.locator('#view-cinema')).to_have_attribute('hidden', '')
-        self.assertEqual(self.errors, [])
+        # Check direct link to main site in header actions
+        main_site_btn = self.page.locator('.nav-actions a[href="index.html"]')
+        expect(main_site_btn).to_be_visible()
+        expect(main_site_btn).to_contain_text('进入主站')
 
-    def test_cinema_play_and_close(self):
-        self.page.goto(BASE + '/resume.html#cinema')
-        expect(self.page.locator('#view-cinema')).to_be_visible()
-        # Click first work play button
-        self.page.locator('.cinema-work-card button[data-play]').first.click()
-        expect(self.page.locator('#resumePlayer')).to_have_attribute('open', '')
-        
-        # Close player
-        self.page.locator('#resumePlayerClose').click()
-        expect(self.page.locator('#resumePlayer')).not_to_have_attribute('open', '')
+        # Check hero button points directly to index.html#works
+        hero_cinema_btn = self.page.locator('.hero-contacts-bar a[href="index.html#works"]')
+        expect(hero_cinema_btn).to_be_visible()
+        expect(hero_cinema_btn).to_contain_text('前往放映厅看片')
         self.assertEqual(self.errors, [])
 
     def test_language_toggle_and_copy(self):
