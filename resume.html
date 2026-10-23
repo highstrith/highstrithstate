@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f4f0">
+  <title>林俊杰 · 个人简历与作品展厅 — Highstrith</title>
+  <meta name="description" content="林俊杰 (Highstrith · 橘小桔) 个人互动简历与影像放映厅。「AIGC 视觉生成 × 3D 扎实底层」双引擎复合型创作者。">
+  <meta property="og:title" content="林俊杰 · 个人简历与作品展厅 — Highstrith">
+  <meta property="og:description" content="AIGC 视频设计师 ｜ 三维与后期视觉专家 ｜ 独立影像全流程创作者。可交互在线履历与完整成片放映。">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://highstrith.github.io/highstrithstate/assets/hero-digital-human.jpg">
+  <link rel="canonical" href="https://highstrith.github.io/highstrithstate/resume.html">
+  <link rel="icon" type="image/svg+xml" href="assets/studio-mark.svg?v=20261008-n">
+  <link rel="stylesheet" href="assets/base.css?v=20261023-optimize">
+  <link rel="stylesheet" href="assets/resume.css?v=20261023-dual">
+</head>
+<body>
+
+  <!-- Top Dual-Mode Navigation -->
+  <header class="dual-nav" data-no-print>
+    <a href="index.html" class="dual-brand" aria-label="返回作品集首页">
+      <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V5h4.8l4.7 6.1V5H19v14h-4.5l-5-6.5V19H5Z"/></svg>
+      <span>Highstrith<span class="dual-brand-sub" data-cn="橘小桔" data-en="Studio">橘小桔</span></span>
+    </a>
+
+    <!-- Center Segmented Pill Switcher -->
+    <div class="mode-segmented" role="tablist" aria-label="视界模式切换">
+      <button type="button" class="segment-btn" data-switch-view="resume" aria-selected="true" role="tab" id="tabResume">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+        <span data-cn="个人简历" data-en="Resume">个人简历</span>
+      </button>
+      <button type="button" class="segment-btn" data-switch-view="cinema" aria-selected="false" role="tab" id="tabCinema">
+        <svg viewBox="0 0 24 24"><path d="m9 5 11 7-11 7z"/></svg>
+        <span data-cn="作品放映厅" data-en="Works Cinema">作品放映厅</span>
+        <span class="segment-badge">14</span>
+      </button>
+    </div>
+
+    <!-- Right Actions -->
+    <div class="nav-actions">
+      <button type="button" class="action-btn" data-open-qr="site" title="手机扫码在微信中打开" aria-label="手机扫码浏览作品">
+        <svg viewBox="0 0 24 24"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm15 0h3v3h-3zm-5 0h3v3h-3zm2 5h3v3h-3zm3 0h3v3h-3zM5 5v4h4V5zm10 0v4h4V5zM5 15v4h4v-4z"/></svg>
+        <span data-cn="扫码看片" data-en="Mobile QR">扫码看片</span>
+      </button>
+      <button type="button" class="action-btn" id="printBtn" title="调用系统打印导出 A4 纸质或 PDF 简历" aria-label="导出 PDF 简历">
+        <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+        <span data-cn="导出 PDF" data-en="Export PDF">导出 PDF</span>
+      </button>
+      <a href="index.html" class="action-btn action-btn-primary" target="_blank" rel="noopener noreferrer" title="在新窗口打开完整独立作品集网站">
+        <svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+        <span data-cn="主站大厅 ↗" data-en="Full Site ↗">主站大厅 ↗</span>
+      </a>
+      <button type="button" class="action-btn" id="langSwitch" aria-label="切换语言">EN</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 1. RESUME VIEW (Default First View)                           -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <section id="view-resume" class="view-panel" aria-labelledby="resumeTitle">
+      
+      <!-- Print-Only Header (Optimized for A4 Paper & PDF Export) -->
+      <div class="print-only print-header-grid">
+        <div class="print-meta">
+          <h1 style="font-size: 20pt; margin-bottom: 4pt;">林俊杰 · 个人简历</h1>
+          <p><strong>求职意向</strong>：AIGC 视频设计师 ｜ AI 视觉全流程创作者 ｜ 三维与后期视觉专家</p>
+          <p><strong>期望形式</strong>：南京本地全职 ｜ 全国远程全职 / 兼职 ｜ 随时到岗</p>
+          <p><strong>电话 / 微信</strong>：+86 180 2016 9750 ｜ Gw1sgdsj_787 ｜ <strong>邮箱</strong>：highstrith@gmail.com</p>
+          <p><strong>在线高清视频作品集主站</strong>：https://highstrith.github.io/highstrithstate/</p>
+        </div>
+        <div class="print-qr-wrap" style="text-align: center;">
+          <img src="assets/site-qr.svg" class="print-qr-code" alt="作品集二维码">
+          <p style="font-size: 8pt; margin-top: 4px; color: #444;">微信扫码直达作品放映</p>
+        </div>
+      </div>
+
+      <!-- Hero Profile Card -->
+      <div class="resume-hero-card">
+        <div class="profile-header">
+          <div class="profile-title-area">
+            <div class="profile-tag-row">
+              <span class="badge-dual-engine">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <span data-cn="「AIGC 视觉生成 × 3D 扎实底层」双引擎复合型创作者" data-en="AIGC Generative AI × Solid 3D CG Dual-Engine Creator">「AIGC 视觉生成 × 3D 扎实底层」双引擎复合型创作者</span>
+              </span>
+              <span class="badge-status">
+                <span class="status-dot"></span>
+                <span data-cn="随时到岗 · 南京全职 / 全国远程" data-en="Available immediately · Nanjing / Remote">随时到岗 · 南京全职 / 全国远程</span>
+              </span>
+            </div>
+
+            <h1 class="profile-name" id="resumeTitle">
+              林俊杰
+              <span data-cn="Highstrith · 橘小桔" data-en="Highstrith · Orange">Highstrith · 橘小桔</span>
+            </h1>
+
+            <p class="profile-subhead" data-cn="AIGC 视频设计师 ｜ 三维与后期视觉专家 ｜ 独立影像全流程单兵作战" data-en="AIGC Video Designer ｜ 3D & Post-Production Visual Specialist ｜ Full-Pipeline Solo Execution">
+              AIGC 视频设计师 ｜ 三维与后期视觉专家 ｜ 独立影像全流程单兵作战
+            </p>
+
+            <div class="profile-meta-pills">
+              <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg><span data-cn="26岁（2000年） · 4年视觉全流程实战" data-en="26 yrs old · 4 yrs Full-Pipeline Visual Exp">26岁（2000年） · 4年视觉全流程实战</span></span>
+              <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3 1 9l11 6 9-4.91V17h2V9L12 3z"/></svg><span data-cn="苏州大学应用技术学院 · 物联网工程（本科）" data-en="Soochow University Applied Tech · IoT Eng (B.S.)">苏州大学应用技术学院 · 物联网工程（本科）</span></span>
+              <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg><span data-cn="英语 CET-4（熟练精读英文 AI 前沿论文与专业文档）" data-en="English CET-4 (Fluent with AI papers & CG docs)">英语 CET-4（熟练精读英文 AI 前沿论文与专业文档）</span></span>
+            </div>
+
+            <!-- Action Buttons for Quick Navigation -->
+            <div class="profile-action-row" data-no-print style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button type="button" class="action-btn action-btn-primary" data-switch-view="cinema">
+                <svg viewBox="0 0 24 24"><path d="m9 5 11 7-11 7z"/></svg>
+                <span data-cn="🎬 动态切换至作品放映厅（14部成片）" data-en="🎬 Switch to Portfolio Cinema (14 Films)">🎬 动态切换至作品放映厅（14部成片）</span>
+              </button>
+              <button type="button" class="action-btn" data-copy="Gw1sgdsj_787">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                <span data-cn="一键复制微信号" data-en="Copy WeChat ID">一键复制微信号</span>
+              </button>
+              <button type="button" class="action-btn" data-open-qr="wechat">
+                <svg viewBox="0 0 24 24"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm15 0h3v3h-3zm-5 0h3v3h-3zm2 5h3v3h-3zm3 0h3v3h-3z"/></svg>
+                <span data-cn="微信扫码" data-en="WeChat QR">微信扫码</span>
+              </button>
+            </div>
+
+            <!-- Contact Grid -->
+            <div class="contact-grid">
+              <a href="mailto:highstrith@gmail.com" class="contact-item">
+                <svg class="contact-item-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                <div class="contact-item-content">
+                  <span class="contact-label" data-cn="工作邮箱" data-en="Email">工作邮箱</span>
+                  <span class="contact-val">highstrith@gmail.com</span>
+                </div>
+              </a>
+              <a href="tel:+8618020169750" class="contact-item">
+                <svg class="contact-item-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                <div class="contact-item-content">
+                  <span class="contact-label" data-cn="联系电话" data-en="Phone">联系电话</span>
+                  <span class="contact-val">+86 180 2016 9750</span>
+                </div>
+              </a>
+              <div class="contact-item" style="cursor: pointer;" data-copy="Gw1sgdsj_787" title="点击复制微信">
+                <svg class="contact-item-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.82.49 3.53 1.34 5L2 22l5.16-1.31A9.957 9.957 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+                <div class="contact-item-content">
+                  <span class="contact-label" data-cn="微信（点击复制）" data-en="WeChat (Click copy)">微信（点击复制）</span>
+                  <span class="contact-val">Gw1sgdsj_787</span>
+                </div>
+              </div>
+              <a href="https://highstrith.github.io/highstrithstate/" target="_blank" rel="noopener noreferrer" class="contact-item">
+                <svg class="contact-item-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                <div class="contact-item-content">
+                  <span class="contact-label" data-cn="作品集主站" data-en="Portfolio Site">作品集主站</span>
+                  <span class="contact-val">highstrithstate ↗</span>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <!-- QR Preview Box -->
+          <div class="profile-qr-box" data-no-print>
+            <img src="assets/site-qr.svg" class="qr-preview-img" alt="作品集主站二维码" loading="lazy">
+            <span class="qr-caption" data-cn="扫码手机看片" data-en="Scan for Portfolio">扫码手机看片</span>
+            <span class="qr-subtext">highstrithstate</span>
+            <button type="button" class="action-btn" style="margin-top: 8px; width: 100%; justify-content: center; font-size: 11px; padding: 4px 6px;" data-open-qr="site">
+              <span data-cn="放大二维码" data-en="Enlarge">放大二维码</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Impact Stats Strip -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">300+</div>
+          <h3 class="stat-title" data-cn="商业视觉内容独立交付" data-en="Commercial Visual Assets Delivered">商业视觉内容独立交付</h3>
+          <p class="stat-desc" data-cn="服务 30 余个中大型外包与品牌项目，涵盖产品三维动态演示、概念角色动画、AI 视觉宣发片等，极高交付确定性。" data-en="Executed 30+ mid-to-large client & brand projects spanning product 3D motion, character concept film, and promotional video.">
+            服务 30 余个中大型外包与品牌项目，涵盖产品三维动态演示、概念角色动画、AI 视觉宣发片等，极高交付确定性。
+          </p>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-number">60%+</div>
+          <h3 class="stat-title" data-cn="制片周期显著压缩" data-en="Production Turnaround Reduced">制片周期显著压缩</h3>
+          <p class="stat-desc" data-cn="将前沿 AI 生图/生视频工具深度融入传统三维制片，将概念美术验证与动态预演周期缩短 60% 以上，吞吐量成倍提升。" data-en="Seamlessly fused AI generation with 3D animation pipelines, cutting concept validation & motion previs time by over 60%.">
+            将前沿 AI 生图/生视频工具深度融入传统三维制片，将概念美术验证与动态预演周期缩短 60% 以上，吞吐量成倍提升。
+          </p>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-number">100%</div>
+          <h3 class="stat-title" data-cn="全流程单兵交付力（OPC级）" data-en="Full Solo Pipeline Execution">全流程单兵交付力（OPC级）</h3>
+          <p class="stat-desc" data-cn="从创意策划、分镜编写、AI 提示词工程，到 Blender/UE5 资产运镜、剪辑包装、达芬奇电影级调色与声效独立闭环。" data-en="Full autonomous execution: creative scripting, AI prompt crafting, Blender/UE5 camera staging, DaVinci ACES grading, and audio design.">
+            从创意策划、分镜编写、AI 提示词工程，到 Blender/UE5 资产运镜、剪辑包装、达芬奇电影级调色与声效独立闭环。
+          </p>
+        </div>
+      </div>
+
+      <!-- Core Competencies Section -->
+      <div class="section-head">
+        <h2 class="section-head-title">
+          <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+          <span data-cn="核心竞争力与技术壁垒" data-en="Core Strengths & Technical Moats">核心竞争力与技术壁垒</span>
+        </h2>
+        <span class="section-head-note" data-cn="不靠抽卡 · 扎实底层" data-en="Physics Grounded · Consistent">不靠抽卡 · 扎实底层</span>
+      </div>
+
+      <div class="spotlight-grid" style="margin-bottom: 40px;">
+        <div class="spotlight-card">
+          <div class="spotlight-top">
+            <span class="spotlight-tag" data-cn="痛点突破" data-en="Core Fix">痛点突破</span>
+            <span style="font-size: 12px; color: var(--muted);" data-cn="可控性与一致性" data-en="Control & Consistency">可控性与一致性</span>
+          </div>
+          <h3 class="spotlight-title" data-cn="解决 AI 视频核心痛点（可控与一致）" data-en="Solving AI Video Inconsistency">解决 AI 视频核心痛点（可控与一致）</h3>
+          <p class="spotlight-desc" data-cn="不盲目“抽卡”。凭借深厚 Blender 建模/灯光/运镜基础与 UE5 空间构图思维，辅以三维动态 Previs 与参考图强约束，精准把控主体角色一致性、复杂运镜与物理规律。" data-en="Beyond random prompting. Leveraging solid Blender 3D modeling/lighting/staging and UE5 spatial composition, using 3D dynamic previs and multivariable reference locks for strict consistency.">
+            不盲目“抽卡”。凭借深厚 Blender 建模/灯光/运镜基础与 UE5 空间构图思维，辅以三维动态 Previs 与参考图强约束，精准把控主体角色一致性、复杂运镜与物理规律。
+          </p>
+        </div>
+
+        <div class="spotlight-card">
+          <div class="spotlight-top">
+            <span class="spotlight-tag" data-cn="独立成片" data-en="Solo Film">独立成片</span>
+            <span style="font-size: 12px; color: var(--muted);" data-cn="端到端独立闭环" data-en="End-to-End">端到端独立闭环</span>
+          </div>
+          <h3 class="spotlight-title" data-cn="从 0 到 1 打造独立成片能力" data-en="End-to-End Solo Film Delivery">从 0 到 1 打造独立成片能力</h3>
+          <p class="spotlight-desc" data-cn="独立创作原创 AI 概念微电影《AI患者》（编剧/分镜/生图/生视频/后期/配乐全流程独立闭环）。在无真人员工参演下，实现长镜头运镜稳定性与多机位下主角面部及场景的高度一致。" data-en="Independently created original sci-fi short film 'AI Patient' (full script, storyboard, AI generation, 3D depth fix, editing, and soundscape). Achieved cinematic camera continuity without actors.">
+            独立创作原创 AI 概念微电影《AI患者》（编剧/分镜/生图/生视频/后期/配乐全流程独立闭环）。在无真人员工参演下，实现长镜头运镜稳定性与多机位下主角面部及场景的高度一致。
+          </p>
+        </div>
+
+        <div class="spotlight-card">
+          <div class="spotlight-top">
+            <span class="spotlight-tag" data-cn="商业敏锐" data-en="Commercial">商业敏锐</span>
+            <span style="font-size: 12px; color: var(--muted);" data-cn="高转化网感" data-en="Data Driven">高转化网感</span>
+          </div>
+          <h3 class="spotlight-title" data-cn="深谙前 3 秒留存与商业转化" data-en="Commercial Retention & Data Mindset">深谙前 3 秒留存与商业转化</h3>
+          <p class="spotlight-desc" data-cn="拥有丰富的抖音、快手短视频信息流爆款与商业发布会快剪经验，精通前 3 秒黄金吸睛视觉设计、综艺科技风动态花字包装，在艺术格调与商业获客转化间取得精准平衡。" data-en="Deep experience in short-video feed ads and launch event reels. Master of the 3-second visual hook, dynamic typography motion, and converting aesthetics into business retention.">
+            拥有丰富的抖音、快手短视频信息流爆款与商业发布会快剪经验，精通前 3 秒黄金吸睛视觉设计、综艺科技风动态花字包装，在艺术格调与商业获客转化间取得精准平衡。
+          </p>
+        </div>
+      </div>
+
+      <!-- Skills Matrix Section -->
+      <div class="section-head">
+        <h2 class="section-head-title">
+          <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+          <span data-cn="专业技能工具栈" data-en="Technical Skills & Tooling">专业技能工具栈</span>
+        </h2>
+        <span class="section-head-note" data-cn="全栈视觉 · 多维协同" data-en="Multi-Disciplinary Stack">全栈视觉 · 多维协同</span>
+      </div>
+
+      <div class="skills-container">
+        <!-- Skill 1 -->
+        <div class="skill-group-card">
+          <div class="skill-group-title">
+            <span data-cn="AIGC 视觉生成栈" data-en="AIGC Visual Generative Stack">AIGC 视觉生成栈</span>
+            <span class="badge-dual-engine" style="font-size: 11px;">AI Native</span>
+          </div>
+          <div class="skill-tag-list">
+            <span class="skill-tag skill-tag-primary">Seedance 2.0</span>
+            <span class="skill-tag skill-tag-primary">可灵 O3</span>
+            <span class="skill-tag">Runway Gen-3</span>
+            <span class="skill-tag">Luma Dream Machine</span>
+            <span class="skill-tag">MiniMax</span>
+            <span class="skill-tag skill-tag-primary">Nano Banana Pro</span>
+            <span class="skill-tag">Midjourney</span>
+            <span class="skill-tag">Stable Diffusion</span>
+            <span class="skill-tag skill-tag-primary">ComfyUI 工作流</span>
+            <span class="skill-tag">GPT Image 2</span>
+            <span class="skill-tag">LibTV</span>
+            <span class="skill-tag">Lovart</span>
+          </div>
+          <p class="skill-group-detail" data-cn="擅长多模态提示词工程、首尾帧控制、三联设定图与多机位角色面部及服装一致性锁死方案。" data-en="Expert in multimodal prompt engineering, start/end frame alignment, character sheet constraints, and facial continuity across camera angles.">
+            擅长多模态提示词工程、首尾帧控制、三联设定图与多机位角色面部及服装一致性锁死方案。
+          </p>
+        </div>
+
+        <!-- Skill 2 -->
+        <div class="skill-group-card">
+          <div class="skill-group-title">
+            <span data-cn="三维与空间视觉" data-en="3D & Spatial Visualization">三维与空间视觉</span>
+            <span class="badge-dual-engine" style="font-size: 11px;">Physics Base</span>
+          </div>
+          <div class="skill-tag-list">
+            <span class="skill-tag skill-tag-primary">Blender 全模块</span>
+            <span class="skill-tag">Blender 建模与贴图</span>
+            <span class="skill-tag">灯光渲染 (Cycles/Eevee)</span>
+            <span class="skill-tag">骨骼绑定与权重</span>
+            <span class="skill-tag">动力学物理模拟</span>
+            <span class="skill-tag skill-tag-primary">Unreal Engine 5 (UE5)</span>
+            <span class="skill-tag">虚幻场景搭建与运镜</span>
+            <span class="skill-tag skill-tag-primary">Cascadeur 动力学</span>
+          </div>
+          <p class="skill-group-detail" data-cn="熟练使用 Blender 进行三维资产搭建与运镜预演，通过 UE5 与 Cascadeur 为 AI 视频提供真实的重力、动力学与镜头透视底座。" data-en="Skilled in Blender asset creation & previs. Leveraging UE5 and Cascadeur to provide authentic gravitational physics and perspective constraints for AI video.">
+            熟练使用 Blender 进行三维资产搭建与运镜预演，通过 UE5 与 Cascadeur 为 AI 视频提供真实的重力、动力学与镜头透视底座。
+          </p>
+        </div>
+
+        <!-- Skill 3 -->
+        <div class="skill-group-card">
+          <div class="skill-group-title">
+            <span data-cn="剪辑调色与后期包装" data-en="Post-Production & Color Grading">剪辑调色与后期包装</span>
+            <span class="badge-dual-engine" style="font-size: 11px;">Film Craft</span>
+          </div>
+          <div class="skill-tag-list">
+            <span class="skill-tag skill-tag-primary">DaVinci Resolve 达芬奇</span>
+            <span class="skill-tag">ACES 色彩管理流程</span>
+            <span class="skill-tag">电影级胶片调色</span>
+            <span class="skill-tag skill-tag-primary">After Effects (AE)</span>
+            <span class="skill-tag">光影合成与去痕追踪</span>
+            <span class="skill-tag">综艺/科技花字动效</span>
+            <span class="skill-tag skill-tag-primary">Premiere Pro (PR)</span>
+            <span class="skill-tag">Photoshop 精细修图</span>
+          </div>
+          <p class="skill-group-detail" data-cn="熟练掌控影视调色科学管理，擅长复杂动效包装、画面瑕疵修复跟踪及视听节奏卡点。" data-en="Mastery over cinematic color management (ACES), complex motion tracking, generative artifact cleanup, and rhythm-driven editing.">
+            熟练掌控影视调色科学管理，擅长复杂动效包装、画面瑕疵修复跟踪及视听节奏卡点。
+          </p>
+        </div>
+      </div>
+
+      <!-- Experience Timeline Section -->
+      <div class="section-head">
+        <h2 class="section-head-title">
+          <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+          <span data-cn="工作与实战经历" data-en="Professional Experience">工作与实战经历</span>
+        </h2>
+        <span class="section-head-note" data-cn="高密度商业落地" data-en="Commercial Delivery">高密度商业落地</span>
+      </div>
+
+      <div class="timeline-list">
+        <!-- Job 1 -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-header">
+              <div class="timeline-role-org">
+                <h3 data-cn="微视文化传媒工作室" data-en="Microvision Media Studio">微视文化传媒工作室</h3>
+                <p data-cn="3D / AIGC 视觉设计师 ｜ 核心主创" data-en="3D / AIGC Visual Designer ｜ Core Lead">3D / AIGC 视觉设计师 ｜ 核心主创</p>
+              </div>
+              <span class="timeline-period" data-cn="2025.03 – 至今（随时可到岗）" data-en="2025.03 – Present">2025.03 – 至今（随时可到岗）</span>
+            </div>
+            <ul class="timeline-bullets">
+              <li>
+                <strong data-cn="项目全生命周期独立闭环：" data-en="End-to-End Lifecycle:">项目全生命周期独立闭环：</strong>
+                <span data-cn="直接对接外部企业及品牌客户，独立负责需求拆解、创意 Previs、3D建模/渲染、AI视觉生成、后期调色及修改交付。" data-en="Directly led brand clients through brief breakdown, creative 3D previs, rendering, AI video generation, and DaVinci finishing.">直接对接外部企业及品牌客户，独立负责需求拆解、创意 Previs、3D建模/渲染、AI视觉生成、后期调色及修改交付。</span>
+              </li>
+              <li>
+                <strong data-cn="高确定性商业交付：" data-en="High-Density Delivery:">高确定性商业交付：</strong>
+                <span data-cn="累计独立交付 300+ 条商业视觉内容，服务 30 余个中大型项目，涵盖产品三维动态演示、概念角色动画、AI 视觉宣发片等。" data-en="Successfully delivered 300+ commercial visual contents across 30+ client projects with high predictability and polish.">累计独立交付 300+ 条商业视觉内容，服务 30 余个中大型项目，涵盖产品三维动态演示、概念角色动画、AI 视觉宣发片等。</span>
+              </li>
+              <li>
+                <strong data-cn="AIGC 工作流赋能：" data-en="Workflow Innovation:">AIGC 工作流赋能：</strong>
+                <span data-cn="将前沿 AI 生图/生视频工具深度融入传统三维制片流程，将概念美术验证与动态预演周期缩短 60% 以上，大幅提升交付吞吐量与视觉丰富度。" data-en="Fused generative tools into standard 3D studio pipelines, slashing early-stage concept validation and dynamic previs time by >60%.">将前沿 AI 生图/生视频工具深度融入传统三维制片流程，将概念美术验证与动态预演周期缩短 60% 以上，大幅提升交付吞吐量与视觉丰富度。</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Job 2 -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-header">
+              <div class="timeline-role-org">
+                <h3 data-cn="鹿创文化" data-en="Luchuang Media">鹿创文化</h3>
+                <p data-cn="剪辑师 ｜ 视觉后期" data-en="Senior Video Editor ｜ Visual Post Specialist">剪辑师 ｜ 视觉后期</p>
+              </div>
+              <span class="timeline-period">2023.12 – 2024.11</span>
+            </div>
+            <ul class="timeline-bullets">
+              <li>
+                <strong data-cn="商业宣传片与活动快剪：" data-en="Brand Campaigns & Quick Turnaround:">商业宣传片与活动快剪：</strong>
+                <span data-cn="主导多场品牌发布会、大型活动宣传片及商业快剪项目，把控紧凑节奏与情绪落点。" data-en="Led post-production for brand keynotes, live-event reels, and high-tempo commercial promos.">主导多场品牌发布会、大型活动宣传片及商业快剪项目，把控紧凑节奏与情绪落点。</span>
+              </li>
+              <li>
+                <strong data-cn="动态包装与花字体系：" data-en="Motion & Typography:">动态包装与花字体系：</strong>
+                <span data-cn="负责综艺级花字动效、科技感 UI 包装与实拍素材跟踪合成，沉淀了极具商业网感与视觉冲击力的包装手法。" data-en="Crafted variety-show style dynamic kinetic type, tech UI overlays, and 3D camera tracking integrations.">负责综艺级花字动效、科技感 UI 包装与实拍素材跟踪合成，沉淀了极具商业网感与视觉冲击力的包装手法。</span>
+              </li>
+              <li>
+                <strong data-cn="跨部门协同制作：" data-en="Cross-Disciplinary Staging:">跨部门协同制作：</strong>
+                <span data-cn="配合摄影团队参与产品拍摄现场规划，反向推导后期合成点位，保障拍摄与后期无缝接轨。" data-en="Coordinated on-set shooting layouts with camera operators to guarantee seamless VFX camera matching.">配合摄影团队参与产品拍摄现场规划，反向推导后期合成点位，保障拍摄与后期无缝接轨。</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Job 3 -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-header">
+              <div class="timeline-role-org">
+                <h3 data-cn="金铂利口腔集团" data-en="Kimberly Dental Group">金铂利口腔集团</h3>
+                <p data-cn="视频制作 ｜ 编导剪辑" data-en="Video Producer ｜ Director & Editor">视频制作 ｜ 编导剪辑</p>
+              </div>
+              <span class="timeline-period">2022.07 – 2023.11</span>
+            </div>
+            <ul class="timeline-bullets">
+              <li>
+                <strong data-cn="爆款信息流与品牌宣传：" data-en="High-Converting Feed Ads:">爆款信息流与品牌宣传：</strong>
+                <span data-cn="负责抖音、快手等平台的信息流效果广告、院内 IP 医生口播及品牌宣传微短片。" data-en="Produced short-video conversion ads, doctor IP formats, and brand narrative micro-videos on Douyin/Kuaishou.">负责抖音、快手等平台的信息流效果广告、院内 IP 医生口播及品牌宣传微短片。</span>
+              </li>
+              <li>
+                <strong data-cn="数据导向视听迭代：" data-en="Data-Driven Optimization:">数据导向视听迭代：</strong>
+                <span data-cn="针对短视频前 3 秒黄金吸睛率进行针对性剪辑与花字实验，显著提高留存率与广告转化率。" data-en="Conducted rigorous A/B hook experiments for the crucial first 3 seconds, boosting CTR and user retention.">针对短视频前 3 秒黄金吸睛率进行针对性剪辑与花字实验，显著提高留存率与广告转化率。</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured Works Spotlight with Direct Cinema Launcher -->
+      <div class="section-head">
+        <h2 class="section-head-title">
+          <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
+          <span data-cn="精选代表作与现场放映" data-en="Featured Works & Cinema Launchers">精选代表作与现场放映</span>
+        </h2>
+        <span class="section-head-note" data-cn="点击立即在放映厅大屏播放" data-en="Click to Play in Cinema">点击立即在放映厅大屏播放</span>
+      </div>
+
+      <div class="spotlight-grid">
+        <!-- Work 1 -->
+        <div class="spotlight-card">
+          <div class="spotlight-top">
+            <span class="spotlight-tag">原创 AI 概念微电影</span>
+            <span style="font-size: 12px; color: var(--muted);">Seedance / Blender / 达芬奇</span>
+          </div>
+          <h3 class="spotlight-title" data-cn="《AI患者》概念科幻短片" data-en="Original Sci-Fi 'AI Patient'">《AI患者》概念科幻短片</h3>
+          <p class="spotlight-desc" data-cn="探讨人与 AI 深度捆绑下的个体异化与自主性重构。独立闭环完成剧本、分镜、生成、三维空间景深修正、剪辑、达芬奇调色与全片声效混音。在无演员参演下，实现长镜头运镜与多机位主体面部高度一致。" data-en="Explores human autonomy in an AI-pervasive world. Independently created end-to-end: script, storyboard, AI synthesis, 3D depth fix, editing, and soundscape.">
+            探讨人与 AI 深度捆绑下的个体异化与自主性重构。独立闭环完成剧本、分镜、生成、三维空间景深修正、剪辑、达芬奇调色与全片声效混音。在无演员参演下，实现长镜头运镜与多机位主体面部高度一致。
+          </p>
+          <div class="spotlight-btn-row" data-no-print>
+            <button type="button" class="action-btn action-btn-primary" data-play-work="work-ai-patient">
+              <svg viewBox="0 0 24 24"><path d="m9 5 11 7-11 7z"/></svg>
+              <span data-cn="🎬 现场放映《AI患者》" data-en="🎬 Play 'AI Patient'">🎬 现场放映《AI患者》</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Work 2 -->
+        <div class="spotlight-card">
+          <div class="spotlight-top">
+            <span class="spotlight-tag">三维视觉与动画</span>
+            <span style="font-size: 12px; color: var(--muted);">Blender / UE5 / 光影材质</span>
+          </div>
+          <h3 class="spotlight-title" data-cn="三维产品与动作动力学实验" data-en="3D Product & Dynamic Previs">三维产品与动作动力学实验</h3>
+          <p class="spotlight-desc" data-cn="展示严谨的三维布光、物理材质与动力学骨骼动画。包含《产品视觉实验》、《动作预演》与《能量实验》，体现对光影物理规律与空间运镜节奏的深层掌控力。" data-en="Demonstrates 3D studio lighting, physically accurate materials, and skeletal animation previs. Highlights deep mastery of physical light and camera pacing.">
+            展示严谨的三维布光、物理材质与动力学骨骼动画。包含《产品视觉实验》、《动作预演》与《能量实验》，体现对光影物理规律与空间运镜节奏的深层掌控力。
+          </p>
+          <div class="spotlight-btn-row" data-no-print>
+            <button type="button" class="action-btn action-btn-primary" data-play-work="visual-study">
+              <svg viewBox="0 0 24 24"><path d="m9 5 11 7-11 7z"/></svg>
+              <span data-cn="🎬 现场放映三维作品" data-en="🎬 Play 3D Works">🎬 现场放映三维作品</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Work 3 -->
+        <div class="spotlight-card">
+          <div class="spotlight-top">
+            <span class="spotlight-tag">自研前端工具</span>
+            <span style="font-size: 12px; color: var(--muted);">AI 生态 / 独立开发</span>
+          </div>
+          <h3 class="spotlight-title" data-cn="AI 积分比价系统与实用工具" data-en="AI Points Comparison Tool">AI 积分比价系统与实用工具</h3>
+          <p class="spotlight-desc" data-cn="将主流 AI 视频/图像平台的会员套餐、积分与消耗换算成精确的每秒/每图生成成本，支持直观横向比价，展现强大的产品化思维与全栈解决问题能力。" data-en="Calculates exact generation unit costs across AI platforms, providing direct cost comparison. Showcases strong product thinking and full-stack problem-solving.">
+            将主流 AI 视频/图像平台的会员套餐、积分与消耗换算成精确的每秒/每图生成成本，支持直观横向比价，展现强大的产品化思维与全栈解决问题能力。
+          </p>
+          <div class="spotlight-btn-row" data-no-print>
+            <a href="assets/apps/points-comparison.html" target="_blank" rel="noopener noreferrer" class="action-btn">
+              <span data-cn="打开比价系统 ↗" data-en="Open App ↗">打开比价系统 ↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 2. CINEMA VIEW (Full Portfolio Showcase Mode)                  -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <section id="view-cinema" class="view-panel" hidden aria-labelledby="cinemaTitle">
+      
+      <!-- Sticky Return Banner -->
+      <div class="cinema-banner">
+        <div class="cinema-banner-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="m9 5 11 7-11 7z"/></svg>
+          <span id="cinemaTitle" data-cn="Highstrith 影像放映厅（共 14 部精选成片）" data-en="Highstrith Cinema Showcase (14 Films)">Highstrith 影像放映厅（共 14 部精选成片）</span>
+        </div>
+        <button type="button" class="cinema-back-btn" data-switch-view="resume" aria-label="返回个人简历视图">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+          <span data-cn="↩️ 返回个人简历" data-en="↩️ Back to Resume">↩️ 返回个人简历</span>
+        </button>
+      </div>
+
+      <!-- Toolbar: Filters and Search -->
+      <div class="cinema-toolbar">
+        <div class="cinema-filters" role="group" aria-label="作品分类">
+          <button type="button" class="filter-btn" data-filter="all" aria-pressed="true" data-cn="全部 (14)" data-en="All (14)">全部 (14)</button>
+          <button type="button" class="filter-btn" data-filter="story" aria-pressed="false" data-cn="叙事短片 (Story)" data-en="Narrative (Story)">叙事短片 (Story)</button>
+          <button type="button" class="filter-btn" data-filter="motion" aria-pressed="false" data-cn="三维与动画 (3D)" data-en="3D & Animation">三维与动画 (3D)</button>
+          <button type="button" class="filter-btn" data-filter="edit" aria-pressed="false" data-cn="剪辑与视觉 (Edit)" data-en="Edit & Motion">剪辑与视觉 (Edit)</button>
+        </div>
+
+        <div class="cinema-search">
+          <svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5 5"/></svg>
+          <input type="search" id="workSearchInput" placeholder="搜索片名或技术关键词" aria-label="搜索作品" autocomplete="off">
+        </div>
+      </div>
+
+      <!-- Works Grid -->
+      <div class="cinema-grid" id="cinemaGrid">
+        <!-- Rendered by assets/resume.js -->
+      </div>
+
+    </section>
+  </main>
+
+  <!-- Video Player Dialog -->
+  <dialog id="resumePlayer" aria-labelledby="playerTitle">
+    <div class="dialog-header">
+      <div>
+        <p id="playerCategory" style="font-size: 12px; color: var(--resume-accent-dark); font-weight: 600;"></p>
+        <h3 id="playerTitle"></h3>
+      </div>
+      <button type="button" class="dialog-close" id="resumePlayerClose" aria-label="关闭视频">×</button>
+    </div>
+    <div class="player-video-wrap">
+      <video id="resumePlayerVideo" controls playsinline></video>
+    </div>
+    <div class="player-details">
+      <p id="playerDesc" style="font-size: 14px; color: var(--text-secondary); line-height: 1.5;"></p>
+    </div>
+  </dialog>
+
+  <!-- QR Code Modal Dialog -->
+  <dialog id="qrDialog" aria-labelledby="qrDialogTitle">
+    <div class="dialog-header">
+      <h3 id="qrDialogTitle">手机扫码</h3>
+      <button type="button" class="dialog-close" id="qrDialogClose" aria-label="关闭二维码">×</button>
+    </div>
+    <div class="qr-dialog-body">
+      <img id="qrDialogImg" class="qr-dialog-img" src="assets/site-qr.svg" alt="二维码">
+      <p id="qrDialogDesc" style="font-size: 13px; color: var(--muted);"></p>
+      <button type="button" class="action-btn" style="margin-top: 14px;" data-copy="Gw1sgdsj_787">
+        <span data-cn="点击复制微信号 Gw1sgdsj_787" data-en="Copy WeChat ID">点击复制微信号 Gw1sgdsj_787</span>
+      </button>
+    </div>
+  </dialog>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast-msg" role="status" aria-live="polite">已复制微信号</div>
+
+  <!-- Main JavaScript Logic -->
+  <script src="assets/resume.js?v=20261023-dual"></script>
+</body>
+</html>
