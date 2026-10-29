@@ -1,0 +1,74 @@
+[
+  {
+    "eagleId": "MI4D7XS4VZGB0",
+    "eagleName": "render8out",
+    "star": 5,
+    "source": "/Users/linjunjie/Downloads/eagle/homePC.library/images/MI4D7XS4VZGB0.info/render8out.mp4",
+    "sourceSha256": "6d101a0331952706f0d83c8519fafad7c8b53099108ad0507e84b99492d38212",
+    "sourceBytes": 51067284,
+    "duration": 38.378667,
+    "workId": "eagle-badminton-visual",
+    "posterSecond": 29.9,
+    "fullVideoTranscoded": false
+  },
+  {
+    "eagleId": "MF200KIXK6AAD",
+    "eagleName": "萤火虫",
+    "star": 4,
+    "source": "/Users/linjunjie/Downloads/eagle/homePC.library/images/MF200KIXK6AAD.info/萤火虫.mp4",
+    "sourceSha256": "5a1941d84d1f5f6164bd1cf6ed5feacf03a759ce46f85df9a3ee417ea79ac75d",
+    "sourceBytes": 6304671,
+    "duration": 4.629333,
+    "workId": "eagle-fireflies",
+    "posterSecond": 2.2,
+    "fullVideoTranscoded": false
+  },
+  {
+    "eagleId": "MU28WOC0AC3W0",
+    "eagleName": "一次善意",
+    "star": 3,
+    "source": "/Users/linjunjie/Downloads/eagle/homePC.library/images/MU28WOC0AC3W0.info/一次善意.mp4",
+    "sourceSha256": "6fdf4f6c40131aab6a87db089bcc5d2ac01013f10f5d47988bd87c26a62371ec",
+    "sourceBytes": 41826013,
+    "duration": 66.730667,
+    "workId": "eagle-act-of-kindness",
+    "posterSecond": 13.5,
+    "fullVideoTranscoded": false
+  },
+  {
+    "eagleId": "MQ9O9KBZ2R98J",
+    "eagleName": "蓝色背景滴液实验动画",
+    "star": 3,
+    "source": "/Users/linjunjie/Downloads/eagle/homePC.library/images/MQ9O9KBZ2R98J.info/蓝色背景滴液实验动画.mp4",
+    "sourceSha256": "35a33e23483cd72a04fbb5db889b96b9fa071e1e967ccea068de742f9c7cdc22",
+    "sourceBytes": 7484459,
+    "duration": 15.625,
+    "workId": "eagle-liquid-lab",
+    "posterSecond": 12.2,
+    "fullVideoTranscoded": false
+  },
+  {
+    "eagleId": "MP6A2OBR8POQY",
+    "eagleName": "V2",
+    "star": 3,
+    "source": "/Users/linjunjie/Downloads/eagle/homePC.library/images/MP6A2OBR8POQY.info/V2.mp4",
+    "sourceSha256": "7ea7c223000fafbc82e10ab877f2225d448ed0baa831d6c79ebe7202021be712",
+    "sourceBytes": 224668076,
+    "duration": 117.056,
+    "workId": "eagle-robot-short",
+    "posterSecond": 19.9,
+    "fullVideoTranscoded": true
+  },
+  {
+    "eagleId": "MQ685IHCK6WJH",
+    "eagleName": "3D红人酒馆地牢场景",
+    "star": 3,
+    "source": "/Users/linjunjie/Downloads/eagle/homePC.library/images/MQ685IHCK6WJH.info/3D红人酒馆地牢场景.mp4",
+    "sourceSha256": "76acf80f26796667eb1df9e03fb30089724f05f775143862a788905b3dbb650f",
+    "sourceBytes": 1553392,
+    "duration": 6.229,
+    "workId": "eagle-tavern-animation",
+    "posterSecond": 3.0,
+    "fullVideoTranscoded": false
+  }
+]

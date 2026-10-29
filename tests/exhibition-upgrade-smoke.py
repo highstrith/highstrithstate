@@ -22,7 +22,7 @@ class ExhibitionUpgrade(unittest.TestCase):
         page.set_default_timeout(6000)
         self.addCleanup(page.close)
         page.goto(BASE + '/', wait_until='domcontentloaded')
-        expect(page.locator('#worksGrid .work-card')).to_have_count(14)
+        expect(page.locator('#worksGrid .work-card')).to_have_count(20)
         return page
 
     def test_directory_view_preserves_search_filter_and_language(self):
@@ -133,7 +133,7 @@ class ExhibitionUpgrade(unittest.TestCase):
             rect = page.locator('#stillViewer').bounding_box()
             self.assertLessEqual(rect['width'], width)
         page.keyboard.press('Escape')
-        self.assertEqual(page.locator('#worksGrid .work-card').count(), 14)
+        self.assertEqual(page.locator('#worksGrid .work-card').count(), 20)
 
     def test_still_viewer_defers_original_and_pauses_requested_music(self):
         page = self.page(viewport={'width': 1440, 'height': 900}, reduced_motion='reduce')

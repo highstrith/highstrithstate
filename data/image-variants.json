@@ -280,5 +280,122 @@
       "width": 1600,
       "height": 900
     }
+  ],
+  "assets/posters/eagle-badminton-visual.jpg": [
+    {
+      "src": "assets/optimized-images/92e15a52cc4bf8b1-eb1d2671-160w.webp",
+      "width": 160,
+      "height": 213
+    },
+    {
+      "src": "assets/optimized-images/92e15a52cc4bf8b1-eb1d2671-480w.webp",
+      "width": 480,
+      "height": 640
+    },
+    {
+      "src": "assets/optimized-images/92e15a52cc4bf8b1-eb1d2671-750w.webp",
+      "width": 750,
+      "height": 1000
+    }
+  ],
+  "assets/posters/eagle-fireflies.jpg": [
+    {
+      "src": "assets/optimized-images/e1f3c88e200290f0-eb1d2671-160w.webp",
+      "width": 160,
+      "height": 90
+    },
+    {
+      "src": "assets/optimized-images/e1f3c88e200290f0-eb1d2671-480w.webp",
+      "width": 480,
+      "height": 270
+    },
+    {
+      "src": "assets/optimized-images/e1f3c88e200290f0-eb1d2671-960w.webp",
+      "width": 960,
+      "height": 540
+    },
+    {
+      "src": "assets/optimized-images/e1f3c88e200290f0-eb1d2671-1600w.webp",
+      "width": 1600,
+      "height": 900
+    }
+  ],
+  "assets/posters/eagle-act-of-kindness.jpg": [
+    {
+      "src": "assets/optimized-images/d68dd2ce7deba8b3-eb1d2671-160w.webp",
+      "width": 160,
+      "height": 284
+    },
+    {
+      "src": "assets/optimized-images/d68dd2ce7deba8b3-eb1d2671-480w.webp",
+      "width": 480,
+      "height": 853
+    },
+    {
+      "src": "assets/optimized-images/d68dd2ce7deba8b3-eb1d2671-720w.webp",
+      "width": 720,
+      "height": 1280
+    }
+  ],
+  "assets/posters/eagle-liquid-lab.jpg": [
+    {
+      "src": "assets/optimized-images/3c4542517dbf3893-eb1d2671-160w.webp",
+      "width": 160,
+      "height": 90
+    },
+    {
+      "src": "assets/optimized-images/3c4542517dbf3893-eb1d2671-480w.webp",
+      "width": 480,
+      "height": 270
+    },
+    {
+      "src": "assets/optimized-images/3c4542517dbf3893-eb1d2671-960w.webp",
+      "width": 960,
+      "height": 540
+    },
+    {
+      "src": "assets/optimized-images/3c4542517dbf3893-eb1d2671-1600w.webp",
+      "width": 1600,
+      "height": 900
+    }
+  ],
+  "assets/posters/eagle-robot-short.jpg": [
+    {
+      "src": "assets/optimized-images/fbe4a087b4454f85-eb1d2671-160w.webp",
+      "width": 160,
+      "height": 90
+    },
+    {
+      "src": "assets/optimized-images/fbe4a087b4454f85-eb1d2671-480w.webp",
+      "width": 480,
+      "height": 270
+    },
+    {
+      "src": "assets/optimized-images/fbe4a087b4454f85-eb1d2671-960w.webp",
+      "width": 960,
+      "height": 540
+    },
+    {
+      "src": "assets/optimized-images/fbe4a087b4454f85-eb1d2671-1600w.webp",
+      "width": 1600,
+      "height": 900
+    }
+  ],
+  "assets/posters/eagle-tavern-animation.jpg": [
+    {
+      "src": "assets/optimized-images/db8ddac7f50bd790-eb1d2671-160w.webp",
+      "width": 160,
+      "height": 90
+    },
+    {
+      "src": "assets/optimized-images/db8ddac7f50bd790-eb1d2671-480w.webp",
+      "width": 480,
+      "height": 270
+    },
+    {
+      "src": "assets/optimized-images/db8ddac7f50bd790-eb1d2671-960w.webp",
+      "width": 960,
+      "height": 540
+    }
   ]
 }

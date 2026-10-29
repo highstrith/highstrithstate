@@ -38,7 +38,7 @@ for (const asset of [...media, ...posters]) {
 assert.ok(fs.statSync(path.join(root, 'assets/hero-studio-red.jpg')).size < 500_000, 'hero background should stay below 500 KB for mobile');
 assert.doesNotMatch(html, /<link[^>]+rel="preload"[^>]+hero-studio-red/i, 'decorative hero background should not be preloaded');
 
-assert.equal(works.length, 15, 'catalogue data retains all works, including hidden legacy entries');
+assert.equal(works.length, 21, 'catalogue retains all previous works plus six Eagle selections, including hidden legacy entries');
 const lyingDownFilm = works.find((work) => work.id === 'work-lying-down-20261001');
 assert.equal(lyingDownFilm?.cnTitle, '趴着办公早该知道');
 assert.equal(lyingDownFilm?.video, 'assets/uploads/lying-down-20261001.mp4');

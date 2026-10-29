@@ -166,6 +166,72 @@
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
       "webRemux": true
+    },
+    {
+      "id": "eagle-badminton-visual",
+      "source": "assets/works/eagle-badminton-visual.mp4",
+      "sourceHash": "6d101a0331952706f0d83c8519fafad7c8b53099108ad0507e84b99492d38212",
+      "previewSeconds": 20,
+      "previewBytes": 1413026,
+      "mobileBytes": 3005901,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
+      "webRemux": true
+    },
+    {
+      "id": "eagle-fireflies",
+      "source": "assets/works/eagle-fireflies.mp4",
+      "sourceHash": "5a1941d84d1f5f6164bd1cf6ed5feacf03a759ce46f85df9a3ee417ea79ac75d",
+      "previewSeconds": 4.63,
+      "previewBytes": 298369,
+      "mobileBytes": 403765,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
+      "webRemux": true
+    },
+    {
+      "id": "eagle-act-of-kindness",
+      "source": "assets/works/eagle-act-of-kindness.mp4",
+      "sourceHash": "6fdf4f6c40131aab6a87db089bcc5d2ac01013f10f5d47988bd87c26a62371ec",
+      "previewSeconds": 20,
+      "previewBytes": 1642461,
+      "mobileBytes": 6335266,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
+      "webRemux": true
+    },
+    {
+      "id": "eagle-liquid-lab",
+      "source": "assets/works/eagle-liquid-lab.mp4",
+      "sourceHash": "35a33e23483cd72a04fbb5db889b96b9fa071e1e967ccea068de742f9c7cdc22",
+      "previewSeconds": 15.63,
+      "previewBytes": 1221731,
+      "mobileBytes": 1286033,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
+      "webRemux": true
+    },
+    {
+      "id": "eagle-robot-short",
+      "source": "assets/works/eagle-robot-short.mp4",
+      "sourceHash": "28bc7d99a3165ba7357fd00a702a2749e39757f350b0ee373f21614072ce7c07",
+      "previewSeconds": 20,
+      "previewBytes": 1722682,
+      "mobileBytes": 6711519,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
+      "webRemux": false
+    },
+    {
+      "id": "eagle-tavern-animation",
+      "source": "assets/works/eagle-tavern-animation.mp4",
+      "sourceHash": "76acf80f26796667eb1df9e03fb30089724f05f775143862a788905b3dbb650f",
+      "previewSeconds": 6.21,
+      "previewBytes": 421201,
+      "mobileBytes": 609356,
+      "mobileMaxrate": "750k",
+      "mobileKeyframeSeconds": 2,
+      "webRemux": true
     }
   ],
   "failed": []
