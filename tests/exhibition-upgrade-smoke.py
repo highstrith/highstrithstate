@@ -43,7 +43,7 @@ class ExhibitionUpgrade(unittest.TestCase):
         page.locator('[data-view="gallery"]').click()
         self.assertEqual(page.locator('#worksGrid .work-card:visible').count(), count)
 
-    def test_gallery_has_native_aligned_rows_and_filtered_reflow(self):
+    def test_gallery_has_landscape_aligned_rows_and_filtered_reflow(self):
         page = self.page(viewport={'width': 1440, 'height': 900}, reduced_motion='reduce')
         boxes = page.locator('#worksGrid .work-media').evaluate_all('els => els.slice(0,3).map(e=>{const r=e.getBoundingClientRect();return {top:r.y,height:r.height};})')
         self.assertTrue(all(abs(box['top'] - boxes[0]['top']) < 1 for box in boxes))

@@ -541,41 +541,7 @@
   function layoutWorks() {
     if (!grid) return;
     const visible = cardRecords.filter(record => !record.item.hidden);
-    const width = grid.clientWidth;
-    if (!width || !visible.length) return;
-    if (grid.classList.contains('is-list')) {
-      visible.forEach(record => { record.image.sizes = `${Math.ceil(record.media.getBoundingClientRect().width)}px`; });
-      return;
-    }
-    if (innerWidth <= 600) {
-      visible.forEach(record => {
-        record.item.style.removeProperty('--gallery-width');
-        record.image.sizes = `${Math.round(workAspect(record.work) < 1 ? Math.min(width * .46, 190) : width)}px`;
-      });
-    } else {
-      const gap = parseFloat(getComputedStyle(grid).columnGap) || 32;
-      const target = width >= 1000 ? 250 : 210;
-      const rowHeight = row => (width - gap * (row.length - 1) - .5) / row.reduce((sum, record) => sum + workAspect(record.work), 0);
-      const place = (row, last = false) => {
-        const height = Math.min(300, last ? Math.min(target, rowHeight(row)) : rowHeight(row));
-        row.forEach(record => {
-          const size = height * workAspect(record.work);
-          record.item.style.setProperty('--gallery-width', `${size.toFixed(3)}px`);
-          record.image.sizes = `${Math.ceil(size)}px`;
-        });
-      };
-      let row = [];
-      visible.forEach(record => {
-        const next = [...row, record];
-        if (row.length && rowHeight(next) <= target && rowHeight(row) <= 300 &&
-            Math.abs(rowHeight(row) - target) < Math.abs(rowHeight(next) - target)) {
-          place(row);
-          row = [record];
-        } else row = next;
-        if (rowHeight(row) <= target) { place(row); row = []; }
-      });
-      if (row.length) place(row, true);
-    }
+    visible.forEach(record => { record.image.sizes = `${Math.ceil(record.media.getBoundingClientRect().width)}px`; });
     window.dispatchEvent(new Event('catalogue:layout'));
   }
 

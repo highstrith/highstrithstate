@@ -334,15 +334,14 @@ class ProgressPage(unittest.TestCase):
             page.goto(BASE + '/projects.html', wait_until='load')
             page.screenshot(path=str(output / 'projects.png'))
 
-    def test_portrait_works_keep_portrait_cards_and_player_frames(self):
+    def test_landscape_cover_keeps_native_portrait_player(self):
         page = self.page()
         page.goto(BASE + '/', wait_until='load')
         card = page.locator('#worksGrid .work-card').filter(has=page.locator('img[src*="ddfc97d74e1f0d46"]'))
         expect(card).to_have_count(1)
         media = card.locator('.work-media')
         bounds = media.bounding_box()
-        self.assertLess(bounds['width'], bounds['height'])
-        self.assertLessEqual(bounds['width'], 360)
+        self.assertAlmostEqual(bounds['width']/bounds['height'], 16/9, delta=.01)
         card.click()
         page.wait_for_function('document.querySelector("#workPlayerVideo").videoHeight > 0')
         frame = page.locator('#workPlayerVideo').bounding_box()
@@ -379,7 +378,7 @@ class ProgressPage(unittest.TestCase):
         if captures:
             page.screenshot(path=str(Path(captures) / 'portrait-landscape.png'))
 
-    def test_unoptimized_portrait_poster_sets_card_shape_without_video_preview(self):
+    def test_unoptimized_portrait_poster_uses_landscape_cover_without_video_preview(self):
         page = self.page(has_touch=True)
         fixture = json.loads((ROOT / 'data/works.json').read_text())
         work = next(work for work in fixture if work['id'] == 'eagle-act-of-kindness')
@@ -392,7 +391,8 @@ class ProgressPage(unittest.TestCase):
         card.scroll_into_view_if_needed()
         card.locator('img').evaluate('image=>image.decode()')
         frame = card.locator('.work-media').bounding_box()
-        self.assertAlmostEqual(frame['width']/frame['height'], 9/16, delta=.02)
+        self.assertAlmostEqual(frame['width']/frame['height'], 16/9, delta=.02)
+        self.assertEqual(card.locator('img').evaluate('image=>getComputedStyle(image).objectFit'), 'cover')
         self.assertEqual(video_requests, [])
 
 

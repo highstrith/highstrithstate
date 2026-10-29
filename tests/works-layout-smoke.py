@@ -1,4 +1,4 @@
-"""Film catalogue layout: native proportions, aligned rows and stable order."""
+"""Film catalogue: consistent landscape covers and stable order."""
 import os
 import unittest
 from pathlib import Path
@@ -34,7 +34,7 @@ class WorksLayout(unittest.TestCase):
             rows[-1].append(box)
         return rows
 
-    def test_gallery_rows_align_and_preserve_native_media(self):
+    def test_gallery_rows_align_with_landscape_covers(self):
         page = self.page()
         output = os.environ.get('WORKS_CAPTURE_DIR')
         if output:
@@ -53,10 +53,10 @@ class WorksLayout(unittest.TestCase):
         self.assertLessEqual(len(rows), 8)
         for row in rows:
             for box in row:
-                self.assertAlmostEqual(box['w']/box['h'], box['ratio'], delta=.01)
+                self.assertAlmostEqual(box['w']/box['h'], 16/9, delta=.01)
                 self.assertLessEqual(box['h'], 301)
                 self.assertAlmostEqual(box['h'], row[0]['h'], delta=1)
-            if row is not rows[-1]:
+            if len(row) == 3:
                 self.assertGreater(row[-1]['x'] + row[-1]['w'] - row[0]['x'], width * .97)
 
     def test_filter_resize_and_view_switch_preserve_sequence(self):
@@ -75,10 +75,10 @@ class WorksLayout(unittest.TestCase):
         page.locator('#workSearch').fill('一次善意')
         expect(page.locator('.work-card:visible')).to_have_count(1)
         box = self.rows(page)[0][0]
-        self.assertLess(box['w'], box['h'])
+        self.assertAlmostEqual(box['w']/box['h'], 16/9, delta=.01)
         self.assertLessEqual(box['h'], 301)
 
-    def test_mobile_portrait_layout_is_compact_and_bilingual(self):
+    def test_landscape_covers_are_consistent_on_mobile_and_bilingual(self):
         page = self.page()
         for width in [320, 390, 600, 820, 1440, 1920]:
             page.set_viewport_size({'width': width, 'height': 1000})
@@ -90,8 +90,8 @@ class WorksLayout(unittest.TestCase):
                     for item in page.locator('.work-item.is-portrait').all():
                         media = item.locator('.work-media').bounding_box()
                         caption = item.locator('.work-caption').bounding_box()
-                        self.assertLessEqual(media['height'], 340)
-                        self.assertGreaterEqual(caption['x'], media['x'] + media['width'])
+                        self.assertAlmostEqual(media['width']/media['height'], 16/9, delta=.01)
+                        self.assertGreaterEqual(caption['y'], media['y'] + media['height'])
         output = os.environ.get('WORKS_CAPTURE_DIR')
         if output:
             page.set_viewport_size({'width': 390, 'height': 1000})
