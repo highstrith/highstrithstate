@@ -30,7 +30,7 @@ class ProgressPage(unittest.TestCase):
 
     def ready(self, page):
         page.goto(BASE + '/in-progress.html', wait_until='load')
-        expect(page.locator('.progress-gallery a')).to_have_count(6, timeout=1500)
+        expect(page.locator('.progress-gallery a')).to_have_count(15, timeout=1500)
 
     def test_home_links_to_real_work_in_progress_without_recycled_video_frames(self):
         page = self.page()
@@ -46,10 +46,10 @@ class ProgressPage(unittest.TestCase):
         expect(page).to_have_url(BASE + '/in-progress.html')
         expect(page.locator('h1')).to_have_text('正在制作')
         expect(page.locator('#progressProjectTitle')).to_have_text('《未识之诺》')
-        expect(page.locator('.progress-gallery a')).to_have_count(6)
+        expect(page.locator('.progress-gallery a')).to_have_count(15)
         expect(page.locator('video, audio')).to_have_count(0)
         sources = page.locator('.progress-gallery img').evaluate_all('images => images.map(image => new URL(image.src).pathname)')
-        self.assertEqual(len(set(sources)), 6)
+        self.assertEqual(len(set(sources)), 15)
         self.assertTrue(all('/assets/progress/weishizhinuo/' in source for source in sources))
         self.assertFalse(any(entry['name'].endswith('.mp4') for entry in page.evaluate('performance.getEntriesByType("resource").map(e=>({name:e.name}))')))
 
@@ -93,7 +93,7 @@ class ProgressPage(unittest.TestCase):
         expect(page.locator('body')).not_to_have_class(re.compile(r'\bmodal-open\b'))
         page.locator('#langSwitch').click()
         page.locator('.progress-gallery a').last.click()
-        expect(page.locator('#progressViewerTitle')).to_have_text('Storyboard workspace')
+        expect(page.locator('#progressViewerTitle')).to_have_text('Shot detailing')
         expect(page.locator('#progressViewerClose')).to_have_attribute('aria-label', 'Close image')
 
     def test_all_sizes_images_and_mobile_keyboard_menu(self):
@@ -126,7 +126,7 @@ class ProgressPage(unittest.TestCase):
         page.goto((ROOT / 'in-progress.html').as_uri(), wait_until='load')
         expect(page.locator('h1')).to_have_text('正在制作')
         links = page.locator('.progress-gallery a')
-        expect(links).to_have_count(6, timeout=1500)
+        expect(links).to_have_count(15, timeout=1500)
         for link in links.all():
             self.assertTrue((ROOT / link.get_attribute('href')).is_file())
         self.assertTrue(page.evaluate('document.documentElement.scrollWidth <= innerWidth'))
@@ -137,12 +137,12 @@ class ProgressPage(unittest.TestCase):
         page = self.page()
         page.goto(BASE + '/', wait_until='load')
         expect(page.locator('#in-progress')).to_have_count(1, timeout=1500)
-        expect(page.locator('.home-progress-card')).to_have_count(3)
+        expect(page.locator('.home-progress-card')).to_have_count(9)
         expect(page.locator('.home-progress-grid')).to_be_visible()
         first = page.locator('.home-progress-card').first
         first.click()
         expect(page.locator('#stillViewerTitle')).to_have_text('森林湖岸都市')
-        expect(page.locator('#stillViewerPosition')).to_have_text('01 / 03')
+        expect(page.locator('#stillViewerPosition')).to_have_text('01 / 09')
         page.keyboard.press('ArrowRight')
         expect(page.locator('#stillViewerTitle')).to_have_text('高空投送')
         page.keyboard.press('Escape')
@@ -150,6 +150,28 @@ class ProgressPage(unittest.TestCase):
         page.locator('[data-still="0"]').click()
         expect(page.locator('#stillViewerTitle')).to_have_text('月下少年')
         expect(page.locator('#stillViewerPosition')).to_have_text('01 / 04')
+
+    def test_production_contact_sheet_groups_and_full_sequence(self):
+        page = self.page()
+        self.ready(page)
+        for group, count in [('assets', 6), ('storyboards', 5), ('workbench', 4)]:
+            expect(page.locator('#production-' + group + ' .progress-gallery a')).to_have_count(count)
+            expect(page.locator('#production-' + group + ' .progress-group-count')).to_have_text(str(count))
+            page.locator('.progress-index a[href="#production-' + group + '"]').click()
+            expect(page).to_have_url(BASE + '/in-progress.html#production-' + group)
+        page.locator('.progress-gallery a').first.click()
+        expect(page.locator('#progressViewerPosition')).to_have_text('01 / 15')
+        page.keyboard.press('ArrowLeft')
+        expect(page.locator('#progressViewerPosition')).to_have_text('15 / 15')
+        expect(page.locator('#progressViewerTitle')).to_have_text('镜头细化')
+        page.keyboard.press('Escape')
+        page.locator('#langSwitch').click()
+        expect(page.locator('.progress-index')).to_contain_text('Assets')
+        expect(page.locator('.progress-group-count')).to_have_text(['6', '5', '4'])
+        for link in page.locator('.progress-gallery a').all():
+            image = link.locator('img')
+            self.assertTrue(image.get_attribute('src').endswith('-thumb.webp'))
+            self.assertTrue((ROOT / link.get_attribute('href')).is_file())
 
     def test_top_work_navigation_dropdown_closes_and_restores_keyboard_focus(self):
         page = self.page()
@@ -187,7 +209,7 @@ class ProgressPage(unittest.TestCase):
             page.screenshot(path=str(output / 'navigation.png'))
             page.set_viewport_size({'width': 390, 'height': 844})
             page.locator('#in-progress').evaluate('section=>section.scrollIntoView({behavior:"instant"})')
-            page.screenshot(path=str(output / 'home-mobile.png'))
+            page.locator('#in-progress').screenshot(path=str(output / 'home-mobile.png'))
             page.set_viewport_size({'width': 1440, 'height': 900})
         self.ready(page)
         for image in page.locator('.progress-gallery img').all():
@@ -197,7 +219,7 @@ class ProgressPage(unittest.TestCase):
                 image.scroll_into_view_if_needed()
                 image.evaluate('image=>image.decode()')
             page.evaluate('scrollTo(0,0)')
-            page.screenshot(path=str(output / 'detail.png'))
+            page.screenshot(path=str(output / 'detail.png'), full_page=True)
             page.goto(BASE + '/projects.html', wait_until='load')
             page.screenshot(path=str(output / 'projects.png'))
 

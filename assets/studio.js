@@ -48,7 +48,7 @@
       viewImage: '查看大图', zoomImage: '放大查看', fitImage: '适应画面', previousImage: '上一张', nextImage: '下一张', closeImage: '关闭图片浏览',
       imageLoading: '正在加载图片…', imageError: '图片暂时无法加载，请切换其他图片后重试。', copyEmail: '复制邮箱', emailCopied: '邮箱已复制', emailCopyFailed: '请手动复制：highstrith@gmail.com',
       progressLabel: '成片之前', progressIntro: '资产、分镜，还有制作时的工作台。', inProduction: '制作中',
-      progressAsset: '森林湖岸都市', progressAssetKind: '场景资产', progressBoard: '高空投送', progressBoardKind: '分镜草图', progressWorkbench: '影片总览', progressWorkbenchKind: '导演工作台', progressNote: '制作中的阶段记录，画面会继续调整。', progressMore: '查看完整制作记录',
+      progressAsset: '森林湖岸都市', progressAssetKind: '场景资产', progressBoard: '高空投送', progressBoardKind: '分镜草图', progressWorkbench: '影片总览', progressWorkbenchKind: '导演工作台', progressNote: '制作中的阶段记录，画面会继续调整。', progressMore: '查看完整制作记录', progressCount: '15 张制作记录',
     },
     en: {
       skip: 'Skip to works', navWorks: 'Works', navProgress: 'In progress', navProjects: 'Projects', navResume: 'Resume', navAbout: 'About', navContact: 'Contact', admin: 'Manage works',
@@ -86,7 +86,7 @@
       viewImage: 'View full image', zoomImage: 'Zoom in', fitImage: 'Fit to screen', previousImage: 'Previous', nextImage: 'Next', closeImage: 'Close image viewer',
       imageLoading: 'Loading image…', imageError: 'This image could not be loaded. Switch to another image and try again.', copyEmail: 'Copy email', emailCopied: 'Email copied', emailCopyFailed: 'Copy this address: highstrith@gmail.com',
       progressLabel: 'Before the finished film', progressIntro: 'Assets, storyboards and a look at the workbench.', inProduction: 'In production',
-      progressAsset: 'Forest lakeside city', progressAssetKind: 'Environment asset', progressBoard: 'Aerial deployment', progressBoardKind: 'Storyboard sketch', progressWorkbench: 'Film overview', progressWorkbenchKind: 'Director’s workbench', progressNote: 'Work in progress. These images will continue to evolve.', progressMore: 'View the full production notes',
+      progressAsset: 'Forest lakeside city', progressAssetKind: 'Environment asset', progressBoard: 'Aerial deployment', progressBoardKind: 'Storyboard sketch', progressWorkbench: 'Film overview', progressWorkbenchKind: 'Director’s workbench', progressNote: 'Work in progress. These images will continue to evolve.', progressMore: 'View the full production notes', progressCount: '15 production images',
     },
   };
 
@@ -99,9 +99,69 @@
     { image: 'assets/stills/wasteland-dagger.jpg', thumbnail: 'assets/stills/wasteland-dagger-preview.webp', cnTitle: '废土之刃', enTitle: 'Wasteland Dagger', cnDesc: '扳手改造匕首的写实 PBR 材质练习。', enDesc: 'A realistic PBR study of a wrench-repurposed dagger.' },
   ];
   const progressFrames = [
-    { image: 'assets/progress/weishizhinuo/forest-city.webp', cnTitle: '森林湖岸都市', enTitle: 'Forest lakeside city', cnDesc: '《未识之诺》场景资产', enDesc: 'Environment asset for 《未识之诺》' },
-    { image: 'assets/progress/weishizhinuo/storyboard-flight.webp', cnTitle: '高空投送', enTitle: 'Aerial deployment', cnDesc: '《未识之诺》分镜草图', enDesc: 'Storyboard sketch for 《未识之诺》' },
-    { image: 'assets/progress/weishizhinuo/director-overview.webp', cnTitle: '影片总览', enTitle: 'Film overview', cnDesc: '《未识之诺》导演工作台截图', enDesc: 'Director’s workbench for 《未识之诺》' },
+    {
+      "image": "assets/progress/weishizhinuo/forest-city.webp",
+      "cnTitle": "森林湖岸都市",
+      "enTitle": "Forest lakeside city",
+      "cnDesc": "场景资产",
+      "enDesc": "Environment asset"
+    },
+    {
+      "image": "assets/progress/weishizhinuo/storyboard-flight.webp",
+      "cnTitle": "高空投送",
+      "enTitle": "Aerial deployment",
+      "cnDesc": "机位与构图草图",
+      "enDesc": "Camera and composition sketch"
+    },
+    {
+      "image": "assets/progress/weishizhinuo/director-overview.webp",
+      "cnTitle": "影片总览",
+      "enTitle": "Film overview",
+      "cnDesc": "剧情组与分镜整理",
+      "enDesc": "Organizing story groups and shots"
+    },
+    {
+      "image": "assets/progress/weishizhinuo/xu-zhiwei.webp",
+      "cnTitle": "许知微",
+      "enTitle": "Xu Zhiwei",
+      "cnDesc": "角色资产",
+      "enDesc": "Character asset"
+    },
+    {
+      "image": "assets/progress/weishizhinuo/patrol-rover.webp",
+      "cnTitle": "巡护越野车",
+      "enTitle": "Patrol rover",
+      "cnDesc": "内外多视图",
+      "enDesc": "Exterior and interior views"
+    },
+    {
+      "image": "assets/progress/weishizhinuo/storyboard-spray.webp",
+      "cnTitle": "举罐示意",
+      "enTitle": "Holding up the spray",
+      "cnDesc": "越肩与空间关系",
+      "enDesc": "Over-the-shoulder composition"
+    },
+    {
+      "image": "assets/progress/weishizhinuo/cliff-battlefield.webp",
+      "cnTitle": "乱石滩断崖",
+      "enTitle": "Rocky cliffside",
+      "cnDesc": "场景鸟瞰",
+      "enDesc": "Environment overview"
+    },
+    {
+      "image": "assets/progress/weishizhinuo/director-asset-library.webp",
+      "cnTitle": "资产库整理",
+      "enTitle": "Asset library",
+      "cnDesc": "角色与参考图管理",
+      "enDesc": "Characters and visual references"
+    },
+    {
+      "image": "assets/progress/weishizhinuo/director-shot-detail.webp",
+      "cnTitle": "镜头细化",
+      "enTitle": "Shot detailing",
+      "cnDesc": "逐镜画面与机位参数",
+      "enDesc": "Shot images and camera notes"
+    }
   ];
   let viewerFrames = stillFrames;
 
@@ -1089,6 +1149,8 @@
       const frame = progressFrames[Number(link.dataset.homeProgress)];
       const title = language === 'cn' ? frame.cnTitle : frame.enTitle;
       link.setAttribute('aria-label', `${t('viewImage')}: ${title}`);
+      link.querySelector('h4').textContent = title;
+      link.querySelector('span').textContent = language === 'cn' ? frame.cnDesc : frame.enDesc;
       link.querySelector('img').alt = language === 'cn' ? frame.cnDesc + ' · ' + title : frame.enDesc + ': ' + title;
     });
     if (stillViewer?.open) updateStillText();

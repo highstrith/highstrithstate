@@ -103,19 +103,22 @@
 .works-grid.is-list .comment-toggle, .works-grid.is-list .comment-panel { margin-left: 232px; }
 .stills-section { padding-block: 76px 100px; }
 .home-progress-section { border-top: 1px solid var(--line); padding-block: 64px 76px; }
-.home-progress-heading { display: flex; gap: 18px; align-items: center; margin-bottom: 24px; }
+.home-progress-layout { display: grid; grid-template-columns: minmax(200px, 280px) minmax(0, 708px); justify-content: space-between; gap: 48px; }
+.home-progress-summary { padding-top: 8px; }
+.home-progress-summary > p { font-size: 12px; line-height: 1.85; color: var(--muted); max-width: 24ch; }
+.home-progress-summary .home-progress-count { margin-top: 24px; font-size: 11px; color: var(--ink); }
+.home-progress-summary .text-link { margin-top: 12px; font-size: 12px; border-bottom: 1px solid var(--ink); }
+.home-progress-heading { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-bottom: 16px; }
 .home-progress-heading h3 { margin: 0; font-size: 23px; line-height: 1.5; font-weight: 450; }
 .home-progress-heading > span { color: var(--orange-dark); font-size: 11px; }
 .home-progress-grid { display: grid; grid-template-columns: repeat(3,minmax(0,220px)); gap: 24px; align-items: start; max-width: 708px; }
 .home-progress-card { display: block; min-width: 0; cursor: zoom-in; }
-.home-progress-card img { width: 100%; height: auto; aspect-ratio: 16/10; object-fit: contain; border-radius: 3px; background: var(--exhibit-soft); }
+.home-progress-card img { width: 100%; height: auto; aspect-ratio: 16/10; object-fit: contain; border-radius: 2px; background: #e9ece6; padding: 6px; transition: background .2s; }
+.home-progress-card:hover img, .home-progress-card:focus-visible img { background: #dce2d5; }
 .home-progress-card img[data-deferred-src] { display: none; }
-.home-progress-card > div { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; padding-top: 13px; }
-.home-progress-card h4 { margin: 0; font-size: 13px; line-height: 1.6; font-weight: 500; }
-.home-progress-card span { color: var(--muted); font-size: 10px; line-height: 1.8; text-align: right; }
-.home-progress-footer { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-top: 28px; }
-.home-progress-footer p { font-size: 11px; line-height: 1.8; color: var(--muted); }
-.home-progress-footer .text-link { margin: 0; font-size: 12px; border-bottom: 1px solid var(--ink); }
+.home-progress-card > div { display: flex; flex-direction: column; gap: 2px; padding-top: 9px; }
+.home-progress-card h4 { margin: 0; font-size: 12px; line-height: 1.6; font-weight: 500; }
+.home-progress-card span { color: var(--muted); font-size: 10px; line-height: 1.8; text-align: left; }
 .stills-grid { grid-template-columns: repeat(12, minmax(0,1fr)); gap: 38px 28px; align-items: start; }
 .still-card { grid-column: span 4; }
 .still-card:first-child { grid-column: span 4; grid-row: span 2; }
@@ -252,6 +255,10 @@ html:not(.shell-ready) :is(.view-switch, .feature-preview-control, #copyEmail) {
   .nav-collection summary { width: 44px; min-height: 48px; }
   .nav-submenu { top: 48px; left: 0; width: 100%; border: 0; border-top: 1px solid var(--line); box-shadow: none; background: var(--paper); padding: 8px 0; }
   .nav-work-group:has(.nav-collection[open]) { padding-bottom: 112px; }
+  .home-progress-layout { grid-template-columns: 1fr; gap: 28px; }
+  .home-progress-summary { padding: 0; }
+  .home-progress-summary > p { max-width: none; }
+  .home-progress-summary .home-progress-count { margin-top: 12px; }
   .home-progress-grid { gap: 20px; }
   .home-progress-card > div { flex-direction: column; gap: 4px; }
   .hero { padding-top: 32px; }
@@ -357,7 +364,6 @@ html:not(.shell-ready) :is(.view-switch, .feature-preview-control, #copyEmail) {
   .home-progress-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px 18px; max-width: 390px; }
   .home-progress-card > div { flex-direction: column; gap: 4px; }
   .home-progress-card h4 { font-size: 12px; }
-  .home-progress-footer { align-items: start; flex-direction: column; gap: 12px; }
   .stills-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 28px 16px; }
   .still-card, .still-card:first-child, .still-card:nth-child(n) { grid-column: auto; grid-row: auto; margin: 0; }
   .still-card:first-child { grid-column: 1/-1; width: 74%; margin-inline: auto; }

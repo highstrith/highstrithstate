@@ -1,0 +1,493 @@
+{
+  "project": "未识之诺",
+  "date": "2026-10-29",
+  "archiveRoot": "/Volumes/E61--/网站/制作过程归档/未识之诺/2026-10-29",
+  "note": "《未识之诺》15张真实制作记录：6张资产、5张分镜、4张工作台界面；原件与网页衍生分开保存。工作台截图包含同日早期与晚间状态，不表示成片完成。",
+  "sourceFilesUnchanged": true,
+  "items": [
+    {
+      "id": "forest-city",
+      "cnTitle": "森林湖岸都市",
+      "enTitle": "Forest lakeside city",
+      "cnKind": "场景资产",
+      "enKind": "Environment asset",
+      "newInExpansion": false,
+      "source": "/Users/linjunjie/Downloads/AI短片工作流_新片模板/02_资产/01_资产/@场景_星球远景_森林湖岸都市.png",
+      "sourceSha256": "4e02382a1fc0019b958c41e3cd8cf5c27b024a31facb7e09b6a36a83b2be4b21",
+      "originalSize": [
+        3024,
+        1296
+      ],
+      "archivedOriginal": "/Volumes/E61--/网站/制作过程归档/未识之诺/2026-10-29/原始素材/01_森林湖岸都市_@场景_星球远景_森林湖岸都市.png",
+      "archiveSha256": "4e02382a1fc0019b958c41e3cd8cf5c27b024a31facb7e09b6a36a83b2be4b21",
+      "derivatives": [
+        {
+          "path": "assets/progress/weishizhinuo/forest-city.webp",
+          "width": 1920,
+          "height": 823,
+          "bytes": 243534,
+          "sha256": "6d100790cd5b790df1d2af7c5fa9c00dc0f03edc1b32111838d3c423da371efa"
+        },
+        {
+          "path": "assets/progress/weishizhinuo/forest-city-thumb.webp",
+          "width": 960,
+          "height": 411,
+          "bytes": 63278,
+          "sha256": "4c0cb7987a8d339f6dc278c814d903a3a8947dc3c9ac6b0bba25e726d929227d"
+        }
+      ]
+    },
+    {
+      "id": "xu-zhiwei",
+      "cnTitle": "许知微",
+      "enTitle": "Xu Zhiwei",
+      "cnKind": "角色资产",
+      "enKind": "Character asset",
+      "newInExpansion": false,
+      "source": "/Users/linjunjie/Downloads/AI短片工作流_新片模板/02_资产/01_资产/@角色_许知微_身份设定.png",
+      "sourceSha256": "c5ff38d153a7a89125073df7691829cefc2443a69bf71a797382ba2e50b269b3",
+      "originalSize": [
+        2752,
+        1536
+      ],
+      "archivedOriginal": "/Volumes/E61--/网站/制作过程归档/未识之诺/2026-10-29/原始素材/02_许知微_@角色_许知微_身份设定.png",
+      "archiveSha256": "c5ff38d153a7a89125073df7691829cefc2443a69bf71a797382ba2e50b269b3",
+      "derivatives": [
+        {
+          "path": "assets/progress/weishizhinuo/xu-zhiwei.webp",
+          "width": 1920,
+          "height": 1072,
+          "bytes": 294214,
+          "sha256": "dc8109cb7ef84e3d9516810b3af878b493a109ff517bc45c989571a6d40d3e57"
+        },
+        {
+          "path": "assets/progress/weishizhinuo/xu-zhiwei-thumb.webp",
+          "width": 960,
+          "height": 536,
+          "bytes": 78506,
+          "sha256": "0cd3387dd8fc287dcbabb5e35c1aa922ea584da4a3bd522881a3546b44e419bb"
+        }
+      ]
+    },
+    {
+      "id": "gu-lin",
+      "cnTitle": "顾凛",
+      "enTitle": "Gu Lin",
+      "cnKind": "角色三视图",
+      "enKind": "Character turnaround",
+      "newInExpansion": true,
+      "source": "/Users/linjunjie/Downloads/AI短片工作流_新片模板/02_资产/01_资产/@角色_顾凛_三视图.png",
+      "sourceSha256": "94abbfe5240e4582aaaafc7dc84562bcae34391b79d755ac938b47cd8dc419fc",
+      "originalSize": [
+        2752,
+        1536
+      ],
+      "archivedOriginal": "/Volumes/E61--/网站/制作过程归档/未识之诺/2026-10-29/原始素材/03_顾凛_@角色_顾凛_三视图.png",
+      "archiveSha256": "94abbfe5240e4582aaaafc7dc84562bcae34391b79d755ac938b47cd8dc419fc",
+      "derivatives": [
+        {
+          "path": "assets/progress/weishizhinuo/gu-lin.webp",
+          "width": 1920,
+          "height": 1072,
+          "bytes": 122272,
+          "sha256": "663f7573b48f4c9291985bd0e2bdc8f0145f2d4bac9801e269f0370612a9ac64"
+        },
+        {
+          "path": "assets/progress/weishizhinuo/gu-lin-thumb.webp",
+          "width": 960,
+          "height": 536,
+          "bytes": 41056,
+          "sha256": "ef86f9a37855505a1731e49e56ad4e0c6ab58acf46873d5ee6f00f4eee64de46"
+        }
+      ]
+    },
+    {
+      "id": "cliff-battlefield",
+      "cnTitle": "乱石滩断崖",
+      "enTitle": "Rocky cliffside",
+      "cnKind": "场景鸟瞰",
+      "enKind": "Environment overview",
+      "newInExpansion": true,
+      "source": "/Users/linjunjie/Downloads/AI短片工作流_新片模板/02_资产/01_资产/@场景_乱石滩断崖战场_鸟瞰.png",
+      "sourceSha256": "d2db725a2c2786d75a6308a46df4d58e728a788b115c5af63a2cb080eeb564a0",
+      "originalSize": [
+        1920,
+        823
+      ],
+      "archivedOriginal": "/Volumes/E61--/网站/制作过程归档/未识之诺/2026-10-29/原始素材/04_乱石滩断崖_@场景_乱石滩断崖战场_鸟瞰.png",
+      "archiveSha256": "d2db725a2c2786d75a6308a46df4d58e728a788b115c5af63a2cb080eeb564a0",
+      "derivatives": [
+        {
+          "path": "assets/progress/weishizhinuo/cliff-battlefield.webp",
+          "width": 1920,
+          "height": 823,
+          "bytes": 353060,
+          "sha256": "cdd49e3c08f38ca90a113cd7fde3487b7f8b794c3501e1f9bfee507715f34893"
+        },
+        {
+          "path": "assets/progress/weishizhinuo/cliff-battlefield-thumb.webp",
+          "width": 960,
+          "height": 412,
+          "bytes": 96070,
+          "sha256": "f291be384d7ea02e80ce60a34bbaf760cc4ae4cdca9294094716cb2654c1bd25"
+        }
+      ]
+    },
+    {
+      "id": "patrol-rover",
+      "cnTitle": "巡护越野车",
+      "enTitle": "Patrol rover",
+      "cnKind": "内外多视图",
+      "enKind": "Exterior and interior views",
+      "newInExpansion": true,
+      "source": "/Users/linjunjie/Downloads/AI短片工作流_新片模板/02_资产/01_资产/@道具_苍脉巡护越野车_内外多视图.png",
+      "sourceSha256": "ea7a5eb09e2a90f4785898eb2369e7e6d1eccca6e5ff9b151054fcba22719c6b",
+      "originalSize": [
+        2400,
+        1792
+      ],
+      "archivedOriginal": "/Volumes/E61--/网站/制作过程归档/未识之诺/2026-10-29/原始素材/05_巡护越野车_@道具_苍脉巡护越野车_内外多视图.png",
+      "archiveSha256": "ea7a5eb09e2a90f4785898eb2369e7e6d1eccca6e5ff9b151054fcba22719c6b",
+      "derivatives": [
+        {
+          "path": "assets/progress/weishizhinuo/patrol-rover.webp",
+          "width": 1920,
+          "height": 1434,
+          "bytes": 245082,
+          "sha256": "958f602dc08271c56400c6912dd45a8924393f47e00f26065a459cdbf13e7749"
+        },
+        {
+          "path": "assets/progress/weishizhinuo/patrol-rover-thumb.webp",
+          "width": 960,
+          "height": 717,
+          "bytes": 86738,
+          "sha256": "4ccacf7781b20c54cdfaa26fafd8cb89e96338e057aea373eaedca9577fe89f3"
+        }
+      ]
+    },
+    {
+      "id": "tactical-locator",
+      "cnTitle": "战术定位仪",
+      "enTitle": "Tactical locator",
+      "cnKind": "佩戴关系参考",
+      "enKind": "Wearable prop reference",
+      "newInExpansion": true,
+      "source": "/Users/linjunjie/Downloads/AI短片工作流_新片模板/02_资产/01_资产/@道具_极枢战术定位仪_前臂佩戴关系.png",
+      "sourceSha256": "fdb0f936c77d58ba523b09f99245db4f789df8b52d6dcd1fddcc53cf253a5e66",
+      "originalSize": [
+        751,
+        333
+      ],
+      "archivedOriginal": "/Volumes/E61--/网站/制作过程归档/未识之诺/2026-10-29/原始素材/06_战术定位仪_@道具_极枢战术定位仪_前臂佩戴关系.png",
+      "archiveSha256": "fdb0f936c77d58ba523b09f99245db4f789df8b52d6dcd1fddcc53cf253a5e66",
+      "derivatives": [
+        {
+          "path": "assets/progress/weishizhinuo/tactical-locator.webp",
+          "width": 751,
+          "height": 333,
+          "bytes": 16892,
+          "sha256": "925d1e437078ef0ecb15ae0025c4f852a8418049ebaae19c7387c3a84db5535e"
+        },
+        {
+          "path": "assets/progress/weishizhinuo/tactical-locator-thumb.webp",
+          "width": 751,
+          "height": 333,
+          "bytes": 16892,
+          "sha256": "925d1e437078ef0ecb15ae0025c4f852a8418049ebaae19c7387c3a84db5535e"
+        }
+      ]
+    },
+    {
+      "id": "storyboard-flight",
+      "cnTitle": "高空投送",
+      "enTitle": "Aerial deployment",
+      "cnKind": "机位与构图草图",
+      "enKind": "Camera and composition sketch",
+      "newInExpansion": false,
+      "source": "/Users/linjunjie/Downloads/AI短片工作流_新片模板/01_剧本/分镜图/SHOT001.png",
+      "sourceSha256": "cfe3b59fc3ce5b3e90b3c2e77b7f60ac1a117772169f438b8f32c800d3a6e787",
+      "originalSize": [
+        1672,
+        941
+      ],
+      "archivedOriginal": "/Volumes/E61--/网站/制作过程归档/未识之诺/2026-10-29/原始素材/07_高空投送_SHOT001.png",
+      "archiveSha256": "cfe3b59fc3ce5b3e90b3c2e77b7f60ac1a117772169f438b8f32c800d3a6e787",
+      "derivatives": [
+        {
+          "path": "assets/progress/weishizhinuo/storyboard-flight.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 42402,
+          "sha256": "bba140ea84a779cb8c1747be59c4debaa1e3f9b9936d76d915492de63dc57a8e"
+        },
+        {
+          "path": "assets/progress/weishizhinuo/storyboard-flight-thumb.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 18124,
+          "sha256": "555b1c4bb7dd59cb82f9b48e70f0e8648075f48ab1cb7d94ab2360df1aefada3"
+        }
+      ]
+    },
+    {
+      "id": "storyboard-pods",
+      "cnTitle": "索降舱",
+      "enTitle": "Drop pods",
+      "cnKind": "场景与空间关系",
+      "enKind": "Scene and spatial relationships",
+      "newInExpansion": false,
+      "source": "/Users/linjunjie/Downloads/AI短片工作流_新片模板/01_剧本/分镜图/SHOT012_当前.png",
+      "sourceSha256": "b572da6abfeb17f9e08ffd3cc2bd1f3b4d44102634aae134bfe93d3aeae3b837",
+      "originalSize": [
+        1672,
+        941
+      ],
+      "archivedOriginal": "/Volumes/E61--/网站/制作过程归档/未识之诺/2026-10-29/原始素材/08_索降舱_SHOT012_当前.png",
+      "archiveSha256": "b572da6abfeb17f9e08ffd3cc2bd1f3b4d44102634aae134bfe93d3aeae3b837",
+      "derivatives": [
+        {
+          "path": "assets/progress/weishizhinuo/storyboard-pods.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 106864,
+          "sha256": "bb5fd7936b029b0801d8a1668c082e3af991c87095c01db8712feb87da5f4a48"
+        },
+        {
+          "path": "assets/progress/weishizhinuo/storyboard-pods-thumb.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 46302,
+          "sha256": "78a4f66724e3bab6e0d603be001f65aa9cca7974052debb07467c979c5e49876"
+        }
+      ]
+    },
+    {
+      "id": "storyboard-exit",
+      "cnTitle": "下车调度",
+      "enTitle": "Exiting the rover",
+      "cnKind": "双人全景",
+      "enKind": "Two-character wide shot",
+      "newInExpansion": true,
+      "source": "/Users/linjunjie/Downloads/AI短片工作流_新片模板/01_剧本/分镜图/SHOT017_下车.png",
+      "sourceSha256": "61efde019e17ceac3929fd71ba8faa6c8464512ec5f4de3834580a9cf8788b16",
+      "originalSize": [
+        1672,
+        941
+      ],
+      "archivedOriginal": "/Volumes/E61--/网站/制作过程归档/未识之诺/2026-10-29/原始素材/09_下车调度_SHOT017_下车.png",
+      "archiveSha256": "61efde019e17ceac3929fd71ba8faa6c8464512ec5f4de3834580a9cf8788b16",
+      "derivatives": [
+        {
+          "path": "assets/progress/weishizhinuo/storyboard-exit.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 135818,
+          "sha256": "a2a6480b54ca1ae4304a33091b0652b3a868479a09bd4ca78c19c1e8466d2536"
+        },
+        {
+          "path": "assets/progress/weishizhinuo/storyboard-exit-thumb.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 61748,
+          "sha256": "d1aec8e97f86ead881564f27f18e61ba4e641cc3efa479ebca01d11269c54378"
+        }
+      ]
+    },
+    {
+      "id": "storyboard-spray",
+      "cnTitle": "举罐示意",
+      "enTitle": "Holding up the spray",
+      "cnKind": "越肩与空间关系",
+      "enKind": "Over-the-shoulder composition",
+      "newInExpansion": true,
+      "source": "/Users/linjunjie/Downloads/AI短片工作流_新片模板/01_剧本/分镜图/SHOT027_举罐说明草图.png",
+      "sourceSha256": "032f0780c76d08fb924e531f7a4b9984d1334756d57dfb02c1b89cb431bdca8c",
+      "originalSize": [
+        1672,
+        941
+      ],
+      "archivedOriginal": "/Volumes/E61--/网站/制作过程归档/未识之诺/2026-10-29/原始素材/10_举罐示意_SHOT027_举罐说明草图.png",
+      "archiveSha256": "032f0780c76d08fb924e531f7a4b9984d1334756d57dfb02c1b89cb431bdca8c",
+      "derivatives": [
+        {
+          "path": "assets/progress/weishizhinuo/storyboard-spray.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 120936,
+          "sha256": "024e1e681b5a2ce4e1a1da5eab7382aad15a7ac709c0ca7e3a3f522e2d2589e7"
+        },
+        {
+          "path": "assets/progress/weishizhinuo/storyboard-spray-thumb.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 53124,
+          "sha256": "ecae027d5fe0f40089acb8bb828b0f5e54382ec6903c5f480c9956b80a9dcda4"
+        }
+      ]
+    },
+    {
+      "id": "storyboard-closeup",
+      "cnTitle": "人物近景",
+      "enTitle": "Character close-up",
+      "cnKind": "表情与景别草图",
+      "enKind": "Expression and shot-size study",
+      "newInExpansion": true,
+      "source": "/Users/linjunjie/Downloads/AI短片工作流_新片模板/01_剧本/分镜图/SHOT192_组10草图.png",
+      "sourceSha256": "b77e52acff2a630690a4e03a45c68f9275f916892228d919eac1944d2bdbaf3c",
+      "originalSize": [
+        2048,
+        1152
+      ],
+      "archivedOriginal": "/Volumes/E61--/网站/制作过程归档/未识之诺/2026-10-29/原始素材/11_人物近景_SHOT192_组10草图.png",
+      "archiveSha256": "b77e52acff2a630690a4e03a45c68f9275f916892228d919eac1944d2bdbaf3c",
+      "derivatives": [
+        {
+          "path": "assets/progress/weishizhinuo/storyboard-closeup.webp",
+          "width": 1920,
+          "height": 1080,
+          "bytes": 87864,
+          "sha256": "4440f5276ac6d2ae2bb636fdcb97b3a79ecd6827c54dcbac18a5ce2f71b6fbc5"
+        },
+        {
+          "path": "assets/progress/weishizhinuo/storyboard-closeup-thumb.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 34866,
+          "sha256": "ec161efc1102a3c7594a6e5978fe769a32ea880ff9051a5666795ce86613989f"
+        }
+      ]
+    },
+    {
+      "id": "director-overview",
+      "cnTitle": "影片总览",
+      "enTitle": "Film overview",
+      "cnKind": "剧情组与分镜整理",
+      "enKind": "Organizing story groups and shots",
+      "newInExpansion": false,
+      "source": "/tmp/wip-director-overview.png",
+      "sourceSha256": "7a3f0020aae63d1a990af53836d5eac89fe2199f496b236362ddd39046abead3",
+      "originalSize": [
+        1512,
+        980
+      ],
+      "archivedOriginal": "/Volumes/E61--/网站/制作过程归档/未识之诺/2026-10-29/原始素材/12_影片总览.png",
+      "archiveSha256": "7a3f0020aae63d1a990af53836d5eac89fe2199f496b236362ddd39046abead3",
+      "captureContext": "真实导演工作台窗口；旧两张为同日早期状态，新两张为晚间状态。只切换工作区，无编辑。",
+      "derivatives": [
+        {
+          "path": "assets/progress/weishizhinuo/director-overview.webp",
+          "width": 1512,
+          "height": 980,
+          "bytes": 108948,
+          "sha256": "75682b93c2f296045db824a396453ff272b7bf364d8f3c9b620b0ffaaf60103c"
+        },
+        {
+          "path": "assets/progress/weishizhinuo/director-overview-thumb.webp",
+          "width": 960,
+          "height": 622,
+          "bytes": 54424,
+          "sha256": "21f391fa37225009c4761b8f280dfa0dd29330c8538271555809eba539535bf1"
+        }
+      ]
+    },
+    {
+      "id": "director-storyboard",
+      "cnTitle": "分镜工作区",
+      "enTitle": "Storyboard workspace",
+      "cnKind": "画面、提示词与镜头序列",
+      "enKind": "Images, prompts and shot sequence",
+      "newInExpansion": false,
+      "source": "/tmp/wip-director-storyboard.png",
+      "sourceSha256": "30664ea5229fb1b9d9fbe81f3bd58cab7c5ec4ecf132e3a246fe6b2864e542a7",
+      "originalSize": [
+        1512,
+        980
+      ],
+      "archivedOriginal": "/Volumes/E61--/网站/制作过程归档/未识之诺/2026-10-29/原始素材/13_分镜工作区.png",
+      "archiveSha256": "30664ea5229fb1b9d9fbe81f3bd58cab7c5ec4ecf132e3a246fe6b2864e542a7",
+      "captureContext": "真实导演工作台窗口；旧两张为同日早期状态，新两张为晚间状态。只切换工作区，无编辑。",
+      "derivatives": [
+        {
+          "path": "assets/progress/weishizhinuo/director-storyboard.webp",
+          "width": 1512,
+          "height": 980,
+          "bytes": 126962,
+          "sha256": "c9725bcfd946a0551d0b1e86208fe67fa2ba7bc5f9506870ceebb44086166f76"
+        },
+        {
+          "path": "assets/progress/weishizhinuo/director-storyboard-thumb.webp",
+          "width": 960,
+          "height": 622,
+          "bytes": 62878,
+          "sha256": "e7db95c9836459c2a9c4cd368305d0f46590333846d7e1fc399b30c88dea4825"
+        }
+      ]
+    },
+    {
+      "id": "director-asset-library",
+      "cnTitle": "资产库整理",
+      "enTitle": "Asset library",
+      "cnKind": "角色与参考图管理",
+      "enKind": "Characters and visual references",
+      "newInExpansion": true,
+      "source": "/tmp/wip-director-asset-library.png",
+      "sourceSha256": "e9d4e6fc383d17c5f76abe8b9ab9f3a3c53f41c92eb9f9ed68da7a599779c855",
+      "originalSize": [
+        2048,
+        1156
+      ],
+      "archivedOriginal": "/Volumes/E61--/网站/制作过程归档/未识之诺/2026-10-29/原始素材/14_资产库整理.png",
+      "archiveSha256": "e9d4e6fc383d17c5f76abe8b9ab9f3a3c53f41c92eb9f9ed68da7a599779c855",
+      "captureContext": "真实导演工作台窗口；旧两张为同日早期状态，新两张为晚间状态。只切换工作区，无编辑。",
+      "derivatives": [
+        {
+          "path": "assets/progress/weishizhinuo/director-asset-library.webp",
+          "width": 1920,
+          "height": 1084,
+          "bytes": 138690,
+          "sha256": "7d9c5cab542873ea93bc2ddf7eab3015916de1d8b38a2448a54a64e760e9e62b"
+        },
+        {
+          "path": "assets/progress/weishizhinuo/director-asset-library-thumb.webp",
+          "width": 960,
+          "height": 542,
+          "bytes": 49720,
+          "sha256": "13871d2457996f5e1ac3d2bdc4a6f88a68fc864ca88290d2530929d995d48861"
+        }
+      ]
+    },
+    {
+      "id": "director-shot-detail",
+      "cnTitle": "镜头细化",
+      "enTitle": "Shot detailing",
+      "cnKind": "逐镜画面与机位参数",
+      "enKind": "Shot images and camera notes",
+      "newInExpansion": true,
+      "source": "/tmp/wip-director-shot-detail.png",
+      "sourceSha256": "77c6411912f2e0ce0ccead03ee5ada1a1dc9a7ee870d0092545e3a2fbd08649f",
+      "originalSize": [
+        2048,
+        1156
+      ],
+      "archivedOriginal": "/Volumes/E61--/网站/制作过程归档/未识之诺/2026-10-29/原始素材/15_镜头细化.png",
+      "archiveSha256": "77c6411912f2e0ce0ccead03ee5ada1a1dc9a7ee870d0092545e3a2fbd08649f",
+      "captureContext": "真实导演工作台窗口；旧两张为同日早期状态，新两张为晚间状态。只切换工作区，无编辑。",
+      "derivatives": [
+        {
+          "path": "assets/progress/weishizhinuo/director-shot-detail.webp",
+          "width": 1920,
+          "height": 1084,
+          "bytes": 154076,
+          "sha256": "5d89e0696ee852393181aef00fea295c6a15fd001613dd28c0e6ad43c41991b8"
+        },
+        {
+          "path": "assets/progress/weishizhinuo/director-shot-detail-thumb.webp",
+          "width": 960,
+          "height": 542,
+          "bytes": 54768,
+          "sha256": "f035115e9a22488301bed50d6006bf685fbfcdce4bc8fd95fdb5cdfde4739889"
+        }
+      ]
+    }
+  ]
+}
