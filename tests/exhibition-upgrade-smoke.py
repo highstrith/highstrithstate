@@ -43,10 +43,11 @@ class ExhibitionUpgrade(unittest.TestCase):
         page.locator('[data-view="gallery"]').click()
         self.assertEqual(page.locator('#worksGrid .work-card:visible').count(), count)
 
-    def test_gallery_has_asymmetric_composition_and_filtered_reflow(self):
+    def test_gallery_has_native_aligned_rows_and_filtered_reflow(self):
         page = self.page(viewport={'width': 1440, 'height': 900}, reduced_motion='reduce')
-        widths = page.locator('#worksGrid .work-item').evaluate_all('els => els.slice(0,2).map(e=>e.getBoundingClientRect().width)')
-        self.assertGreater(abs(widths[0] - widths[1]), 100)
+        boxes = page.locator('#worksGrid .work-media').evaluate_all('els => els.slice(0,3).map(e=>{const r=e.getBoundingClientRect();return {top:r.y,height:r.height};})')
+        self.assertTrue(all(abs(box['top'] - boxes[0]['top']) < 1 for box in boxes))
+        self.assertTrue(all(abs(box['height'] - boxes[0]['height']) < 1 for box in boxes))
         page.locator('[data-filter="motion"]').click()
         boxes = page.locator('#worksGrid .work-item:visible').evaluate_all('els => els.map(e=>({top:e.offsetTop,left:e.offsetLeft}))')
         self.assertEqual(boxes[0]['top'], boxes[1]['top'])

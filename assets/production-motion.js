@@ -23,6 +23,7 @@
       cleanups.push(() => node.removeEventListener(event, callback));
     };
     listen(window, 'catalogue:ready', () => ScrollTrigger.refresh());
+    listen(window, 'catalogue:layout', () => ScrollTrigger.refresh());
     if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
       document.querySelectorAll('.progress-gallery a, .home-progress-card').forEach(link => {
         const surface = link.matches('.home-progress-card') ? link.querySelector('img') : link;
