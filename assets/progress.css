@@ -1,5 +1,6 @@
 /* Production contact sheets: compact previews, original framing, grouped by craft. */
 .progress-main { padding-block: 56px 64px; }
+.progress-return { display: inline-flex; align-items: center; min-height: 44px; margin-bottom: 22px; font-size: 12px; text-decoration: underline; text-underline-offset: 5px; }
 .progress-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding-bottom: 44px; }
 .progress-heading h1 { margin: 0; font-size: 36px; font-weight: 450; line-height: 1.4; letter-spacing: -.03em; }
 .progress-heading > p { font-size: 13px; line-height: 1.8; color: var(--muted); }

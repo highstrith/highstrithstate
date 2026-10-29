@@ -17,8 +17,8 @@
   <link rel="manifest" href="assets/site.webmanifest">
   <link rel="stylesheet" href="assets/base.css?v=20261029-stills">
   <link rel="stylesheet" href="assets/studio.css?v=20261029-gallery2">
-  <link rel="stylesheet" href="assets/exhibition.css?v=20261029-production-sheet">
-  <link rel="stylesheet" href="assets/progress.css?v=20261029-production-sheet">
+  <link rel="stylesheet" href="assets/exhibition.css?v=20261029-motion2">
+  <link rel="stylesheet" href="assets/progress.css?v=20261029-motion2">
 </head>
 <body>
   <a class="skip-link" href="#progress" data-cn="跳转到制作中项目" data-en="Skip to work in progress">跳转到制作中项目</a>
@@ -36,6 +36,7 @@
     <div class="header-actions"><button id="langSwitch" type="button" aria-label="Switch to English" aria-pressed="false">EN</button><button id="menuToggle" class="menu-toggle" type="button" aria-controls="mainNavigation" aria-expanded="false" hidden><span class="menu-icon" aria-hidden="true"></span><span data-menu-label>菜单</span></button></div>
   </header>
   <main id="progress" class="progress-main page-width">
+    <a class="progress-return" href="index.html#in-progress" data-home-link data-cn="返回首页 · 正在制作" data-en="Back to home · In progress">返回首页 · 正在制作</a>
     <div class="progress-heading"><h1 data-cn="正在制作" data-en="In progress">正在制作</h1><p data-cn="15 张制作记录，来自成片之前。" data-en="15 production images from before the finished film.">15 张制作记录，来自成片之前。</p></div>
     <article class="progress-project" aria-labelledby="progressProjectTitle">
       <div class="progress-project-heading"><div class="progress-project-name"><h2 id="progressProjectTitle">《未识之诺》</h2><span class="progress-status" data-cn="制作中" data-en="In production">制作中</span></div><p data-cn="资产、分镜，还有制作时的工作台。" data-en="Assets, storyboards and a look at the workbench.">资产、分镜，还有制作时的工作台。</p></div>
@@ -75,11 +76,15 @@
   </main>
   <footer class="site-footer page-width progress-footer"><div class="footer-top"><span>© <span id="copyrightYear">2026</span> Highstrith · 橘小桔</span><div><a href="index.html" data-home-link data-cn="返回影像作品集" data-en="Back to the film portfolio">返回影像作品集</a><a href="projects.html" data-projects-link data-cn="项目与应用" data-en="Projects & apps">项目与应用</a></div></div></footer>
   <dialog id="progressViewer" class="progress-viewer" aria-labelledby="progressViewerTitle" aria-describedby="progressViewerDescription">
-    <div class="progress-viewer-header"><span id="progressViewerPosition" aria-live="polite"></span><div><a id="progressOriginal" target="_blank" rel="noopener" data-cn="打开原图" data-en="Open full image">打开原图</a><button id="progressViewerClose" class="icon-button" type="button" aria-label="关闭图片" data-cn-label="关闭图片" data-en-label="Close image">×</button></div></div>
+    <div class="progress-viewer-header"><span id="progressViewerPosition" aria-live="polite"></span><div><a id="progressOriginal" target="_blank" rel="noopener" data-cn="打开原图" data-en="Open full image">打开原图</a><button id="progressViewerClose" class="icon-button gallery-return-button" type="button" aria-label="关闭图片" data-cn-label="关闭图片" data-en-label="Close image"><span data-cn="返回图集" data-en="Back to images">返回图集</span><span class="gallery-close-icon" aria-hidden="true">×</span></button></div></div>
     <div class="progress-viewer-stage"><img id="progressViewerImage" alt=""><p id="progressViewerStatus" role="status"></p></div>
     <div class="progress-viewer-footer"><div><h2 id="progressViewerTitle"></h2><p id="progressViewerDescription"></p></div><div class="progress-viewer-nav"><button id="progressPrevious" type="button" data-cn="上一张" data-en="Previous">上一张</button><button id="progressNext" type="button" data-cn="下一张" data-en="Next">下一张</button></div></div>
   </dialog>
-  <script src="assets/progress.js?v=20261029-progress"></script>
+  <script src="assets/gallery-navigation.js?v=20261029-motion2"></script>
+  <script src="assets/progress.js?v=20261029-motion2"></script>
   <script src="assets/site-shell.js?v=20261029-progress-nav"></script>
+  <script src="assets/vendor/gsap-3.15.0/gsap.min.js"></script>
+  <script src="assets/vendor/gsap-3.15.0/ScrollTrigger.min.js"></script>
+  <script src="assets/production-motion.js?v=20261029-motion2"></script>
 </body>
 </html>

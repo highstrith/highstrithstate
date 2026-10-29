@@ -19,7 +19,7 @@
   <link rel="manifest" href="assets/site.webmanifest">
   <link rel="stylesheet" href="assets/base.css?v=20261029-stills">
   <link rel="stylesheet" href="assets/studio.css?v=20261029-gallery2">
-  <link rel="stylesheet" href="assets/exhibition.css?v=20261029-production-sheet">
+  <link rel="stylesheet" href="assets/exhibition.css?v=20261029-motion2">
 </head>
 <body>
   <a class="skip-link" href="#works" data-i18n="skip">跳转到作品</a>
@@ -184,7 +184,7 @@
   </dialog>
   <dialog id="social-qr-dialog" class="qr-dialog" aria-labelledby="social-qr-title"><button type="button" id="socialQrClose" class="icon-button" aria-label="关闭二维码">×</button><h2 id="social-qr-title">微信</h2><p id="social-qr-account">Gw1sgdsj_787</p><img id="social-qr-image" alt="微信二维码"><p class="qr-instruction" data-i18n="qrHint">打开对应 App 扫码，和我打个招呼</p></dialog>
   <dialog id="stillViewer" class="still-viewer" aria-labelledby="stillViewerTitle" aria-describedby="stillViewerDescription">
-    <div class="still-viewer-header"><span id="stillViewerPosition" aria-live="polite"></span><div class="still-viewer-actions"><button type="button" id="stillZoom" aria-pressed="false" class="viewer-button"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5 5M7 10h6M10 7v6"/></svg><span data-i18n="zoomImage">放大查看</span></button><button id="stillViewerClose" class="icon-button" type="button" aria-label="关闭图片浏览">×</button></div></div>
+    <div class="still-viewer-header"><span id="stillViewerPosition" aria-live="polite"></span><div class="still-viewer-actions"><button type="button" id="stillZoom" aria-pressed="false" class="viewer-button"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5 5M7 10h6M10 7v6"/></svg><span data-i18n="zoomImage">放大查看</span></button><button id="stillViewerClose" class="icon-button gallery-return-button" type="button" aria-label="关闭图片浏览"><span data-i18n="backImages">返回图集</span><span class="gallery-close-icon" aria-hidden="true">×</span></button></div></div>
     <div class="still-viewer-stage" id="stillViewerStage"><img id="stillViewerImage" alt=""><p id="stillViewerStatus" role="status"></p></div>
     <div class="still-viewer-footer"><div class="still-viewer-caption"><h2 id="stillViewerTitle"></h2><p id="stillViewerDescription"></p></div><div class="still-viewer-nav"><button type="button" id="stillPrevious" class="viewer-button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 5-7 7 7 7"/></svg><span data-i18n="previousImage">上一张</span></button><button type="button" id="stillNext" class="viewer-button"><span data-i18n="nextImage">下一张</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 5 7 7-7 7"/></svg></button></div></div>
   </dialog>
@@ -914,7 +914,11 @@
   </script>
   <script src="assets/comment-config.js?v=20261010-comments" defer></script>
   <script src="assets/scroll-reveal.js?v=20261029-gallery2" defer></script>
-  <script src="assets/studio.js?v=20261029-production-sheet" defer></script>
+  <script src="assets/gallery-navigation.js?v=20261029-motion2" defer></script>
+  <script src="assets/studio.js?v=20261029-motion2" defer></script>
   <script src="assets/site-shell.js?v=20261029-progress-nav" defer></script>
+  <script src="assets/vendor/gsap-3.15.0/gsap.min.js" defer></script>
+  <script src="assets/vendor/gsap-3.15.0/ScrollTrigger.min.js" defer></script>
+  <script src="assets/production-motion.js?v=20261029-motion2" defer></script>
 </body>
 </html>

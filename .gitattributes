@@ -1,0 +1,2 @@
+# Preserve the official vendor distributions byte-for-byte, including headers.
+assets/vendor/gsap-3.15.0/*.js -whitespace

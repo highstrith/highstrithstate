@@ -6,9 +6,11 @@
   const viewer = $('#progressViewer');
   const image = $('#progressViewerImage');
   const status = $('#progressViewerStatus');
+  const navigation = window.createGalleryNavigation(viewer);
   let selected = 0;
   let returnFocus = null;
   let imageState = '';
+  let imageEntry = null;
 
   function updateViewerText() {
     const frame = gallery[selected].closest('figure');
@@ -43,17 +45,21 @@
     const url = new URL(location.href);
     if (english) url.searchParams.set('lang', 'en');
     else url.searchParams.delete('lang');
-    try { history.replaceState(null, '', url); } catch { /* file mode may deny history changes */ }
+    try { history.replaceState(history.state, '', url); } catch { /* file mode may deny history changes */ }
   }
 
   function showImage(index) {
     selected = (index + gallery.length) % gallery.length;
+    if (imageEntry) imageEntry.index = selected;
     imageState = 'loading';
     status.hidden = false;
     image.hidden = true;
     updateViewerText();
     $('#progressOriginal').href = gallery[selected].href;
-    image.onload = () => { imageState = ''; status.hidden = true; image.hidden = false; };
+    image.onload = () => {
+      imageState = ''; status.hidden = true; image.hidden = false;
+      image.dispatchEvent(new Event('gallery:image'));
+    };
     image.onerror = () => { imageState = 'error'; updateViewerText(); };
     image.src = gallery[selected].href;
   }
@@ -61,15 +67,19 @@
   gallery.forEach((link, index) => link.addEventListener('click', event => {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
-    returnFocus = link;
-    showImage(index);
-    viewer.showModal();
-    document.body.classList.add('modal-open');
-    $('#progressViewerClose').focus({ preventScroll: true });
+    const entry = { index };
+    navigation.open(() => {
+      imageEntry = entry;
+      returnFocus = link;
+      showImage(entry.index);
+      viewer.showModal();
+      document.body.classList.add('modal-open');
+      $('#progressViewerClose').focus({ preventScroll: true });
+    });
   }));
   $('#progressPrevious').addEventListener('click', () => showImage(selected - 1));
   $('#progressNext').addEventListener('click', () => showImage(selected + 1));
-  $('#progressViewerClose').addEventListener('click', () => viewer.close());
+  $('#progressViewerClose').addEventListener('click', navigation.close);
   viewer.addEventListener('keydown', event => {
     if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
     event.preventDefault();
@@ -77,6 +87,7 @@
   });
   viewer.addEventListener('close', () => {
     if (viewer.open) return;
+    imageEntry = null;
     image.onload = image.onerror = null;
     image.removeAttribute('src');
     document.body.classList.remove('modal-open');
@@ -86,7 +97,7 @@
   viewer.addEventListener('click', event => {
     if (event.target !== viewer) return;
     const rect = viewer.getBoundingClientRect();
-    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) viewer.close();
+    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) navigation.close();
   });
   $('#langSwitch').addEventListener('click', () => { english = !english; setLanguage(); });
   $('#copyrightYear').textContent = String(new Date().getFullYear());

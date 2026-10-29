@@ -45,7 +45,7 @@
       stillsIntro: '过往创作留下的画面，\n记录不同阶段的光线与情绪。',
       galleryView: '画廊', listView: '目录', previewNote: '静音片段预览', pausePreview: '暂停预览', resumePreview: '继续预览',
       toolsLabel: '项目与应用', toolsTitle: '导演工作台', toolsIntro: '把剧本、分镜、资产和提示词，放在一个工作台里。', toolsExplore: '查看项目与应用', toolFeatured: '导演工作台 App', toolsAlso: '也在做', toolCanvas: 'AI 无限画布',
-      viewImage: '查看大图', zoomImage: '放大查看', fitImage: '适应画面', previousImage: '上一张', nextImage: '下一张', closeImage: '关闭图片浏览',
+      viewImage: '查看大图', zoomImage: '放大查看', fitImage: '适应画面', previousImage: '上一张', nextImage: '下一张', closeImage: '关闭图片浏览', backImages: '返回图集',
       imageLoading: '正在加载图片…', imageError: '图片暂时无法加载，请切换其他图片后重试。', copyEmail: '复制邮箱', emailCopied: '邮箱已复制', emailCopyFailed: '请手动复制：highstrith@gmail.com',
       progressLabel: '成片之前', progressIntro: '资产、分镜，还有制作时的工作台。', inProduction: '制作中',
       progressAsset: '森林湖岸都市', progressAssetKind: '场景资产', progressBoard: '高空投送', progressBoardKind: '分镜草图', progressWorkbench: '影片总览', progressWorkbenchKind: '导演工作台', progressNote: '制作中的阶段记录，画面会继续调整。', progressMore: '查看完整制作记录', progressCount: '15 张制作记录',
@@ -83,7 +83,7 @@
       stillsIntro: 'Frames left behind by past works,\ncapturing light and mood at different stages.',
       galleryView: 'Gallery', listView: 'Directory', previewNote: 'Silent film excerpts', pausePreview: 'Pause preview', resumePreview: 'Resume preview',
       toolsLabel: 'Projects & apps', toolsTitle: 'Director’s workbench', toolsIntro: 'Scripts, storyboards, assets and prompts in one workspace.', toolsExplore: 'Explore projects & apps', toolFeatured: 'Director’s workbench app', toolsAlso: 'Also making', toolCanvas: 'AI infinite canvas',
-      viewImage: 'View full image', zoomImage: 'Zoom in', fitImage: 'Fit to screen', previousImage: 'Previous', nextImage: 'Next', closeImage: 'Close image viewer',
+      viewImage: 'View full image', zoomImage: 'Zoom in', fitImage: 'Fit to screen', previousImage: 'Previous', nextImage: 'Next', closeImage: 'Close image viewer', backImages: 'Back to images',
       imageLoading: 'Loading image…', imageError: 'This image could not be loaded. Switch to another image and try again.', copyEmail: 'Copy email', emailCopied: 'Email copied', emailCopyFailed: 'Copy this address: highstrith@gmail.com',
       progressLabel: 'Before the finished film', progressIntro: 'Assets, storyboards and a look at the workbench.', inProduction: 'In production',
       progressAsset: 'Forest lakeside city', progressAssetKind: 'Environment asset', progressBoard: 'Aerial deployment', progressBoardKind: 'Storyboard sketch', progressWorkbench: 'Film overview', progressWorkbenchKind: 'Director’s workbench', progressNote: 'Work in progress. These images will continue to evolve.', progressMore: 'View the full production notes', progressCount: '15 production images',
@@ -431,6 +431,13 @@
     updateHero();
     applyFilters();
     if (commentsEnabled) prefetchCommentCounts();
+    window.dispatchEvent(new Event('catalogue:ready'));
+    // Initial anchor navigation happens before the asynchronous catalogue has
+    // established the lower sections' final positions.
+    const section = location.hash.slice(1);
+    if (['works', 'in-progress', 'stills', 'about', 'contact'].includes(section)) {
+      document.getElementById(section)?.scrollIntoView({ behavior: 'instant' });
+    }
   }
 
   function renderCards() {
@@ -1176,6 +1183,7 @@
 
   function showStill(index) {
     selectedStill = (index + viewerFrames.length) % viewerFrames.length;
+    if (stillEntry) stillEntry.index = selectedStill;
     resetStillZoom();
     updateStillText();
     const status = $('#stillViewerStatus');
@@ -1189,22 +1197,29 @@
     stillImage.onload = () => {
       status.hidden = true;
       stillImage.hidden = false;
+      stillImage.dispatchEvent(new Event('gallery:image'));
       $('#stillZoom').disabled = false;
     };
     stillImage.onerror = () => { status.textContent = t('imageError'); };
     stillImage.src = mediaURL(viewerFrames[selectedStill].image);
   }
 
+  const stillNavigation = window.createGalleryNavigation(stillViewer);
+  let stillEntry = null;
   function openStill(index, trigger, frames = stillFrames) {
-    viewerFrames = frames;
-    stillReturnFocus = trigger;
-    stopPreview();
-    hideQrPreview();
-    showStill(index);
-    stillViewer.showModal();
-    updateScrollLock();
-    syncMusic();
-    $('#stillViewerClose').focus({ preventScroll: true });
+    const entry = { index };
+    stillNavigation.open(() => {
+      stillEntry = entry;
+      viewerFrames = frames;
+      stillReturnFocus = trigger;
+      stopPreview();
+      hideQrPreview();
+      showStill(entry.index);
+      stillViewer.showModal();
+      updateScrollLock();
+      syncMusic();
+      $('#stillViewerClose').focus({ preventScroll: true });
+    });
   }
 
   function toggleStillZoom() {
@@ -1227,7 +1242,7 @@
   });
   $('#stillPrevious')?.addEventListener('click', () => showStill(selectedStill - 1));
   $('#stillNext')?.addEventListener('click', () => showStill(selectedStill + 1));
-  $('#stillViewerClose')?.addEventListener('click', () => stillViewer.close());
+  $('#stillViewerClose')?.addEventListener('click', stillNavigation.close);
   stillViewer?.addEventListener('keydown', event => {
     if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
     event.preventDefault();
@@ -1252,6 +1267,7 @@
   stillStage?.addEventListener('pointercancel', () => { stillSwipe = null; });
   stillViewer?.addEventListener('close', () => {
     if (stillViewer.open) return;
+    stillEntry = null;
     stillImage.onload = stillImage.onerror = null;
     stillImage.removeAttribute('src');
     resetStillZoom();
@@ -1265,7 +1281,7 @@
   stillViewer?.addEventListener('click', event => {
     if (event.target !== stillViewer) return;
     const rect = stillViewer.getBoundingClientRect();
-    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) stillViewer.close();
+    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) stillNavigation.close();
   });
   $('#featurePreviewToggle')?.addEventListener('click', () => {
     featurePaused = !featurePaused;

@@ -95,6 +95,13 @@ class ProgressPage(unittest.TestCase):
         page.locator('.progress-gallery a').last.click()
         expect(page.locator('#progressViewerTitle')).to_have_text('Shot detailing')
         expect(page.locator('#progressViewerClose')).to_have_attribute('aria-label', 'Close image')
+        for width in [320, 390]:
+            page.set_viewport_size({'width': width, 'height': 844})
+            for selector in ['#progressViewerClose', '#progressOriginal']:
+                bounds = page.locator(selector).bounding_box()
+                self.assertGreaterEqual(bounds['x'], 0)
+                self.assertLessEqual(bounds['x'] + bounds['width'], width)
+                self.assertGreaterEqual(bounds['height'], 44)
 
     def test_all_sizes_images_and_mobile_keyboard_menu(self):
         page = self.page()
@@ -172,6 +179,110 @@ class ProgressPage(unittest.TestCase):
             image = link.locator('img')
             self.assertTrue(image.get_attribute('src').endswith('-thumb.webp'))
             self.assertTrue((ROOT / link.get_attribute('href')).is_file())
+
+    def test_visible_return_links_preserve_home_section_and_language(self):
+        page = self.page()
+        self.ready(page)
+        back = page.locator('.progress-return')
+        expect(back).to_be_visible()
+        self.assertLess(back.bounding_box()['y'], 250)
+        expect(back).to_have_attribute('href', 'index.html#in-progress')
+        page.locator('#langSwitch').click()
+        expect(back).to_have_attribute('href', 'index.html?lang=en#in-progress')
+        back.click()
+        expect(page).to_have_url(BASE + '/index.html?lang=en#in-progress')
+        expect(page.locator('#in-progress')).to_be_in_viewport()
+
+    def test_browser_back_closes_picture_before_returning_home(self):
+        page = self.page()
+        page.goto(BASE + '/index.html?lang=en#in-progress')
+        page.locator('#in-progress [data-progress-link]').click()
+        first = page.locator('.progress-gallery a').first
+        first.click()
+        expect(page.locator('#progressViewerClose')).to_contain_text('Back to images')
+        page.keyboard.press('ArrowRight')
+        expect(page.locator('#progressViewerPosition')).to_have_text('02 / 15')
+        page.go_back()
+        expect(page.locator('#progressViewer')).not_to_be_visible()
+        expect(first).to_be_focused()
+        expect(page.locator('body')).not_to_have_class(re.compile(r'\bmodal-open\b'))
+        self.assertIn('in-progress.html', page.url)
+        page.go_forward()
+        expect(page.locator('#progressViewer')).to_be_visible()
+        expect(page.locator('#progressViewerPosition')).to_have_text('02 / 15')
+        expect(page.locator('#progressViewerTitle')).to_have_text('Xu Zhiwei')
+        page.locator('#progressViewerClose').click()
+        expect(page.locator('#progressViewer')).not_to_be_visible()
+        page.locator('#langSwitch').click()
+        first.click()
+        expect(page.locator('#progressViewerClose')).to_contain_text('返回图集')
+        page.keyboard.press('Escape')
+        page.keyboard.press('Escape')
+        expect(page.locator('#progressViewer')).not_to_be_visible()
+        page.go_back()
+        expect(page).to_have_url(BASE + '/index.html?lang=en#in-progress')
+
+    def test_home_image_browser_back_and_rapid_reopen_keep_the_page(self):
+        page = self.page()
+        page.goto(BASE + '/index.html#in-progress')
+        first = page.locator('.home-progress-card').first
+        first.click()
+        expect(page.locator('#stillViewer')).to_be_visible()
+        page.keyboard.press('ArrowRight')
+        page.go_back()
+        expect(page.locator('#stillViewer')).not_to_be_visible()
+        expect(first).to_be_focused()
+        page.go_forward()
+        expect(page.locator('#stillViewerPosition')).to_have_text('02 / 09')
+        expect(page.locator('#stillViewerTitle')).to_have_text('高空投送')
+        page.keyboard.press('Escape')
+        expect(page.locator('#stillViewer')).not_to_be_visible()
+        first.click()
+        page.keyboard.press('Escape')
+        first.click()
+        expect(page.locator('#stillViewer')).to_be_visible()
+        page.locator('#stillViewerClose').click()
+        expect(page.locator('#stillViewer')).not_to_be_visible()
+        expect(page.locator('#in-progress')).to_be_in_viewport()
+
+    def test_motion_library_failure_keeps_navigation_and_images_usable(self):
+        page = self.page()
+        page.emulate_media(reduced_motion='no-preference')
+        page.route('**/assets/vendor/gsap-3.15.0/**', lambda route: route.abort())
+        self.ready(page)
+        expect(page.locator('.progress-return')).to_be_visible()
+        first = page.locator('.progress-gallery a').first
+        first.click()
+        expect(page.locator('#progressViewer')).to_be_visible()
+        page.locator('#progressViewerClose').click()
+        expect(page.locator('#progressViewer')).not_to_be_visible()
+        expect(first).to_be_focused()
+
+    def test_production_motion_responds_to_hover_and_reduces_cleanly(self):
+        page = self.page()
+        page.emulate_media(reduced_motion='no-preference')
+        self.ready(page)
+        expect(page.locator('html')).to_have_class(re.compile(r'\bproduction-motion\b'))
+        link = page.locator('.progress-gallery a').first
+        link.scroll_into_view_if_needed()
+        link.hover(position={'x': 20, 'y': 20})
+        page.wait_for_function('getComputedStyle(document.querySelector(".progress-gallery a")).transform !== "none"')
+        captures = os.environ.get('PROGRESS_CAPTURE_DIR')
+        if captures:
+            page.screenshot(path=str(Path(captures) / 'motion-hover.png'))
+        first = page.locator('.progress-gallery img').first
+        first.evaluate('image=>image.decode()')
+        link.click()
+        page.wait_for_function('document.querySelector("#progressViewerImage").naturalWidth > 0')
+        if captures:
+            expect(page.locator('#progressViewerImage')).to_be_visible()
+            page.screenshot(path=str(Path(captures) / 'motion-viewer.png'))
+        page.locator('#progressNext').click()
+        expect(page.locator('#progressViewerTitle')).to_have_text('许知微')
+        page.keyboard.press('Escape')
+        page.emulate_media(reduced_motion='reduce')
+        expect(page.locator('html')).not_to_have_class(re.compile(r'\bproduction-motion\b'))
+        self.assertTrue(page.locator('.progress-gallery figure').evaluate_all('nodes=>nodes.every(node=>getComputedStyle(node).visibility!=="hidden" && getComputedStyle(node).opacity==="1")'))
 
     def test_top_work_navigation_dropdown_closes_and_restores_keyboard_focus(self):
         page = self.page()

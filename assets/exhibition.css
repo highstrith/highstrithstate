@@ -162,6 +162,9 @@
 .site-notice { position: fixed; z-index: 90; bottom: max(24px, env(safe-area-inset-bottom)); left: 50%; transform: translate(-50%, 12px); width: max-content; max-width: calc(100vw - 32px); padding: 12px 20px; color: var(--paper); background: var(--ink); font-size: 12px; line-height: 1.6; text-align: center; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; }
 .site-notice.is-visible { opacity: 1; transform: translate(-50%, 0); }
 .work-player { border-radius: 6px; }
+.gallery-return-button { display: inline-flex; align-items: center; gap: 10px; font-size: 12px; padding-inline: 8px; white-space: nowrap; }
+.gallery-close-icon { font-size: 23px; line-height: 1; }
+.production-motion .still-viewer[open] { animation: none; }
 .work-player.is-portrait { width: min(420px, calc(100vw - 32px)); height: min(900px, calc(100dvh - 32px)); max-height: calc(100dvh - 32px); }
 .work-player.is-portrait[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
 .work-player.is-portrait .player-header, .work-player.is-portrait .player-footer { padding: 16px 20px; }
