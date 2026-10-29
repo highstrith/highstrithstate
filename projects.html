@@ -17,8 +17,9 @@
   <link rel="apple-touch-icon" href="assets/studio-mark.svg?v=20261008-n">
   <link rel="manifest" href="assets/site.webmanifest">
   <link rel="stylesheet" href="assets/base.css?v=20261023-optimize">
-  <link rel="stylesheet" href="assets/studio.css?v=20261023-optimize">
+  <link rel="stylesheet" href="assets/studio.css?v=20261029-gallery2">
   <link rel="stylesheet" href="assets/projects.css?v=20261023-optimize">
+  <link rel="stylesheet" href="assets/exhibition.css?v=20261029-gallery2">
 </head>
 <body>
   <a class="skip-link" href="#projects" data-cn="跳转到项目" data-en="Skip to projects">跳转到项目</a>
@@ -27,13 +28,14 @@
       <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V5h4.8l4.7 6.1V5H19v14h-4.5l-5-6.5V19H5Z"/></svg>
       <span>Highstrith<span class="brand-cn">橘小桔</span></span>
     </a>
-    <nav aria-label="主导航" data-cn-label="主导航" data-en-label="Main navigation" class="main-nav">
+    <nav id="mainNavigation" aria-label="主导航" data-cn-label="主导航" data-en-label="Main navigation" class="main-nav">
       <a href="index.html#works" data-home-link data-cn="作品" data-en="Works">作品</a>
+      <a href="index.html#stills" data-home-link data-cn="画面截图" data-en="Stills">画面截图</a>
       <a href="projects.html" aria-current="page" data-cn="项目与应用" data-en="Projects">项目与应用</a>
       <a href="index.html#about" data-home-link data-cn="关于" data-en="About">关于</a>
       <a href="index.html#contact" data-home-link data-cn="联系" data-en="Contact">联系</a>
     </nav>
-    <div class="header-actions"><button id="langSwitch" type="button" aria-label="Switch to English" aria-pressed="false">EN</button></div>
+    <div class="header-actions"><button id="langSwitch" type="button" aria-label="Switch to English" aria-pressed="false">EN</button><button id="menuToggle" class="menu-toggle" type="button" aria-controls="mainNavigation" aria-expanded="false" hidden><span class="menu-icon" aria-hidden="true"></span><span data-menu-label>菜单</span></button></div>
   </header>
   <main id="projects" class="projects-main page-width">
     <div class="projects-heading">
@@ -81,5 +83,6 @@
   </main>
   <footer class="site-footer page-width projects-footer"><div class="footer-top"><span>© <span id="copyrightYear">2026</span> Highstrith · 橘小桔</span><div style="display:inline-flex;gap:18px;"><a href="resume.html" data-resume-link data-cn="创作者档案" data-en="Creator Resume">创作者档案</a><a href="index.html" data-home-link data-cn="返回影像作品集" data-en="Back to the film portfolio">返回影像作品集</a></div></div></footer>
   <script src="assets/projects.js?v=20261022-projects"></script>
+  <script src="assets/site-shell.js?v=20261029-gallery2"></script>
 </body>
 </html>

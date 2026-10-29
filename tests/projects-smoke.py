@@ -13,7 +13,7 @@ class ProjectPages(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.runtime = sync_playwright().start()
-        cls.browser = cls.runtime.chromium.launch(headless=True)
+        cls.browser = cls.runtime.chromium.launch(channel=os.environ.get('STUDIO_BROWSER_CHANNEL', 'chrome'), headless=True)
 
     @classmethod
     def tearDownClass(cls):
@@ -27,6 +27,7 @@ class ProjectPages(unittest.TestCase):
         self.page.on('pageerror', lambda error: self.errors.append(str(error)))
 
     def tearDown(self):
+        self.context.unroute_all(behavior='ignoreErrors')
         self.context.close()
 
     def test_home_navigation_opens_distinct_project_page(self):
@@ -37,7 +38,7 @@ class ProjectPages(unittest.TestCase):
         expect(self.page.get_by_role('heading', name='AI 无限画布', exact=True)).to_be_visible()
         expect(self.page.get_by_role('heading', name='积分比价系统', exact=True)).to_be_visible()
         expect(self.page.get_by_role('heading', name='AA 计算器', exact=True)).to_be_visible()
-        self.assertTrue(self.page.locator('.project-preview img').evaluate_all('(images) => images.every(image => image.complete && image.naturalWidth > 0)'))
+        self.page.wait_for_function('Array.from(document.querySelectorAll(".project-preview img")).every(image => image.complete && image.naturalWidth > 0)')
         self.assertEqual(self.errors, [])
 
     def test_comparison_entry_opens_working_self_contained_app(self):

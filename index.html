@@ -17,8 +17,9 @@
   <link rel="icon" type="image/svg+xml" href="assets/studio-mark.svg?v=20261008-n">
   <link rel="apple-touch-icon" href="assets/studio-mark.svg?v=20261008-n">
   <link rel="manifest" href="assets/site.webmanifest">
-  <link rel="stylesheet" href="assets/base.css?v=20261023-optimize">
-  <link rel="stylesheet" href="assets/studio.css?v=20261023-optimize">
+  <link rel="stylesheet" href="assets/base.css?v=20261029-stills">
+  <link rel="stylesheet" href="assets/studio.css?v=20261029-gallery2">
+  <link rel="stylesheet" href="assets/exhibition.css?v=20261029-gallery2">
 </head>
 <body>
   <a class="skip-link" href="#works" data-i18n="skip">跳转到作品</a>
@@ -27,8 +28,9 @@
       <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V5h4.8l4.7 6.1V5H19v14h-4.5l-5-6.5V19H5Z"/></svg>
       <span>Highstrith<span class="brand-cn">橘小桔</span></span>
     </a>
-    <nav aria-label="主导航" class="main-nav">
+    <nav id="mainNavigation" aria-label="主导航" class="main-nav">
       <a href="#works" data-i18n="navWorks">作品</a>
+      <a href="#stills" data-i18n="navStills">画面截图</a>
       <a href="projects.html" data-projects-link data-i18n="navProjects">项目与应用</a>
       <a href="#about" data-i18n="navAbout">关于</a>
       <a href="#contact" data-i18n="navContact">联系</a>
@@ -36,21 +38,22 @@
     <div class="header-actions">
       <a id="adminEntryLink" href="admin.html" data-i18n="admin" hidden>作品管理</a>
       <button id="langSwitch" type="button" aria-label="Switch to English" aria-pressed="false">EN</button>
+      <button id="menuToggle" class="menu-toggle" type="button" aria-controls="mainNavigation" aria-expanded="false" hidden><span class="menu-icon" aria-hidden="true"></span><span data-menu-label>菜单</span></button>
     </div>
   </header>
   <main id="home">
     <section class="hero page-width" aria-labelledby="heroTitle">
       <div class="hero-intro">
-        <div class="hero-title-wrap">
+        <div class="hero-title-wrap" data-reveal>
           <p class="intro-name" data-i18n="intro">独立影像创作者 · 南京</p>
-          <h1 id="heroTitle" data-i18n="heroTitle">想象，在此成片</h1>
+          <h1 id="heroTitle" data-i18n="heroTitle" data-lines>想象，在此成片</h1>
         </div>
-        <div class="hero-description">
+        <div class="hero-description" data-reveal>
           <p data-i18n="heroDesc">用三维构建世界，用影像讲述故事。<br>从一个念头，到让人记住的画面。</p>
           <a class="text-link" href="#works"><span data-i18n="explore">探索作品</span></a>
         </div>
       </div>
-      <div class="hero-feature">
+      <div class="hero-feature" data-reveal="scale">
         <div class="feature-screen">
         <img id="heroPoster" class="hero-poster" alt="重置日作品画面" fetchpriority="high" src="assets/optimized-images/9f50ee24bfd4004e-a0066563-480w.webp" srcset="assets/optimized-images/9f50ee24bfd4004e-a0066563-160w.webp 160w, assets/optimized-images/9f50ee24bfd4004e-a0066563-480w.webp 480w, assets/optimized-images/9f50ee24bfd4004e-a0066563-960w.webp 960w, assets/optimized-images/9f50ee24bfd4004e-a0066563-1600w.webp 1600w" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) calc(100vw - 64px), (max-width: 1696px) calc(100vw - 96px), 1600px" width="480" height="270" data-image-source="assets/uploads/posters/reset-day-20261007-16x9.png">
         <video id="heroPreview" autoplay muted playsinline preload="none" aria-hidden="true"></video>
@@ -58,13 +61,17 @@
         <div class="feature-top"><span data-i18n="selected">精选放映</span><span id="featurePosition">01 / 05</span></div>
         <button class="feature-play" type="button" data-hero-play aria-label="播放重置日"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 11 7-11 7z"/></svg><span data-i18n="watch">观看完整作品</span></button>
         </div>
-        <div class="feature-bottom"><div class="feature-info"><span id="featureCategory">剧情 / AI 短片</span><h2 id="featureTitle">重置日</h2></div><div class="feature-controls" id="featureControls" aria-label="选择精选作品"></div></div>
+        <div class="feature-bottom">
+          <div class="feature-info"><span id="featureCategory">剧情 / AI 短片</span><h2 id="featureTitle">重置日</h2><p id="featureDescription"></p></div>
+          <div class="feature-controls" id="featureControls" aria-label="选择精选作品"></div>
+          <div class="feature-preview-control"><span data-i18n="previewNote">静音片段预览</span><button id="featurePreviewToggle" type="button" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path class="pause-symbol" d="M7 5v10M13 5v10"/><path class="resume-symbol" d="m7 4 9 6-9 6Z"/></svg><span id="featurePreviewLabel">暂停预览</span></button></div>
+        </div>
       </div>
       <div class="hero-foot"><span data-i18n="discipline">AI 影像 / 三维动画 / 动态视觉 / 剪辑</span><a href="#works" aria-label="向下浏览作品"><span data-i18n="scroll">向下发现更多</span></a></div>
     </section>
     <section class="works-section page-width" id="works" aria-labelledby="worksTitle">
-      <div class="section-heading"><div><p class="section-label" data-i18n="portfolio">每个画面，都有来处</p><h2 id="worksTitle" data-i18n="worksTitle">作品集</h2></div><p class="works-intro" data-i18n="worksIntro">一些故事，一些实验。<br>在不同的媒介里，寻找自己的表达。</p></div>
-      <div class="works-toolbar">
+      <div class="section-heading"><div data-reveal><p class="section-label" data-i18n="portfolio">每个画面，都有来处</p><h2 id="worksTitle" data-i18n="worksTitle" data-lines>作品集</h2></div><p class="works-intro" data-i18n="worksIntro" data-reveal>一些故事，一些实验。<br>在不同的媒介里，寻找自己的表达。</p></div>
+      <div class="works-toolbar" data-reveal>
         <div class="work-filters" id="workFilters" role="group" aria-label="作品分类">
           <button type="button" data-filter="all" aria-pressed="true"><span data-i18n="all">全部作品</span><span class="filter-total">14</span></button>
           <button type="button" data-filter="story" aria-pressed="false" data-i18n="story">叙事短片</button>
@@ -73,7 +80,7 @@
         </div>
         <label class="work-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5 5"/></svg><input id="workSearch" type="search" placeholder="寻找一部作品" aria-label="搜索作品" autocomplete="off"></label>
       </div>
-      <p id="worksCount" class="result-count" role="status" aria-live="polite">14 部作品</p>
+      <div class="works-viewbar"><p id="worksCount" class="result-count" role="status" aria-live="polite">14 部作品</p><div class="view-switch" role="group" aria-label="作品视图" id="viewSwitch"><button type="button" data-view="gallery" aria-pressed="true" aria-label="画廊视图"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3h9v6H2zM14 3h4v6h-4zM2 12h4v5H2zM9 12h9v5H9z"/></svg><span data-i18n="galleryView">画廊</span></button><button type="button" data-view="list" aria-pressed="false" aria-label="目录视图"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 4h3v3H2zM8 5h10M2 12h3v3H2zM8 13h10"/></svg><span data-i18n="listView">目录</span></button></div></div>
       <div class="works-grid" id="worksGrid"></div>
       <div class="empty-state" id="emptyState" hidden><h3 data-i18n="empty">还没有找到这部作品</h3><p data-i18n="emptyHint">试试其他关键词，或查看全部作品。</p><button id="resetFilters" type="button" class="button button-dark" data-i18n="reset">查看全部作品</button></div>
       <noscript>
@@ -98,16 +105,36 @@
           <!-- generated-works:end -->
       </noscript>
     </section>
+    <section class="stills-section page-width" id="stills" aria-labelledby="stillsTitle">
+      <div class="section-heading"><div data-reveal><p class="section-label" data-i18n="stillsLabel">画面定格</p><h2 id="stillsTitle" data-i18n="stillsTitle" data-lines>作品截图</h2></div><p class="works-intro" data-i18n="stillsIntro" data-reveal>过往创作留下的画面，<br>记录不同阶段的光线与情绪。</p></div>
+      <div class="stills-grid" id="stillsGrid"></div>
+      <noscript>
+        <div class="stills-grid">
+          <figure class="still-card"><div class="still-media"><img src="assets/stills/nezha-boy.jpg" alt="月下少年 · 作品截图" loading="lazy" width="480" height="300"></div><figcaption><h3>月下少年</h3><p>国风角色三维渲染：月夜水面，少年执枪而立。</p></figcaption></figure>
+          <figure class="still-card"><div class="still-media"><img src="assets/stills/jade-blades.jpg" alt="翡翠之刃 · 作品截图" loading="lazy" width="480" height="300"></div><figcaption><h3>翡翠之刃</h3><p>玉石质感与玫瑰金相结合的奇幻武器设计。</p></figcaption></figure>
+          <figure class="still-card"><div class="still-media"><img src="assets/stills/frost-rune-sword.jpg" alt="寒渊符文剑 · 作品截图" loading="lazy" width="480" height="300"></div><figcaption><h3>寒渊符文剑</h3><p>冰晶符文巨剑的三视图渲染展示。</p></figcaption></figure>
+          <figure class="still-card"><div class="still-media"><img src="assets/stills/wasteland-dagger.jpg" alt="废土之刃 · 作品截图" loading="lazy" width="480" height="300"></div><figcaption><h3>废土之刃</h3><p>扳手改造匕首的写实 PBR 材质练习。</p></figcaption></figure>
+          <figure class="still-card"><div class="still-media"><img src="assets/uploads/posters/reset-day-20261007-16x9.png" alt="重置日 · 画面截图" loading="lazy" width="480" height="270"></div><figcaption><h3>重置日 · 归零之后</h3><p>画面里的一束光，落在重新开始的那一刻。</p></figcaption></figure>
+          <figure class="still-card"><div class="still-media"><img src="assets/uploads/posters/lying-down-20261001-16x9.png" alt="趴着办公早该知道 · 画面截图" loading="lazy" width="480" height="270"></div><figcaption><h3>趴着办公早该知道 · 床式工位</h3><p>一本正经的喜剧，藏在最日常的构图里。</p></figcaption></figure>
+          <figure class="still-card"><div class="still-media"><img src="assets/posters/creative-3.jpg" alt="动作预演 · 画面截图" loading="lazy" width="480" height="270"></div><figcaption><h3>动作预演 · 一个转身</h3><p>角色动作与镜头节奏的一次练习。</p></figcaption></figure>
+          <figure class="still-card"><div class="still-media"><img src="assets/posters/render-test.jpg" alt="能量实验 · 画面截图" loading="lazy" width="480" height="270"></div><figcaption><h3>能量实验 · 火焰材质</h3><p>火焰与能量材质的动态渲染实验。</p></figcaption></figure>
+        </div>
+      </noscript>
+    </section>
+    <section class="tools-preview page-width" aria-labelledby="toolsTitle">
+      <div class="tools-preview-copy" data-reveal><p class="section-label" data-i18n="toolsLabel">创作之外，也造工具</p><h2 id="toolsTitle" data-i18n="toolsTitle">让想法，顺手发生</h2><p data-i18n="toolsIntro">从 AI 画布到日常计算，把自己的需要做成可以使用的应用。</p><a class="text-link" href="projects.html" data-projects-link data-i18n="toolsExplore">查看项目与应用</a></div>
+      <a class="tools-preview-image" href="projects.html" data-projects-link data-reveal><img src="assets/projects/ai-infinite-canvas-preview.webp" alt="AI 无限画布界面" data-tool-image loading="lazy" width="960" height="624"><span data-i18n="toolFeatured">AI 无限画布</span></a>
+    </section>
     <section class="about-section" id="about" aria-labelledby="aboutTitle">
       <div class="about-layout page-width">
-        <div class="about-portrait"><img class="hero-avatar" alt="橘小桔的数字人形象" loading="lazy" src="assets/optimized-images/70e3ae512b666f5e-a0066563-480w.webp" srcset="assets/optimized-images/70e3ae512b666f5e-a0066563-160w.webp 160w, assets/optimized-images/70e3ae512b666f5e-a0066563-480w.webp 480w, assets/optimized-images/70e3ae512b666f5e-a0066563-960w.webp 960w, assets/optimized-images/70e3ae512b666f5e-a0066563-1600w.webp 1600w" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) 40vw, (max-width: 1696px) 43vw, 684px" width="480" height="643" data-image-source="assets/hero-digital-human-full.jpg"><span class="portrait-caption" data-i18n="portrait">我的数字人形象</span></div>
-        <div class="about-content"><p class="section-label" data-i18n="aboutLabel">镜头背后</p><h2 id="aboutTitle" data-i18n="aboutTitle">创作的起点，<br>是好奇心</h2><p class="about-lead" data-i18n="aboutLead">你好，我是橘小桔，也叫 Highstrith。</p><p data-i18n="aboutCopy">我在南京，创作 AI 短片、三维动画和动态影像。从脚本、角色到剪辑与成片，我喜欢把不同的工具放在一起，让脑海里的世界有自己的光线、节奏和情绪。</p><p data-i18n="aboutSecond">这里既有完整的故事，也有尚在探索的视觉实验。比起固定的风格，我更在意每一次创作是否带来新的表达。</p><div class="practice-list"><span data-i18n="practiceOne">故事与影像</span><span data-i18n="practiceTwo">三维与角色</span><span data-i18n="practiceThree">剪辑与后期</span></div><div style="display:inline-flex;gap:24px;align-items:center;flex-wrap:wrap;"><a class="text-link" href="#contact"><span data-i18n="aboutContact">聊聊你的想法</span></a><a class="text-link" href="resume.html" data-resume-link target="_blank" rel="noopener noreferrer"><span data-i18n="aboutResume">创作者档案与简历</span></a></div></div>
+        <div class="about-portrait" data-reveal="scale"><img class="hero-avatar" alt="橘小桔的数字人形象" loading="lazy" src="assets/optimized-images/70e3ae512b666f5e-a0066563-480w.webp" srcset="assets/optimized-images/70e3ae512b666f5e-a0066563-160w.webp 160w, assets/optimized-images/70e3ae512b666f5e-a0066563-480w.webp 480w, assets/optimized-images/70e3ae512b666f5e-a0066563-960w.webp 960w, assets/optimized-images/70e3ae512b666f5e-a0066563-1600w.webp 1600w" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) 40vw, (max-width: 1696px) 43vw, 684px" width="480" height="643" data-image-source="assets/hero-digital-human-full.jpg"><span class="portrait-caption" data-i18n="portrait">我的数字人形象</span></div>
+        <div class="about-content" data-reveal><p class="section-label" data-i18n="aboutLabel">镜头背后</p><h2 id="aboutTitle" data-i18n="aboutTitle" data-lines>创作的起点，<br>是好奇心</h2><p class="about-lead" data-i18n="aboutLead">你好，我是橘小桔，也叫 Highstrith。</p><p data-i18n="aboutCopy">我在南京，创作 AI 短片、三维动画和动态影像。从脚本、角色到剪辑与成片，我喜欢把不同的工具放在一起，让脑海里的世界有自己的光线、节奏和情绪。</p><p data-i18n="aboutSecond">这里既有完整的故事，也有尚在探索的视觉实验。比起固定的风格，我更在意每一次创作是否带来新的表达。</p><div class="practice-list"><span data-i18n="practiceOne">故事与影像</span><span data-i18n="practiceTwo">三维与角色</span><span data-i18n="practiceThree">剪辑与后期</span></div><div style="display:inline-flex;gap:24px;align-items:center;flex-wrap:wrap;"><a class="text-link" href="#contact"><span data-i18n="aboutContact">聊聊你的想法</span></a><a class="text-link" href="resume.html" data-resume-link target="_blank" rel="noopener noreferrer"><span data-i18n="aboutResume">创作者档案与简历</span></a></div></div>
       </div>
     </section>
     <section class="contact-section page-width" id="contact" aria-labelledby="contactTitle">
-      <div class="contact-top"><p class="section-label" data-i18n="contactLabel">从一句「我有个想法」开始</p><span class="location" data-i18n="location">中国 · 南京</span></div>
-      <h2 id="contactTitle" data-i18n="contactTitle">下一个画面，<br>一起完成</h2>
-      <div class="contact-bottom"><a class="contact-email" href="mailto:highstrith@gmail.com">highstrith@gmail.com</a><div class="contact-details"><a href="tel:+8618020169750">+86 180 2016 9750</a><span data-i18n="wechatAccount">微信 Gw1sgdsj_787</span></div></div>
+      <div class="contact-top" data-reveal><p class="section-label" data-i18n="contactLabel">从一句「我有个想法」开始</p><span class="location" data-i18n="location">中国 · 南京</span></div>
+      <h2 id="contactTitle" data-i18n="contactTitle" data-lines data-reveal>下一个画面，<br>一起完成</h2>
+      <div class="contact-bottom" data-reveal><div class="contact-email-group"><a class="contact-email" href="mailto:highstrith@gmail.com">highstrith@gmail.com</a><button id="copyEmail" class="copy-email" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1"/><path d="M12 4V2H2v10h2"/></svg><span data-i18n="copyEmail">复制邮箱</span></button></div><div class="contact-details"><a href="tel:+8618020169750">+86 180 2016 9750</a><span data-i18n="wechatAccount">微信 Gw1sgdsj_787</span></div></div>
       <div class="social-row"><span class="social-label" data-i18n="elsewhere">也可以在这里找到我</span><div class="social-links">
         <button type="button" data-qr-image="assets/social/wechat-qr.png" data-qr-title="微信" data-qr-en="WeChat" data-qr-account="Gw1sgdsj_787"><span class="social-name" data-i18n="wechat">微信</span><span class="social-hint" data-i18n="scanShort">扫码查看</span></button>
         <button type="button" data-qr-image="assets/social/douyin-qr.png" data-qr-title="抖音" data-qr-en="Douyin" data-qr-account="Gw1sgdsj_787"><span class="social-name" data-i18n="douyin">抖音</span><span class="social-hint" data-i18n="scanShort">扫码查看</span></button>
@@ -133,6 +160,12 @@
     <div class="player-footer"><div class="player-copy"><p id="playerDescription"></p><div id="playerSoftware" class="work-software" hidden></div></div><span data-i18n="playerHint">Esc 关闭</span></div>
   </dialog>
   <dialog id="social-qr-dialog" class="qr-dialog" aria-labelledby="social-qr-title"><button type="button" id="socialQrClose" class="icon-button" aria-label="关闭二维码">×</button><h2 id="social-qr-title">微信</h2><p id="social-qr-account">Gw1sgdsj_787</p><img id="social-qr-image" alt="微信二维码"><p class="qr-instruction" data-i18n="qrHint">打开对应 App 扫码，和我打个招呼</p></dialog>
+  <dialog id="stillViewer" class="still-viewer" aria-labelledby="stillViewerTitle" aria-describedby="stillViewerDescription">
+    <div class="still-viewer-header"><span id="stillViewerPosition" aria-live="polite"></span><div class="still-viewer-actions"><button type="button" id="stillZoom" aria-pressed="false" class="viewer-button"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5 5M7 10h6M10 7v6"/></svg><span data-i18n="zoomImage">放大查看</span></button><button id="stillViewerClose" class="icon-button" type="button" aria-label="关闭图片浏览">×</button></div></div>
+    <div class="still-viewer-stage" id="stillViewerStage"><img id="stillViewerImage" alt=""><p id="stillViewerStatus" role="status"></p></div>
+    <div class="still-viewer-footer"><div class="still-viewer-caption"><h2 id="stillViewerTitle"></h2><p id="stillViewerDescription"></p></div><div class="still-viewer-nav"><button type="button" id="stillPrevious" class="viewer-button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 5-7 7 7 7"/></svg><span data-i18n="previousImage">上一张</span></button><button type="button" id="stillNext" class="viewer-button"><span data-i18n="nextImage">下一张</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 5 7 7-7 7"/></svg></button></div></div>
+  </dialog>
+  <div id="siteNotice" class="site-notice" role="status" aria-live="polite" aria-atomic="true"></div>
   <div id="social-qr-preview" class="qr-preview" hidden aria-hidden="true"><img alt=""><p></p></div>
   <!-- generated-images:start -->
   <script>const posterImageData = {
@@ -650,6 +683,8 @@
       ];
   </script>
   <script src="assets/comment-config.js?v=20261010-comments" defer></script>
-  <script src="assets/studio.js?v=20261022-cursor" defer></script>
+  <script src="assets/scroll-reveal.js?v=20261029-gallery2" defer></script>
+  <script src="assets/studio.js?v=20261029-gallery2" defer></script>
+  <script src="assets/site-shell.js?v=20261029-gallery2" defer></script>
 </body>
 </html>

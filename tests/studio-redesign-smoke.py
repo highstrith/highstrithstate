@@ -113,7 +113,11 @@ class StudioRedesign(unittest.TestCase):
     def page(self, **options):
         page = self.browser.new_page(**options)
         page.set_default_timeout(8000)
-        self.addCleanup(page.close)
+        def close_page():
+            if not page.is_closed():
+                page.unroute_all(behavior="ignoreErrors")
+                page.close()
+        self.addCleanup(close_page)
         return page
 
     def ready(self, page, url=None):
@@ -844,6 +848,7 @@ class StudioRedesign(unittest.TestCase):
                 expect(page.locator("#social-qr-dialog")).to_be_visible()
                 image = page.locator("#social-qr-dialog img")
                 expect(image).to_be_visible()
+                image.evaluate("img => img.decode()")
                 self.assertTrue(image.evaluate("img => img.complete && img.naturalWidth > 0"))
                 page.keyboard.press("Escape")
                 expect(qr).to_be_focused()
@@ -874,7 +879,7 @@ class StudioRedesign(unittest.TestCase):
         self.assert_playing(page, VISIBLE[0].get("webVideo") or VISIBLE[0]["video"])
         nojs = self.page(viewport={"width": 390, "height": 844}, java_script_enabled=False)
         nojs.route("https://studio.example/**", static_route)
-        nojs.goto(public, wait_until="domcontentloaded")
+        nojs.goto(public, wait_until="load")
         expect(nojs.locator(".no-js-work")).to_have_count(len(VISIBLE))
         expect(nojs.locator(".no-js-work").first).to_be_visible()
         for index, work in enumerate(VISIBLE):

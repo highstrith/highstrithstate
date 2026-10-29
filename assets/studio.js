@@ -41,6 +41,12 @@
       comment: '评论', commentClose: '收起评论', commentCount: '条评论',
       commentFailed: '评论暂时加载不出来，请稍后再试。',
       softwareTools: '熟练使用的软件', madeWith: '制作软件',
+      navStills: '画面截图', stillsLabel: '画面定格', stillsTitle: '作品截图',
+      stillsIntro: '过往创作留下的画面，\n记录不同阶段的光线与情绪。',
+      galleryView: '画廊', listView: '目录', previewNote: '静音片段预览', pausePreview: '暂停预览', resumePreview: '继续预览',
+      toolsLabel: '创作之外，也造工具', toolsTitle: '让想法，顺手发生', toolsIntro: '从 AI 画布到日常计算，把自己的需要做成可以使用的应用。', toolsExplore: '查看项目与应用', toolFeatured: 'AI 无限画布',
+      viewImage: '查看大图', zoomImage: '放大查看', fitImage: '适应画面', previousImage: '上一张', nextImage: '下一张', closeImage: '关闭图片浏览',
+      imageLoading: '正在加载图片…', imageError: '图片暂时无法加载，请切换其他图片后重试。', copyEmail: '复制邮箱', emailCopied: '邮箱已复制', emailCopyFailed: '请手动复制：highstrith@gmail.com',
     },
     en: {
       skip: 'Skip to works', navWorks: 'Works', navProjects: 'Projects', navResume: 'Resume', navAbout: 'About', navContact: 'Contact', admin: 'Manage works',
@@ -71,10 +77,58 @@
       comment: 'Comments', commentClose: 'Hide comments', commentCount: 'comments',
       commentFailed: 'Comments could not be loaded right now. Please try again later.',
       softwareTools: 'Tools I work with', madeWith: 'Made with',
+      navStills: 'Stills', stillsLabel: 'Frozen frames', stillsTitle: 'Stills',
+      stillsIntro: 'Frames left behind by past works,\ncapturing light and mood at different stages.',
+      galleryView: 'Gallery', listView: 'Directory', previewNote: 'Silent film excerpts', pausePreview: 'Pause preview', resumePreview: 'Resume preview',
+      toolsLabel: 'Making tools, too', toolsTitle: 'Room for your ideas', toolsIntro: 'From an AI canvas to everyday calculations, small apps built around real needs.', toolsExplore: 'Explore projects & apps', toolFeatured: 'AI infinite canvas',
+      viewImage: 'View full image', zoomImage: 'Zoom in', fitImage: 'Fit to screen', previousImage: 'Previous', nextImage: 'Next', closeImage: 'Close image viewer',
+      imageLoading: 'Loading image…', imageError: 'This image could not be loaded. Switch to another image and try again.', copyEmail: 'Copy email', emailCopied: 'Email copied', emailCopyFailed: 'Copy this address: highstrith@gmail.com',
     },
   };
 
+  // 画面定格（作品截图）数据。替换图片时，把 image 换成新文件路径即可；
+  // 如需增减条目，直接在此数组增删对象，页面会自动重排。
+  const stillFrames = [
+    { image: 'assets/stills/nezha-boy.jpg', thumbnail: 'assets/stills/nezha-boy-preview.webp', cnTitle: '月下少年', enTitle: 'Boy Under the Moon', cnDesc: '国风角色三维渲染：月夜水面，少年执枪而立。', enDesc: 'A stylized 3D character render: a boy with his spear on the water under the moon.' },
+    { image: 'assets/stills/jade-blades.jpg', thumbnail: 'assets/stills/jade-blades-preview.webp', cnTitle: '翡翠之刃', enTitle: 'Jade Blades', cnDesc: '玉石质感与玫瑰金相结合的奇幻武器设计。', enDesc: 'Fantasy weapon design pairing jade-like blades with rose-gold fittings.' },
+    { image: 'assets/stills/frost-rune-sword.jpg', thumbnail: 'assets/stills/frost-rune-sword-preview.webp', cnTitle: '寒渊符文剑', enTitle: 'Frost Rune Sword', cnDesc: '冰晶符文巨剑的三视图渲染展示。', enDesc: 'A rune-etched greatsword presented in a three-view render.' },
+    { image: 'assets/stills/wasteland-dagger.jpg', thumbnail: 'assets/stills/wasteland-dagger-preview.webp', cnTitle: '废土之刃', enTitle: 'Wasteland Dagger', cnDesc: '扳手改造匕首的写实 PBR 材质练习。', enDesc: 'A realistic PBR study of a wrench-repurposed dagger.' },
+    { image: 'assets/uploads/posters/reset-day-20261007-16x9.png', cnTitle: '重置日 · 归零之后', enTitle: 'Reset Day · After the reset', cnDesc: '画面里的一束光，落在重新开始的那一刻。', enDesc: 'A beam of light landing on the moment everything starts over.' },
+    { image: 'assets/uploads/posters/lying-down-20261001-16x9.png', cnTitle: '趴着办公早该知道 · 床式工位', enTitle: 'Should Have Worked Lying Down · Bed desk', cnDesc: '一本正经的喜剧，藏在最日常的构图里。', enDesc: 'A straight-faced comedy hidden in an everyday composition.' },
+    { image: 'assets/posters/creative-3.jpg', cnTitle: '动作预演 · 一个转身', enTitle: 'Action Study · A turn', cnDesc: '角色动作与镜头节奏的一次练习。', enDesc: 'A study of character movement and camera rhythm.' },
+    { image: 'assets/posters/render-test.jpg', cnTitle: '能量实验 · 火焰材质', enTitle: 'Energy Study · Flame material', cnDesc: '火焰与能量材质的动态渲染实验。', enDesc: 'A motion render study of flame and energy materials.' },
+  ];
+
+  function renderStills() {
+    if (!stillsGrid) return;
+    stillsGrid.replaceChildren(...stillFrames.map((frame, index) => {
+      const title = language === 'cn' ? frame.cnTitle : frame.enTitle;
+      const desc = language === 'cn' ? frame.cnDesc : frame.enDesc;
+      const figure = create('figure', 'still-card');
+      figure.setAttribute('data-reveal', '');
+      const button = create('button', 'still-media');
+      button.type = 'button';
+      button.dataset.still = String(index);
+      button.setAttribute('aria-label', `${t('viewImage')}: ${title}`);
+      button.setAttribute('aria-haspopup', 'dialog');
+      const image = create('img');
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      setPosterImage(image, frame.thumbnail || frame.image, 'card');
+      image.alt = title;
+      image.width = index === 0 ? 270 : 480;
+      image.height = index === 0 ? 480 : 300;
+      button.append(image, create('span', 'still-open-hint', t('viewImage')));
+      button.addEventListener('click', () => openStill(index, button));
+      const caption = create('figcaption');
+      caption.append(create('h3', '', title), create('p', '', desc));
+      figure.append(button, caption);
+      return figure;
+    }));
+    window.StudioReveal?.refresh(stillsGrid);
+  }
   const grid = $('#worksGrid');
+  const stillsGrid = $('#stillsGrid');
   const filters = $('#workFilters');
   const search = $('#workSearch');
   const hero = $('.hero-feature');
@@ -92,6 +146,9 @@
   const musicButton = $('#musicToggle');
   const qrDialog = $('#social-qr-dialog');
   const qrPreview = $('#social-qr-preview');
+  const stillViewer = $('#stillViewer');
+  const stillImage = $('#stillViewerImage');
+  const stillStage = $('#stillViewerStage');
 
   let language = 'cn';
   let works = [];
@@ -116,6 +173,10 @@
   let activeQrButton = null;
   let qrReturnFocus = null;
   let hoveredQrButton = null;
+  let featurePaused = false;
+  let selectedStill = 0;
+  let stillReturnFocus = null;
+  let noticeTimer = 0;
 
   // 评论由腾讯云开发上的 Twikoo 提供。envId 留空时整段逻辑不启用，
   // 页面不会多渲染任何节点，也不会向外部请求任何脚本。
@@ -287,8 +348,10 @@
     closeComments();
     hoveredCard = null;
     focusedCard = null;
-    cardRecords = works.map((work) => {
+    cardRecords = works.map((work, index) => {
       const item = create('div', 'work-item');
+      item.setAttribute('data-reveal', '');
+      item.style.setProperty('--i', String(index % 2));
       const card = create('button', 'work-card');
       card.type = 'button';
       card.dataset.workId = work.id;
@@ -338,9 +401,11 @@
       return record;
     });
     grid?.replaceChildren(...cardRecords.map(({ item }) => item));
+    updateActiveNavigation();
     updateCardText();
     const total = $('.filter-total');
     if (total) total.textContent = String(works.length);
+    window.StudioReveal?.refresh(grid);
   }
 
   function updateCardText() {
@@ -362,6 +427,7 @@
     cardRecords.forEach((record) => {
       const visible = (currentFilter === 'all' || record.categories.has(currentFilter)) && (!query || record.query.includes(query));
       record.item.hidden = !visible;
+      if (visible) record.item.dataset.gallerySlot = String(count % 4);
       if (!visible && openCommentCard === record) closeComments();
       if (visible) count++;
     });
@@ -503,7 +569,9 @@
       image.loading = 'lazy';
       image.decoding = 'async';
       setPosterImage(image, work.poster, 'thumbnail');
-      button.append(image, create('span', '', String(index + 1).padStart(2, '0')));
+      const details = create('span', 'pick-copy');
+      details.append(create('span', 'pick-title', workTitle(work)), create('span', 'pick-category', workText(work, 'Sub')));
+      button.append(image, create('span', 'pick-number', String(index + 1).padStart(2, '0')), details);
       button.addEventListener('click', () => selectFeature(work.id));
       button.addEventListener('pointerenter', (event) => {
         if (event.pointerType === 'mouse') selectFeature(work.id);
@@ -539,18 +607,20 @@
     }
     if ($('#featureTitle')) $('#featureTitle').textContent = name;
     if ($('#featureCategory')) $('#featureCategory').textContent = workText(work, 'Sub');
+    if ($('#featureDescription')) $('#featureDescription').textContent = workText(work, 'Desc');
     if ($('#featurePosition')) $('#featurePosition').textContent = `${String(featuredWorks.indexOf(work) + 1).padStart(2, '0')} / ${String(featuredWorks.length).padStart(2, '0')}`;
     document.querySelectorAll('[data-hero-play]').forEach((button) => button.setAttribute('aria-label', `${t('watch')}: ${name}`));
     heroControls?.querySelectorAll('[data-feature]').forEach((button) => {
       const active = button.dataset.feature === selectedFeatureId;
       button.setAttribute('aria-pressed', String(active));
       button.classList.toggle('is-active', active);
+      if (!active) button.style.setProperty('--preview-progress', '0');
     });
     syncPreview();
   }
 
   function previewAllowed() {
-    return !reducedMotion.matches && !document.hidden && !player?.open && !qrDialog?.open;
+    return !reducedMotion.matches && !document.hidden && !player?.open && !qrDialog?.open && !stillViewer?.open;
   }
 
   function nearViewport(element) {
@@ -653,6 +723,8 @@
           container.classList.add('is-previewing');
         }
         if (!video.paused && !video.seeking && video.currentTime >= segmentStart + featurePreviewSeconds) advance();
+        const progress = Math.max(0, Math.min(1, (video.currentTime - segmentStart) / Math.min(featurePreviewSeconds, video.duration - segmentStart || featurePreviewSeconds)));
+        heroControls?.querySelector('[aria-pressed="true"]')?.style.setProperty('--preview-progress', String(progress));
       }, { signal: controller.signal });
       video.addEventListener('ended', advance, { signal: controller.signal });
     }
@@ -699,12 +771,12 @@
       : null;
     if (card) { startPreview(card.work, card.video, card.card); return; }
     const work = featuredWorks.find((item) => item.id === selectedFeatureId);
-    if (work && heroNearViewport && nearViewport(hero)) startPreview(work, heroVideo, hero);
+    if (work && !featurePaused && heroNearViewport && nearViewport(heroVideo)) startPreview(work, heroVideo, hero);
     else stopPreview();
   }
 
   function updateScrollLock() {
-    document.body.classList.toggle('modal-open', Boolean(player?.open || qrDialog?.open));
+    document.body.classList.toggle('modal-open', Boolean(player?.open || qrDialog?.open || stillViewer?.open));
   }
 
   function clearPlayerTimer() {
@@ -852,7 +924,7 @@
     if (!music) return;
     const generation = ++musicGeneration;
     updateMusicUI();
-    if (!musicWanted || document.hidden || player?.open || qrDialog?.open) {
+    if (!musicWanted || document.hidden || player?.open || qrDialog?.open || stillViewer?.open) {
       music.pause();
       return;
     }
@@ -916,7 +988,7 @@
 
   function setLanguage(nextLanguage) {
     language = nextLanguage;
-    document.querySelector('[data-projects-link]')?.setAttribute('href', language === 'en' ? 'projects.html?lang=en' : 'projects.html');
+    document.querySelectorAll('[data-projects-link]').forEach(link => link.setAttribute('href', language === 'en' ? 'projects.html?lang=en' : 'projects.html'));
     document.querySelectorAll('[data-resume-link]').forEach(el => {
       el.setAttribute('href', language === 'en' ? 'resume.html?lang=en' : 'resume.html');
     });
@@ -944,6 +1016,7 @@
     document.querySelector('.hero-foot a')?.setAttribute('aria-label', language === 'cn' ? '向下浏览作品' : 'Browse the works below');
     document.querySelector('.hero-avatar')?.setAttribute('alt', language === 'cn' ? '橘小桔的数字人形象' : 'The digital persona of Highstrith');
     document.title = language === 'cn' ? 'Highstrith · 橘小桔 — 影像与想象' : 'Highstrith · Film & imagination';
+    renderStills();
     updateCardText();
     renderHeroControls();
     updateHero();
@@ -952,10 +1025,157 @@
     updateQrDialog();
     if (hoveredQrButton) showQrPreview(hoveredQrButton);
     updateMusicUI();
+    updateExhibitionText();
+    window.StudioReveal?.relang(document);
   }
+
+  function updateExhibitionText() {
+    $('#viewSwitch')?.setAttribute('aria-label', language === 'cn' ? '作品视图' : 'Work views');
+    document.querySelector('[data-view="gallery"]')?.setAttribute('aria-label', language === 'cn' ? '画廊视图' : 'Gallery view');
+    document.querySelector('[data-view="list"]')?.setAttribute('aria-label', language === 'cn' ? '目录视图' : 'Directory view');
+    $('#featurePreviewLabel').textContent = t(featurePaused ? 'resumePreview' : 'pausePreview');
+    $('#featurePreviewToggle').setAttribute('aria-label', t(featurePaused ? 'resumePreview' : 'pausePreview'));
+    $('#stillViewerClose').setAttribute('aria-label', t('closeImage'));
+    $('[data-tool-image]')?.setAttribute('alt', language === 'cn' ? 'AI 无限画布界面' : 'AI infinite canvas interface');
+    if (stillViewer?.open) updateStillText();
+  }
+
+  function updateStillText() {
+    const frame = stillFrames[selectedStill];
+    const title = language === 'cn' ? frame.cnTitle : frame.enTitle;
+    $('#stillViewerTitle').textContent = title;
+    $('#stillViewerDescription').textContent = language === 'cn' ? frame.cnDesc : frame.enDesc;
+    $('#stillViewerPosition').textContent = `${String(selectedStill + 1).padStart(2, '0')} / ${String(stillFrames.length).padStart(2, '0')}`;
+    stillImage.alt = title;
+    const zoomed = stillStage.classList.contains('is-zoomed');
+    $('#stillZoom').setAttribute('aria-label', t(zoomed ? 'fitImage' : 'zoomImage'));
+    $('#stillZoom span').textContent = t(zoomed ? 'fitImage' : 'zoomImage');
+  }
+
+  function resetStillZoom() {
+    stillStage.classList.remove('is-zoomed');
+    stillStage.scrollTop = stillStage.scrollLeft = 0;
+    $('#stillZoom').setAttribute('aria-pressed', 'false');
+  }
+
+  function showStill(index) {
+    selectedStill = (index + stillFrames.length) % stillFrames.length;
+    resetStillZoom();
+    updateStillText();
+    const status = $('#stillViewerStatus');
+    status.hidden = false;
+    status.textContent = t('imageLoading');
+    stillImage.hidden = true;
+    // Disabling the focused zoom button would drop focus outside this dialog
+    // while the next image loads, losing subsequent arrow-key navigation.
+    if (document.activeElement === $('#stillZoom')) $('#stillViewerClose').focus({ preventScroll: true });
+    $('#stillZoom').disabled = true;
+    stillImage.onload = () => {
+      status.hidden = true;
+      stillImage.hidden = false;
+      $('#stillZoom').disabled = false;
+    };
+    stillImage.onerror = () => { status.textContent = t('imageError'); };
+    stillImage.src = mediaURL(stillFrames[selectedStill].image);
+  }
+
+  function openStill(index, trigger) {
+    stillReturnFocus = trigger;
+    stopPreview();
+    hideQrPreview();
+    showStill(index);
+    stillViewer.showModal();
+    updateScrollLock();
+    syncMusic();
+    $('#stillViewerClose').focus({ preventScroll: true });
+  }
+
+  function toggleStillZoom() {
+    if ($('#stillZoom').disabled) return;
+    const zoomed = stillStage.classList.toggle('is-zoomed');
+    $('#stillZoom').setAttribute('aria-pressed', String(zoomed));
+    if (!zoomed) stillStage.scrollTop = stillStage.scrollLeft = 0;
+    updateStillText();
+  }
+
+  $('#stillZoom')?.addEventListener('click', toggleStillZoom);
+  let suppressStillClickUntil = 0;
+  stillImage?.addEventListener('click', () => {
+    if (performance.now() >= suppressStillClickUntil) toggleStillZoom();
+  });
+  $('#stillPrevious')?.addEventListener('click', () => showStill(selectedStill - 1));
+  $('#stillNext')?.addEventListener('click', () => showStill(selectedStill + 1));
+  $('#stillViewerClose')?.addEventListener('click', () => stillViewer.close());
+  stillViewer?.addEventListener('keydown', event => {
+    if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+    event.preventDefault();
+    showStill(selectedStill + (event.key === 'ArrowLeft' ? -1 : 1));
+  });
+  let stillSwipe = null;
+  stillStage?.addEventListener('pointerdown', event => {
+    if (event.pointerType !== 'touch' || stillStage.classList.contains('is-zoomed')) return;
+    stillSwipe = { x: event.clientX, y: event.clientY, id: event.pointerId };
+  });
+  stillStage?.addEventListener('pointerup', event => {
+    const start = stillSwipe;
+    stillSwipe = null;
+    if (!start || start.id !== event.pointerId) return;
+    const dx = event.clientX - start.x;
+    const dy = event.clientY - start.y;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      suppressStillClickUntil = performance.now() + 400;
+      showStill(selectedStill + (dx < 0 ? 1 : -1));
+    }
+  });
+  stillStage?.addEventListener('pointercancel', () => { stillSwipe = null; });
+  stillViewer?.addEventListener('close', () => {
+    if (stillViewer.open) return;
+    stillImage.onload = stillImage.onerror = null;
+    stillImage.removeAttribute('src');
+    resetStillZoom();
+    updateScrollLock();
+    const target = stillReturnFocus;
+    stillReturnFocus = null;
+    if (target?.isConnected) target.focus({ preventScroll: true });
+    syncPreview();
+    syncMusic();
+  });
+  stillViewer?.addEventListener('click', event => {
+    if (event.target !== stillViewer) return;
+    const rect = stillViewer.getBoundingClientRect();
+    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) stillViewer.close();
+  });
+  $('#featurePreviewToggle')?.addEventListener('click', () => {
+    featurePaused = !featurePaused;
+    $('#featurePreviewToggle').setAttribute('aria-pressed', String(featurePaused));
+    updateExhibitionText();
+    syncPreview();
+  });
+  $('#viewSwitch')?.addEventListener('click', event => {
+    const button = event.target.closest('[data-view]');
+    if (!button) return;
+    const list = button.dataset.view === 'list';
+    grid.classList.toggle('is-list', list);
+    document.querySelectorAll('[data-view]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    window.StudioReveal?.refresh(grid);
+    syncPreview();
+  });
+  $('#copyEmail')?.addEventListener('click', async () => {
+    let message;
+    try {
+      await navigator.clipboard.writeText('highstrith@gmail.com');
+      message = t('emailCopied');
+    } catch { message = t('emailCopyFailed'); }
+    const notice = $('#siteNotice');
+    notice.textContent = message;
+    notice.classList.add('is-visible');
+    window.clearTimeout(noticeTimer);
+    noticeTimer = window.setTimeout(() => { notice.classList.remove('is-visible'); }, 4500);
+  });
 
   $('#adminEntryLink')?.toggleAttribute('hidden', !isLoopback && !isFile);
   $('#copyrightYear')?.replaceChildren(document.createTextNode(String(new Date().getFullYear())));
+  renderStills();
   filters?.addEventListener('click', (event) => {
     const button = event.target.closest('[data-filter]');
     if (!button || !filters.contains(button)) return;
@@ -1026,7 +1246,7 @@
 
     screen.addEventListener('pointermove', (event) => {
       if (event.pointerType !== 'mouse' || reducedMotion.matches) return;
-      const rect = hero.getBoundingClientRect();
+      const rect = screen.getBoundingClientRect();
       if (!rect.width || !rect.height) return;
       measure();
       if (!follow.active) {
@@ -1046,7 +1266,7 @@
 
     screen.addEventListener('pointerleave', () => {
       if (!follow.active) return;
-      const rect = hero.getBoundingClientRect();
+      const rect = screen.getBoundingClientRect();
       follow.active = false;
       measure();
       aim(rect.width / 2, rect.height * .45);
@@ -1180,6 +1400,7 @@
       hideQrPreview();
       if (!('IntersectionObserver' in window)) heroNearViewport = nearViewport(hero);
       syncPreview();
+      updateActiveNavigation();
     });
   }, { passive: true });
   if (hero && 'IntersectionObserver' in window) {
@@ -1190,27 +1411,19 @@
     observer.observe(hero);
   }
 
-  // ScrollSpy for main-nav sections (#works, #about, #contact)
+  // A work catalogue can be much taller than the viewport; an intersection
+  // ratio threshold would never activate it. Track section starts instead.
   const navSectionLinks = [...document.querySelectorAll('.main-nav a[href^="#"]')];
-  if (navSectionLinks.length > 0 && typeof IntersectionObserver === 'function') {
-    const sectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          navSectionLinks.forEach(link => {
-            const isMatch = link.getAttribute('href') === `#${id}`;
-            if (isMatch) link.setAttribute('aria-current', 'true');
-            else link.removeAttribute('aria-current');
-          });
-        }
-      });
-    }, { rootMargin: '-20% 0px -60% 0px', threshold: 0.05 });
-
+  const navSections = navSectionLinks.map(link => ({ link, section: document.getElementById(link.hash.slice(1)) })).filter(item => item.section);
+  function updateActiveNavigation() {
+    const marker = ($('.site-header')?.getBoundingClientRect().bottom || 0) + window.innerHeight * .2;
+    const current = navSections.filter(({ section }) => section.getBoundingClientRect().top <= marker).at(-1)?.link;
     navSectionLinks.forEach(link => {
-      const section = document.querySelector(link.getAttribute('href'));
-      if (section) sectionObserver.observe(section);
+      if (link === current) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
     });
   }
+  window.addEventListener('resize', updateActiveNavigation, { passive: true });
 
   setLanguage(new URLSearchParams(window.location.search).get('lang') === 'en' ? 'en' : 'cn');
   loadCatalogue();

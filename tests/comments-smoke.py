@@ -67,7 +67,7 @@ def open_studio(browser, config=None, widget=None):
 class CommentsDisabledByDefault(unittest.TestCase):
     def test_catalogue_has_no_comment_entry_without_configuration(self):
         with sync_playwright() as playwright:
-            browser = playwright.chromium.launch()
+            browser = playwright.chromium.launch(channel=os.environ.get('STUDIO_BROWSER_CHANNEL', 'chrome'))
             widget_requests = []
             page = open_studio(browser)
             page.on("request", lambda request: widget_requests.append(request.url)
@@ -86,7 +86,7 @@ class CommentsDisabledByDefault(unittest.TestCase):
 class CommentsEnabled(unittest.TestCase):
     def test_entry_shows_the_counted_comments_and_opens_on_demand(self):
         with sync_playwright() as playwright:
-            browser = playwright.chromium.launch()
+            browser = playwright.chromium.launch(channel=os.environ.get('STUDIO_BROWSER_CHANNEL', 'chrome'))
             page = open_studio(browser, config=ENABLED_CONFIG, widget=STUB_WIDGET)
             page.goto(BASE + "/", wait_until="load")
             page.wait_for_selector(TOGGLE)
@@ -112,7 +112,7 @@ class CommentsEnabled(unittest.TestCase):
 
     def test_opening_another_work_moves_the_single_thread(self):
         with sync_playwright() as playwright:
-            browser = playwright.chromium.launch()
+            browser = playwright.chromium.launch(channel=os.environ.get('STUDIO_BROWSER_CHANNEL', 'chrome'))
             page = open_studio(browser, config=ENABLED_CONFIG, widget=STUB_WIDGET)
             page.goto(BASE + "/", wait_until="load")
             page.wait_for_selector(TOGGLE)
@@ -131,7 +131,7 @@ class CommentsEnabled(unittest.TestCase):
 
     def test_closing_returns_the_entry_to_its_resting_label(self):
         with sync_playwright() as playwright:
-            browser = playwright.chromium.launch()
+            browser = playwright.chromium.launch(channel=os.environ.get('STUDIO_BROWSER_CHANNEL', 'chrome'))
             page = open_studio(browser, config=ENABLED_CONFIG, widget=STUB_WIDGET)
             page.goto(BASE + "/", wait_until="load")
             page.wait_for_selector(TOGGLE)
@@ -148,7 +148,7 @@ class CommentsEnabled(unittest.TestCase):
 
     def test_counts_are_fetched_for_every_visible_work_in_one_batch(self):
         with sync_playwright() as playwright:
-            browser = playwright.chromium.launch()
+            browser = playwright.chromium.launch(channel=os.environ.get('STUDIO_BROWSER_CHANNEL', 'chrome'))
             page = open_studio(browser, config=ENABLED_CONFIG, widget=STUB_WIDGET)
             page.goto(BASE + "/", wait_until="load")
             page.wait_for_selector(TOGGLE)
@@ -162,7 +162,7 @@ class CommentsEnabled(unittest.TestCase):
 
     def test_filtering_hides_the_open_thread_without_breaking_the_catalogue(self):
         with sync_playwright() as playwright:
-            browser = playwright.chromium.launch()
+            browser = playwright.chromium.launch(channel=os.environ.get('STUDIO_BROWSER_CHANNEL', 'chrome'))
             page = open_studio(browser, config=ENABLED_CONFIG, widget=STUB_WIDGET)
             page.goto(BASE + "/", wait_until="load")
             page.wait_for_selector(TOGGLE)
@@ -177,7 +177,7 @@ class CommentsEnabled(unittest.TestCase):
 
     def test_english_switch_keeps_the_entry_readable(self):
         with sync_playwright() as playwright:
-            browser = playwright.chromium.launch()
+            browser = playwright.chromium.launch(channel=os.environ.get('STUDIO_BROWSER_CHANNEL', 'chrome'))
             page = open_studio(browser, config=ENABLED_CONFIG, widget=STUB_WIDGET)
             page.goto(BASE + "/", wait_until="load")
             page.wait_for_selector(TOGGLE)
@@ -195,7 +195,7 @@ class CommentsEnabled(unittest.TestCase):
 class CommentsFailQuietly(unittest.TestCase):
     def test_unreachable_widget_removes_the_entry_and_keeps_the_page_usable(self):
         with sync_playwright() as playwright:
-            browser = playwright.chromium.launch()
+            browser = playwright.chromium.launch(channel=os.environ.get('STUDIO_BROWSER_CHANNEL', 'chrome'))
             page = open_studio(browser, config=ENABLED_CONFIG, widget=None)
             errors = []
             page.on("pageerror", lambda error: errors.append(str(error)))
