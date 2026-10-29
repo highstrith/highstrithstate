@@ -19,7 +19,7 @@
   <link rel="manifest" href="assets/site.webmanifest">
   <link rel="stylesheet" href="assets/base.css?v=20261029-stills">
   <link rel="stylesheet" href="assets/studio.css?v=20261029-gallery2">
-  <link rel="stylesheet" href="assets/exhibition.css?v=20261029-landscape-final">
+  <link rel="stylesheet" href="assets/exhibition.css?v=20261029-pages">
 </head>
 <body>
   <a class="skip-link" href="#works" data-i18n="skip">跳转到作品</a>
@@ -72,7 +72,7 @@
       <div class="section-heading"><div data-reveal><p class="section-label" data-i18n="portfolio">每个画面，都有来处</p><h2 id="worksTitle" data-i18n="worksTitle" data-lines>作品集</h2></div><p class="works-intro" data-i18n="worksIntro" data-reveal>一些故事，一些实验。<br>在不同的媒介里，寻找自己的表达。</p></div>
       <div class="works-toolbar" data-reveal>
         <div class="work-filters" id="workFilters" role="group" aria-label="作品分类">
-          <button type="button" data-filter="all" aria-pressed="true"><span data-i18n="all">全部作品</span><span class="filter-total">14</span></button>
+          <button type="button" data-filter="all" aria-pressed="true"><span data-i18n="all">全部作品</span><span class="filter-total">20</span></button>
           <button type="button" data-filter="story" aria-pressed="false" data-i18n="story">叙事短片</button>
           <button type="button" data-filter="motion" aria-pressed="false" data-i18n="motion">三维与动画</button>
           <button type="button" data-filter="edit" aria-pressed="false" data-i18n="edit">剪辑与视觉</button>
@@ -81,6 +81,7 @@
       </div>
       <div class="works-viewbar"><p id="worksCount" class="result-count" role="status" aria-live="polite">20 部作品</p><div class="view-switch" role="group" aria-label="作品视图" id="viewSwitch"><button type="button" data-view="gallery" aria-pressed="true" aria-label="画廊视图"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3h9v6H2zM14 3h4v6h-4zM2 12h4v5H2zM9 12h9v5H9z"/></svg><span data-i18n="galleryView">画廊</span></button><button type="button" data-view="list" aria-pressed="false" aria-label="目录视图"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 4h3v3H2zM8 5h10M2 12h3v3H2zM8 13h10"/></svg><span data-i18n="listView">目录</span></button></div></div>
       <div class="works-grid" id="worksGrid"></div>
+      <nav class="works-pagination" id="worksPagination" aria-label="作品分页" hidden></nav>
       <div class="empty-state" id="emptyState" hidden><h3 data-i18n="empty">还没有找到这部作品</h3><p data-i18n="emptyHint">试试其他关键词，或查看全部作品。</p><button id="resetFilters" type="button" class="button button-dark" data-i18n="reset">查看全部作品</button></div>
       <noscript>
         <p class="noscript-note">点击封面可直接观看完整作品。启用 JavaScript 后可使用筛选和页内播放器。</p>
@@ -141,6 +142,10 @@
           <figure class="still-card"><div class="still-media"><img src="assets/stills/jade-blades.jpg" alt="翡翠之刃 · 作品截图" loading="lazy" width="480" height="300"></div><figcaption><h3>翡翠之刃</h3><p>玉石质感与玫瑰金相结合的奇幻武器设计。</p></figcaption></figure>
           <figure class="still-card"><div class="still-media"><img src="assets/stills/frost-rune-sword.jpg" alt="寒渊符文剑 · 作品截图" loading="lazy" width="480" height="300"></div><figcaption><h3>寒渊符文剑</h3><p>冰晶符文巨剑的三视图渲染展示。</p></figcaption></figure>
           <figure class="still-card"><div class="still-media"><img src="assets/stills/wasteland-dagger.jpg" alt="废土之刃 · 作品截图" loading="lazy" width="480" height="300"></div><figcaption><h3>废土之刃</h3><p>扳手改造匕首的写实 PBR 材质练习。</p></figcaption></figure>
+          <figure class="still-card"><a class="still-media" href="assets/stills/catalogue-tavern.webp"><img src="assets/stills/catalogue-tavern-preview.webp" alt="酒馆光影" loading="lazy" width="480" height="270"></a><figcaption><h3>酒馆光影</h3><p>《酒馆角色动画》成片画面：暖色石墙与角色走位。</p></figcaption></figure>
+          <figure class="still-card"><a class="still-media" href="assets/stills/catalogue-robot.webp"><img src="assets/stills/catalogue-robot-preview.webp" alt="门廊里的机器人" loading="lazy" width="480" height="270"></a><figcaption><h3>门廊里的机器人</h3><p>《机器人短片》成片画面：明暗交界中的角色与空间。</p></figcaption></figure>
+          <figure class="still-card"><a class="still-media" href="assets/stills/catalogue-approach.webp"><img src="assets/stills/catalogue-approach-preview.webp" alt="窗边对话" loading="lazy" width="480" height="270"></a><figcaption><h3>窗边对话</h3><p>《搭讪》成片画面：咖啡馆窗边的人物与对话。</p></figcaption></figure>
+          <figure class="still-card"><a class="still-media" href="assets/stills/catalogue-fireflies.webp"><img src="assets/stills/catalogue-fireflies-preview.webp" alt="花丛微光" loading="lazy" width="480" height="270"></a><figcaption><h3>花丛微光</h3><p>《萤火虫》成片画面：花丛、枝叶与游动光点。</p></figcaption></figure>
         </div>
       </noscript>
     </section>
@@ -842,8 +847,8 @@
           "enTitle": "Fireflies",
           "cnSub": "场景 / 三维",
           "enSub": "ENVIRONMENT / 3D",
-          "cnDesc": "鱼群、珊瑚与游动光点构成的水下场景。",
-          "enDesc": "An underwater scene of schooling fish, coral and drifting points of light.",
+          "cnDesc": "花丛、枝叶与飞动光点构成的微光场景。",
+          "enDesc": "A softly lit scene of flowers, foliage and drifting points of light.",
           "video": "assets/works/eagle-fireflies.mp4",
           "mobileVideo": "assets/optimized/eagle-fireflies/938eca3f572ea6c5-mobile.mp4",
           "poster": "assets/posters/eagle-fireflies.jpg",
@@ -915,7 +920,7 @@
   <script src="assets/comment-config.js?v=20261010-comments" defer></script>
   <script src="assets/scroll-reveal.js?v=20261029-gallery2" defer></script>
   <script src="assets/gallery-navigation.js?v=20261029-motion2" defer></script>
-  <script src="assets/studio.js?v=20261029-landscape-final" defer></script>
+  <script src="assets/studio.js?v=20261029-pages" defer></script>
   <script src="assets/site-shell.js?v=20261029-progress-nav" defer></script>
   <script src="assets/vendor/gsap-3.15.0/gsap.min.js" defer></script>
   <script src="assets/vendor/gsap-3.15.0/ScrollTrigger.min.js" defer></script>

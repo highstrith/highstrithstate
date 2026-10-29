@@ -72,6 +72,12 @@
 .work-search input { padding-block: 11px; font-size: 12px; }
 .works-viewbar { display: flex; align-items: center; justify-content: space-between; margin-block: 16px 30px; }
 .works-viewbar .result-count { margin: 0; }
+.works-pagination { display: flex; align-items: center; justify-content: center; gap: 28px; margin-top: 36px; padding-top: 22px; border-top: 1px solid var(--line); }
+.works-page-numbers { display: flex; gap: 6px; }
+.works-page-link { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: 8px 12px; font-size: 12px; }
+.works-page-link[aria-current="page"] { color: var(--paper); background: var(--ink); }
+.works-page-link[aria-disabled="true"] { color: var(--muted); opacity: .45; }
+.works-page-link:not([aria-current]):not([aria-disabled]):hover { background: var(--exhibit-soft); }
 .view-switch { display: flex; gap: 2px; }
 .view-switch button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 0 10px; background: transparent; color: var(--muted); font-size: 11px; }
 .view-switch button[aria-pressed="true"] { background: var(--exhibit-soft); color: var(--ink); }
@@ -340,6 +346,8 @@ html:not(.shell-ready) :is(.view-switch, .feature-preview-control, #copyEmail) {
   .work-filters { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 6px; }
   .work-filters button { font-size: 11px; justify-content: center; }
   .works-viewbar { margin-block: 10px 22px; }
+  .works-pagination { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 26px; }
+  .works-page-numbers { grid-column: 1/-1; grid-row: 1; justify-content: center; }
   .view-switch button { font-size: 10px; gap: 5px; padding-inline: 8px; }
   .works-grid { grid-template-columns: minmax(0,1fr); gap: 30px; }
   .work-caption { gap: 5px; }

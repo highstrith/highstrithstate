@@ -1,0 +1,153 @@
+{
+  "date": "2026-10-29",
+  "pageSize": 6,
+  "selection": "源作品均在当前目录第3或第4页，避开首页五部精选；截取不同于现有封面的真实视频时刻。",
+  "ffmpeg": "/tmp/highstrith-media-tools/imageio_ffmpeg/binaries/ffmpeg-macos-aarch64-v7.1",
+  "imageConversion": "Pillow RGB, WebP quality 85 method 6; max edges 1920/960, no crop or upscaling",
+  "items": [
+    {
+      "workId": "eagle-tavern-animation",
+      "workTitle": "酒馆角色动画",
+      "catalogueIndex": 12,
+      "cataloguePosition": 13,
+      "cataloguePage": 3,
+      "second": 1,
+      "source": "assets/works/eagle-tavern-animation.mp4",
+      "sourceSha256": "76acf80f26796667eb1df9e03fb30089724f05f775143862a788905b3dbb650f",
+      "sourceDimensions": [
+        960,
+        540
+      ],
+      "image": "assets/stills/catalogue-tavern.webp",
+      "thumbnail": "assets/stills/catalogue-tavern-preview.webp",
+      "cnTitle": "酒馆光影",
+      "enTitle": "Tavern light",
+      "cnDesc": "《酒馆角色动画》成片画面：暖色石墙与角色走位。",
+      "enDesc": "A frame from Tavern Character Animation: warm stone walls and character blocking.",
+      "derivatives": [
+        {
+          "path": "assets/stills/catalogue-tavern.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 43264,
+          "sha256": "2d7915d0f7985d63622fa945fedf2253567facda7adbaf9d1a61d1c0c6cbd8d6"
+        },
+        {
+          "path": "assets/stills/catalogue-tavern-preview.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 43264,
+          "sha256": "2d7915d0f7985d63622fa945fedf2253567facda7adbaf9d1a61d1c0c6cbd8d6"
+        }
+      ]
+    },
+    {
+      "workId": "eagle-robot-short",
+      "workTitle": "机器人短片",
+      "catalogueIndex": 13,
+      "cataloguePosition": 14,
+      "cataloguePage": 3,
+      "second": 58,
+      "source": "assets/works/eagle-robot-short.mp4",
+      "sourceSha256": "28bc7d99a3165ba7357fd00a702a2749e39757f350b0ee373f21614072ce7c07",
+      "sourceDimensions": [
+        1920,
+        1080
+      ],
+      "image": "assets/stills/catalogue-robot.webp",
+      "thumbnail": "assets/stills/catalogue-robot-preview.webp",
+      "cnTitle": "门廊里的机器人",
+      "enTitle": "Robot in the doorway",
+      "cnDesc": "《机器人短片》成片画面：明暗交界中的角色与空间。",
+      "enDesc": "A frame from Robot Short: character and space at the edge of light.",
+      "derivatives": [
+        {
+          "path": "assets/stills/catalogue-robot.webp",
+          "width": 1920,
+          "height": 1080,
+          "bytes": 47312,
+          "sha256": "10ea935d6f7af94e6ebeac6b47d505e8bdf92d43741b9582def75fe17ce29102"
+        },
+        {
+          "path": "assets/stills/catalogue-robot-preview.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 20640,
+          "sha256": "fe911daf4ce72693ef7d3835c2ce579ec6d88d369f00cbb18ce077099c86fa25"
+        }
+      ]
+    },
+    {
+      "workId": "featured-approach",
+      "workTitle": "搭讪",
+      "catalogueIndex": 15,
+      "cataloguePosition": 16,
+      "cataloguePage": 3,
+      "second": 38,
+      "source": "assets/works/approach.mp4",
+      "sourceSha256": "21842d8b8a4214930d17a680abf12c1519f060ca5d62c1135e99c3a10e4dc567",
+      "sourceDimensions": [
+        1280,
+        720
+      ],
+      "image": "assets/stills/catalogue-approach.webp",
+      "thumbnail": "assets/stills/catalogue-approach-preview.webp",
+      "cnTitle": "窗边对话",
+      "enTitle": "Conversation by the window",
+      "cnDesc": "《搭讪》成片画面：咖啡馆窗边的人物与对话。",
+      "enDesc": "A frame from Approach: characters and conversation beside the café window.",
+      "derivatives": [
+        {
+          "path": "assets/stills/catalogue-approach.webp",
+          "width": 1280,
+          "height": 720,
+          "bytes": 96106,
+          "sha256": "52b43a33a4c5678f7d4d529f122a7bec38b2bc94838728ecddfd2d63886428c4"
+        },
+        {
+          "path": "assets/stills/catalogue-approach-preview.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 71466,
+          "sha256": "abe38de328b23368b8df8b4aa581bb1a2a870b3b6f17841e4fa989c038192f67"
+        }
+      ]
+    },
+    {
+      "workId": "eagle-fireflies",
+      "workTitle": "萤火虫",
+      "catalogueIndex": 19,
+      "cataloguePosition": 20,
+      "cataloguePage": 4,
+      "second": 0.6,
+      "source": "assets/works/eagle-fireflies.mp4",
+      "sourceSha256": "5a1941d84d1f5f6164bd1cf6ed5feacf03a759ce46f85df9a3ee417ea79ac75d",
+      "sourceDimensions": [
+        1920,
+        1080
+      ],
+      "image": "assets/stills/catalogue-fireflies.webp",
+      "thumbnail": "assets/stills/catalogue-fireflies-preview.webp",
+      "cnTitle": "花丛微光",
+      "enTitle": "Garden glow",
+      "cnDesc": "《萤火虫》成片画面：花丛、枝叶与游动光点。",
+      "enDesc": "A frame from Fireflies: flowers, leaves and drifting points of light.",
+      "derivatives": [
+        {
+          "path": "assets/stills/catalogue-fireflies.webp",
+          "width": 1920,
+          "height": 1080,
+          "bytes": 278762,
+          "sha256": "1deb4f9887cba672c8e217378445e222fe84086910d690d144b0f865941837e4"
+        },
+        {
+          "path": "assets/stills/catalogue-fireflies-preview.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 101824,
+          "sha256": "eacf94f9a207a229dc3a4c7e10221866110d0273580d94c4b13e6547460d708e"
+        }
+      ]
+    }
+  ]
+}

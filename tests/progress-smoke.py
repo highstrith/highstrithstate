@@ -32,11 +32,11 @@ class ProgressPage(unittest.TestCase):
         page.goto(BASE + '/in-progress.html', wait_until='load')
         expect(page.locator('.progress-gallery a')).to_have_count(15, timeout=1500)
 
-    def test_home_links_to_real_work_in_progress_without_recycled_video_frames(self):
+    def test_home_links_to_progress_and_keeps_separate_still_gallery(self):
         page = self.page()
         page.goto(BASE + '/')
         expect(page.locator('.main-nav [data-progress-section]')).to_have_count(1, timeout=1500)
-        expect(page.locator('#stillsGrid .still-card')).to_have_count(4)
+        expect(page.locator('#stillsGrid .still-card')).to_have_count(8)
         self.assertTrue(page.locator('#stillsGrid img').evaluate_all('images => images.every(image => image.src.includes("/assets/stills/"))'))
         page.locator('.nav-collection summary').click()
         page.locator('.main-nav [data-progress-section]').click()
@@ -156,7 +156,7 @@ class ProgressPage(unittest.TestCase):
         expect(first).to_be_focused()
         page.locator('[data-still="0"]').click()
         expect(page.locator('#stillViewerTitle')).to_have_text('月下少年')
-        expect(page.locator('#stillViewerPosition')).to_have_text('01 / 04')
+        expect(page.locator('#stillViewerPosition')).to_have_text('01 / 08')
 
     def test_production_contact_sheet_groups_and_full_sequence(self):
         page = self.page()
@@ -337,6 +337,7 @@ class ProgressPage(unittest.TestCase):
     def test_landscape_cover_keeps_native_portrait_player(self):
         page = self.page()
         page.goto(BASE + '/', wait_until='load')
+        page.locator('#workSearch').fill('AI 之后')
         card = page.locator('#worksGrid .work-card').filter(has=page.locator('img[src*="ddfc97d74e1f0d46"]'))
         expect(card).to_have_count(1)
         media = card.locator('.work-media')
@@ -364,6 +365,7 @@ class ProgressPage(unittest.TestCase):
         page = self.page(has_touch=True)
         page.set_viewport_size({'width': 844, 'height': 390})
         page.goto(BASE + '/', wait_until='load')
+        page.locator('#workSearch').fill('一次善意')
         page.locator('[data-work-id="eagle-act-of-kindness"]').click()
         page.wait_for_function('document.querySelector("#workPlayerVideo").videoHeight > 0')
         frame = page.locator('#workPlayerVideo').bounding_box()
@@ -387,6 +389,7 @@ class ProgressPage(unittest.TestCase):
         video_requests = []
         page.on('request', lambda request: video_requests.append(request.url) if '.mp4' in request.url else None)
         page.goto(BASE + '/', wait_until='load')
+        page.locator('#workSearch').fill('一次善意')
         card = page.locator('[data-work-id="eagle-act-of-kindness"]')
         card.scroll_into_view_if_needed()
         card.locator('img').evaluate('image=>image.decode()')

@@ -97,6 +97,10 @@
     { image: 'assets/stills/jade-blades.jpg', thumbnail: 'assets/stills/jade-blades-preview.webp', cnTitle: '翡翠之刃', enTitle: 'Jade Blades', cnDesc: '玉石质感与玫瑰金相结合的奇幻武器设计。', enDesc: 'Fantasy weapon design pairing jade-like blades with rose-gold fittings.' },
     { image: 'assets/stills/frost-rune-sword.jpg', thumbnail: 'assets/stills/frost-rune-sword-preview.webp', cnTitle: '寒渊符文剑', enTitle: 'Frost Rune Sword', cnDesc: '冰晶符文巨剑的三视图渲染展示。', enDesc: 'A rune-etched greatsword presented in a three-view render.' },
     { image: 'assets/stills/wasteland-dagger.jpg', thumbnail: 'assets/stills/wasteland-dagger-preview.webp', cnTitle: '废土之刃', enTitle: 'Wasteland Dagger', cnDesc: '扳手改造匕首的写实 PBR 材质练习。', enDesc: 'A realistic PBR study of a wrench-repurposed dagger.' },
+    {"image": "assets/stills/catalogue-tavern.webp", "thumbnail": "assets/stills/catalogue-tavern-preview.webp", "cnTitle": "酒馆光影", "enTitle": "Tavern light", "cnDesc": "《酒馆角色动画》成片画面：暖色石墙与角色走位。", "enDesc": "A frame from Tavern Character Animation: warm stone walls and character blocking."},
+    {"image": "assets/stills/catalogue-robot.webp", "thumbnail": "assets/stills/catalogue-robot-preview.webp", "cnTitle": "门廊里的机器人", "enTitle": "Robot in the doorway", "cnDesc": "《机器人短片》成片画面：明暗交界中的角色与空间。", "enDesc": "A frame from Robot Short: character and space at the edge of light."},
+    {"image": "assets/stills/catalogue-approach.webp", "thumbnail": "assets/stills/catalogue-approach-preview.webp", "cnTitle": "窗边对话", "enTitle": "Conversation by the window", "cnDesc": "《搭讪》成片画面：咖啡馆窗边的人物与对话。", "enDesc": "A frame from Approach: characters and conversation beside the café window."},
+    {"image": "assets/stills/catalogue-fireflies.webp", "thumbnail": "assets/stills/catalogue-fireflies-preview.webp", "cnTitle": "花丛微光", "enTitle": "Garden glow", "cnDesc": "《萤火虫》成片画面：花丛、枝叶与游动光点。", "enDesc": "A frame from Fireflies: flowers, leaves and drifting points of light."},
   ];
   const progressFrames = [
     {
@@ -223,7 +227,9 @@
   let selectedFeatureId = '';
   const featurePreviewSeconds = 10;
   const featureVisits = new Map();
-  let currentFilter = 'all';
+  let currentFilter = filterFromURL();
+  const pageSize = 6;
+  let currentPage = pageFromURL();
   let cardRecords = [];
   let hoveredCard = null;
   let focusedCard = null;
@@ -419,6 +425,7 @@
     if (!featuredWorks.some((work) => work.id === selectedFeatureId)) selectedFeatureId = featuredWorks[0]?.id || '';
     renderCards();
     catalogueReady = true;
+    applyFilters();
     renderStills();
     // The catalogue establishes the lower sections' real distance from the
     // viewport. Setting their sources earlier defeats native lazy loading.
@@ -429,7 +436,6 @@
     });
     renderHeroControls();
     updateHero();
-    applyFilters();
     if (commentsEnabled) prefetchCommentCounts();
     window.dispatchEvent(new Event('catalogue:ready'));
     // Initial anchor navigation happens before the asynchronous catalogue has
@@ -555,21 +561,86 @@
     }).observe(grid);
   }
 
-  function applyFilters() {
+  function pageFromURL() {
+    const value = Number(new URLSearchParams(location.search).get('page') || 1);
+    return Number.isSafeInteger(value) && value > 0 ? value : 1;
+  }
+
+  function filterFromURL() {
+    const value = new URLSearchParams(location.search).get('category');
+    return ['story', 'motion', 'edit'].includes(value) ? value : 'all';
+  }
+
+  function pageAddress(number, anchor = false) {
+    const url = new URL(location.href);
+    if (number > 1) url.searchParams.set('page', String(number));
+    else url.searchParams.delete('page');
+    if (language === 'en') url.searchParams.set('lang', 'en');
+    else url.searchParams.delete('lang');
+    if (currentFilter !== 'all') url.searchParams.set('category', currentFilter);
+    else url.searchParams.delete('category');
+    const query = (search?.value || '').trim();
+    if (query) url.searchParams.set('q', query);
+    else url.searchParams.delete('q');
+    if (anchor) url.hash = 'works';
+    return url;
+  }
+
+  function renderPagination(count) {
+    const nav = $('#worksPagination');
+    if (!nav) return;
+    const pages = Math.ceil(count / pageSize);
+    nav.hidden = pages <= 1;
+    nav.setAttribute('aria-label', language === 'cn' ? '作品分页' : 'Work pages');
+    const link = (number, label, direction) => {
+      const enabled = number >= 1 && number <= pages;
+      const element = create(enabled ? 'a' : 'span', 'works-page-link');
+      element.textContent = label;
+      if (direction) element.dataset.direction = direction;
+      if (enabled) {
+        element.href = pageAddress(number, true).href;
+        element.dataset.page = String(number);
+        element.setAttribute('aria-label', direction
+          ? (language === 'cn' ? (direction === 'previous' ? '上一页作品' : '下一页作品') : (direction === 'previous' ? 'Previous page of works' : 'Next page of works'))
+          : (language === 'cn' ? `第${number}页作品` : `Page ${number} of works`));
+      } else element.setAttribute('aria-disabled', 'true');
+      return element;
+    };
+    const numbers = create('div', 'works-page-numbers');
+    numbers.id = 'worksPages';
+    for (let number = 1; number <= pages; number++) {
+      const element = link(number, String(number));
+      if (number === currentPage) element.setAttribute('aria-current', 'page');
+      numbers.append(element);
+    }
+    nav.replaceChildren(link(currentPage - 1, language === 'cn' ? '上一页' : 'Previous', 'previous'), numbers,
+      link(currentPage + 1, language === 'cn' ? '下一页' : 'Next', 'next'));
+  }
+
+  function applyFilters(pushPage = false) {
+    if (!catalogueReady) return;
     const query = (search?.value || '').trim().normalize('NFKC').toLocaleLowerCase();
-    let count = 0;
+    const matched = cardRecords.filter(record => (currentFilter === 'all' || record.categories.has(currentFilter)) && (!query || record.query.includes(query)));
+    const count = matched.length;
+    currentPage = Math.min(currentPage, Math.max(1, Math.ceil(count / pageSize)));
+    const start = (currentPage - 1) * pageSize;
+    const visiblePage = new Set(matched.slice(start, start + pageSize));
     cardRecords.forEach((record) => {
-      const visible = (currentFilter === 'all' || record.categories.has(currentFilter)) && (!query || record.query.includes(query));
+      const visible = visiblePage.has(record);
       record.item.hidden = !visible;
       if (!visible && openCommentCard === record) closeComments();
-      if (visible) count++;
     });
     filters?.querySelectorAll('[data-filter]').forEach((button) => {
       const active = button.dataset.filter === currentFilter;
       button.setAttribute('aria-pressed', String(active));
       button.classList.toggle('is-active', active);
     });
-    if ($('#worksCount')) $('#worksCount').textContent = language === 'cn' ? `${count} 部作品` : `${count} ${count === 1 ? 'work' : 'works'}`;
+    const range = count > pageSize ? `${start + 1}–${Math.min(start + pageSize, count)} / ` : '';
+    if ($('#worksCount')) $('#worksCount').textContent = range + (language === 'cn' ? `${count} 部作品` : `${count} ${count === 1 ? 'work' : 'works'}`);
+    renderPagination(count);
+    const url = pageAddress(currentPage, pushPage === true);
+    try { if (url.href !== location.href) history[pushPage === true ? 'pushState' : 'replaceState'](history.state, '', url); }
+    catch { /* File mode may restrict history; in-page controls still work. */ }
     if ($('#emptyState')) $('#emptyState').hidden = count !== 0;
     layoutWorks();
     syncPreview();
@@ -1344,14 +1415,40 @@
     const button = event.target.closest('[data-filter]');
     if (!button || !filters.contains(button)) return;
     currentFilter = button.dataset.filter;
+    currentPage = 1;
     applyFilters();
   });
-  search?.addEventListener('input', applyFilters);
+  search?.addEventListener('input', () => { currentPage = 1; applyFilters(); });
   $('#resetFilters')?.addEventListener('click', () => {
     currentFilter = 'all';
+    currentPage = 1;
     if (search) search.value = '';
     applyFilters();
     search?.focus({ preventScroll: true });
+  });
+  $('#worksPagination')?.addEventListener('click', event => {
+    const link = event.target.closest('a[data-page]');
+    if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    const number = Number(link.dataset.page);
+    if (number === currentPage) return;
+    currentPage = number;
+    applyFilters(true);
+    $('#works')?.scrollIntoView({ behavior: 'instant' });
+    $('#worksTitle')?.setAttribute('tabindex', '-1');
+    $('#worksTitle')?.focus({ preventScroll: true });
+  });
+  window.addEventListener('popstate', () => {
+    const number = pageFromURL();
+    const category = filterFromURL();
+    const query = new URLSearchParams(location.search).get('q') || '';
+    const nextLanguage = new URLSearchParams(location.search).get('lang') === 'en' ? 'en' : 'cn';
+    const changed = number !== currentPage || category !== currentFilter || query !== (search?.value || '');
+    currentPage = number;
+    currentFilter = category;
+    if (search) search.value = query;
+    if (nextLanguage !== language) setLanguage(nextLanguage);
+    else if (changed) applyFilters();
   });
   $('#langSwitch')?.addEventListener('click', () => setLanguage(language === 'cn' ? 'en' : 'cn'));
   document.querySelectorAll('[data-hero-play]').forEach((button) => button.addEventListener('click', () => {
@@ -1589,6 +1686,7 @@
   }
   window.addEventListener('resize', updateActiveNavigation, { passive: true });
 
+  if (search) search.value = new URLSearchParams(location.search).get('q') || '';
   setLanguage(new URLSearchParams(window.location.search).get('lang') === 'en' ? 'en' : 'cn');
   loadCatalogue();
 })();

@@ -134,7 +134,7 @@ class StudioRedesign(unittest.TestCase):
             expect(page.locator("main")).not_to_contain_text(hidden["cnTitle"])
 
     def assert_count(self, page, count):
-        expect(page.locator(CARDS + ":visible")).to_have_count(count)
+        expect(page.locator(CARDS + ":visible")).to_have_count(min(count, 6))
         self.assertIn(page.locator("#worksCount").get_attribute("aria-live"), ("polite", "assertive"))
         expect(page.locator("#worksCount")).to_contain_text(re.compile(r"(?<!\d)%s(?!\d)" % count))
 
@@ -327,7 +327,7 @@ class StudioRedesign(unittest.TestCase):
         self.assertEqual(page.locator("#heroPreview").evaluate_all(SOURCE_COUNT), 0)
         page.locator("#workPlayerClose").click()
         assert_preview(FEATURED[1]["previewVideo"])
-        page.locator(CARDS).last.scroll_into_view_if_needed()
+        page.locator(CARDS + ":visible").last.scroll_into_view_if_needed()
         page.wait_for_function("!document.querySelector('#heroPreview').getAttribute('src')")
         self.assertEqual(page.locator(CARDS + " video").evaluate_all(SOURCE_COUNT), 0)
         page.locator("#heroTitle").scroll_into_view_if_needed()
@@ -488,7 +488,7 @@ class StudioRedesign(unittest.TestCase):
                 requests = []
                 page.on("request", lambda request: requests.append(request.url) if ".mp4" in request.url else None)
                 self.ready(page)
-                page.locator(CARDS).last.scroll_into_view_if_needed()
+                page.locator(CARDS + ":visible").last.scroll_into_view_if_needed()
                 # A short observation window detects delayed eager video requests.
                 page.wait_for_timeout(250)
                 self.assertEqual(requests, [])
@@ -838,7 +838,7 @@ class StudioRedesign(unittest.TestCase):
                     with self.subTest(language=language):
                         if language == "en":
                             page.locator("#langSwitch").click()
-                        page.locator(CARDS).last.scroll_into_view_if_needed()
+                        page.locator(CARDS + ":visible").last.scroll_into_view_if_needed()
                         self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), width + 1)
                         expect(page.locator("#workSearch")).to_be_visible()
                         expect(page.locator("#adminEntryLink")).to_be_visible()

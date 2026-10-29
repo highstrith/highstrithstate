@@ -39,7 +39,7 @@ class WorksLayout(unittest.TestCase):
         output = os.environ.get('WORKS_CAPTURE_DIR')
         if output:
             Path(output).mkdir(parents=True, exist_ok=True)
-            for image in page.locator('#worksGrid img').all():
+            for image in page.locator('#worksGrid .work-item:visible img').all():
                 image.scroll_into_view_if_needed()
                 image.evaluate('image=>image.decode()')
             page.mouse.move(0, 0)
@@ -80,6 +80,7 @@ class WorksLayout(unittest.TestCase):
 
     def test_landscape_covers_are_consistent_on_mobile_and_bilingual(self):
         page = self.page()
+        page.locator('#worksPages [data-page="2"]').click()
         for width in [320, 390, 600, 820, 1440, 1920]:
             page.set_viewport_size({'width': width, 'height': 1000})
             for language in ['cn', 'en']:
@@ -87,7 +88,7 @@ class WorksLayout(unittest.TestCase):
                     page.locator('#langSwitch').click()
                 self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'), width)
                 if width <= 600:
-                    for item in page.locator('.work-item.is-portrait').all():
+                    for item in page.locator('.work-item.is-portrait:visible').all():
                         media = item.locator('.work-media').bounding_box()
                         caption = item.locator('.work-caption').bounding_box()
                         self.assertAlmostEqual(media['width']/media['height'], 16/9, delta=.01)
@@ -96,7 +97,7 @@ class WorksLayout(unittest.TestCase):
         if output:
             page.set_viewport_size({'width': 390, 'height': 1000})
             page.locator('#langSwitch').click()
-            for image in page.locator('#worksGrid img').all():
+            for image in page.locator('#worksGrid .work-item:visible img').all():
                 image.scroll_into_view_if_needed()
                 image.evaluate('image=>image.decode()')
             page.mouse.move(0, 0)
