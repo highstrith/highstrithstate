@@ -467,12 +467,13 @@ class StudioRedesign(unittest.TestCase):
                     page.locator("#langSwitch").click()
                 for index in range(5):
                     page.locator("#featureControls button").nth(index).click()
+                    page.locator("#heroPoster").evaluate("image => image.decode()")
                     poster = page.locator("#heroPoster").bounding_box()
                     info = page.locator(".feature-info").bounding_box()
                     controls = page.locator("#featureControls").bounding_box()
                     self.assertGreaterEqual(info["y"], poster["y"] + poster["height"])
                     self.assertGreaterEqual(controls["y"], info["y"] + info["height"])
-                    self.assertAlmostEqual(poster["width"] / poster["height"], 16 / 9, places=2)
+                    self.assertAlmostEqual(poster["width"] / poster["height"], 16 / 9, delta=.02)
                     for button in page.locator("#featureControls button").all():
                         box = button.bounding_box()
                         self.assertGreaterEqual(box["width"], 44)

@@ -23,6 +23,7 @@
 
 - 五部视频保持 Eagle 源文件逐字节副本；《机器人短片》的 Eagle 原件约 224.7 MB，完整保留在素材库，网站使用保留原分辨率、比例、完整时长和声音的 H.264/AAC 网页副本（CRF 20、faststart）。不把超大源文件加入 Git。
 - 六张封面均截取真实视频画面，保持原比例；图片按需提供 160／480／960／1600px 的 WebP 尺寸，不放大低分辨率素材。
+- 《一次善意》封面按后续反馈改取原片7.2秒的公交站双人镜头，替换13.5秒带字幕的手机局部图；保留720×1280原比例，Eagle原件不改。
 - 沿用 `scripts/optimize-media.mjs` 生成静音预览、手机完整版本及必要的桌面 faststart 副本，在隔离目录只处理新作品，再合并六部资源与报告，避免重编码已有作品。静音预览最长 20 秒，手机最长边 960px、短边不超过 540px。
 - 源 ID、源文件哈希、大小、封面时间点及转码情况记录于 `eagle-selections-20261029.json`；Eagle 文件与星级均不修改。
 - 开始制作前评估 [FFmpeg 开源项目](https://github.com/FFmpeg/FFmpeg) 及其[许可证](https://github.com/FFmpeg/FFmpeg/blob/master/LICENSE.md)，并核对 [Eagle 官方 API](https://api.eagle.cool/)。本次复用现有本地 FFmpeg 编码工具与项目脚本，不复制第三方模板代码，不将 FFmpeg 二进制打包到公开站。

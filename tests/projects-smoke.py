@@ -35,6 +35,7 @@ class ProjectPages(unittest.TestCase):
         self.page.get_by_role('navigation').get_by_role('link', name='项目与应用', exact=True).click(timeout=3000)
         expect(self.page).to_have_url(BASE + '/projects.html')
         expect(self.page.get_by_role('heading', name='项目与应用', exact=True)).to_be_visible()
+        expect(self.page.get_by_role('heading', name='导演工作台', exact=True)).to_be_visible()
         expect(self.page.get_by_role('heading', name='AI 无限画布', exact=True)).to_be_visible()
         expect(self.page.get_by_role('heading', name='积分比价系统', exact=True)).to_be_visible()
         expect(self.page.get_by_role('heading', name='AA 计算器', exact=True)).to_be_visible()
@@ -89,7 +90,7 @@ class ProjectPages(unittest.TestCase):
                 for route in ('/', '/projects.html'):
                     self.page.goto(BASE + route + '?lang=' + language)
                     self.assertTrue(self.page.evaluate('document.documentElement.scrollWidth <= innerWidth'), (width, language, route))
-                    boxes = self.page.locator('.main-nav a').evaluate_all('(links) => links.map(link => { const r = link.getBoundingClientRect(); return {left:r.left, right:r.right}; })')
+                    boxes = self.page.locator('.main-nav a:visible').evaluate_all('(links) => links.map(link => { const r = link.getBoundingClientRect(); return {left:r.left, right:r.right}; })')
                     self.assertTrue(all(a['right'] <= b['left'] for a, b in zip(boxes, boxes[1:])), (width, language, route))
         self.page.goto((ROOT / 'projects.html').as_uri())
         expect(self.page.locator('.project-bottom').get_by_role('link', name='打开 AI 无限画布')).to_be_visible()
@@ -118,6 +119,26 @@ class ProjectPages(unittest.TestCase):
         expect(app.get_by_role('heading', name='你的创作工作台', exact=True)).to_be_visible()
         self.assertIn('/assets/apps/ai-infinite-canvas.html', app.url)
         self.assertEqual(self.errors, [])
+
+    def test_director_workbench_is_primary_and_canvas_is_second(self):
+        self.page.goto(BASE + '/projects.html')
+        titles = self.page.locator('.project-card h2')
+        expect(titles.first).to_have_text('导演工作台')
+        expect(titles.nth(1)).to_have_text('AI 无限画布')
+        expect(titles).to_have_count(4)
+        preview = self.page.locator('.project-card').first.locator('.project-preview')
+        expect(preview).to_have_attribute('href', 'assets/projects/director-workbench.webp')
+        with self.page.expect_popup() as popup:
+            preview.click()
+        popup.value.wait_for_load_state('load')
+        self.assertTrue(popup.value.url.endswith('/assets/projects/director-workbench.webp'))
+        popup.value.close()
+        self.page.goto(BASE + '/')
+        expect(self.page.locator('#toolsTitle')).to_have_text('导演工作台')
+        expect(self.page.locator('.tools-secondary a')).to_have_text('AI 无限画布')
+        self.page.locator('#langSwitch').click()
+        expect(self.page.locator('#toolsTitle')).to_have_text('Director’s workbench')
+        expect(self.page.locator('.tools-secondary a')).to_have_attribute('href', 'projects.html?lang=en#canvasTitle')
 
     def test_project_entries_work_without_javascript(self):
         context = self.browser.new_context(java_script_enabled=False)

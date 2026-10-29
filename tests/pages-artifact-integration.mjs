@@ -14,7 +14,8 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
   const script = step[1].replace(/^ {10}/gm, '');
   const source = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
   const projects = fs.readFileSync(path.join(root, 'projects.html'), 'utf8');
-  const references = [...(source + projects).matchAll(/<(?:link|script)\b[^>]*>/gi)].flatMap(([tag]) => {
+  const progress = fs.readFileSync(path.join(root, 'in-progress.html'), 'utf8');
+  const references = [...(source + projects + progress).matchAll(/<(?:link|script)\b[^>]*>/gi)].flatMap(([tag]) => {
     const attribute = /^<script\b/i.test(tag) ? 'src' : /\brel=["']stylesheet["']/i.test(tag) ? 'href' : null;
     const reference = attribute && tag.match(new RegExp(`\\b${attribute}=["']([^"']+)["']`, 'i'))?.[1];
     if (!reference) return [];
@@ -22,10 +23,10 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
     return url.origin === 'https://pages.fixture' ? [decodeURIComponent(url.pathname.slice(1))] : [];
   });
   assert.ok(references.length > 0, 'real index must reference local CSS or JavaScript');
-  const projectFiles = [...projects.matchAll(/(?:href|src)="(assets\/[^"]+)"/g)].map(match => match[1].split('?')[0]);
+  const projectFiles = [...(projects + progress).matchAll(/(?:href|src)="(assets\/[^"]+)"/g)].map(match => match[1].split('?')[0]);
   const fixture = fs.mkdtempSync(path.join(os.tmpdir(), 'highstrith-pages-'));
   try {
-    for (const file of ['index.html', 'projects.html', 'resume.html', 'admin.html', 'admin.css', 'serve.js']) {
+    for (const file of ['index.html', 'projects.html', 'in-progress.html', 'resume.html', 'admin.html', 'admin.css', 'serve.js']) {
       if (fs.existsSync(path.join(root, file))) {
         fs.copyFileSync(path.join(root, file), path.join(fixture, file));
       }
@@ -43,6 +44,7 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
     const html = fs.readFileSync(path.join(publicRoot, 'index.html'), 'utf8');
     assert.equal(html, source);
     assert.equal(fs.readFileSync(path.join(publicRoot, 'projects.html'), 'utf8'), projects);
+    assert.equal(fs.readFileSync(path.join(publicRoot, 'in-progress.html'), 'utf8'), progress);
     assert.deepEqual(references.filter(file => !fs.existsSync(path.join(publicRoot, file))), [], 'Pages artifact is missing local CSS/JS referenced by index.html');
     for (const file of [...references, ...projectFiles, 'assets/studio-mark.svg', 'data/works.json']) {
       assert.deepEqual(fs.readFileSync(path.join(publicRoot, file)), fs.readFileSync(path.join(root, file)), `${file} must be copied unchanged`);

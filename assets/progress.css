@@ -1,0 +1,73 @@
+/* A short visual notebook: six authentic production images, very little copy. */
+.progress-main { padding-block: 56px 64px; }
+.progress-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding-bottom: 44px; }
+.progress-heading h1 { margin: 0; font-size: 36px; font-weight: 450; line-height: 1.4; letter-spacing: -.03em; }
+.progress-heading > p { font-size: 13px; line-height: 1.8; color: var(--muted); }
+.progress-project { border-top: 1px solid var(--line); }
+.progress-project-heading { display: flex; align-items: center; justify-content: space-between; gap: 32px; padding-block: 30px 38px; }
+.progress-project-name { display: flex; align-items: center; gap: 20px; }
+.progress-project-name h2 { font-size: 25px; font-weight: 450; letter-spacing: -.025em; line-height: 1.5; }
+.progress-status { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; color: var(--orange-dark); white-space: nowrap; }
+.progress-status::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+.progress-project-heading > p { color: var(--muted); font-size: 12px; line-height: 1.8; }
+.progress-section + .progress-section { margin-top: 56px; }
+.progress-section-title { margin: 0 0 18px; font-size: 13px; font-weight: 500; }
+.progress-gallery { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 28px; align-items: start; max-width: 840px; }
+.progress-gallery figure { min-width: 0; margin: 0; }
+.progress-gallery a { position: relative; display: block; background: var(--exhibit-soft); border-radius: 3px; overflow: hidden; cursor: zoom-in; }
+.progress-gallery img { display: block; width: 100%; height: auto; }
+.progress-boards a { border: 1px solid var(--line); background: #fff; }
+.progress-image-hint { position: absolute; right: 12px; bottom: 12px; padding: 7px 11px; background: rgba(23,25,24,.82); color: #fff; font-size: 10px; opacity: 0; transition: opacity .2s; }
+.progress-gallery a:hover .progress-image-hint, .progress-gallery a:focus-visible .progress-image-hint { opacity: 1; }
+.progress-gallery figcaption { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-top: 13px; }
+.progress-gallery h4 { font-size: 13px; line-height: 1.6; font-weight: 500; margin: 0; }
+.progress-gallery figcaption p { font-size: 10px; color: var(--muted); line-height: 1.7; text-align: right; }
+.progress-footnote { font-size: 11px; line-height: 1.8; color: var(--muted); margin-top: 42px; }
+.progress-footer a { display: inline-flex; align-items: center; min-height: 44px; }
+.progress-viewer { width: min(1280px, calc(100vw - 48px)); height: min(920px, calc(100dvh - 40px)); max-width: none; max-height: none; margin: auto; border-radius: 5px; overflow: hidden; background: var(--surface-dark); color: var(--on-dark); }
+.progress-viewer[open] { display: flex; flex-direction: column; }
+.progress-viewer::backdrop { background: rgba(15,19,16,.88); }
+.progress-viewer-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 10px 18px; border-bottom: 1px solid #363d36; flex-shrink: 0; }
+.progress-viewer-header > span { font-size: 11px; color: var(--on-dark-body); }
+.progress-viewer-header > div { display: flex; gap: 16px; align-items: center; }
+#progressOriginal { min-height: 44px; display: inline-flex; align-items: center; font-size: 11px; color: var(--on-dark-body); text-decoration: underline; text-underline-offset: 4px; }
+.progress-viewer-stage { flex: 1; min-height: 0; position: relative; display: flex; align-items: center; justify-content: center; background: #0c100d; overflow: auto; }
+#progressViewerImage { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
+#progressViewerStatus { position: absolute; color: var(--on-dark-body); font-size: 12px; max-width: 30ch; padding: 20px; line-height: 1.8; text-align: center; }
+.progress-viewer-footer { flex-shrink: 0; padding: 18px 22px; display: flex; gap: 24px; justify-content: space-between; align-items: center; border-top: 1px solid #363d36; }
+.progress-viewer-footer h2 { font-size: 18px; font-weight: 450; line-height: 1.5; }
+.progress-viewer-footer p { font-size: 11px; color: var(--on-dark-body); margin-top: 4px; line-height: 1.8; }
+.progress-viewer-nav { display: flex; gap: 12px; flex-shrink: 0; }
+.progress-viewer-nav button { min-height: 44px; padding: 0 12px; background: transparent; color: inherit; font-size: 12px; }
+.progress-viewer-nav button:hover { background: #303730; }
+@media (max-width: 800px) {
+  .progress-heading { padding-bottom: 30px; }
+  .progress-heading h1 { font-size: 32px; }
+  .progress-project-heading { flex-direction: column; align-items: start; gap: 12px; padding-block: 24px 28px; }
+  .progress-gallery { gap: 24px; }
+  .progress-gallery figcaption { flex-direction: column; gap: 3px; }
+  .progress-gallery figcaption p { text-align: left; }
+}
+@media (max-width: 600px) {
+  .progress-main { padding-block: 32px 48px; }
+  .progress-heading { flex-direction: column; gap: 10px; padding-bottom: 26px; }
+  .progress-heading h1 { font-size: 29px; }
+  .progress-heading > p { font-size: 12px; }
+  .progress-project-name { gap: 14px; flex-wrap: wrap; }
+  .progress-project-name h2 { font-size: 23px; }
+  .progress-project-heading > p { font-size: 11px; }
+  .progress-gallery { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px 16px; }
+  .progress-section + .progress-section { margin-top: 38px; }
+  .progress-section-title { margin-bottom: 16px; font-size: 12px; }
+  .progress-gallery figcaption { flex-direction: column; gap: 4px; }
+  .progress-gallery h4 { font-size: 11px; }
+  .progress-gallery figcaption p { text-align: left; font-size: 9px; }
+  .progress-footer .footer-top > div { gap: 16px; flex-wrap: wrap; }
+  .progress-viewer { width: 100vw; height: 100dvh; border-radius: 0; padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .progress-viewer-header { padding: 8px 12px; }
+  .progress-viewer-footer { padding: 14px 16px; gap: 12px; }
+  .progress-viewer-footer h2 { font-size: 15px; }
+  .progress-viewer-footer p { font-size: 10px; }
+  .progress-viewer-nav { gap: 0; }
+  .progress-viewer-nav button { font-size: 11px; padding-inline: 9px; }
+}

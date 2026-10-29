@@ -13,7 +13,7 @@
 
   const copy = {
     cn: {
-      skip: '跳转到作品', navWorks: '作品', navProjects: '项目与应用', navResume: '创作者档案', navAbout: '关于', navContact: '联系', admin: '作品管理',
+      skip: '跳转到作品', navWorks: '作品', navProgress: '正在制作', navProjects: '项目与应用', navResume: '创作者档案', navAbout: '关于', navContact: '联系', admin: '作品管理',
       intro: '独立影像创作者 · 南京', heroTitle: '想象，在此成片',
       heroDesc: '用三维构建世界，用影像讲述故事。\n从一个念头，到让人记住的画面。',
       explore: '探索作品', selected: '精选放映', watch: '观看完整作品',
@@ -44,12 +44,14 @@
       navStills: '画面截图', stillsLabel: '画面定格', stillsTitle: '作品截图',
       stillsIntro: '过往创作留下的画面，\n记录不同阶段的光线与情绪。',
       galleryView: '画廊', listView: '目录', previewNote: '静音片段预览', pausePreview: '暂停预览', resumePreview: '继续预览',
-      toolsLabel: '创作之外，也造工具', toolsTitle: '让想法，顺手发生', toolsIntro: '从 AI 画布到日常计算，把自己的需要做成可以使用的应用。', toolsExplore: '查看项目与应用', toolFeatured: 'AI 无限画布',
+      toolsLabel: '项目与应用', toolsTitle: '导演工作台', toolsIntro: '把剧本、分镜、资产和提示词，放在一个工作台里。', toolsExplore: '查看项目与应用', toolFeatured: '导演工作台 App', toolsAlso: '也在做', toolCanvas: 'AI 无限画布',
       viewImage: '查看大图', zoomImage: '放大查看', fitImage: '适应画面', previousImage: '上一张', nextImage: '下一张', closeImage: '关闭图片浏览',
       imageLoading: '正在加载图片…', imageError: '图片暂时无法加载，请切换其他图片后重试。', copyEmail: '复制邮箱', emailCopied: '邮箱已复制', emailCopyFailed: '请手动复制：highstrith@gmail.com',
+      progressLabel: '成片之前', progressIntro: '资产、分镜，还有制作时的工作台。', inProduction: '制作中',
+      progressAsset: '森林湖岸都市', progressAssetKind: '场景资产', progressBoard: '高空投送', progressBoardKind: '分镜草图', progressWorkbench: '影片总览', progressWorkbenchKind: '导演工作台', progressNote: '制作中的阶段记录，画面会继续调整。', progressMore: '查看完整制作记录',
     },
     en: {
-      skip: 'Skip to works', navWorks: 'Works', navProjects: 'Projects', navResume: 'Resume', navAbout: 'About', navContact: 'Contact', admin: 'Manage works',
+      skip: 'Skip to works', navWorks: 'Works', navProgress: 'In progress', navProjects: 'Projects', navResume: 'Resume', navAbout: 'About', navContact: 'Contact', admin: 'Manage works',
       intro: 'Independent image maker · Nanjing', heroTitle: 'Imagination, in motion',
       heroDesc: 'Building worlds in 3D. Telling stories through film.\nFrom a first thought to an image that stays with you.',
       explore: 'Explore the works', selected: 'Selected screening', watch: 'Watch the full film',
@@ -80,9 +82,11 @@
       navStills: 'Stills', stillsLabel: 'Frozen frames', stillsTitle: 'Stills',
       stillsIntro: 'Frames left behind by past works,\ncapturing light and mood at different stages.',
       galleryView: 'Gallery', listView: 'Directory', previewNote: 'Silent film excerpts', pausePreview: 'Pause preview', resumePreview: 'Resume preview',
-      toolsLabel: 'Making tools, too', toolsTitle: 'Room for your ideas', toolsIntro: 'From an AI canvas to everyday calculations, small apps built around real needs.', toolsExplore: 'Explore projects & apps', toolFeatured: 'AI infinite canvas',
+      toolsLabel: 'Projects & apps', toolsTitle: 'Director’s workbench', toolsIntro: 'Scripts, storyboards, assets and prompts in one workspace.', toolsExplore: 'Explore projects & apps', toolFeatured: 'Director’s workbench app', toolsAlso: 'Also making', toolCanvas: 'AI infinite canvas',
       viewImage: 'View full image', zoomImage: 'Zoom in', fitImage: 'Fit to screen', previousImage: 'Previous', nextImage: 'Next', closeImage: 'Close image viewer',
       imageLoading: 'Loading image…', imageError: 'This image could not be loaded. Switch to another image and try again.', copyEmail: 'Copy email', emailCopied: 'Email copied', emailCopyFailed: 'Copy this address: highstrith@gmail.com',
+      progressLabel: 'Before the finished film', progressIntro: 'Assets, storyboards and a look at the workbench.', inProduction: 'In production',
+      progressAsset: 'Forest lakeside city', progressAssetKind: 'Environment asset', progressBoard: 'Aerial deployment', progressBoardKind: 'Storyboard sketch', progressWorkbench: 'Film overview', progressWorkbenchKind: 'Director’s workbench', progressNote: 'Work in progress. These images will continue to evolve.', progressMore: 'View the full production notes',
     },
   };
 
@@ -93,14 +97,16 @@
     { image: 'assets/stills/jade-blades.jpg', thumbnail: 'assets/stills/jade-blades-preview.webp', cnTitle: '翡翠之刃', enTitle: 'Jade Blades', cnDesc: '玉石质感与玫瑰金相结合的奇幻武器设计。', enDesc: 'Fantasy weapon design pairing jade-like blades with rose-gold fittings.' },
     { image: 'assets/stills/frost-rune-sword.jpg', thumbnail: 'assets/stills/frost-rune-sword-preview.webp', cnTitle: '寒渊符文剑', enTitle: 'Frost Rune Sword', cnDesc: '冰晶符文巨剑的三视图渲染展示。', enDesc: 'A rune-etched greatsword presented in a three-view render.' },
     { image: 'assets/stills/wasteland-dagger.jpg', thumbnail: 'assets/stills/wasteland-dagger-preview.webp', cnTitle: '废土之刃', enTitle: 'Wasteland Dagger', cnDesc: '扳手改造匕首的写实 PBR 材质练习。', enDesc: 'A realistic PBR study of a wrench-repurposed dagger.' },
-    { image: 'assets/uploads/posters/reset-day-20261007-16x9.png', cnTitle: '重置日 · 归零之后', enTitle: 'Reset Day · After the reset', cnDesc: '画面里的一束光，落在重新开始的那一刻。', enDesc: 'A beam of light landing on the moment everything starts over.' },
-    { image: 'assets/uploads/posters/lying-down-20261001-16x9.png', cnTitle: '趴着办公早该知道 · 床式工位', enTitle: 'Should Have Worked Lying Down · Bed desk', cnDesc: '一本正经的喜剧，藏在最日常的构图里。', enDesc: 'A straight-faced comedy hidden in an everyday composition.' },
-    { image: 'assets/posters/creative-3.jpg', cnTitle: '动作预演 · 一个转身', enTitle: 'Action Study · A turn', cnDesc: '角色动作与镜头节奏的一次练习。', enDesc: 'A study of character movement and camera rhythm.' },
-    { image: 'assets/posters/render-test.jpg', cnTitle: '能量实验 · 火焰材质', enTitle: 'Energy Study · Flame material', cnDesc: '火焰与能量材质的动态渲染实验。', enDesc: 'A motion render study of flame and energy materials.' },
   ];
+  const progressFrames = [
+    { image: 'assets/progress/weishizhinuo/forest-city.webp', cnTitle: '森林湖岸都市', enTitle: 'Forest lakeside city', cnDesc: '《未识之诺》场景资产', enDesc: 'Environment asset for 《未识之诺》' },
+    { image: 'assets/progress/weishizhinuo/storyboard-flight.webp', cnTitle: '高空投送', enTitle: 'Aerial deployment', cnDesc: '《未识之诺》分镜草图', enDesc: 'Storyboard sketch for 《未识之诺》' },
+    { image: 'assets/progress/weishizhinuo/director-overview.webp', cnTitle: '影片总览', enTitle: 'Film overview', cnDesc: '《未识之诺》导演工作台截图', enDesc: 'Director’s workbench for 《未识之诺》' },
+  ];
+  let viewerFrames = stillFrames;
 
   function renderStills() {
-    if (!stillsGrid) return;
+    if (!stillsGrid || !catalogueReady) return;
     stillsGrid.replaceChildren(...stillFrames.map((frame, index) => {
       const title = language === 'cn' ? frame.cnTitle : frame.enTitle;
       const desc = language === 'cn' ? frame.cnDesc : frame.enDesc;
@@ -152,6 +158,7 @@
 
   let language = 'cn';
   let works = [];
+  let catalogueReady = false;
   let featuredWorks = [];
   let selectedFeatureId = '';
   const featurePreviewSeconds = 10;
@@ -241,6 +248,20 @@
     const variants = imageVariants(source);
     const variant = thumbnail ? variants[0] : variants.find((item) => item.width >= 960) || variants.at(-1);
     return mediaURL(variant?.src || source);
+  }
+
+  const workAspects = new Map();
+
+  function workAspect(work) {
+    if (workAspects.has(work?.id)) return workAspects.get(work.id);
+    const variant = imageVariants(work?.poster).at(-1);
+    return variant?.width && variant?.height ? variant.width / variant.height : 16 / 9;
+  }
+
+  function setMediaAspect(container, ratio) {
+    if (!Number.isFinite(ratio) || ratio <= 0) return;
+    container.classList.toggle('is-portrait', ratio < 1);
+    container.style.setProperty('--media-aspect', String(ratio));
   }
 
   function setPosterImage(image, source, role) {
@@ -337,6 +358,15 @@
     featuredWorks = [...new Map(candidates.map((work) => [work.id, work])).values()].slice(0, 5);
     if (!featuredWorks.some((work) => work.id === selectedFeatureId)) selectedFeatureId = featuredWorks[0]?.id || '';
     renderCards();
+    catalogueReady = true;
+    renderStills();
+    // The catalogue establishes the lower sections' real distance from the
+    // viewport. Setting their sources earlier defeats native lazy loading.
+    grid?.getBoundingClientRect();
+    document.querySelectorAll('img[data-deferred-src]').forEach(image => {
+      image.src = image.dataset.deferredSrc;
+      image.removeAttribute('data-deferred-src');
+    });
     renderHeroControls();
     updateHero();
     applyFilters();
@@ -356,11 +386,23 @@
       card.type = 'button';
       card.dataset.workId = work.id;
       const media = create('span', 'work-media');
+      setMediaAspect(item, workAspect(work));
       const image = create('img');
       image.loading = 'lazy';
       image.decoding = 'async';
+      image.addEventListener('load', () => {
+        if (imageVariants(work.poster).length || workAspects.has(work.id) || !image.naturalHeight) return;
+        workAspects.set(work.id, image.naturalWidth / image.naturalHeight);
+        setMediaAspect(item, workAspect(work));
+      });
       setPosterImage(image, work.poster, 'card');
       const video = create('video');
+      video.addEventListener('loadedmetadata', () => {
+        const ratio = video.videoWidth / video.videoHeight;
+        if (!Number.isFinite(ratio) || ratio <= 0) return;
+        workAspects.set(work.id, ratio);
+        setMediaAspect(item, ratio);
+      });
       video.muted = true;
       video.defaultMuted = true;
       video.loop = true;
@@ -827,6 +869,7 @@
     const controller = new AbortController();
     playerController = controller;
     const listen = (event, callback) => playerVideo.addEventListener(event, callback, { signal: controller.signal });
+    listen('loadedmetadata', () => setMediaAspect(player, playerVideo.videoWidth / playerVideo.videoHeight));
     listen('playing', () => { clearPlayerTimer(); showPlayerState(''); });
     listen('waiting', () => { showPlayerState('buffering'); schedulePlayerWait(controller); });
     listen('stalled', () => { showPlayerState('buffering'); schedulePlayerWait(controller); });
@@ -868,6 +911,7 @@
   function openPlayer(work, trigger) {
     if (!player || !playerVideo) return;
     playerWork = work;
+    setMediaAspect(player, workAspect(work));
     playerReturnFocus = trigger || document.activeElement;
     const mobile = narrowScreen.matches || coarsePointer.matches;
     playerSource = mediaURL(mobile ? (work.mobileVideo || work.video) : (work.webVideo || work.video));
@@ -988,7 +1032,11 @@
 
   function setLanguage(nextLanguage) {
     language = nextLanguage;
-    document.querySelectorAll('[data-projects-link]').forEach(link => link.setAttribute('href', language === 'en' ? 'projects.html?lang=en' : 'projects.html'));
+    document.querySelectorAll('[data-projects-link]').forEach(link => {
+      const hash = new URL(link.getAttribute('href'), siteBaseURL).hash;
+      link.setAttribute('href', `projects.html${language === 'en' ? '?lang=en' : ''}${hash}`);
+    });
+    document.querySelectorAll('[data-progress-link]').forEach(link => link.setAttribute('href', language === 'en' ? 'in-progress.html?lang=en' : 'in-progress.html'));
     document.querySelectorAll('[data-resume-link]').forEach(el => {
       el.setAttribute('href', language === 'en' ? 'resume.html?lang=en' : 'resume.html');
     });
@@ -1036,16 +1084,22 @@
     $('#featurePreviewLabel').textContent = t(featurePaused ? 'resumePreview' : 'pausePreview');
     $('#featurePreviewToggle').setAttribute('aria-label', t(featurePaused ? 'resumePreview' : 'pausePreview'));
     $('#stillViewerClose').setAttribute('aria-label', t('closeImage'));
-    $('[data-tool-image]')?.setAttribute('alt', language === 'cn' ? 'AI 无限画布界面' : 'AI infinite canvas interface');
+    $('[data-tool-image]')?.setAttribute('alt', language === 'cn' ? '导演工作台资产工作区' : 'Director’s workbench asset workspace');
+    document.querySelectorAll('[data-home-progress]').forEach(link => {
+      const frame = progressFrames[Number(link.dataset.homeProgress)];
+      const title = language === 'cn' ? frame.cnTitle : frame.enTitle;
+      link.setAttribute('aria-label', `${t('viewImage')}: ${title}`);
+      link.querySelector('img').alt = language === 'cn' ? frame.cnDesc + ' · ' + title : frame.enDesc + ': ' + title;
+    });
     if (stillViewer?.open) updateStillText();
   }
 
   function updateStillText() {
-    const frame = stillFrames[selectedStill];
+    const frame = viewerFrames[selectedStill];
     const title = language === 'cn' ? frame.cnTitle : frame.enTitle;
     $('#stillViewerTitle').textContent = title;
     $('#stillViewerDescription').textContent = language === 'cn' ? frame.cnDesc : frame.enDesc;
-    $('#stillViewerPosition').textContent = `${String(selectedStill + 1).padStart(2, '0')} / ${String(stillFrames.length).padStart(2, '0')}`;
+    $('#stillViewerPosition').textContent = `${String(selectedStill + 1).padStart(2, '0')} / ${String(viewerFrames.length).padStart(2, '0')}`;
     stillImage.alt = title;
     const zoomed = stillStage.classList.contains('is-zoomed');
     $('#stillZoom').setAttribute('aria-label', t(zoomed ? 'fitImage' : 'zoomImage'));
@@ -1059,7 +1113,7 @@
   }
 
   function showStill(index) {
-    selectedStill = (index + stillFrames.length) % stillFrames.length;
+    selectedStill = (index + viewerFrames.length) % viewerFrames.length;
     resetStillZoom();
     updateStillText();
     const status = $('#stillViewerStatus');
@@ -1076,10 +1130,11 @@
       $('#stillZoom').disabled = false;
     };
     stillImage.onerror = () => { status.textContent = t('imageError'); };
-    stillImage.src = mediaURL(stillFrames[selectedStill].image);
+    stillImage.src = mediaURL(viewerFrames[selectedStill].image);
   }
 
-  function openStill(index, trigger) {
+  function openStill(index, trigger, frames = stillFrames) {
+    viewerFrames = frames;
     stillReturnFocus = trigger;
     stopPreview();
     hideQrPreview();
@@ -1099,6 +1154,11 @@
   }
 
   $('#stillZoom')?.addEventListener('click', toggleStillZoom);
+  document.querySelectorAll('[data-home-progress]').forEach(link => link.addEventListener('click', event => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    openStill(Number(link.dataset.homeProgress), link, progressFrames);
+  }));
   let suppressStillClickUntil = 0;
   stillImage?.addEventListener('click', () => {
     if (performance.now() >= suppressStillClickUntil) toggleStillZoom();

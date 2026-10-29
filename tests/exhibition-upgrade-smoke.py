@@ -95,6 +95,11 @@ class ExhibitionUpgrade(unittest.TestCase):
         expect(page.locator('#menuToggle')).to_have_attribute('aria-expanded', 'true')
         expect(page.locator('.main-nav a').first).to_be_focused()
         page.keyboard.press('Tab')
+        expect(page.locator('.nav-collection summary')).to_be_focused()
+        page.keyboard.press('Enter')
+        page.keyboard.press('Tab')
+        expect(page.locator('.main-nav [data-progress-section]')).to_be_focused()
+        page.keyboard.press('Tab')
         expect(page.locator('.main-nav a[href="#stills"]')).to_be_focused()
         expect(page.locator('.main-nav')).to_be_visible()
         page.locator('.main-nav a[href="#stills"]').click()
@@ -167,6 +172,8 @@ class ExhibitionUpgrade(unittest.TestCase):
     def test_navigation_tracks_long_sections_and_resets_at_home(self):
         page = self.page(viewport={'width': 1440, 'height': 900}, reduced_motion='reduce')
         for section in ['works', 'stills', 'about', 'contact']:
+            if section == 'stills':
+                page.locator('.nav-collection summary').click()
             page.locator('.main-nav a[href="#%s"]' % section).click()
             expect(page.locator('.main-nav a[aria-current="true"]')).to_have_attribute('href', '#' + section)
         page.locator('.brand').click()
