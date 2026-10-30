@@ -7,6 +7,7 @@
   if (!header || !nav || !toggle) return;
   const collection = header.querySelector('.nav-collection');
   const collectionToggle = collection?.querySelector('summary');
+  header.querySelectorAll('a').forEach(link => link.target = '_self');
   const compact = matchMedia('(max-width: 800px)');
   const english = () => document.documentElement.lang === 'en';
   function label() {
@@ -29,6 +30,16 @@
   toggle.hidden = false;
   document.documentElement.classList.add('shell-ready');
   toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+  // Keep ordinary site navigation in this document's browsing context,
+  // including embedded browsers that otherwise intercept link clicks.
+  header.addEventListener('click', event => {
+    const link = event.target.closest('a');
+    if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const destination = new URL(link.href, location.href);
+    if (destination.origin !== location.origin) return;
+    event.preventDefault();
+    location.assign(destination.href);
+  });
   document.addEventListener('click', event => {
     if (collection && !collection.contains(event.target)) collection.open = false;
     if (!header.contains(event.target)) setOpen(false);

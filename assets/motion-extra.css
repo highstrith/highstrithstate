@@ -1,0 +1,31 @@
+/* 其他小动效（白底克制版）：只用 transform / opacity / filter，不改字号上限、不改布局。 */
+/* 首屏：暖色光晕缓慢漂移，盖在首屏封面后，不抢文字 */
+.hero { position: relative; }
+.hero::before { content: ''; position: absolute; inset: -40px -20px auto -20px; height: 420px; background: radial-gradient(closest-side, rgba(255, 138, 42, .22), rgba(255, 138, 42, 0) 70%), radial-gradient(closest-side at 80% 20%, rgba(255, 200, 120, .18), rgba(255, 200, 120, 0) 70%); filter: blur(10px); opacity: .8; pointer-events: none; z-index: 0; animation: heroGlow 14s ease-in-out infinite alternate; }
+.hero > * { position: relative; z-index: 1; }
+@keyframes heroGlow { from { transform: translateY(0) scale(1); opacity: .65; } to { transform: translateY(18px) scale(1.04); opacity: .9; } }
+/* 首屏标题：入场后轻微的字母间距收紧，不改字号 */
+#heroTitle { animation: heroTitleSettle 1.1s cubic-bezier(.22, .8, .3, 1) both; }
+@keyframes heroTitleSettle { from { letter-spacing: .06em; opacity: 0; transform: translateY(10px); } to { letter-spacing: 0; opacity: 1; transform: translateY(0); } }
+/* 作品筛选药丸：切换时有明显的背景与轻微放大 */
+.work-filters button { transition: background .3s ease, color .3s ease, transform .3s ease, box-shadow .3s ease; }
+.work-filters button[aria-pressed='true'] { transform: scale(1.04); box-shadow: 0 6px 16px rgba(0,0,0,.12); }
+.work-filters button:hover:not([aria-pressed='true']) { transform: translateY(-1px); }
+/* 作品卡片悬停：轻微上浮加阴影，不动外层揭示动效 */
+.work-card { transition: transform .35s ease, box-shadow .35s ease; }
+.work-card:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(0,0,0,.12); }
+/* 分隔跑马灯：只放在作品区与正在制作之间，14px 克制尺寸 */
+.motion-marquee { overflow: hidden; white-space: nowrap; padding: 14px 48px; border-top: 1px solid #e6e2da; border-bottom: 1px solid #e6e2da; background: #f4f4f0; font-size: 14px; letter-spacing: .12em; color: #6b655c; -webkit-mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent); mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent); }
+.motion-marquee span { display: inline-block; padding-right: 48px; animation: marqueeMove 28s linear infinite; }
+.motion-marquee b { color: #ff6a00; font-weight: 400; }
+@keyframes marqueeMove { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+/* 按钮反馈：渐变底与轻微上浮，磁吸由 JS 补 6px 内位移 */
+.button, .fly-more { transition: transform .25s ease, background .25s ease, box-shadow .25s ease; }
+.button:hover, .fly-more:hover { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(0,0,0,.12); }
+.button-dark:hover { background: linear-gradient(120deg, #222, #ff6a00 160%); }
+/* 滚动明暗：带 data-brighten 的段落，滚入时由暗变亮 */
+[data-brighten] { transition: opacity .6s ease; }
+@media (prefers-reduced-motion: reduce) {
+  .hero::before, #heroTitle, .motion-marquee span { animation: none !important; }
+  .work-card:hover, .work-filters button[aria-pressed='true'] { transform: none; }
+}

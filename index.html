@@ -14,15 +14,18 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://highstrith.github.io/highstrithstate/">
   <meta name="color-scheme" content="light">
+  <script src="assets/theme.js?v=20261030-theme"></script>
   <link rel="icon" type="image/svg+xml" href="assets/studio-mark.svg?v=20261008-n">
   <link rel="apple-touch-icon" href="assets/studio-mark.svg?v=20261008-n">
   <link rel="manifest" href="assets/site.webmanifest">
   <link rel="stylesheet" href="assets/base.css?v=20261029-stills">
   <link rel="stylesheet" href="assets/studio.css?v=20261030-qr-click">
-  <link rel="stylesheet" href="assets/exhibition.css?v=20261030-align-links">
+  <link rel="stylesheet" href="assets/exhibition.css?v=20261030-header">
   <link rel="stylesheet" href="assets/fly-forward.css?v=20261030-vortex3">
   <link rel="stylesheet" href="assets/director-word.css?v=20261030-word2">
   <link rel="stylesheet" href="assets/contact-rows.css?v=20261030-rows3">
+  <link rel="stylesheet" href="assets/motion-extra.css?v=20261030-m2">
+  <link rel="stylesheet" href="assets/theme.css?v=20261030-theme">
 </head>
 <body>
   <a class="skip-link" href="#works" data-i18n="skip">跳转到作品</a>
@@ -39,6 +42,7 @@
     </nav>
     <div class="header-actions">
       <a id="adminEntryLink" href="admin.html" data-i18n="admin" hidden>作品管理</a>
+      <button id="themeToggle" type="button" aria-label="切换到深色模式" aria-pressed="false" hidden><svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg><svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button>
       <button id="langSwitch" type="button" aria-label="Switch to English" aria-pressed="false">EN</button>
       <button id="menuToggle" class="menu-toggle" type="button" aria-controls="mainNavigation" aria-expanded="false" hidden><span class="menu-icon" aria-hidden="true"></span><span data-menu-label>菜单</span></button>
     </div>
@@ -80,7 +84,7 @@
       </div></div>
     </section>
     <section class="works-section page-width" id="works" aria-labelledby="worksTitle">
-      <div class="section-heading"><div data-reveal><p class="section-label" data-i18n="portfolio">每个画面，都有来处</p><h2 id="worksTitle" data-i18n="worksTitle" data-lines>作品集</h2></div><p class="works-intro" data-i18n="worksIntro" data-reveal>一些故事，一些实验。<br>在不同的媒介里，寻找自己的表达。</p></div>
+      <div class="section-heading"><div data-reveal><p class="section-label" data-i18n="portfolio">每个画面，都有来处</p><h2 id="worksTitle" data-i18n="worksTitle" data-lines>全部作品</h2></div><p class="works-intro" data-i18n="worksIntro" data-reveal data-brighten>一些故事，一些实验。<br>在不同的媒介里，寻找自己的表达。</p></div>
       <div class="works-toolbar" data-reveal>
         <div class="work-filters" id="workFilters" role="group" aria-label="作品分类">
           <button type="button" data-filter="all" aria-pressed="true"><span data-i18n="all">全部作品</span><span class="filter-total">20</span></button>
@@ -122,6 +126,7 @@
           <!-- generated-works:end -->
       </noscript>
     </section>
+    <div class="motion-marquee" aria-hidden="true"><span>AI 影像 <b>·</b> 三维动画 <b>·</b> 动态视觉 <b>·</b> 剪辑 <b>·</b> 想象，在此成片 <b>·</b>&nbsp;AI 影像 <b>·</b> 三维动画 <b>·</b> 动态视觉 <b>·</b> 剪辑 <b>·</b> 想象，在此成片 <b>·</b>&nbsp;</span></div>
     <section class="home-progress-section page-width" id="in-progress" aria-labelledby="homeProgressTitle">
       <div class="section-heading"><div><p class="section-label" data-i18n="progressLabel">成片之前</p><h2 id="homeProgressTitle" class="production-title"><span data-i18n="navProgress">正在制作</span><span class="production-title-ellipsis" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span></h2></div><p class="works-intro" data-i18n="progressIntro">资产、分镜，还有制作时的工作台。</p></div>
       <div class="home-progress-layout">
@@ -960,12 +965,13 @@
   <script src="assets/scroll-reveal.js?v=20261030-linefix" defer></script>
   <script src="assets/gallery-navigation.js?v=20261029-motion2" defer></script>
   <script src="assets/studio.js?v=20261030-qr-click2" defer></script>
-  <script src="assets/site-shell.js?v=20261029-progress-nav" defer></script>
+  <script src="assets/site-shell.js?v=20261030-self" defer></script>
   <script src="assets/vendor/gsap-3.15.0/gsap.min.js" defer></script>
   <script src="assets/vendor/gsap-3.15.0/ScrollTrigger.min.js" defer></script>
   <script src="assets/production-strip.js?v=20261030-strip-final" defer></script>
   <script src="assets/production-motion.js?v=20261030-strip-final" defer></script>
   <script src="assets/fly-forward.js?v=20261030-vortex3" defer></script>
   <script src="assets/director-word.js?v=20261030-word2" defer></script>
+  <script src="assets/motion-extra.js?v=20261030-m1" defer></script>
 </body>
 </html>

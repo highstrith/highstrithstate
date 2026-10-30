@@ -1,0 +1,33 @@
+/* Light is the original V2 palette. Dark changes surfaces, never media. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #111214;
+  --ink: #ecece7;
+  --muted: #a4a6a5;
+  --line: #36383b;
+  --text-secondary: #c0c2bf;
+  --orange: #e98a62;
+  --orange-dark: #f0a17c;
+  --exhibit-white: #1b1d20;
+  --exhibit-soft: #282b2e;
+  --surface-dark: #191b1e;
+}
+.site-header #themeToggle { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--line); border-radius: 10px; background: transparent; color: var(--ink); }
+.site-header #themeToggle:hover { background: var(--exhibit-soft); }
+#themeToggle svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+#themeToggle .theme-sun, [data-theme="dark"] #themeToggle .theme-moon { display: none; }
+[data-theme="dark"] #themeToggle .theme-sun { display: block; }
+[data-theme="dark"] :is(.project-preview, .progress-gallery a, .home-progress-card img) { background: var(--exhibit-white); }
+[data-theme="dark"] :is(.progress-gallery a:hover, .home-progress-card:hover img) { background: var(--exhibit-soft); }
+[data-theme="dark"] .production-status { background: #32251f; }
+[data-theme="dark"] .production-status-track { background: #674638; }
+[data-theme="dark"] .about-section { background: var(--surface-dark); color: var(--on-dark); }
+[data-theme="dark"] .about-content p.about-lead { color: var(--on-dark); }
+[data-theme="dark"] .work-filters button:hover:not([aria-pressed="true"]) { background: var(--exhibit-soft); }
+[data-theme="dark"] .button-dark:hover { background: #d6d6cf; color: var(--paper); }
+[data-theme="dark"] .hero::before { opacity: .22; animation: none; }
+[data-theme="dark"] .motion-marquee { background: var(--paper); color: var(--muted); border-color: var(--line); }
+[data-theme="dark"] :is(.text-link, .hero-foot a, .footer-top a, .contact-details a, .tools-secondary a, .progress-return, .progress-index a, .comment-toggle, .view-switch button, .production-strip-controls button, .work-filters button, #musicToggle) { text-decoration-color: currentColor; }
+@media (max-width: 360px) {
+  .site-header .brand > span { display: none; }
+}

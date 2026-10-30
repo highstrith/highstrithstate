@@ -1,5 +1,6 @@
 """Behavior contracts for the experimental gallery upgrade. Run against serve.js."""
 import os
+import re
 import unittest
 from playwright.sync_api import expect, sync_playwright
 
@@ -24,6 +25,102 @@ class ExhibitionUpgrade(unittest.TestCase):
         page.goto(BASE + '/', wait_until='domcontentloaded')
         expect(page.locator('#worksGrid .work-card')).to_have_count(20)
         return page
+
+    def test_floating_header_keeps_centered_navigation_and_compact_menu(self):
+        page = self.browser.new_page(viewport={'width': 1440, 'height': 900}, reduced_motion='reduce')
+        self.addCleanup(page.close)
+        for path in ['/', '/projects.html', '/in-progress.html']:
+            page.goto(BASE + path, wait_until='domcontentloaded')
+            expect(page.locator('html')).to_have_class(re.compile('shell-ready'))
+            for width in [1440, 1024, 820, 390, 320]:
+                page.set_viewport_size({'width': width, 'height': 900})
+                for language in ['cn', 'en']:
+                    if language == 'en': page.locator('#langSwitch').click()
+                    header = page.locator('.site-header')
+                    metrics = header.evaluate('''e => {
+                      const r=e.getBoundingClientRect(), s=getComputedStyle(e);
+                      return {x:r.x, right:r.right, radius:parseFloat(s.borderRadius), height:r.height,
+                        background:s.backgroundColor, overflow:document.documentElement.scrollWidth>innerWidth};
+                    }''')
+                    self.assertGreaterEqual(metrics['x'], 10)
+                    self.assertLessEqual(metrics['right'], width - 10)
+                    self.assertGreaterEqual(metrics['radius'], 12)
+                    self.assertLessEqual(metrics['height'], 80)
+                    self.assertFalse(metrics['overflow'], (path, width, language))
+                    self.assertEqual(metrics['background'], 'rgb(244, 244, 240)')
+                    if width > 800:
+                        nav = page.locator('.main-nav').bounding_box()
+                        self.assertAlmostEqual(nav['x'] + nav['width']/2, width/2, delta=2)
+                        brand = page.locator('.brand').bounding_box()
+                        actions = page.locator('.header-actions').bounding_box()
+                        self.assertLess(brand['x'] + brand['width'], nav['x'])
+                        self.assertLess(nav['x'] + nav['width'], actions['x'])
+                    else:
+                        page.locator('#menuToggle').click()
+                        expect(page.locator('.main-nav')).to_be_visible()
+                        page.locator('.nav-collection summary').click()
+                        expect(page.locator('.nav-submenu')).to_be_visible()
+                        self.assertLessEqual(page.locator('.nav-submenu').bounding_box()['width'], width-20)
+                        page.keyboard.press('Escape')
+                        page.keyboard.press('Escape')
+                        expect(page.locator('.main-nav')).not_to_be_visible()
+                        expect(page.locator('#menuToggle')).to_be_focused()
+                page.locator('#langSwitch').click()
+            page.locator('.brand').evaluate('e=>window.scrollTo(0,500)')
+            self.assertGreaterEqual(page.locator('.site-header').bounding_box()['y'], 10)
+
+    def test_theme_switch_persists_across_pages_and_keeps_media_original(self):
+        page = self.browser.new_page(viewport={'width': 1440, 'height': 900}, reduced_motion='reduce')
+        self.addCleanup(page.close)
+        page.goto(BASE + '/', wait_until='domcontentloaded')
+        expect(page.locator('#themeToggle')).to_be_visible()
+        expect(page.locator('html')).to_have_attribute('data-theme', 'light')
+        poster = page.locator('#heroPoster').get_attribute('src')
+        page.locator('#themeToggle').click()
+        expect(page.locator('html')).to_have_attribute('data-theme', 'dark')
+        expect(page.locator('#themeToggle')).to_have_attribute('aria-pressed', 'true')
+        expect(page.locator('#themeToggle')).to_have_attribute('aria-label', '切换到浅色模式')
+        for selector in ['html', '.site-header']:
+            self.assertEqual(page.locator(selector).evaluate('e=>getComputedStyle(e).backgroundColor'), 'rgb(17, 18, 20)')
+        self.assertEqual(page.locator('#heroPoster').get_attribute('src'), poster)
+        self.assertEqual(page.locator('#heroPoster').evaluate('e=>getComputedStyle(e).filter'), 'none')
+        page.locator('#langSwitch').click()
+        expect(page.locator('#themeToggle')).to_have_attribute('aria-label', 'Switch to light mode')
+        page.reload(wait_until='domcontentloaded')
+        expect(page.locator('html')).to_have_attribute('data-theme', 'dark')
+        for path in ['/projects.html?lang=en', '/in-progress.html?lang=en']:
+            page.goto(BASE + path, wait_until='domcontentloaded')
+            expect(page.locator('html')).to_have_attribute('data-theme', 'dark')
+            expect(page.locator('#themeToggle')).to_have_attribute('aria-label', 'Switch to light mode')
+        page.locator('#themeToggle').focus()
+        page.keyboard.press('Space')
+        expect(page.locator('html')).to_have_attribute('data-theme', 'light')
+        page.goto(BASE + '/', wait_until='domcontentloaded')
+        expect(page.locator('html')).to_have_attribute('data-theme', 'light')
+
+    def test_theme_storage_failure_does_not_break_switching(self):
+        page = self.browser.new_page(viewport={'width': 390, 'height': 844})
+        self.addCleanup(page.close)
+        page.add_init_script("Object.defineProperty(window,'localStorage',{get(){throw new Error('unavailable')}})")
+        page.goto(BASE + '/', wait_until='domcontentloaded')
+        page.locator('#themeToggle').click()
+        expect(page.locator('html')).to_have_attribute('data-theme', 'dark')
+        page.locator('#themeToggle').click()
+        expect(page.locator('html')).to_have_attribute('data-theme', 'light')
+
+    def test_header_internal_navigation_uses_current_tab(self):
+        page = self.browser.new_page(viewport={'width': 1440, 'height': 900}, reduced_motion='reduce')
+        self.addCleanup(page.close)
+        for path in ['/', '/projects.html', '/in-progress.html']:
+            page.goto(BASE + path, wait_until='domcontentloaded')
+            for link in page.locator('.site-header a').all():
+                expect(link).to_have_attribute('target', '_self')
+            page.locator('.main-nav > a[href^="projects.html"]').click()
+            expect(page).to_have_url(re.compile('/projects.html'))
+            self.assertEqual(len(page.context.pages), 1)
+            page.locator('.main-nav a[href*="#about"]').click()
+            expect(page).to_have_url(re.compile('index.html.*#about'))
+            self.assertEqual(len(page.context.pages), 1)
 
     def test_directory_view_preserves_search_filter_and_language(self):
         page = self.page(viewport={'width': 1440, 'height': 900})
