@@ -1,13 +1,12 @@
 /* A local, original adaptation of proximity-responsive elastic typography. */
-(() => {
+document.querySelectorAll('#heroTitle, #toolsTitle').forEach(heading => {
   'use strict';
-  const heading = document.getElementById('toolsTitle');
-  if (!heading) return;
-  const surface = heading.closest('.tools-preview-copy');
+  const surface = heading.closest('.hero-title-wrap, .tools-preview-copy');
   const media = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
   const ns = 'http://www.w3.org/2000/svg';
   const filters = document.createElementNS(ns, 'svg');
-  filters.id = 'directorWordFilters';
+  filters.id = `${heading.id}WordFilters`;
+  filters.setAttribute('class', 'elastic-word-filters');
   filters.setAttribute('width', '0');
   filters.setAttribute('height', '0');
   filters.style.position = 'absolute';
@@ -44,7 +43,7 @@
         node.className = 'director-letter';
         node.textContent = character;
         const filter = document.createElementNS(ns, 'filter');
-        filter.id = `director-word-warp-${letters.length}`;
+        filter.id = `${heading.id}-word-warp-${letters.length}`;
         for (const [key, value] of Object.entries({x:'-20%',y:'-20%',width:'140%',height:'140%'})) filter.setAttribute(key, value);
         const noise = document.createElementNS(ns, 'feTurbulence');
         noise.setAttribute('type', 'fractalNoise');
@@ -115,4 +114,4 @@
   addEventListener('scroll', reset, {passive: true});
   document.addEventListener('visibilitychange', reset);
   build();
-})();
+});

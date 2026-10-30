@@ -1,4 +1,4 @@
-"""The Director heading responds locally to a mouse; the rest of the site does not."""
+"""The Hero and Director headings respond locally to a mouse."""
 import os
 import unittest
 from playwright.sync_api import sync_playwright, expect
@@ -32,17 +32,17 @@ class DirectorWord(unittest.TestCase):
         heading = page.locator('#toolsTitle')
         original = heading.bounding_box()
         intro = page.locator('[data-i18n="toolsIntro"]').bounding_box()
-        first = page.locator('.director-letter').first.bounding_box()
+        first = heading.locator('.director-letter').first.bounding_box()
         page.mouse.move(first['x'] + first['width']/2, first['y'] + first['height']/2)
         page.wait_for_timeout(220)
-        scales = page.locator('.director-letter').evaluate_all("els => els.map(e => new DOMMatrix(getComputedStyle(e).transform).m22)")
+        scales = heading.locator('.director-letter').evaluate_all("els => els.map(e => new DOMMatrix(getComputedStyle(e).transform).m22)")
         self.assertGreater(scales[0], 1.08)
         self.assertGreater(scales[0], scales[-1] + .04)
         self.assertAlmostEqual(original['height'], heading.bounding_box()['height'], delta=1)
         self.assertAlmostEqual(intro['y'], page.locator('[data-i18n="toolsIntro"]').bounding_box()['y'], delta=1)
         page.mouse.move(10, 10)
         page.wait_for_timeout(850)
-        self.assertTrue(all(value == 'none' for value in page.locator('.director-letter').evaluate_all('els => els.map(e => getComputedStyle(e).transform)')))
+        self.assertTrue(all(value == 'none' for value in heading.locator('.director-letter').evaluate_all('els => els.map(e => getComputedStyle(e).transform)')))
         self.assertEqual(page.locator('#studioCursor').count(), 0)
         self.assertNotEqual(page.locator('body').evaluate('e => getComputedStyle(e).cursor'), 'none')
 
@@ -51,7 +51,8 @@ class DirectorWord(unittest.TestCase):
         page.locator('#langSwitch').click()
         expect(page.locator('#toolsTitle')).to_have_text('Director’s workbench')
         expect(page.locator('#toolsTitle')).to_have_attribute('aria-label', 'Director’s workbench')
-        self.assertGreater(page.locator('.director-letter').count(), 10)
+        expect(page.locator('#heroTitle')).to_have_attribute('aria-label', 'Imagination, in motion')
+        self.assertGreater(page.locator('#toolsTitle .director-letter').count(), 10)
         page.locator('#toolsTitle').hover()
         page.emulate_media(reduced_motion='reduce')
         page.wait_for_timeout(150)
@@ -71,6 +72,29 @@ class DirectorWord(unittest.TestCase):
         fallback.goto(BASE, wait_until='domcontentloaded')
         expect(fallback.locator('#toolsTitle')).to_have_text('导演工作台')
         self.assertEqual(fallback.locator('.director-letter').count(), 0)
+
+    def test_hero_letters_ripple_restore_and_keep_independent_filters(self):
+        page = self.page()
+        hero = page.locator('#heroTitle')
+        expect(hero.locator('.director-letter')).to_have_count(7)
+        hero.scroll_into_view_if_needed()
+        page.wait_for_timeout(700)
+        first = hero.locator('.director-letter').first
+        first.hover()
+        page.wait_for_timeout(220)
+        self.assertGreater(first.evaluate('e => new DOMMatrix(getComputedStyle(e).transform).m22'), 1.08)
+        self.assertTrue(all(value == 'none' for value in page.locator('#toolsTitle .director-letter').evaluate_all('els => els.map(e => getComputedStyle(e).transform)')))
+        page.mouse.move(10, 10)
+        page.wait_for_timeout(850)
+        self.assertTrue(all(value == 'none' for value in hero.locator('.director-letter').evaluate_all('els => els.map(e => getComputedStyle(e).transform)')))
+        ids = page.locator('.elastic-word-filters filter').evaluate_all('els => els.map(e => e.id)')
+        self.assertEqual(len(ids), 12)
+        self.assertEqual(len(set(ids)), len(ids))
+        page.locator('#langSwitch').click()
+        expect(hero).to_have_text('Imagination, in motion')
+        expect(hero).to_have_attribute('aria-label', 'Imagination, in motion')
+        self.assertGreater(hero.locator('.director-letter').count(), 10)
+        self.assertEqual(hero.locator('.rv-line').count(), 0)
 
 
 if __name__ == '__main__':

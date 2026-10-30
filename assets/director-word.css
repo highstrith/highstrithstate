@@ -1,7 +1,7 @@
-/* Local mouse response on the Director heading; layout and native cursor stay intact. */
-#toolsTitle .director-word-chunk { position: relative; display: inline-block; white-space: nowrap; }
-#toolsTitle .director-letter { display: inline-block; transform-origin: 50% 85%; color: color-mix(in srgb, var(--ink), var(--orange) var(--director-accent, 0%)); }
-#directorWordFilters { position: absolute; width: 0; height: 0; pointer-events: none; }
+/* Local response on the two selected headings; native cursor stays intact. */
+:is(#heroTitle, #toolsTitle) .director-word-chunk { position: relative; display: inline-block; white-space: nowrap; }
+:is(#heroTitle, #toolsTitle) .director-letter { display: inline-block; transform-origin: 50% 85%; color: color-mix(in srgb, var(--ink), var(--orange) var(--director-accent, 0%)); }
+.elastic-word-filters { position: absolute; width: 0; height: 0; pointer-events: none; }
 @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
-  #toolsTitle .director-letter { transform: none !important; filter: none !important; color: inherit; }
+  :is(#heroTitle, #toolsTitle) .director-letter { transform: none !important; filter: none !important; color: inherit; }
 }
