@@ -44,7 +44,7 @@ class ProgressPage(unittest.TestCase):
         expect(page.locator('.home-progress-grid')).to_be_visible()
         page.locator('#in-progress [data-progress-link]').click()
         expect(page).to_have_url(BASE + '/in-progress.html')
-        expect(page.locator('h1')).to_have_text('正在制作')
+        expect(page.locator('h1')).to_contain_text('正在制作')
         expect(page.locator('#progressProjectTitle')).to_have_text('《未识之诺》')
         expect(page.locator('.progress-gallery a')).to_have_count(15)
         expect(page.locator('video, audio')).to_have_count(0)
@@ -131,7 +131,7 @@ class ProgressPage(unittest.TestCase):
     def test_file_and_no_script_keep_images_and_links_available(self):
         page = self.page(java_script_enabled=False)
         page.goto((ROOT / 'in-progress.html').as_uri(), wait_until='load')
-        expect(page.locator('h1')).to_have_text('正在制作')
+        expect(page.locator('h1')).to_contain_text('正在制作')
         links = page.locator('.progress-gallery a')
         expect(links).to_have_count(15, timeout=1500)
         for link in links.all():

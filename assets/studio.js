@@ -45,6 +45,7 @@
       stillsIntro: '过往创作留下的画面，\n记录不同阶段的光线与情绪。',
       galleryView: '画廊', listView: '目录', previewNote: '静音片段预览', pausePreview: '暂停预览', resumePreview: '继续预览',
       toolsLabel: '项目与应用', toolsTitle: '导演工作台', toolsIntro: '把剧本、分镜、资产和提示词，放在一个工作台里。', toolsExplore: '查看项目与应用', toolFeatured: '导演工作台 App', toolsAlso: '也在做', toolCanvas: 'AI 无限画布',
+      toolCarouselPause: '暂停轮播', toolCarouselResume: '继续轮播', toolCarouselLink: '查看导演工作台项目',
       viewImage: '查看大图', zoomImage: '放大查看', fitImage: '适应画面', previousImage: '上一张', nextImage: '下一张', closeImage: '关闭图片浏览', backImages: '返回图集',
       imageLoading: '正在加载图片…', imageError: '图片暂时无法加载，请切换其他图片后重试。', copyEmail: '复制邮箱', emailCopied: '邮箱已复制', emailCopyFailed: '请手动复制：highstrith@gmail.com',
       progressLabel: '成片之前', progressIntro: '资产、分镜，还有制作时的工作台。', inProduction: '制作中',
@@ -83,6 +84,7 @@
       stillsIntro: 'Frames left behind by past works,\ncapturing light and mood at different stages.',
       galleryView: 'Gallery', listView: 'Directory', previewNote: 'Silent film excerpts', pausePreview: 'Pause preview', resumePreview: 'Resume preview',
       toolsLabel: 'Projects & apps', toolsTitle: 'Director’s workbench', toolsIntro: 'Scripts, storyboards, assets and prompts in one workspace.', toolsExplore: 'Explore projects & apps', toolFeatured: 'Director’s workbench app', toolsAlso: 'Also making', toolCanvas: 'AI infinite canvas',
+      toolCarouselPause: 'Pause slideshow', toolCarouselResume: 'Resume slideshow', toolCarouselLink: 'View Director’s workbench project',
       viewImage: 'View full image', zoomImage: 'Zoom in', fitImage: 'Fit to screen', previousImage: 'Previous', nextImage: 'Next', closeImage: 'Close image viewer', backImages: 'Back to images',
       imageLoading: 'Loading image…', imageError: 'This image could not be loaded. Switch to another image and try again.', copyEmail: 'Copy email', emailCopied: 'Email copied', emailCopyFailed: 'Copy this address: highstrith@gmail.com',
       progressLabel: 'Before the finished film', progressIntro: 'Assets, storyboards and a look at the workbench.', inProduction: 'In production',
@@ -1223,6 +1225,111 @@
     qrPreview.style.top = `${top}px`;
   }
 
+  function initDirectorCarousel() {
+    const root = $('[data-director-carousel]');
+    if (!root) return;
+    const track = root.querySelector('.tools-carousel-track');
+    const slides = [...root.querySelectorAll('.tools-carousel-slide')];
+    const realSlides = [...root.querySelectorAll('[data-director-slide]')];
+    const clone = root.querySelector('[data-director-clone]');
+    const toggle = root.querySelector('[data-carousel-toggle]');
+    if (!track || !clone || !toggle || realSlides.length < 2) return;
+
+    const holdTime = 5000;
+    const transitionTime = 900;
+    let index = 0;
+    let timer = 0;
+    let transitionTimer = 0;
+    let transitioning = false;
+    let inView = false;
+    let manuallyPaused = false;
+
+    const shouldPlay = () => !manuallyPaused && !reducedMotion.matches && inView && !document.hidden;
+    function updateAccessibility() {
+      realSlides.forEach((slide, slideIndex) => {
+        if (slideIndex === index) slide.removeAttribute('aria-hidden');
+        else slide.setAttribute('aria-hidden', 'true');
+      });
+      clone.setAttribute('aria-hidden', 'true');
+    }
+    function syncPauseState() {
+      root.classList.toggle('is-paused', !shouldPlay());
+      toggle.hidden = reducedMotion.matches;
+      toggle.setAttribute('aria-pressed', String(manuallyPaused));
+      const label = t(manuallyPaused ? 'toolCarouselResume' : 'toolCarouselPause');
+      toggle.setAttribute('aria-label', label);
+      toggle.querySelector('span').textContent = label;
+    }
+    function schedule() {
+      window.clearTimeout(timer);
+      syncPauseState();
+      if (!shouldPlay() || transitioning) return;
+      timer = window.setTimeout(advance, holdTime);
+    }
+    function finishTransition() {
+      if (!transitioning) return;
+      window.clearTimeout(transitionTimer);
+      if (index === realSlides.length) {
+        track.classList.add('is-static');
+        track.style.transform = 'translate3d(0,0,0)';
+        index = 0;
+        clone.classList.remove('is-active');
+      }
+      realSlides.forEach((slide, slideIndex) => slide.classList.toggle('is-active', slideIndex === index));
+      transitioning = false;
+      updateAccessibility();
+      schedule();
+    }
+    function advance() {
+      if (transitioning || !shouldPlay()) return;
+      window.clearTimeout(timer);
+      transitioning = true;
+      index += 1;
+      slides[index].classList.add('is-active');
+      if (index === realSlides.length) realSlides[0].classList.add('is-active');
+      track.classList.remove('is-static');
+      void track.offsetWidth;
+      track.style.transform = `translate3d(-${index * 100}%,0,0)`;
+      updateAccessibility();
+      transitionTimer = window.setTimeout(finishTransition, transitionTime + 120);
+    }
+
+    track.addEventListener('transitionend', (event) => {
+      if (event.target === track && event.propertyName === 'transform') finishTransition();
+    });
+    toggle.addEventListener('click', () => {
+      manuallyPaused = !manuallyPaused;
+      if (manuallyPaused) window.clearTimeout(timer);
+      schedule();
+    });
+    document.addEventListener('visibilitychange', schedule);
+    reducedMotion.addEventListener('change', () => {
+      window.clearTimeout(timer);
+      window.clearTimeout(transitionTimer);
+      if (reducedMotion.matches) {
+        transitioning = false;
+        index = 0;
+        track.classList.add('is-static');
+        track.style.transform = 'translate3d(0,0,0)';
+        slides.forEach((slide, slideIndex) => slide.classList.toggle('is-active', slideIndex === 0));
+        updateAccessibility();
+      }
+      schedule();
+    });
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(([entry]) => {
+        inView = entry.isIntersecting;
+        if (!inView) window.clearTimeout(timer);
+        schedule();
+      }, { rootMargin: '100px 0px', threshold: 0.05 });
+      observer.observe(root);
+    } else {
+      inView = true;
+    }
+    updateAccessibility();
+    schedule();
+  }
+
   function setLanguage(nextLanguage) {
     language = nextLanguage;
     document.querySelectorAll('[data-projects-link]').forEach(link => {
@@ -1277,7 +1384,16 @@
     $('#featurePreviewLabel').textContent = t(featurePaused ? 'resumePreview' : 'pausePreview');
     $('#featurePreviewToggle').setAttribute('aria-label', t(featurePaused ? 'resumePreview' : 'pausePreview'));
     $('#stillViewerClose').setAttribute('aria-label', t('closeImage'));
-    $('[data-tool-image]')?.setAttribute('alt', language === 'cn' ? '导演工作台资产工作区' : 'Director’s workbench asset workspace');
+    document.querySelectorAll('[data-tool-image]').forEach(image => {
+      image.alt = language === 'cn' ? image.dataset.cnLabel : image.dataset.enLabel;
+    });
+    $('.tools-carousel-viewport')?.setAttribute('aria-label', t('toolCarouselLink'));
+    const carouselToggle = $('[data-carousel-toggle]');
+    if (carouselToggle) {
+      const label = t(carouselToggle.getAttribute('aria-pressed') === 'true' ? 'toolCarouselResume' : 'toolCarouselPause');
+      carouselToggle.setAttribute('aria-label', label);
+      carouselToggle.querySelector('span').textContent = label;
+    }
     document.querySelectorAll('[data-home-progress]').forEach(link => {
       const frame = progressFrames[Number(link.dataset.homeProgress)];
       const title = language === 'cn' ? frame.cnTitle : frame.enTitle;
@@ -1489,8 +1605,7 @@
     if (work) openPlayer(work, button);
   }));
 
-  // The play badge trails the pointer so it never covers the corner of the frame a
-  // visitor is looking at, then eases back to the middle once the pointer leaves.
+  // Show a compact play cursor only while a mouse is inside the feature frame.
   (function trackHeroPlay() {
     const screen = hero?.querySelector('.feature-screen');
     const badge = hero?.querySelector('[data-hero-play]');
@@ -1543,27 +1658,25 @@
       const rect = screen.getBoundingClientRect();
       if (!rect.width || !rect.height) return;
       measure();
+      const pad = 12;
+      const x = Math.min(Math.max(event.clientX - rect.left, follow.halfW + pad), rect.width - follow.halfW - pad);
+      const y = Math.min(Math.max(event.clientY - rect.top, follow.halfH + pad), rect.height - follow.halfH - pad);
       if (!follow.active) {
-        // Start from wherever the badge sits so following never jumps.
-        const box = badge.getBoundingClientRect();
-        follow.x = box.left - rect.left + box.width / 2;
-        follow.y = box.top - rect.top + box.height / 2;
+        follow.x = follow.toX = x;
+        follow.y = follow.toY = y;
         follow.active = true;
         hero.classList.add('is-play-follow');
+        place();
       }
-      const pad = 12;
-      aim(
-        Math.min(Math.max(event.clientX - rect.left, follow.halfW + pad), rect.width - follow.halfW - pad),
-        Math.min(Math.max(event.clientY - rect.top, follow.halfH + pad), rect.height - follow.halfH - pad),
-      );
+      aim(x, y);
     });
 
     screen.addEventListener('pointerleave', () => {
       if (!follow.active) return;
-      const rect = screen.getBoundingClientRect();
       follow.active = false;
-      measure();
-      aim(rect.width / 2, rect.height * .45);
+      window.cancelAnimationFrame(follow.frame);
+      follow.frame = 0;
+      park();
     });
 
     window.addEventListener('resize', () => {
@@ -1720,6 +1833,7 @@
   window.addEventListener('resize', updateActiveNavigation, { passive: true });
 
   if (search) search.value = new URLSearchParams(location.search).get('q') || '';
+  initDirectorCarousel();
   setLanguage(new URLSearchParams(window.location.search).get('lang') === 'en' ? 'en' : 'cn');
   loadCatalogue();
 })();

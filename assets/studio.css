@@ -40,6 +40,12 @@ button { color: inherit; border: 0; }
 .hero-feature.is-play-follow .feature-play { will-change: transform; }
 .hero-feature.is-play-follow .feature-play:hover { background: rgba(0,0,0,.18); border-color: rgba(255,255,255,.55); }
 .feature-play:focus-visible { outline-color: #fff; }
+@media (hover: hover) and (pointer: fine) {
+  .hero-feature .feature-play { width: 36px; height: 36px; gap: 0; opacity: 0; pointer-events: none; transition: opacity .15s ease, background .2s, border-color .2s; backdrop-filter: blur(2px); }
+  .hero-feature .feature-play svg { width: 14px; height: 14px; }
+  .hero-feature .feature-play span { display: none; }
+  .hero-feature.is-play-follow .feature-play, .hero-feature .feature-play:focus-visible { opacity: 1; pointer-events: auto; }
+}
 .feature-bottom { position: absolute; left: 30px; right: 30px; bottom: 27px; display: flex; justify-content: space-between; align-items: end; gap: 24px; }
 .feature-info { max-width: 55%; }
 .feature-info > span { font-size: 11px; color: #d7dcd8; }
