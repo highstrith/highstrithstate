@@ -31,7 +31,7 @@
       contactLabel: '从一句「我有个想法」开始', location: '中国 · 南京', contactTitle: '下一个画面，\n一起完成',
       wechatAccount: '微信 Gw1sgdsj_787', elsewhere: '也可以在这里找到我',
       wechat: '微信', douyin: '抖音', red: '小红书', bili: '哔哩哔哩',
-      scanShort: '扫码查看', openShort: '打开主页',
+      scanShort: '查看二维码', openShort: '打开主页',
       sound: '背景音乐', backTop: '回到顶部', playerHint: 'Esc 关闭', qrHint: '打开对应 App 扫码，和我打个招呼',
       searchPlaceholder: '寻找一部作品', searchLabel: '搜索作品', filterLabel: '作品分类', featureLabel: '选择精选作品',
       closeVideo: '关闭视频', closeQR: '关闭二维码', play: '播放', retry: '重试播放',
@@ -70,7 +70,7 @@
       contactLabel: 'It starts with “I have an idea”', location: 'Nanjing · China', contactTitle: 'Let’s make\nthe next image',
       wechatAccount: 'WeChat Gw1sgdsj_787', elsewhere: 'Find me elsewhere',
       wechat: 'WeChat', douyin: 'Douyin', red: 'Xiaohongshu', bili: 'Bilibili',
-      scanShort: 'Scan the code', openShort: 'Open profile',
+      scanShort: 'View QR code', openShort: 'Open profile',
       sound: 'Background music', backTop: 'Back to top', playerHint: 'Esc to close', qrHint: 'Scan in the matching app and say hello',
       searchPlaceholder: 'Find a work', searchLabel: 'Search works', filterLabel: 'Filter works', featureLabel: 'Choose a featured work',
       closeVideo: 'Close video', closeQR: 'Close QR code', play: 'Play', retry: 'Try again',
@@ -247,7 +247,6 @@
   const music = $('#bgMusic');
   const musicButton = $('#musicToggle');
   const qrDialog = $('#social-qr-dialog');
-  const qrPreview = $('#social-qr-preview');
   const stillViewer = $('#stillViewer');
   const stillImage = $('#stillViewerImage');
   const stillStage = $('#stillViewerStage');
@@ -277,7 +276,6 @@
   let musicGeneration = 0;
   let activeQrButton = null;
   let qrReturnFocus = null;
-  let hoveredQrButton = null;
   let featurePaused = false;
   let selectedStill = 0;
   let stillReturnFocus = null;
@@ -1114,7 +1112,6 @@
     if (poster) playerVideo.poster = poster;
     else playerVideo.removeAttribute('poster');
     stopPreview();
-    hideQrPreview();
     if (!player.open) player.showModal();
     updateScrollLock();
     syncMusic();
@@ -1194,35 +1191,11 @@
     activeQrButton = button;
     qrReturnFocus = button;
     updateQrDialog();
-    hideQrPreview();
     stopPreview();
     qrDialog.showModal();
     updateScrollLock();
     syncMusic();
     $('#socialQrClose')?.focus({ preventScroll: true });
-  }
-
-  function hideQrPreview() {
-    if (qrPreview) qrPreview.hidden = true;
-    hoveredQrButton = null;
-  }
-
-  function showQrPreview(button) {
-    if (!qrPreview || !finePointer.matches || narrowScreen.matches || player?.open || qrDialog?.open) return;
-    hoveredQrButton = button;
-    const source = mediaURL(button.dataset.qrImage);
-    if (!source) return;
-    qrPreview.querySelector('img').src = source;
-    qrPreview.querySelector('p').textContent = `${qrTitle(button)} · ${text(button.dataset.qrAccount)}`;
-    qrPreview.hidden = false;
-    const anchor = button.getBoundingClientRect();
-    const popup = qrPreview.getBoundingClientRect();
-    const margin = 16;
-    const left = Math.max(margin, Math.min(anchor.left + anchor.width / 2 - popup.width / 2, window.innerWidth - popup.width - margin));
-    const preferredTop = anchor.top - popup.height - 14;
-    const top = Math.max(margin, Math.min(preferredTop >= margin ? preferredTop : anchor.bottom + 14, window.innerHeight - popup.height - margin));
-    qrPreview.style.left = `${left}px`;
-    qrPreview.style.top = `${top}px`;
   }
 
   function initDirectorCarousel() {
@@ -1371,7 +1344,6 @@
     applyFilters();
     updatePlayerText();
     updateQrDialog();
-    if (hoveredQrButton) showQrPreview(hoveredQrButton);
     updateMusicUI();
     updateExhibitionText();
     window.StudioReveal?.relang(document);
@@ -1455,7 +1427,6 @@
       viewerFrames = frames;
       stillReturnFocus = trigger;
       stopPreview();
-      hideQrPreview();
       showStill(entry.index);
       stillViewer.showModal();
       updateScrollLock();
@@ -1762,8 +1733,6 @@
 
   document.querySelectorAll('[data-qr-image]').forEach((button) => {
     button.addEventListener('click', () => openQr(button));
-    button.addEventListener('pointerenter', (event) => { if (event.pointerType === 'mouse') showQrPreview(button); });
-    button.addEventListener('pointerleave', hideQrPreview);
   });
   $('#socialQrClose')?.addEventListener('click', () => qrDialog?.close());
   qrDialog?.addEventListener('close', () => {
@@ -1785,26 +1754,21 @@
   }));
 
   [reducedMotion, finePointer, narrowScreen].forEach((query) => query.addEventListener('change', () => {
-    hideQrPreview();
     syncPreview();
   }));
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
-      hideQrPreview();
       clearPlayerTimer();
       if (player?.open) playerVideo.pause();
     }
     syncPreview();
     syncMusic();
   });
-  window.addEventListener('blur', hideQrPreview);
-  window.addEventListener('resize', hideQrPreview, { passive: true });
   let scrollFrame = 0;
   window.addEventListener('scroll', () => {
     if (scrollFrame) return;
     scrollFrame = window.requestAnimationFrame(() => {
       scrollFrame = 0;
-      hideQrPreview();
       if (!('IntersectionObserver' in window)) heroNearViewport = nearViewport(hero);
       syncPreview();
       updateActiveNavigation();

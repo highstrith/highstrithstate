@@ -20,7 +20,7 @@ with sync_playwright() as p:
     assert page.locator("[data-social-platform='bilibili']").get_attribute("href") == "https://b23.tv/VFqS3Tj"
     wechat = page.locator("[data-social-platform='wechat']")
     wechat.hover()
-    assert page.locator("#social-qr-preview").is_visible()
+    assert page.locator("#social-qr-preview").count() == 0
     wechat.click()
     assert page.locator("#social-qr-dialog").evaluate("e => e.open")
     page.close()
