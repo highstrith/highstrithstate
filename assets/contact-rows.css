@@ -1,0 +1,37 @@
+/* Contact rows: quiet paper at rest, ink and paper inverted on interaction. */
+#contact .contact-bottom { display: grid; grid-template-columns: minmax(0, 1fr); justify-content: stretch; align-items: stretch; gap: 18px; padding: 28px 0 0; border-bottom: 0; }
+#contact .contact-email-group { display: flex; flex-wrap: nowrap; gap: 20px; width: 100%; padding: 0 24px; border-block: 1px solid var(--line); color: var(--ink); background: transparent; transition: background-color .18s ease, color .18s ease; }
+#contact .contact-email { flex: 1; min-width: 0; min-height: 88px; display: flex; color: inherit; font-size: clamp(18px, 2vw, 26px); text-decoration: none; overflow-wrap: anywhere; }
+#contact .copy-email { flex-shrink: 0; color: inherit; border-color: currentColor; background: transparent; }
+#contact .contact-details { flex-direction: row; gap: 16px 28px; flex-wrap: wrap; padding-inline: 24px; }
+#contact .social-row { display: block; padding-top: 26px; }
+#contact .social-label { display: block; margin-bottom: 18px; }
+#contact .social-links { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; border-bottom: 1px solid var(--line); }
+#contact .social-links > :is(button, a) { width: 100%; min-width: 0; min-height: 88px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 24px; border-top: 1px solid var(--line); color: var(--ink); background: transparent; transition: background-color .18s ease, color .18s ease; }
+#contact .social-name { color: inherit; font-size: 24px; font-weight: 450; line-height: 1.4; transition: color .18s ease; }
+#contact .social-hint { color: var(--muted); transition: color .18s ease; }
+
+/* Focus-visible gives keyboard users the full-row feedback without leaving
+   a dark row behind after an ordinary mouse click. */
+#contact .contact-email-group:has(:focus-visible),
+#contact .social-links > :focus-visible { background: var(--ink); color: var(--paper); }
+#contact .contact-email-group:has(:focus-visible) :is(.contact-email, .copy-email),
+#contact .social-links > :focus-visible :is(.social-name, .social-hint) { color: var(--paper); }
+#contact :is(.contact-email, .copy-email, .social-links > *):focus-visible { outline-offset: -5px; }
+@media (hover: hover) and (pointer: fine) {
+  #contact .contact-email-group:hover,
+  #contact .social-links > :hover { background: var(--ink); color: var(--paper); }
+  #contact .contact-email-group:hover :is(.contact-email, .copy-email),
+  #contact .social-links > :hover :is(.social-name, .social-hint) { color: var(--paper); }
+}
+@media (max-width: 600px) {
+  #contact .contact-email-group { padding: 14px 16px; flex-wrap: wrap; gap: 6px 16px; }
+  #contact .contact-email { flex-basis: 100%; min-height: 44px; }
+  #contact .contact-details { padding-inline: 16px; }
+  #contact .social-links > :is(button, a) { min-height: 76px; padding: 18px 16px; gap: 12px; }
+  #contact .social-name { font-size: 21px; }
+  #contact .social-hint { font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #contact :is(.contact-email-group, .contact-email, .copy-email, .social-links > *, .social-name, .social-hint) { transition: none; }
+}
