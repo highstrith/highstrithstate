@@ -46,6 +46,23 @@ class ContactRows(unittest.TestCase):
         page.wait_for_timeout(230)
         self.assertEqual(self.colors(links.first)[1], 'rgb(23, 25, 24)')
 
+    def test_contact_heading_has_two_compact_lines_without_blank_row(self):
+        page = self.page()
+        for language in ['cn', 'en']:
+            if language == 'en': page.locator('#langSwitch').click()
+            heading = page.locator('#contactTitle')
+            expect(heading.locator('.rv-line')).to_have_count(2)
+            self.assertEqual(heading.locator('br').count(), 0, 'Block lines must not have an extra BR between them')
+            metrics = heading.evaluate('''e => ({
+              height:e.getBoundingClientRect().height,
+              font:parseFloat(getComputedStyle(e).fontSize),
+              line:parseFloat(getComputedStyle(e).lineHeight),
+              tops:[...e.querySelectorAll('.rv-line')].map(n=>n.offsetTop)
+            })''')
+            self.assertLessEqual(metrics['line'], metrics['font'] * 1.3)
+            self.assertAlmostEqual(metrics['height'], metrics['line'] * 2, delta=1)
+            self.assertAlmostEqual(metrics['tops'][1] - metrics['tops'][0], metrics['line'], delta=1)
+
     def test_keyboard_and_email_copy_share_readable_active_state(self):
         page = self.page()
         # Use actual keyboard focus so mouse clicks do not leave a sticky row.

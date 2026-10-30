@@ -39,7 +39,8 @@
         span.style.setProperty('--i', String(index));
         span.textContent = line;
         heading.append(span);
-        if (index < lines.length - 1) heading.append(document.createElement('br'));
+        // Each rv-line is already a block. A BR here adds an empty line box.
+        if (index < lines.length - 1) heading.append(document.createTextNode('\n'));
       });
     });
   }
