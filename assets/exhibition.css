@@ -113,6 +113,21 @@
 .home-progress-heading { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-bottom: 16px; }
 .home-progress-heading h3 { margin: 0; font-size: 23px; line-height: 1.5; font-weight: 450; }
 .home-progress-heading > span { color: var(--orange-dark); font-size: 11px; }
+.production-status { display: inline-flex; flex-direction: column; gap: 5px; padding: 7px 10px 6px; border-radius: 9px; background: #f7ece4; color: var(--orange-dark); font-size: 11px; line-height: 1.4; white-space: nowrap; }
+.production-status-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.production-status-dots { display: flex; align-items: center; gap: 3px; }
+.production-status-dots i { display: block; width: 3px; height: 3px; border-radius: 50%; background: currentColor; animation: production-hop 1.8s ease-in-out infinite; }
+.production-status-dots i:nth-child(2) { animation-delay: .14s; }
+.production-status-dots i:nth-child(3) { animation-delay: .28s; }
+.production-status-track { display: block; height: 3px; border-radius: 3px; overflow: hidden; background: #ecd7c8; }
+.production-status-fill { display: block; width: 100%; height: 100%; border-radius: inherit; background: currentColor; transform-origin: left center; animation: production-grow 3.6s ease-in-out infinite; }
+.production-status:hover *, .home-progress-summary:focus-within .production-status *, .progress-project:focus-within .production-status * { animation-play-state: paused; }
+@keyframes production-hop { 0%, 42%, 100% { transform: translateY(0) scale(1); } 14% { transform: translateY(-3px) scale(1.08); } 28% { transform: translateY(0) scale(1.12,.85); } }
+@keyframes production-grow { 0%, 100% { transform: scaleX(.22); } 55% { transform: scaleX(.82); } }
+@media (prefers-reduced-motion: reduce) {
+  .production-status-dots i, .production-status-fill { animation: none; }
+  .production-status-fill { transform: scaleX(.45); }
+}
 .home-progress-filmstrip { min-width: 0; align-self: start; }
 .production-strip { overflow-x: auto; overscroll-behavior-x: contain; padding-block: 10px 14px; scrollbar-width: thin; }
 .production-strip.is-looping { overflow: hidden; touch-action: pan-y; }
