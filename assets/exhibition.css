@@ -113,6 +113,11 @@
 .home-progress-heading { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-bottom: 16px; }
 .home-progress-heading h3 { margin: 0; font-size: 23px; line-height: 1.5; font-weight: 450; }
 .home-progress-heading > span { color: var(--orange-dark); font-size: 11px; }
+.production-title { display: inline-flex; align-items: baseline; gap: .1em; }
+.production-title-ellipsis { display: inline-flex; flex: 0 0 1.2em; width: 1.2em; letter-spacing: 0; animation: production-ellipsis 2.4s steps(1,end) infinite; }
+.production-title-ellipsis > span { flex: 1; text-align: center; }
+@keyframes production-ellipsis { 0% { clip-path: inset(0 100% 0 0); } 25% { clip-path: inset(0 66.6667% 0 0); } 50% { clip-path: inset(0 33.3333% 0 0); } 75%, 100% { clip-path: inset(0); } }
+@media (prefers-reduced-motion: reduce) { .production-title-ellipsis { animation: none; clip-path: none; } }
 .production-status { display: inline-flex; flex-direction: column; gap: 5px; padding: 7px 10px 6px; border-radius: 9px; background: #f7ece4; color: var(--orange-dark); font-size: 11px; line-height: 1.4; white-space: nowrap; }
 .production-status-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .production-status-dots { display: flex; align-items: center; gap: 3px; }
