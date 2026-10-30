@@ -1,0 +1,1130 @@
+[
+  {
+    "phase": "stable-initial",
+    "work": "work-reset-day-20261007",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      349,
+      196
+    ],
+    "videoSize": [
+      0,
+      0
+    ],
+    "ready": 0,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-0-delayed",
+    "work": "work-reset-day-20261007",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      349,
+      196
+    ],
+    "videoSize": [
+      0,
+      0
+    ],
+    "ready": 0,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-0-delayed",
+    "work": "work-reset-day-20261007",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      349,
+      196
+    ],
+    "videoSize": [
+      854,
+      480
+    ],
+    "ready": 1,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-0-delayed",
+    "work": "work-reset-day-20261007",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      349,
+      196
+    ],
+    "videoSize": [
+      854,
+      480
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-preview.mp4",
+    "previewing": true
+  },
+  {
+    "phase": "switch-1-delayed",
+    "work": "work-reset-day-20261007",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      349,
+      196
+    ],
+    "videoSize": [
+      854,
+      480
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-preview.mp4",
+    "previewing": true
+  },
+  {
+    "phase": "switch-1-delayed",
+    "work": "featured-prove-it",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      0,
+      0
+    ],
+    "videoSize": [
+      0,
+      0
+    ],
+    "ready": 0,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-prove-it/1476460cc117075e-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-1-delayed",
+    "work": "featured-prove-it",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      349,
+      196
+    ],
+    "videoSize": [
+      0,
+      0
+    ],
+    "ready": 0,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-prove-it/1476460cc117075e-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-1-delayed",
+    "work": "featured-prove-it",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      349,
+      196
+    ],
+    "videoSize": [
+      854,
+      480
+    ],
+    "ready": 1,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-prove-it/1476460cc117075e-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-1-delayed",
+    "work": "featured-prove-it",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      349,
+      196
+    ],
+    "videoSize": [
+      854,
+      480
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-prove-it/1476460cc117075e-preview.mp4",
+    "previewing": true
+  },
+  {
+    "phase": "switch-2-delayed",
+    "work": "work-1783863606674-7ta9sp",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      0,
+      0
+    ],
+    "videoSize": [
+      0,
+      0
+    ],
+    "ready": 0,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-1783863606674-7ta9sp/1a84334206c2df30-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-2-delayed",
+    "work": "work-1783863606674-7ta9sp",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      349,
+      196
+    ],
+    "videoSize": [
+      0,
+      0
+    ],
+    "ready": 0,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-1783863606674-7ta9sp/1a84334206c2df30-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-2-delayed",
+    "work": "work-1783863606674-7ta9sp",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      349,
+      196
+    ],
+    "videoSize": [
+      960,
+      540
+    ],
+    "ready": 1,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-1783863606674-7ta9sp/1a84334206c2df30-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-2-delayed",
+    "work": "work-1783863606674-7ta9sp",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      349,
+      196
+    ],
+    "videoSize": [
+      960,
+      540
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-1783863606674-7ta9sp/1a84334206c2df30-preview.mp4",
+    "previewing": true
+  },
+  {
+    "phase": "switch-3-delayed",
+    "work": "featured-exported-film",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      0,
+      0
+    ],
+    "videoSize": [
+      0,
+      0
+    ],
+    "ready": 0,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-exported-film/33eef9ca7328cfea-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-3-delayed",
+    "work": "featured-exported-film",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      349,
+      196
+    ],
+    "videoSize": [
+      0,
+      0
+    ],
+    "ready": 0,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-exported-film/33eef9ca7328cfea-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-3-delayed",
+    "work": "featured-exported-film",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      349,
+      196
+    ],
+    "videoSize": [
+      960,
+      540
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-exported-film/33eef9ca7328cfea-preview.mp4",
+    "previewing": true
+  },
+  {
+    "phase": "switch-4-delayed",
+    "work": "featured-timeline-1",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      0,
+      0
+    ],
+    "videoSize": [
+      0,
+      0
+    ],
+    "ready": 0,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-timeline-1/4cac536c20796da6-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-4-delayed",
+    "work": "featured-timeline-1",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      350,
+      621
+    ],
+    "videoSize": [
+      0,
+      0
+    ],
+    "ready": 0,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-timeline-1/4cac536c20796da6-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-4-delayed",
+    "work": "featured-timeline-1",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      350,
+      621
+    ],
+    "videoSize": [
+      540,
+      960
+    ],
+    "ready": 1,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-timeline-1/4cac536c20796da6-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-4-delayed",
+    "work": "featured-timeline-1",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      350,
+      621
+    ],
+    "videoSize": [
+      540,
+      960
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-timeline-1/4cac536c20796da6-preview.mp4",
+    "previewing": true
+  },
+  {
+    "phase": "switch-5-delayed",
+    "work": "featured-timeline-1",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      350,
+      621
+    ],
+    "videoSize": [
+      540,
+      960
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-timeline-1/4cac536c20796da6-preview.mp4",
+    "previewing": true
+  },
+  {
+    "phase": "switch-5-delayed",
+    "work": "work-reset-day-20261007",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      349,
+      196
+    ],
+    "videoSize": [
+      0,
+      0
+    ],
+    "ready": 0,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-5-delayed",
+    "work": "work-reset-day-20261007",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      349,
+      196
+    ],
+    "videoSize": [
+      854,
+      480
+    ],
+    "ready": 1,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-5-delayed",
+    "work": "work-reset-day-20261007",
+    "frame": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "poster": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "video": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 196.875
+    },
+    "whole": {
+      "x": 20,
+      "y": 259.828125,
+      "width": 350,
+      "height": 402.21875
+    },
+    "sidebar": {
+      "x": 20,
+      "y": 456.703125,
+      "width": 350,
+      "height": 205.34375
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      349,
+      196
+    ],
+    "videoSize": [
+      854,
+      480
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-preview.mp4",
+    "previewing": true
+  }
+]

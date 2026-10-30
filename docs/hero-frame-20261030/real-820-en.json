@@ -1,0 +1,754 @@
+[
+  {
+    "phase": "stable-initial",
+    "work": "work-reset-day-20261007",
+    "frame": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "poster": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "video": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "whole": {
+      "x": 32,
+      "y": 256.75,
+      "width": 756,
+      "height": 480
+    },
+    "sidebar": {
+      "x": 528,
+      "y": 256.75,
+      "width": 260,
+      "height": 480
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      755,
+      425
+    ],
+    "videoSize": [
+      854,
+      480
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-preview.mp4",
+    "previewing": true
+  },
+  {
+    "phase": "switch-0",
+    "work": "work-reset-day-20261007",
+    "frame": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "poster": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "video": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "whole": {
+      "x": 32,
+      "y": 256.75,
+      "width": 756,
+      "height": 480
+    },
+    "sidebar": {
+      "x": 528,
+      "y": 256.75,
+      "width": 260,
+      "height": 480
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      755,
+      425
+    ],
+    "videoSize": [
+      854,
+      480
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-preview.mp4",
+    "previewing": true
+  },
+  {
+    "phase": "switch-1",
+    "work": "work-reset-day-20261007",
+    "frame": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "poster": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "video": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "whole": {
+      "x": 32,
+      "y": 256.75,
+      "width": 756,
+      "height": 480
+    },
+    "sidebar": {
+      "x": 528,
+      "y": 256.75,
+      "width": 260,
+      "height": 480
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      755,
+      425
+    ],
+    "videoSize": [
+      854,
+      480
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-preview.mp4",
+    "previewing": true
+  },
+  {
+    "phase": "switch-1",
+    "work": "featured-prove-it",
+    "frame": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "poster": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "video": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "whole": {
+      "x": 32,
+      "y": 256.75,
+      "width": 756,
+      "height": 480
+    },
+    "sidebar": {
+      "x": 528,
+      "y": 256.75,
+      "width": 260,
+      "height": 480
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      0,
+      0
+    ],
+    "videoSize": [
+      0,
+      0
+    ],
+    "ready": 0,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-prove-it/1476460cc117075e-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-1",
+    "work": "featured-prove-it",
+    "frame": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "poster": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "video": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "whole": {
+      "x": 32,
+      "y": 256.75,
+      "width": 756,
+      "height": 480
+    },
+    "sidebar": {
+      "x": 528,
+      "y": 256.75,
+      "width": 260,
+      "height": 480
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      756,
+      423
+    ],
+    "videoSize": [
+      854,
+      480
+    ],
+    "ready": 3,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-prove-it/1476460cc117075e-preview.mp4",
+    "previewing": true
+  },
+  {
+    "phase": "switch-1",
+    "work": "featured-prove-it",
+    "frame": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "poster": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "video": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "whole": {
+      "x": 32,
+      "y": 256.75,
+      "width": 756,
+      "height": 480
+    },
+    "sidebar": {
+      "x": 528,
+      "y": 256.75,
+      "width": 260,
+      "height": 480
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      756,
+      423
+    ],
+    "videoSize": [
+      854,
+      480
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-prove-it/1476460cc117075e-preview.mp4",
+    "previewing": true
+  },
+  {
+    "phase": "switch-2",
+    "work": "featured-prove-it",
+    "frame": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "poster": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "video": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "whole": {
+      "x": 32,
+      "y": 256.75,
+      "width": 756,
+      "height": 480
+    },
+    "sidebar": {
+      "x": 528,
+      "y": 256.75,
+      "width": 260,
+      "height": 480
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      756,
+      423
+    ],
+    "videoSize": [
+      854,
+      480
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-prove-it/1476460cc117075e-preview.mp4",
+    "previewing": true
+  },
+  {
+    "phase": "switch-2",
+    "work": "work-1783863606674-7ta9sp",
+    "frame": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "poster": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "video": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "whole": {
+      "x": 32,
+      "y": 256.75,
+      "width": 756,
+      "height": 480
+    },
+    "sidebar": {
+      "x": 528,
+      "y": 256.75,
+      "width": 260,
+      "height": 480
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      756,
+      425
+    ],
+    "videoSize": [
+      960,
+      540
+    ],
+    "ready": 1,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-1783863606674-7ta9sp/1a84334206c2df30-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-2",
+    "work": "work-1783863606674-7ta9sp",
+    "frame": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "poster": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "video": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "whole": {
+      "x": 32,
+      "y": 256.75,
+      "width": 756,
+      "height": 480
+    },
+    "sidebar": {
+      "x": 528,
+      "y": 256.75,
+      "width": 260,
+      "height": 480
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      756,
+      425
+    ],
+    "videoSize": [
+      960,
+      540
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-1783863606674-7ta9sp/1a84334206c2df30-preview.mp4",
+    "previewing": true
+  },
+  {
+    "phase": "switch-3",
+    "work": "work-1783863606674-7ta9sp",
+    "frame": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "poster": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "video": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "whole": {
+      "x": 32,
+      "y": 256.75,
+      "width": 756,
+      "height": 480
+    },
+    "sidebar": {
+      "x": 528,
+      "y": 256.75,
+      "width": 260,
+      "height": 480
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      756,
+      425
+    ],
+    "videoSize": [
+      960,
+      540
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-1783863606674-7ta9sp/1a84334206c2df30-preview.mp4",
+    "previewing": true
+  },
+  {
+    "phase": "switch-3",
+    "work": "featured-exported-film",
+    "frame": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "poster": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "video": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "whole": {
+      "x": 32,
+      "y": 256.75,
+      "width": 756,
+      "height": 480
+    },
+    "sidebar": {
+      "x": 528,
+      "y": 256.75,
+      "width": 260,
+      "height": 480
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      756,
+      425
+    ],
+    "videoSize": [
+      960,
+      540
+    ],
+    "ready": 1,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-exported-film/33eef9ca7328cfea-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-3",
+    "work": "featured-exported-film",
+    "frame": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "poster": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "video": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "whole": {
+      "x": 32,
+      "y": 256.75,
+      "width": 756,
+      "height": 480
+    },
+    "sidebar": {
+      "x": 528,
+      "y": 256.75,
+      "width": 260,
+      "height": 480
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      756,
+      425
+    ],
+    "videoSize": [
+      960,
+      540
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-exported-film/33eef9ca7328cfea-preview.mp4",
+    "previewing": true
+  },
+  {
+    "phase": "switch-4",
+    "work": "featured-timeline-1",
+    "frame": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "poster": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "video": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "whole": {
+      "x": 32,
+      "y": 256.75,
+      "width": 756,
+      "height": 480
+    },
+    "sidebar": {
+      "x": 528,
+      "y": 256.75,
+      "width": 260,
+      "height": 480
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      0,
+      0
+    ],
+    "videoSize": [
+      0,
+      0
+    ],
+    "ready": 0,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-timeline-1/4cac536c20796da6-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-4",
+    "work": "featured-timeline-1",
+    "frame": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "poster": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "video": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "whole": {
+      "x": 32,
+      "y": 256.75,
+      "width": 756,
+      "height": 480
+    },
+    "sidebar": {
+      "x": 528,
+      "y": 256.75,
+      "width": 260,
+      "height": 480
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      756,
+      1341
+    ],
+    "videoSize": [
+      540,
+      960
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/featured-timeline-1/4cac536c20796da6-preview.mp4",
+    "previewing": true
+  },
+  {
+    "phase": "switch-5",
+    "work": "work-reset-day-20261007",
+    "frame": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "poster": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "video": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "whole": {
+      "x": 32,
+      "y": 256.75,
+      "width": 756,
+      "height": 480
+    },
+    "sidebar": {
+      "x": 528,
+      "y": 256.75,
+      "width": 260,
+      "height": 480
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      755,
+      425
+    ],
+    "videoSize": [
+      854,
+      480
+    ],
+    "ready": 1,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-preview.mp4",
+    "previewing": false
+  },
+  {
+    "phase": "switch-5",
+    "work": "work-reset-day-20261007",
+    "frame": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "poster": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "video": {
+      "x": 32,
+      "y": 256.75,
+      "width": 496,
+      "height": 480
+    },
+    "whole": {
+      "x": 32,
+      "y": 256.75,
+      "width": 756,
+      "height": 480
+    },
+    "sidebar": {
+      "x": 528,
+      "y": 256.75,
+      "width": 260,
+      "height": 480
+    },
+    "posterFit": "contain",
+    "videoFit": "contain",
+    "posterSize": [
+      755,
+      425
+    ],
+    "videoSize": [
+      854,
+      480
+    ],
+    "ready": 4,
+    "source": "http://127.0.0.1:3000/assets/optimized/work-reset-day-20261007/1d7ccf6864c1657f-preview.mp4",
+    "previewing": true
+  }
+]
