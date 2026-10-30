@@ -165,6 +165,36 @@
       "enTitle": "Shot detailing",
       "cnDesc": "逐镜画面与机位参数",
       "enDesc": "Shot images and camera notes"
+    },
+    {
+      "image": "assets/progress/weishizhinuo/gu-lin.webp",
+      "cnTitle": "顾凛", "enTitle": "Gu Lin",
+      "cnDesc": "角色三视图", "enDesc": "Character turnaround"
+    },
+    {
+      "image": "assets/progress/weishizhinuo/tactical-locator.webp",
+      "cnTitle": "战术定位仪", "enTitle": "Tactical locator",
+      "cnDesc": "佩戴关系参考", "enDesc": "Wearable prop reference"
+    },
+    {
+      "image": "assets/progress/weishizhinuo/storyboard-pods.webp",
+      "cnTitle": "索降舱", "enTitle": "Drop pods",
+      "cnDesc": "场景与空间关系", "enDesc": "Scene and spatial relationships"
+    },
+    {
+      "image": "assets/progress/weishizhinuo/storyboard-exit.webp",
+      "cnTitle": "下车调度", "enTitle": "Exiting the rover",
+      "cnDesc": "双人全景", "enDesc": "Two-character wide shot"
+    },
+    {
+      "image": "assets/progress/weishizhinuo/storyboard-closeup.webp",
+      "cnTitle": "人物近景", "enTitle": "Character close-up",
+      "cnDesc": "表情与景别草图", "enDesc": "Expression and shot-size study"
+    },
+    {
+      "image": "assets/progress/weishizhinuo/director-storyboard.webp",
+      "cnTitle": "分镜工作区", "enTitle": "Storyboard workspace",
+      "cnDesc": "画面、提示词与镜头序列", "enDesc": "Images, prompts and shot sequence"
     }
   ];
   let viewerFrames = stillFrames;
@@ -1327,11 +1357,14 @@
   }
 
   $('#stillZoom')?.addEventListener('click', toggleStillZoom);
-  document.querySelectorAll('[data-home-progress]').forEach(link => link.addEventListener('click', event => {
+  $('#homeProgressStrip')?.addEventListener('click', event => {
+    const link = event.target.closest('[data-home-progress]');
+    if (!link) return;
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
-    openStill(Number(link.dataset.homeProgress), link, progressFrames);
-  }));
+    const original = $(`.home-progress-grid [data-home-progress="${link.dataset.homeProgress}"]`);
+    openStill(Number(link.dataset.homeProgress), original || link, progressFrames);
+  });
   let suppressStillClickUntil = 0;
   stillImage?.addEventListener('click', () => {
     if (performance.now() >= suppressStillClickUntil) toggleStillZoom();

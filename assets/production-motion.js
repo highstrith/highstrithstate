@@ -7,7 +7,7 @@
   gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
     document.documentElement.classList.add('production-motion');
     const cleanups = [];
-    const groups = document.querySelectorAll('.progress-gallery, .home-progress-grid');
+    const groups = document.querySelectorAll('.progress-gallery');
     const targets = [...groups].flatMap(group => [...group.children]);
     const surfaces = [];
     const intro = document.querySelectorAll('.progress-return, .progress-heading, .progress-project-heading, .progress-index');
