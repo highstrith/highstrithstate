@@ -1,0 +1,7 @@
+/* Local mouse response on the Director heading; layout and native cursor stay intact. */
+#toolsTitle .director-word-chunk { position: relative; display: inline-block; white-space: nowrap; }
+#toolsTitle .director-letter { display: inline-block; transform-origin: 50% 85%; color: color-mix(in srgb, var(--ink), var(--orange) var(--director-accent, 0%)); }
+#directorWordFilters { position: absolute; width: 0; height: 0; pointer-events: none; }
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  #toolsTitle .director-letter { transform: none !important; filter: none !important; color: inherit; }
+}
