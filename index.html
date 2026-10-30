@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="assets/base.css?v=20261029-stills">
   <link rel="stylesheet" href="assets/studio.css?v=20261030-pointer">
   <link rel="stylesheet" href="assets/exhibition.css?v=20261030-align-links">
+  <link rel="stylesheet" href="assets/fly-forward.css?v=20261030-vortex3">
 </head>
 <body>
   <a class="skip-link" href="#works" data-i18n="skip">跳转到作品</a>
@@ -67,6 +68,14 @@
         </div>
       </div>
       <div class="hero-foot"><span data-i18n="discipline">AI 影像 / 三维动画 / 动态视觉 / 剪辑</span><a href="#works" aria-label="向下浏览作品"><span data-i18n="scroll">向下发现更多</span></a></div>
+    </section>
+    <section class="fly-section" id="flyWorks" aria-labelledby="flyTitle">
+      <div class="fly-stage-wrap"><div class="fly-stage" id="flyStage">
+        <div class="fly-head"><h2 id="flyTitle">精选放映</h2><p class="fly-hint">故事、角色与想象，在此交汇。</p><a class="fly-more" href="#works">查看全部作品</a></div>
+        <div class="fly-field" id="flyField"></div>
+        <div class="fly-progress" aria-hidden="true"><span id="flyBar"></span></div>
+        <p class="fly-scroll-note" aria-hidden="true">滚动探索</p>
+      </div></div>
     </section>
     <section class="works-section page-width" id="works" aria-labelledby="worksTitle">
       <div class="section-heading"><div data-reveal><p class="section-label" data-i18n="portfolio">每个画面，都有来处</p><h2 id="worksTitle" data-i18n="worksTitle" data-lines>作品集</h2></div><p class="works-intro" data-i18n="worksIntro" data-reveal>一些故事，一些实验。<br>在不同的媒介里，寻找自己的表达。</p></div>
@@ -955,5 +964,6 @@
   <script src="assets/vendor/gsap-3.15.0/ScrollTrigger.min.js" defer></script>
   <script src="assets/production-strip.js?v=20261030-strip-final" defer></script>
   <script src="assets/production-motion.js?v=20261030-strip-final" defer></script>
+  <script src="assets/fly-forward.js?v=20261030-vortex3" defer></script>
 </body>
 </html>

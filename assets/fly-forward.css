@@ -1,0 +1,30 @@
+/* Static first: narrow screens, reduced motion and script failure stay usable. */
+.fly-section { position: relative; background: var(--paper, #f4f4f0); padding: 48px 0; }
+.fly-stage { position: relative; padding-inline: max(20px, calc((100vw - 1600px) / 2)); }
+.fly-head { position: relative; z-index: 30; text-align: center; margin: 0 auto 28px; }
+.fly-head h2 { font-size: 36px; font-weight: 500; line-height: 1.3; letter-spacing: -.025em; }
+.fly-hint { font-size: 14px; line-height: 1.8; color: var(--muted); margin-top: 12px; }
+.fly-more { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 22px; padding: 10px 20px; background: var(--ink); color: var(--paper); border-radius: 3px; font-size: 13px; pointer-events: auto; }
+.fly-field { display: flex; gap: 20px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; padding: 8px 20px 16px; }
+.fly-card { display: block; flex: 0 0 min(76vw, 320px); min-width: 0; scroll-snap-align: center; color: var(--ink); }
+.fly-card img { display: block; width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; background: #e4e3dd; }
+.fly-title { display: block; margin-top: 10px; font-size: 13px; line-height: 1.5; }
+.fly-progress, .fly-scroll-note { display: none; }
+
+@media (min-width: 801px) and (prefers-reduced-motion: no-preference) {
+  .fly-motion { padding: 0; height: 340vh; }
+  .fly-motion .fly-stage-wrap { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+  .fly-motion .fly-stage { width: 100%; height: 100%; padding: 0; isolation: isolate; }
+  .fly-motion .fly-field { position: absolute; inset: 0; display: block; padding: 0; overflow: clip; scroll-snap-type: none; perspective: 1000px; perspective-origin: 50% 50%; pointer-events: none; }
+  .fly-motion .fly-card { position: absolute; left: calc(50% - 210px); top: calc(50% - 118.125px); width: 420px; opacity: 0; will-change: transform, opacity; backface-visibility: hidden; }
+  .fly-motion .fly-card img { box-shadow: 0 8px 32px rgb(0 0 0 / .08); }
+  .fly-motion .fly-title { display: none; }
+  .fly-motion .fly-head { position: absolute; left: 50%; top: 50%; width: min(76vw, 420px); margin: 0; transform: translate(-50%, -50%); pointer-events: none; }
+  .fly-motion .fly-head::before { content: ''; position: absolute; z-index: -1; inset: -65px -70px; background: radial-gradient(ellipse, var(--paper) 22%, transparent 72%); pointer-events: none; }
+  .fly-motion .fly-progress { display: block; position: absolute; z-index: 30; left: 50%; bottom: 58px; width: 140px; height: 2px; transform: translateX(-50%); background: var(--line); }
+  .fly-motion .fly-progress span { display: block; width: 100%; height: 100%; background: var(--orange); transform: scaleX(0); transform-origin: left; }
+  .fly-motion .fly-scroll-note { display: block; position: absolute; z-index: 30; bottom: 22px; width: 100%; text-align: center; font-size: 11px; color: var(--muted); }
+}
+@media (max-width: 800px) {
+  .fly-head h2 { font-size: 28px; }
+}
