@@ -59,7 +59,11 @@ const works = JSON.parse(fs.readFileSync(cataloguePath));
 const report = { tool: run(['-version']).stdout.split('\n')[0], toolHash, previews: [], failed: [] };
 // Include the generator itself so changing any fixed encoding option invalidates
 // cached files, even when it is not one of the main profile values below.
+// Web sits in its own profile: retuning the desktop tier must not invalidate the
+// cached preview and mobile encodes.
 const profile = { version: 2, seconds: 20, previewEdge: 960, previewBitrate: '650k', mobileLongEdge: 960, mobileShortEdge: 540, mobileCRF: 27, mobileMaxrate: '750k', mobileBuffer: '1500k', mobileAudioBitrate: '80k', mobileKeyframeSeconds: 2, fpsLimit: 30, toolHash, generatorHash: sha(import.meta.filename) };
+const webProfile = { ...profile, version: 1, webLongEdge: 1920, webCRF: 23, webMaxrate: '3500k', webBuffer: '7000k', webAudioBitrate: '96k', webKeyframeSeconds: 2 };
+const hashOf = (sourceHash, kind) => crypto.createHash('sha256').update(sourceHash + JSON.stringify(kind === 'web' ? webProfile : profile)).digest('hex').slice(0, 16);
 
 for (const work of works) {
   try {
@@ -68,10 +72,10 @@ for (const work of works) {
     if (relative.startsWith('..') || path.isAbsolute(relative)) throw new Error('Source is outside assets.');
     const sourceHash = sha(source);
     const info = inspect(source);
-    const hash = crypto.createHash('sha256').update(sourceHash + JSON.stringify(profile)).digest('hex').slice(0, 16);
     const directory = path.join(root, 'assets/optimized', String(work.id).replace(/[^a-zA-Z0-9_-]/g, '_'));
     fs.mkdirSync(directory, { recursive: true });
     const encode = (kind, args) => {
+      const hash = hashOf(sourceHash, kind);
       const output = path.join(directory, `${hash}-${kind}.mp4`);
       if (!fs.existsSync(output)) {
         const temporary = path.join(directory, `${hash}-${kind}.tmp.mp4`);
@@ -87,13 +91,16 @@ for (const work of works) {
     };
     const previewVideo = mobileOnly && work.previewVideo ? work.previewVideo : encode('preview', ['-ss', String(Math.min(info.duration * 0.2, Math.max(0, info.duration - 20))), '-i', source, '-t', '20', '-map', '0:v:0', '-an', '-vf', `scale=${scaled(info, 960)}`, '-r', String(info.fps), '-c:v', 'libx264', '-preset', 'veryfast', '-threads', '2', '-b:v', '650k', '-maxrate', '700k', '-bufsize', '1400k', '-pix_fmt', 'yuv420p', '-movflags', '+faststart']);
     const mobileVideo = encode('mobile', ['-i', source, '-map', '0:v:0', '-map', '0:a:0?', '-vf', `scale=${scaled(info, profile.mobileLongEdge, profile.mobileShortEdge)}`, '-r', String(info.fps), '-c:v', 'libx264', '-preset', 'medium', '-threads', '2', '-crf', String(profile.mobileCRF), '-maxrate', profile.mobileMaxrate, '-bufsize', profile.mobileBuffer, '-g', String(Math.max(1, Math.round(info.fps * profile.mobileKeyframeSeconds))), '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', profile.mobileAudioBitrate, '-movflags', '+faststart']);
-    const webVideo = mobileOnly && (work.webVideo || faststart(source)) ? (work.webVideo || '') : faststart(source) ? '' : encode('web', ['-i', source, '-map', '0:v:0', '-map', '0:a:0?', '-c', 'copy', '-movflags', '+faststart']);
+    const webVideo = mobileOnly && (work.webVideo || faststart(source)) ? (work.webVideo || '') : encode('web', ['-i', source, '-map', '0:v:0', '-map', '0:a:0?', '-vf', `scale=${scaled(info, webProfile.webLongEdge)}`, '-r', String(info.fps), '-c:v', 'libx264', '-preset', 'medium', '-threads', '2', '-crf', String(webProfile.webCRF), '-maxrate', webProfile.webMaxrate, '-bufsize', webProfile.webBuffer, '-g', String(Math.max(1, Math.round(info.fps * webProfile.webKeyframeSeconds))), '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', webProfile.webAudioBitrate, '-movflags', '+faststart']);
     if (sha(source) !== sourceHash) throw new Error('Source changed while generating.');
     const previewInfo = inspect(path.join(root, previewVideo));
-    const previewReport = { id: work.id, source: work.video, sourceHash, previewSeconds: previewInfo.duration, previewBytes: fs.statSync(path.join(root, previewVideo)).size, mobileBytes: fs.statSync(path.join(root, mobileVideo)).size, mobileMaxrate: profile.mobileMaxrate, mobileKeyframeSeconds: profile.mobileKeyframeSeconds, webRemux: !!webVideo };
+    const sourceBytes = fs.statSync(source).size;
+    const webBytes = webVideo ? fs.statSync(path.join(root, webVideo)).size : 0;
+    const previewReport = { id: work.id, source: work.video, sourceHash, previewSeconds: previewInfo.duration, previewBytes: fs.statSync(path.join(root, previewVideo)).size, mobileBytes: fs.statSync(path.join(root, mobileVideo)).size, mobileMaxrate: profile.mobileMaxrate, mobileKeyframeSeconds: profile.mobileKeyframeSeconds, webBytes, webCRF: webProfile.webCRF, webMaxrate: webProfile.webMaxrate };
     Object.assign(work, { previewVideo, mobileVideo, webVideo });
     report.previews.push(previewReport);
-    console.log(`${work.cnTitle || work.id}: ${previewInfo.duration}s preview; mobile ready${webVideo ? '; desktop faststart' : ''}`);
+    const saved = webBytes ? Math.round((1 - webBytes / sourceBytes) * 100) : 0;
+    console.log(`${work.cnTitle || work.id}: ${previewInfo.duration}s preview; web ${(webBytes / 1024 / 1024).toFixed(1)}MB (-${saved}%)`);
   } catch (error) {
     report.failed.push({ id: work.id, error: error.message });
     console.error(`${work.cnTitle || work.id}: ${error.message}`);

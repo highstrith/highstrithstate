@@ -32,7 +32,11 @@ jobs:
           cp projects.html public/projects.html
           cp in-progress.html public/in-progress.html
           cp resume.html public/resume.html
-          rsync -a --exclude 'originals/' assets/ public/assets/
+          # Source masters stay in git so media can be re-encoded, but they are
+          # never published: every work ships optimized preview/mobile/web files,
+          # and the pages only fall back to a source when one is missing.
+          rsync -a --exclude '/originals/' --exclude '/works/' --exclude '/uploads/' assets/ public/assets/
+          rsync -a --exclude '*.mp4' assets/uploads/ public/assets/uploads/
           cp -R data/. public/data/
           touch public/.nojekyll
 

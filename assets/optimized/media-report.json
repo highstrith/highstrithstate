@@ -7,220 +7,260 @@
       "source": "assets/uploads/reset-day-20261007.mp4",
       "sourceHash": "d9297698f85eacea90d731381efbb064f2d16fde7d08f518bfbdd30f74835fff",
       "previewSeconds": 20,
-      "previewBytes": 1709887,
-      "mobileBytes": 9827119,
+      "previewBytes": 1709635,
+      "mobileBytes": 9827113,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": true
+      "webBytes": 15047530,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "work-lying-down-20261001",
       "source": "assets/uploads/lying-down-20261001.mp4",
       "sourceHash": "a4f97a005e244a6e37baf9fc1e63d23a958a337635dbbacf1c6b5d5393901778",
       "previewSeconds": 20,
-      "previewBytes": 1609772,
+      "previewBytes": 1609290,
       "mobileBytes": 3349245,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": true
+      "webBytes": 5029506,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "work-1783863606674-7ta9sp",
       "source": "assets/uploads/work-1783863596658-desktop.mp4",
       "sourceHash": "f3a154b6c6b70ac91eb5f8b5317c725e2ec22bf47466dfeb295bc257ffc4b434",
       "previewSeconds": 20,
-      "previewBytes": 1635085,
+      "previewBytes": 1635194,
       "mobileBytes": 8420950,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": false
+      "webBytes": 22962848,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "work-1783246320299-icguu6",
       "source": "assets/uploads/desktop/work-1783436201027-desktop.mp4",
       "sourceHash": "bd24842da77abbec287ad4770d6406258f083913e604a4e67b3bf65648d50273",
       "previewSeconds": 15.04,
-      "previewBytes": 1183158,
-      "mobileBytes": 1632581,
+      "previewBytes": 1183403,
+      "mobileBytes": 1632263,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": false
+      "webBytes": 5586218,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "featured-prove-it",
       "source": "assets/works/prove-it.mp4",
       "sourceHash": "bfdaced374f473e19e49174d29d571c8f5fe66cb589451043f6a56d0d067272b",
       "previewSeconds": 20,
-      "previewBytes": 1571447,
+      "previewBytes": 1571581,
       "mobileBytes": 4451330,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": true
+      "webBytes": 6900805,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "featured-approach",
       "source": "assets/works/approach.mp4",
       "sourceHash": "21842d8b8a4214930d17a680abf12c1519f060ca5d62c1135e99c3a10e4dc567",
       "previewSeconds": 20,
-      "previewBytes": 1594859,
-      "mobileBytes": 3541296,
+      "previewBytes": 1593842,
+      "mobileBytes": 3541593,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": true
+      "webBytes": 9018527,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "featured-giant-wheel",
       "source": "assets/works/giant-wheel.mp4",
       "sourceHash": "e0228684971f5ab2de7793d105473f1d37e1e621345e1ecbca6b47df5c7b5a9d",
       "previewSeconds": 20,
-      "previewBytes": 1587886,
+      "previewBytes": 1587757,
       "mobileBytes": 1762315,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": true
+      "webBytes": 4290371,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "featured-exported-film",
       "source": "assets/works/exported-film.mp4",
       "sourceHash": "918e9df609aaaef5b8601fc00436cc972c18f47387549c7d8bf70b9eb465a946",
       "previewSeconds": 20,
-      "previewBytes": 1569126,
-      "mobileBytes": 3389386,
+      "previewBytes": 1569313,
+      "mobileBytes": 3390013,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": true
+      "webBytes": 9415177,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "featured-timeline-1",
       "source": "assets/works/timeline-vertical.mp4",
       "sourceHash": "df1d8232da6eb0cc54fdac8c42169bf8aea9d9bb60daabc6e7e55a2dc6a3ea6b",
       "previewSeconds": 20,
-      "previewBytes": 1563846,
+      "previewBytes": 1563817,
       "mobileBytes": 1972759,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": false
+      "webBytes": 5104520,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "added-creative-3",
       "source": "assets/works/creative-3.mp4",
       "sourceHash": "46d6e4f780895c8feb6053dde09be9b8ab7c8353309abb3a7f0138361d88b660",
       "previewSeconds": 10.2,
-      "previewBytes": 628153,
+      "previewBytes": 628315,
       "mobileBytes": 668596,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": true
+      "webBytes": 2871638,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "added-visual-study",
       "source": "assets/works/visual-study.mp4",
       "sourceHash": "6fd6189ceb7395ec8e2572a8df02ccb569987125aab5b1aecdcef30c8c461012",
       "previewSeconds": 5,
-      "previewBytes": 254238,
+      "previewBytes": 254307,
       "mobileBytes": 276143,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": false
+      "webBytes": 956459,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "added-title-render",
       "source": "assets/works/title-render.mp4",
       "sourceHash": "a401f3f44f217a4cc8b8c76a743ab6441214fde014f940fd756d09467b9b3dae",
       "previewSeconds": 13.52,
-      "previewBytes": 973770,
-      "mobileBytes": 1341876,
+      "previewBytes": 974264,
+      "mobileBytes": 1342475,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": false
+      "webBytes": 6241478,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "added-v30001-0180",
       "source": "assets/works/v30001-0180.mp4",
       "sourceHash": "ba681b583f1d285c5511284e19cea643987937a6e3596d09fee383ab0a4042b2",
       "previewSeconds": 7.2,
-      "previewBytes": 500503,
+      "previewBytes": 500209,
       "mobileBytes": 265469,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": true
+      "webBytes": 1355122,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "added-render-test",
       "source": "assets/works/render-test.mp4",
       "sourceHash": "8074dd13a694cb582fd134a84c0c963d3a96c71c3a0d2cab1dba2d2fa2cc7a9d",
       "previewSeconds": 2.23,
-      "previewBytes": 239285,
+      "previewBytes": 238931,
       "mobileBytes": 194363,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": true
+      "webBytes": 941494,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "added-completed-film",
       "source": "assets/works/completed-film.mp4",
       "sourceHash": "eceb45f7040e186d855ca355e50314f3a68d876e00cd9825f49928640f21c4bb",
       "previewSeconds": 20,
-      "previewBytes": 1541622,
+      "previewBytes": 1542571,
       "mobileBytes": 1074434,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": true
+      "webBytes": 4696881,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "eagle-badminton-visual",
       "source": "assets/works/eagle-badminton-visual.mp4",
       "sourceHash": "6d101a0331952706f0d83c8519fafad7c8b53099108ad0507e84b99492d38212",
       "previewSeconds": 20,
-      "previewBytes": 1413026,
-      "mobileBytes": 3005901,
+      "previewBytes": 1414139,
+      "mobileBytes": 3006176,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": true
+      "webBytes": 8041786,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "eagle-fireflies",
       "source": "assets/works/eagle-fireflies.mp4",
       "sourceHash": "5a1941d84d1f5f6164bd1cf6ed5feacf03a759ce46f85df9a3ee417ea79ac75d",
       "previewSeconds": 4.63,
-      "previewBytes": 298369,
-      "mobileBytes": 403765,
+      "previewBytes": 298373,
+      "mobileBytes": 403763,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": true
+      "webBytes": 2246197,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "eagle-act-of-kindness",
       "source": "assets/works/eagle-act-of-kindness.mp4",
       "sourceHash": "6fdf4f6c40131aab6a87db089bcc5d2ac01013f10f5d47988bd87c26a62371ec",
       "previewSeconds": 20,
-      "previewBytes": 1642461,
-      "mobileBytes": 6335266,
+      "previewBytes": 1642904,
+      "mobileBytes": 6337346,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": true
+      "webBytes": 16028554,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "eagle-liquid-lab",
       "source": "assets/works/eagle-liquid-lab.mp4",
       "sourceHash": "35a33e23483cd72a04fbb5db889b96b9fa071e1e967ccea068de742f9c7cdc22",
       "previewSeconds": 15.63,
-      "previewBytes": 1221731,
+      "previewBytes": 1222128,
       "mobileBytes": 1286033,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": true
+      "webBytes": 6461611,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "eagle-robot-short",
       "source": "assets/works/eagle-robot-short.mp4",
       "sourceHash": "28bc7d99a3165ba7357fd00a702a2749e39757f350b0ee373f21614072ce7c07",
       "previewSeconds": 20,
-      "previewBytes": 1722682,
-      "mobileBytes": 6711519,
+      "previewBytes": 1722145,
+      "mobileBytes": 6711541,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": false
+      "webBytes": 33147221,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     },
     {
       "id": "eagle-tavern-animation",
@@ -228,10 +268,12 @@
       "sourceHash": "76acf80f26796667eb1df9e03fb30089724f05f775143862a788905b3dbb650f",
       "previewSeconds": 6.21,
       "previewBytes": 421201,
-      "mobileBytes": 609356,
+      "mobileBytes": 609352,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webRemux": true
+      "webBytes": 1056772,
+      "webCRF": 23,
+      "webMaxrate": "3500k"
     }
   ],
   "failed": []

@@ -30,10 +30,16 @@ class ProjectPages(unittest.TestCase):
         self.context.unroute_all(behavior='ignoreErrors')
         self.context.close()
 
-    def test_home_navigation_opens_distinct_project_page(self):
+    def test_home_nav_lands_project_section_then_opens_project_page(self):
         self.page.goto(BASE + '/')
         self.page.get_by_role('navigation').get_by_role('link', name='项目与应用', exact=True).click(timeout=3000)
-        expect(self.page).to_have_url(BASE + '/projects.html')
+        expect(self.page).to_have_url(BASE + '/#projects')
+        top = self.page.locator('#projects').evaluate('element => Math.round(element.getBoundingClientRect().top)')
+        self.assertGreaterEqual(top, 0)
+        self.assertLess(top, 300)
+        expect(self.page.get_by_role('heading', name='导演工作台', exact=True)).to_be_visible()
+        self.page.locator('#projects [data-projects-link]').first.click(timeout=3000)
+        expect(self.page).to_have_url(BASE + '/projects.html#directorTitle')
         expect(self.page.get_by_role('heading', name='项目与应用', exact=True)).to_be_visible()
         expect(self.page.get_by_role('heading', name='导演工作台', exact=True)).to_be_visible()
         expect(self.page.get_by_role('heading', name='AI 无限画布', exact=True)).to_be_visible()
@@ -77,6 +83,8 @@ class ProjectPages(unittest.TestCase):
         self.page.locator('#langSwitch').click()
         self.page.get_by_role('navigation').get_by_role('link', name='Projects', exact=True).click(timeout=3000)
         expect(self.page.locator('html')).to_have_attribute('lang', 'en')
+        expect(self.page.locator('#projects')).to_be_in_viewport()
+        self.page.locator('#projects [data-projects-link]').first.click(timeout=3000)
         expect(self.page.get_by_role('heading', name='Projects & apps', exact=True)).to_be_visible()
         self.page.get_by_role('navigation').get_by_role('link', name='Works', exact=True).click()
         expect(self.page.locator('html')).to_have_attribute('lang', 'en')

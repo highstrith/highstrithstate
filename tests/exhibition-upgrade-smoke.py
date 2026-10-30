@@ -115,12 +115,17 @@ class ExhibitionUpgrade(unittest.TestCase):
             page.goto(BASE + path, wait_until='domcontentloaded')
             for link in page.locator('.site-header a').all():
                 expect(link).to_have_attribute('target', '_self')
-            page.locator('.main-nav > a[href^="projects.html"]').click()
-            expect(page).to_have_url(re.compile('/projects.html'))
-            self.assertEqual(len(page.context.pages), 1)
             page.locator('.main-nav a[href*="#about"]').click()
-            expect(page).to_have_url(re.compile('index.html.*#about'))
+            expect(page).to_have_url(re.compile('#about$'))
+            expect(page.locator('#about')).to_be_in_viewport()
             self.assertEqual(len(page.context.pages), 1)
+        # 项目与应用 is an in-page section now; its detail page opens in this tab.
+        page.goto(BASE + '/', wait_until='domcontentloaded')
+        page.locator('.main-nav a[href="#projects"]').click()
+        expect(page).to_have_url(re.compile('#projects$'))
+        page.locator('#projects [data-projects-link]').first.click()
+        expect(page).to_have_url(re.compile('/projects.html'))
+        self.assertEqual(len(page.context.pages), 1)
 
     def test_directory_view_preserves_search_filter_and_language(self):
         page = self.page(viewport={'width': 1440, 'height': 900})

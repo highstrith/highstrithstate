@@ -471,7 +471,7 @@
     // Initial anchor navigation happens before the asynchronous catalogue has
     // established the lower sections' final positions.
     const section = location.hash.slice(1);
-    if (['works', 'in-progress', 'stills', 'about', 'contact'].includes(section)) {
+    if (['works', 'in-progress', 'stills', 'projects', 'about', 'contact'].includes(section)) {
       document.getElementById(section)?.scrollIntoView({ behavior: 'instant' });
     }
   }
