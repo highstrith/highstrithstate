@@ -61,7 +61,7 @@ button { color: inherit; border: 0; }
 .hero-foot a { display: inline-flex; gap: 14px; }
 .works-section { padding-block: 76px 88px; }
 .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 40px; margin-bottom: 32px; }
-.section-label { font-size: 13px; line-height: 1.6; }
+.section-label { font-size: 12px; line-height: 1.6; letter-spacing: .04em; }
 .section-heading .section-label { color: var(--muted); margin-bottom: 15px; }
 .section-heading h2 { font-size: 32px; line-height: 1.35; letter-spacing: -.025em; font-weight: 500; }
 .works-intro { width: 295px; font-size: 14px; color: var(--muted); line-height: 1.9; padding-bottom: 3px; }
