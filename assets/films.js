@@ -11,6 +11,19 @@
     return `${url.pathname.split('/').pop()}${url.search}${url.hash}`;
   }
 
+  // 观看按钮的文案跟着链接走：拿到作品页直链时显示「观看第 01 集」，
+  // 只有平台搜索页时如实写成「在抖音搜索」，换链接不用再改一次文案。
+  const isSearchLink = link => /\/search\//.test(link.getAttribute('href') || '');
+  function labelWatch() {
+    const english = language === 'en';
+    document.querySelectorAll('[data-watch]').forEach(link => {
+      const text = link.querySelector('span[data-cn]');
+      if (!text) return;
+      const key = isSearchLink(link) ? (english ? 'enSearch' : 'cnSearch') : (english ? 'en' : 'cn');
+      text.textContent = text.dataset[key];
+    });
+  }
+
   function setLanguage() {
     const english = language === 'en';
     document.documentElement.lang = english ? 'en' : 'zh-CN';
@@ -18,6 +31,7 @@
     document.querySelectorAll('[data-cn][data-en]').forEach(element => {
       element.textContent = element.dataset[language];
     });
+    labelWatch();
     document.querySelectorAll('[data-cn-label][data-en-label]').forEach(element => {
       element.setAttribute(element.tagName === 'IMG' ? 'alt' : 'aria-label', element.dataset[`${language}Label`]);
     });
