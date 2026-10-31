@@ -1556,7 +1556,7 @@
     if (number === currentPage) return;
     currentPage = number;
     applyFilters(true);
-    $('#works')?.scrollIntoView({ behavior: 'instant' });
+    $('#works')?.scrollIntoView({ behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'start' });
     $('#worksTitle')?.setAttribute('tabindex', '-1');
     $('#worksTitle')?.focus({ preventScroll: true });
   });

@@ -23,7 +23,8 @@ class CataloguePages(unittest.TestCase):
         cls.runtime.stop()
 
     def page(self, suffix='/index.html#works', **options):
-        page = self.browser.new_page(viewport={'width': 1440, 'height': 1000}, reduced_motion='reduce', **options)
+        settings = {'viewport': {'width': 1440, 'height': 1000}, 'reduced_motion': 'reduce', **options}
+        page = self.browser.new_page(**settings)
         self.addCleanup(page.context.close)
         page.goto(BASE+suffix, wait_until='load')
         expect(page.locator('.no-js-work' if options.get('java_script_enabled') is False else '.work-card')).to_have_count(len(WORKS))
@@ -63,6 +64,44 @@ class CataloguePages(unittest.TestCase):
         expect(page.locator('#worksPagination')).not_to_be_visible()
         page.locator('#resetFilters').click()
         self.assertEqual(self.ids(page),[w['id'] for w in WORKS[:6]])
+
+    def test_page_changes_return_to_the_start_without_a_vertical_snap_or_rebound(self):
+        for width, height, view, motion in [(1440, 1000, 'gallery', 'no-preference'),
+                                            (390, 844, 'gallery', 'no-preference'),
+                                            (1440, 900, 'list', 'no-preference'),
+                                            (1440, 1000, 'gallery', 'reduce')]:
+            with self.subTest(width=width, view=view, motion=motion):
+                page = self.page('/?page=3#works', viewport={'width': width, 'height': height}, reduced_motion=motion)
+                if view == 'list':
+                    page.locator('[data-view="list"]').click()
+                page.evaluate('''() => {
+                  document.addEventListener('click', event => {
+                    if (!event.target.closest('#worksPagination a[data-page]')) return;
+                    const read=()=>({y:scrollY,top:document.querySelector('#works').getBoundingClientRect().top});
+                    window.pagingFrames=[read()]; const start=performance.now();
+                    const sample=()=>{window.pagingFrames.push(read());
+                      if(performance.now()-start<1100)requestAnimationFrame(sample);};
+                    requestAnimationFrame(sample);
+                  },true);
+                }''')
+                for number in [4, 3]:
+                    link = page.locator(f'#worksPages [data-page="{number}"]')
+                    link.scroll_into_view_if_needed()
+                    page.wait_for_timeout(600)
+                    link.click()
+                    page.wait_for_timeout(1200)
+                    frames = page.evaluate('window.pagingFrames')
+                    self.assertGreater(len(frames), 3)
+                    self.assertAlmostEqual(frames[-1]['top'], 0, delta=1)
+                    moves = [b['y'] - a['y'] for a, b in zip(frames, frames[1:])]
+                    self.assertLessEqual(max(moves), 2, 'Returning to the heading must not bounce downward first')
+                    if motion == 'no-preference':
+                        self.assertLess(max(abs(move) for move in moves), height * .3,
+                                        'Page replacement must not instantly snap the viewport to the heading')
+                    self.assertLess(max(frame['top'] for frame in frames), 2, 'The scroll must not overshoot the section')
+                    expect(page.locator('#worksTitle')).to_be_focused()
+                    self.assertEqual(self.ids(page), [w['id'] for w in WORKS[(number-1)*6:number*6]])
+                page.close()
 
     def test_language_view_refresh_and_browser_back_keep_page(self):
         page = self.page('/index.html?page=3#works')
