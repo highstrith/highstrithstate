@@ -52,7 +52,10 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
     assert.equal(fs.readFileSync(path.join(publicRoot, 'projects.html'), 'utf8'), projects);
     assert.equal(fs.readFileSync(path.join(publicRoot, 'in-progress.html'), 'utf8'), progress);
     assert.equal(fs.readFileSync(path.join(publicRoot, 'reel/index.html'), 'utf8'), reel, 'standalone reel page must be published unchanged');
-    assert.ok(fs.existsSync(path.join(publicRoot, 'reel/img/xianggu.webp')), 'reel covers must be published');
+    for (const cover of ['xianggu', 'jinhaitang', 'yanran']) {
+      assert.ok(fs.existsSync(path.join(publicRoot, `reel/img/${cover}.webp`)), `reel cover ${cover} must be published`);
+      assert.ok(fs.existsSync(path.join(publicRoot, `reel/img/${cover}-640w.webp`)), `reel cover ${cover}-640w must be published`);
+    }
     assert.equal(fs.existsSync(path.join(publicRoot, 'reel/img/raw')), false, 'reel master images must stay out of the artifact');
     assert.deepEqual(references.filter(file => !fs.existsSync(path.join(publicRoot, file))), [], 'Pages artifact is missing local CSS/JS referenced by index.html');
     for (const file of [...references, ...projectFiles, 'assets/studio-mark.svg', 'data/works.json']) {
