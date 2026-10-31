@@ -97,6 +97,34 @@ class FlyVortex(unittest.TestCase):
         self.assertLess(abs(page.locator('#worksTitle').bounding_box()['y']), 450)
         expect(page.locator('#worksGrid .work-item:not([hidden])')).to_have_count(6)
 
+    def test_full_stage_backdrop_follows_theme_and_survives_fallbacks(self):
+        page = self.page()
+        self.seek(page, .35)
+
+        def backdrop():
+            return page.locator('#flyStage').evaluate('''e => {
+              const style = getComputedStyle(e), box = e.getBoundingClientRect();
+              return {image: style.backgroundImage, width: box.width, height: box.height};
+            }''')
+
+        light = backdrop()
+        self.assertIn('radial-gradient(', light['image'],
+                      'The whole pinned stage needs depth, not only the small title mask')
+        self.assertEqual([light['width'], light['height']], [1440, 900])
+        page.locator('#themeToggle').click()
+        dark = backdrop()
+        self.assertIn('radial-gradient(', dark['image'])
+        self.assertNotEqual(light['image'], dark['image'])
+        self.seek(page, .65)
+        self.assertEqual(backdrop(), dark, 'The backdrop must stay with the sticky stage')
+        page.set_viewport_size({'width': 390, 'height': 844})
+        expect(page.locator('#flyWorks')).not_to_have_class('fly-section fly-motion')
+        self.assertIn('radial-gradient(', backdrop()['image'])
+        page.set_viewport_size({'width': 1440, 'height': 900})
+        page.emulate_media(reduced_motion='reduce')
+        expect(page.locator('#flyWorks')).not_to_have_class('fly-section fly-motion')
+        self.assertIn('radial-gradient(', backdrop()['image'])
+
 
 if __name__ == '__main__':
     unittest.main()

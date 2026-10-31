@@ -1,6 +1,24 @@
 /* Static first: narrow screens, reduced motion and script failure stay usable. */
-.fly-section { position: relative; background: var(--paper, #f4f4f0); padding: 48px 0; }
-.fly-stage { position: relative; padding-inline: max(20px, calc((100vw - 1600px) / 2)); }
+.fly-section {
+  --fly-glow: #fff8eb;
+  --fly-mid: #e6ded0;
+  --fly-edge: #aeb3ad;
+  --muted: #4d524d;
+  position: relative;
+  background: var(--paper, #f4f4f0);
+}
+:root[data-theme="dark"] .fly-section {
+  --fly-glow: #594437;
+  --fly-mid: #292b2b;
+  --fly-edge: #101315;
+  --muted: #c0c2bf;
+}
+/* Keep the light source on the viewport-sized stage, not the 340vh scroll track. */
+.fly-stage {
+  position: relative;
+  padding: 48px max(20px, calc((100vw - 1600px) / 2));
+  background: radial-gradient(ellipse at 50% 46%, var(--fly-glow) 0%, var(--fly-mid) 45%, var(--fly-edge) 100%);
+}
 .fly-head { position: relative; z-index: 30; text-align: center; margin: 0 auto 28px; }
 .fly-head h2 { font-size: 36px; font-weight: 500; line-height: 1.3; letter-spacing: -.025em; }
 .fly-hint { font-size: 14px; line-height: 1.8; color: var(--muted); margin-top: 12px; }
@@ -20,7 +38,7 @@
   .fly-motion .fly-card img { box-shadow: 0 8px 32px rgb(0 0 0 / .08); }
   .fly-motion .fly-title { display: none; }
   .fly-motion .fly-head { position: absolute; left: 50%; top: 50%; width: min(76vw, 420px); margin: 0; transform: translate(-50%, -50%); pointer-events: none; }
-  .fly-motion .fly-head::before { content: ''; position: absolute; z-index: -1; inset: -65px -70px; background: radial-gradient(ellipse, var(--paper) 22%, transparent 72%); pointer-events: none; }
+  .fly-motion .fly-head::before { content: ''; position: absolute; z-index: -1; inset: -65px -70px; background: radial-gradient(ellipse, var(--fly-glow) 0%, transparent 72%); pointer-events: none; }
   .fly-motion .fly-progress { display: block; position: absolute; z-index: 30; left: 50%; bottom: 58px; width: 140px; height: 2px; transform: translateX(-50%); background: var(--line); }
   .fly-motion .fly-progress span { display: block; width: 100%; height: 100%; background: var(--orange); transform: scaleX(0); transform-origin: left; }
   .fly-motion .fly-scroll-note { display: block; position: absolute; z-index: 30; bottom: 22px; width: 100%; text-align: center; font-size: 11px; color: var(--muted); }
