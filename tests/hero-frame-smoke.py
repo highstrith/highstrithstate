@@ -93,7 +93,9 @@ class HeroFrameSmoke(unittest.TestCase):
         page.wait_for_function("""() => {
           const hero = document.querySelector('.hero-feature');
           const style = getComputedStyle(hero);
-          return hero.classList.contains('rv-in') && style.transform === 'none' && style.opacity === '1';
+          // Zero-distance parallax retains an identity matrix after the reveal.
+          const settled = style.transform === 'none' || new DOMMatrix(style.transform).isIdentity;
+          return hero.classList.contains('rv-in') && settled && style.opacity === '1';
         }""")
         page.evaluate("() => { window.__heroFrameProbe.samples = []; window.__heroFrameProbe.phase = 'stable-initial'; }")
         page.wait_for_function('window.__heroFrameProbe.samples.length > 0')
