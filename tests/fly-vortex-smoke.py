@@ -2,6 +2,8 @@
 import math
 import os
 import unittest
+from io import BytesIO
+from PIL import Image
 from playwright.sync_api import sync_playwright, expect
 
 BASE = os.environ.get('STUDIO_BASE_URL', 'http://127.0.0.1:3000')
@@ -120,10 +122,62 @@ class FlyVortex(unittest.TestCase):
         page.set_viewport_size({'width': 390, 'height': 844})
         expect(page.locator('#flyWorks')).not_to_have_class('fly-section fly-motion')
         self.assertIn('radial-gradient(', backdrop()['image'])
+
         page.set_viewport_size({'width': 1440, 'height': 900})
         page.emulate_media(reduced_motion='reduce')
         expect(page.locator('#flyWorks')).not_to_have_class('fly-section fly-motion')
         self.assertIn('radial-gradient(', backdrop()['image'])
+
+    def test_images_blend_into_all_four_edges_without_fading_the_title(self):
+        page = self.page()
+        self.seek(page, .5)
+        # A solid test plane exposes the actual compositor alpha at every edge,
+        # independent of the colours and positions of the current film posters.
+        fixture = page.add_style_tag(content='''
+          .site-header, .fly-head, .fly-progress, .fly-scroll-note { visibility: hidden !important; }
+          #flyField .fly-card { display: none !important; }
+          #flyField .fly-card:first-child {
+            display: block !important; left: 0 !important; top: 0 !important;
+            width: 100% !important; height: 100% !important; background: #000 !important;
+            transform: none !important; opacity: 1 !important; visibility: visible !important;
+          }
+          #flyField .fly-card * { display: none !important; }
+        ''')
+        field = page.locator('#flyField')
+        for theme in ['light', 'dark']:
+            if theme == 'dark':
+                page.locator('#themeToggle').click(force=True)
+            field.evaluate("e => e.style.opacity = '0'")
+            background = Image.open(BytesIO(page.screenshot())).convert('RGB')
+            field.evaluate("e => e.style.opacity = '1'")
+            masked = Image.open(BytesIO(page.screenshot())).convert('RGB')
+            width, height = masked.size
+            for edge in ['left', 'right', 'top', 'bottom']:
+                alphas = []
+                for fraction in [.002, .06, .12, .25]:
+                    x, y = width // 2, height // 2
+                    if edge in ['left', 'right']:
+                        x = int(width * fraction) if edge == 'left' else width - 1 - int(width * fraction)
+                    else:
+                        y = int(height * fraction) if edge == 'top' else height - 1 - int(height * fraction)
+                    base = sum(background.getpixel((x, y)))
+                    alphas.append(1 - sum(masked.getpixel((x, y))) / base)
+                with self.subTest(theme=theme, edge=edge):
+                    self.assertLess(alphas[0], .04, 'A poster must disappear before it is clipped')
+                    self.assertGreater(alphas[1], alphas[0] + .15)
+                    self.assertGreater(alphas[2], alphas[1] + .15)
+                    self.assertGreater(alphas[3], .98, 'The inner area must retain full image contrast')
+        fixture.evaluate('e => e.remove()')
+        field.evaluate("e => e.style.removeProperty('opacity')")
+        expect(page.locator('#flyTitle')).to_be_visible()
+        self.assertEqual(page.locator('.fly-head').evaluate('e => getComputedStyle(e).maskImage'), 'none')
+        page.set_viewport_size({'width': 390, 'height': 844})
+        expect(page.locator('#flyWorks')).not_to_have_class('fly-section fly-motion')
+        self.assertEqual(field.evaluate('e => getComputedStyle(e).maskImage'), 'none')
+        page.set_viewport_size({'width': 1440, 'height': 900})
+        page.emulate_media(reduced_motion='reduce')
+        expect(page.locator('#flyWorks')).not_to_have_class('fly-section fly-motion')
+        self.assertEqual(field.evaluate('e => getComputedStyle(e).maskImage'), 'none')
 
 
 if __name__ == '__main__':
