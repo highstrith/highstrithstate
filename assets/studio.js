@@ -13,7 +13,7 @@
 
   const copy = {
     cn: {
-      skip: '跳转到作品', navWorks: '作品', navProgress: '正在制作', navProjects: '项目与应用', navReel: '片单', navResume: '创作者档案', navAbout: '关于', navContact: '联系', admin: '作品管理',
+      skip: '跳转到作品', navWorks: '作品', navProgress: '正在制作', navProjects: '项目与应用', navResume: '创作者档案', navAbout: '关于', navContact: '联系', admin: '作品管理',
       intro: '独立影像创作者 · 南京', heroTitle: '想象，在此成片',
       heroDesc: '用三维构建世界，用影像讲述故事。\n从一个念头，到让人记住的画面。',
       explore: '探索作品', selected: '精选放映', watch: '观看完整作品',
@@ -44,7 +44,8 @@
       navStills: '画面截图', stillsLabel: '画面定格', stillsTitle: '作品截图',
       stillsIntro: '过往创作留下的画面，\n记录不同阶段的光线与情绪。',
       galleryView: '画廊', listView: '目录', previewNote: '静音片段预览', pausePreview: '暂停预览', resumePreview: '继续预览',
-      toolsLabel: '项目与应用', toolsTitle: '导演工作台', toolsIntro: '把剧本、分镜、资产和提示词，放在一个工作台里。', toolsExplore: '查看项目与应用', toolFeatured: '导演工作台 App', toolsAlso: '也在做', toolCanvas: 'AI 无限画布', toolReel: 'AI 影像片单',
+      toolsLabel: '项目与应用', toolsTitle: '导演工作台', toolsIntro: '把剧本、分镜、资产和提示词，放在一个工作台里。', toolsExplore: '查看项目与应用', toolFeatured: '导演工作台 App', toolsAlso: '也在做', toolCanvas: 'AI 无限画布',
+      recommendedFilms: '推荐 AI 片单', recommendedFilmsIntro: '发现其他创作者的 AI 影像，直达原片观看。', recommendedFilmsBrowse: '浏览片单',
       toolCarouselPause: '暂停轮播', toolCarouselResume: '继续轮播', toolCarouselLink: '查看导演工作台项目',
       viewImage: '查看大图', zoomImage: '放大查看', fitImage: '适应画面', previousImage: '上一张', nextImage: '下一张', closeImage: '关闭图片浏览', backImages: '返回图集',
       imageLoading: '正在加载图片…', imageError: '图片暂时无法加载，请切换其他图片后重试。', copyEmail: '复制邮箱', emailCopied: '邮箱已复制', emailCopyFailed: '请手动复制：highstrith@gmail.com',
@@ -52,7 +53,7 @@
       progressAsset: '森林湖岸都市', progressAssetKind: '场景资产', progressBoard: '高空投送', progressBoardKind: '分镜草图', progressWorkbench: '影片总览', progressWorkbenchKind: '导演工作台', progressNote: '制作中的阶段记录，画面会继续调整。', progressMore: '查看完整制作记录', progressCount: '15 张制作记录',
     },
     en: {
-      skip: 'Skip to works', navWorks: 'Works', navProgress: 'In progress', navProjects: 'Projects', navReel: 'Film index', navResume: 'Resume', navAbout: 'About', navContact: 'Contact', admin: 'Manage works',
+      skip: 'Skip to works', navWorks: 'Works', navProgress: 'In progress', navProjects: 'Projects', navResume: 'Resume', navAbout: 'About', navContact: 'Contact', admin: 'Manage works',
       intro: 'Independent image maker · Nanjing', heroTitle: 'Imagination, in motion',
       heroDesc: 'Building worlds in 3D. Telling stories through film.\nFrom a first thought to an image that stays with you.',
       explore: 'Explore the works', selected: 'Selected screening', watch: 'Watch the full film',
@@ -83,7 +84,8 @@
       navStills: 'Stills', stillsLabel: 'Frozen frames', stillsTitle: 'Stills',
       stillsIntro: 'Frames left behind by past works,\ncapturing light and mood at different stages.',
       galleryView: 'Gallery', listView: 'Directory', previewNote: 'Silent film excerpts', pausePreview: 'Pause preview', resumePreview: 'Resume preview',
-      toolsLabel: 'Projects & apps', toolsTitle: 'Director’s workbench', toolsIntro: 'Scripts, storyboards, assets and prompts in one workspace.', toolsExplore: 'Explore projects & apps', toolFeatured: 'Director’s workbench app', toolsAlso: 'Also making', toolCanvas: 'AI infinite canvas', toolReel: 'AI film index',
+      toolsLabel: 'Projects & apps', toolsTitle: 'Director’s workbench', toolsIntro: 'Scripts, storyboards, assets and prompts in one workspace.', toolsExplore: 'Explore projects & apps', toolFeatured: 'Director’s workbench app', toolsAlso: 'Also making', toolCanvas: 'AI infinite canvas',
+      recommendedFilms: 'Recommended AI films', recommendedFilmsIntro: 'Explore AI films by other creators, with links to the originals.', recommendedFilmsBrowse: 'Browse films',
       toolCarouselPause: 'Pause slideshow', toolCarouselResume: 'Resume slideshow', toolCarouselLink: 'View Director’s workbench project',
       viewImage: 'View full image', zoomImage: 'Zoom in', fitImage: 'Fit to screen', previousImage: 'Previous', nextImage: 'Next', closeImage: 'Close image viewer', backImages: 'Back to images',
       imageLoading: 'Loading image…', imageError: 'This image could not be loaded. Switch to another image and try again.', copyEmail: 'Copy email', emailCopied: 'Email copied', emailCopyFailed: 'Copy this address: highstrith@gmail.com',

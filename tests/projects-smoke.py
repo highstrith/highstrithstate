@@ -30,32 +30,34 @@ class ProjectPages(unittest.TestCase):
         self.context.unroute_all(behavior='ignoreErrors')
         self.context.close()
 
-    def test_film_index_is_reachable_from_shared_navigation_in_current_tab(self):
+    def test_recommended_film_index_is_at_home_bottom_and_opens_in_current_tab(self):
         for width in [1440, 820, 390, 320]:
             self.page.set_viewport_size({'width': width, 'height': 900})
-            for path in ['/', '/projects.html', '/in-progress.html?lang=en']:
+            for path in ['/', '/?lang=en', '/projects.html', '/in-progress.html?lang=en']:
                 self.page.goto(BASE + path, wait_until='domcontentloaded')
-                if width <= 800: self.page.locator('#menuToggle').click()
-                link = self.page.locator('.main-nav > a[href="reel/"]')
+                expect(self.page.locator('.main-nav a[href="reel/"]')).to_have_count(0)
+                if 'projects.html' in path or 'in-progress.html' in path: continue
+                section = self.page.locator('#filmRecommendations')
+                self.assertEqual(section.evaluate('e=>e.previousElementSibling.id'), 'contact')
+                expect(section.locator('h2')).to_have_text('Recommended AI films' if 'lang=en' in path else '推荐 AI 片单')
+                expect(self.page.locator('#projects a[href="reel/"]')).to_have_count(0)
+                link = section.locator('a[href="reel/"]')
+                link.scroll_into_view_if_needed()
                 expect(link).to_be_visible()
-                expect(link).to_have_text('Film index' if 'lang=en' in path else '片单')
                 expect(link).to_have_attribute('target', '_self')
                 self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth'), width)
-                if width > 800:
-                    nav = self.page.locator('.main-nav').bounding_box()
-                    actions = self.page.locator('.header-actions').bounding_box()
-                    self.assertLess(nav['x'] + nav['width'], actions['x'])
                 link.click()
                 expect(self.page).to_have_url(BASE + '/reel/')
                 expect(self.page.locator('h1')).to_contain_text('影像，正在')
                 self.assertEqual(len(self.context.pages), 1)
 
-    def test_film_index_navigation_works_without_javascript(self):
+    def test_film_index_recommendation_works_without_javascript(self):
         context = self.browser.new_context(java_script_enabled=False, viewport={'width': 390, 'height': 844})
         self.addCleanup(context.close)
         page = context.new_page()
         page.goto(BASE + '/', wait_until='domcontentloaded')
-        page.locator('.main-nav > a[href="reel/"]').click()
+        expect(page.locator('.main-nav a[href="reel/"]')).to_have_count(0)
+        page.locator('#filmRecommendations a[href="reel/"]').click()
         expect(page).to_have_url(BASE + '/reel/')
 
     def test_home_nav_lands_project_section_then_opens_project_page(self):
