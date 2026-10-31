@@ -15,8 +15,8 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
   const source = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
   const projects = fs.readFileSync(path.join(root, 'projects.html'), 'utf8');
   const progress = fs.readFileSync(path.join(root, 'in-progress.html'), 'utf8');
-  const films = fs.readFileSync(path.join(root, 'films.html'), 'utf8');
-  const references = [...(source + projects + progress + films).matchAll(/<(?:link|script)\b[^>]*>/gi)].flatMap(([tag]) => {
+  const reel = fs.readFileSync(path.join(root, 'reel/index.html'), 'utf8');
+  const references = [...(source + projects + progress).matchAll(/<(?:link|script)\b[^>]*>/gi)].flatMap(([tag]) => {
     const attribute = /^<script\b/i.test(tag) ? 'src' : /\brel=["']stylesheet["']/i.test(tag) ? 'href' : null;
     const reference = attribute && tag.match(new RegExp(`\\b${attribute}=["']([^"']+)["']`, 'i'))?.[1];
     if (!reference) return [];
@@ -27,7 +27,7 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
   const projectFiles = [...(projects + progress).matchAll(/(?:href|src)="(assets\/[^"]+)"/g)].map(match => match[1].split('?')[0]);
   const fixture = fs.mkdtempSync(path.join(os.tmpdir(), 'highstrith-pages-'));
   try {
-    for (const file of ['index.html', 'projects.html', 'in-progress.html', 'films.html', 'resume.html', 'admin.html', 'admin.css', 'serve.js']) {
+    for (const file of ['index.html', 'projects.html', 'in-progress.html', 'resume.html', 'admin.html', 'admin.css', 'serve.js']) {
       if (fs.existsSync(path.join(root, file))) {
         fs.copyFileSync(path.join(root, file), path.join(fixture, file));
       }
@@ -41,6 +41,8 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
     // The real repository always has an uploads folder; the fixture only copies
     // referenced files, so recreate it or the uploads rsync step has no source.
     fs.mkdirSync(path.join(fixture, 'assets/uploads'), { recursive: true });
+    // 片单是独立站点，整目录进产物。
+    fs.cpSync(path.join(root, 'reel'), path.join(fixture, 'reel'), { recursive: true });
     fs.copyFileSync(path.join(root, 'data/works.json'), path.join(fixture, 'data/works.json'));
     execFileSync('/bin/bash', ['-e', '-o', 'pipefail', '-c', script], { cwd: fixture, stdio: 'pipe' });
 
@@ -49,7 +51,9 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
     assert.equal(html, source);
     assert.equal(fs.readFileSync(path.join(publicRoot, 'projects.html'), 'utf8'), projects);
     assert.equal(fs.readFileSync(path.join(publicRoot, 'in-progress.html'), 'utf8'), progress);
-    assert.equal(fs.readFileSync(path.join(publicRoot, 'films.html'), 'utf8'), films);
+    assert.equal(fs.readFileSync(path.join(publicRoot, 'reel/index.html'), 'utf8'), reel, 'standalone reel page must be published unchanged');
+    assert.ok(fs.existsSync(path.join(publicRoot, 'reel/img/xianggu.webp')), 'reel covers must be published');
+    assert.equal(fs.existsSync(path.join(publicRoot, 'reel/img/raw')), false, 'reel master images must stay out of the artifact');
     assert.deepEqual(references.filter(file => !fs.existsSync(path.join(publicRoot, file))), [], 'Pages artifact is missing local CSS/JS referenced by index.html');
     for (const file of [...references, ...projectFiles, 'assets/studio-mark.svg', 'data/works.json']) {
       assert.deepEqual(fs.readFileSync(path.join(publicRoot, file)), fs.readFileSync(path.join(root, file)), `${file} must be copied unchanged`);

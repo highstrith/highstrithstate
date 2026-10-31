@@ -78,7 +78,8 @@ function pathInsideWorkspace(targetPath) {
 
 function resolveFile(urlPath) {
   const clean = safeDecode(urlPath.split("?")[0].split("#")[0]);
-  const relative = clean === "/" ? "/index.html" : clean;
+  // 目录请求回落到 index.html，和 GitHub Pages 的行为保持一致（片单站点在 /reel/）。
+  const relative = clean.endsWith("/") ? `${clean}index.html` : clean;
   const full = path.join(root, relative);
   if (!pathInsideWorkspace(full)) return null;
   return full;

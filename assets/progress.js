@@ -32,7 +32,7 @@
     document.querySelectorAll('[data-cn-label][data-en-label]').forEach(element => {
       element.setAttribute(element.tagName === 'IMG' ? 'alt' : 'aria-label', element.dataset[`${language}Label`]);
     });
-    document.querySelectorAll('[data-home-link], [data-projects-link], [data-progress-link], [data-films-link]').forEach(link => {
+    document.querySelectorAll('[data-home-link], [data-projects-link], [data-progress-link]').forEach(link => {
       const url = new URL(link.getAttribute('href'), location.href);
       url.search = english ? '?lang=en' : '';
       link.setAttribute('href', `${url.pathname.split('/').at(-1)}${url.search}${url.hash}`);

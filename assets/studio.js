@@ -13,7 +13,7 @@
 
   const copy = {
     cn: {
-      skip: '跳转到作品', navWorks: '作品', navProgress: '正在制作', navProjects: '项目与应用', navFilms: '片单', navResume: '创作者档案', navAbout: '关于', navContact: '联系', admin: '作品管理',
+      skip: '跳转到作品', navWorks: '作品', navProgress: '正在制作', navProjects: '项目与应用', navResume: '创作者档案', navAbout: '关于', navContact: '联系', admin: '作品管理',
       intro: '独立影像创作者 · 南京', heroTitle: '想象，在此成片',
       heroDesc: '用三维构建世界，用影像讲述故事。\n从一个念头，到让人记住的画面。',
       explore: '探索作品', selected: '精选放映', watch: '观看完整作品',
@@ -52,7 +52,7 @@
       progressAsset: '森林湖岸都市', progressAssetKind: '场景资产', progressBoard: '高空投送', progressBoardKind: '分镜草图', progressWorkbench: '影片总览', progressWorkbenchKind: '导演工作台', progressNote: '制作中的阶段记录，画面会继续调整。', progressMore: '查看完整制作记录', progressCount: '15 张制作记录',
     },
     en: {
-      skip: 'Skip to works', navWorks: 'Works', navProgress: 'In progress', navProjects: 'Projects', navFilms: 'Film index', navResume: 'Resume', navAbout: 'About', navContact: 'Contact', admin: 'Manage works',
+      skip: 'Skip to works', navWorks: 'Works', navProgress: 'In progress', navProjects: 'Projects', navResume: 'Resume', navAbout: 'About', navContact: 'Contact', admin: 'Manage works',
       intro: 'Independent image maker · Nanjing', heroTitle: 'Imagination, in motion',
       heroDesc: 'Building worlds in 3D. Telling stories through film.\nFrom a first thought to an image that stays with you.',
       explore: 'Explore the works', selected: 'Selected screening', watch: 'Watch the full film',
