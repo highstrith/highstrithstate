@@ -30,12 +30,13 @@ jobs:
           mkdir -p public/assets public/data
           cp index.html public/index.html
           cp projects.html public/projects.html
+          cp films.html public/films.html
           cp in-progress.html public/in-progress.html
           cp resume.html public/resume.html
           # Source masters stay in git so media can be re-encoded, but they are
           # never published: every work ships optimized preview/mobile/web files,
           # and the pages only fall back to a source when one is missing.
-          rsync -a --exclude '/originals/' --exclude '/works/' --exclude '/uploads/' assets/ public/assets/
+          rsync -a --exclude '/originals/' --exclude '/works/' --exclude '/uploads/' --exclude '/films/raw/' assets/ public/assets/
           rsync -a --exclude '*.mp4' assets/uploads/ public/assets/uploads/
           cp -R data/. public/data/
           touch public/.nojekyll
