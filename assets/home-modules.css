@@ -1,0 +1,56 @@
+/* Homepage chapters: one subject per screen, with room for longer collections. */
+#home > :is(.works-section, .home-progress-section, .stills-section, .tools-preview, .about-section, .contact-section) {
+  padding-block: clamp(96px, 12svh, 160px) clamp(72px, 8svh, 112px);
+}
+#projects {
+  display: flex;
+  align-items: center;
+  background: var(--exhibit-white);
+  border-block: 1px solid var(--line);
+}
+#projects .tools-preview-layout {
+  display: grid;
+  grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr);
+  align-items: center;
+  gap: clamp(36px, 5vw, 88px);
+}
+#projects .tools-preview-copy { min-width: 0; max-width: 32rem; }
+#projects .tools-preview-image { width: 100%; justify-self: end; }
+
+@media (min-width: 801px) {
+  #home > .hero { min-height: calc(100svh - 100px); }
+  #home > :is(.works-section, .home-progress-section, .stills-section, .tools-preview, .about-section, .contact-section) {
+    min-height: 100svh;
+    /* Cancel the header inset: each chapter already has safe internal padding. */
+    scroll-margin-top: -110px;
+  }
+  #home > .home-progress-section { display: flex; flex-direction: column; justify-content: center; }
+  #in-progress .section-heading { margin-bottom: clamp(36px, 5svh, 64px); }
+  #in-progress .home-progress-layout { align-items: center; }
+  #home > .about-section { display: grid; align-items: center; }
+  #about .about-layout { grid-template-columns: minmax(0, .9fr) minmax(0, 1fr); gap: 8%; }
+  #about .about-portrait { height: clamp(360px, 56svh, 620px); margin-top: 0; }
+}
+@media (min-width: 1000px) {
+  /* A short laptop window can grow naturally; the interface never gets cropped. */
+  #projects .tools-preview-image { max-width: calc((100svh - 220px) * 960 / 622); }
+}
+@media (min-width: 1100px) and (min-height: 820px) {
+  #home .hero-feature { height: clamp(480px, calc(100svh - 360px), 640px); }
+}
+@media (max-width: 999px) {
+  #projects .tools-preview-layout { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  #projects .tools-preview-copy { max-width: 40rem; }
+}
+@media (max-width: 800px) {
+  #home > :is(.works-section, .home-progress-section, .stills-section, .tools-preview, .about-section, .contact-section) {
+    padding-block: 96px 56px;
+    scroll-margin-top: -96px;
+  }
+  #projects .tools-preview-image { padding: 16px 0 0 16px; }
+  #projects .tools-carousel-label { left: 30px; }
+  #about .about-portrait { width: min(100%, 420px); height: clamp(360px, 95vw, 480px); }
+}
+@media (max-width: 600px) {
+  #home > :is(.works-section, .home-progress-section, .stills-section, .tools-preview, .about-section, .contact-section) { scroll-margin-top: -92px; }
+}

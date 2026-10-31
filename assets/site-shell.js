@@ -63,7 +63,11 @@
 
   function scrollToAnchor(target, hash, instant) {
     const limit = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-    const top = Math.round(Math.min(limit, Math.max(0, target.getBoundingClientRect().top + window.scrollY - scrollPadding())));
+    // Homepage chapters include their own header clearance. Match the native
+    // anchor's scroll-margin without changing offsets on independent pages.
+    const margin = target.parentElement?.id === 'home'
+      ? parseFloat(getComputedStyle(target).scrollMarginTop) || 0 : 0;
+    const top = Math.round(Math.min(limit, Math.max(0, target.getBoundingClientRect().top + window.scrollY - scrollPadding() - margin)));
     const token = ++scrollToken;
     const from = window.scrollY;
     const distance = top - from;
