@@ -30,7 +30,7 @@ class ProjectPages(unittest.TestCase):
         self.context.unroute_all(behavior='ignoreErrors')
         self.context.close()
 
-    def test_recommended_film_index_is_at_home_bottom_and_opens_in_current_tab(self):
+    def test_recommended_film_screen_precedes_portrait_and_opens_in_current_tab(self):
         for width in [1440, 820, 390, 320]:
             self.page.set_viewport_size({'width': width, 'height': 900})
             for path in ['/', '/?lang=en', '/projects.html', '/in-progress.html?lang=en']:
@@ -38,10 +38,22 @@ class ProjectPages(unittest.TestCase):
                 expect(self.page.locator('.main-nav a[href="reel/"]')).to_have_count(0)
                 if 'projects.html' in path or 'in-progress.html' in path: continue
                 section = self.page.locator('#filmRecommendations')
-                self.assertEqual(section.evaluate('e=>e.previousElementSibling.id'), 'contact')
+                self.assertEqual(section.evaluate('e=>e.previousElementSibling.id'), 'projects')
+                self.assertEqual(section.evaluate('e=>e.nextElementSibling.id'), 'about')
                 expect(section.locator('h2')).to_have_text('Recommended AI films' if 'lang=en' in path else '推荐 AI 片单')
                 expect(self.page.locator('#projects a[href="reel/"]')).to_have_count(0)
-                link = section.locator('a[href="reel/"]')
+                expect(section.locator('img')).to_have_count(3)
+                self.assertEqual(section.locator('img').evaluate_all('images=>images.map(i=>i.getAttribute("src"))'),
+                                 ['reel/img/xianggu-640w.webp', 'reel/img/jinhaitang-640w.webp', 'reel/img/yanran-640w.webp'])
+                for cover in section.locator('img').all():
+                    expect(cover).to_have_attribute('loading', 'lazy')
+                    self.assertTrue(cover.get_attribute('width') and cover.get_attribute('height'))
+                expect(self.page.locator('#about .portrait-caption, #about [data-i18n="portrait"]')).to_have_count(0)
+                expect(self.page.locator('#about .hero-avatar')).to_have_attribute('alt',
+                    'The digital persona of Highstrith' if 'lang=en' in path else '橘小桔的数字人形象')
+                if width > 800:
+                    self.assertGreaterEqual(section.bounding_box()['height'], 900)
+                link = section.locator('.film-recommendation-link')
                 link.scroll_into_view_if_needed()
                 expect(link).to_be_visible()
                 expect(link).to_have_attribute('target', '_self')
@@ -57,8 +69,30 @@ class ProjectPages(unittest.TestCase):
         page = context.new_page()
         page.goto(BASE + '/', wait_until='domcontentloaded')
         expect(page.locator('.main-nav a[href="reel/"]')).to_have_count(0)
-        page.locator('#filmRecommendations a[href="reel/"]').click()
+        expect(page.locator('#filmRecommendations img')).to_have_count(3)
+        expect(page.locator('#about .portrait-caption')).to_have_count(0)
+        page.locator('#filmRecommendations .film-recommendation-link').click()
         expect(page).to_have_url(BASE + '/reel/')
+
+    def test_recommended_covers_load_and_are_current_tab_links_in_both_themes(self):
+        self.page.goto(BASE + '/#filmRecommendations', wait_until='load')
+        section = self.page.locator('#filmRecommendations')
+        self.page.wait_for_function("Math.abs(document.querySelector('#filmRecommendations').getBoundingClientRect().top) < 1", timeout=3000)
+        self.assertAlmostEqual(section.bounding_box()['y'], 0, delta=1)
+        section.evaluate('e=>e.scrollIntoView({behavior:"instant"})')
+        for cover in section.locator('img').all():
+            cover.evaluate('e=>e.decode()')
+            self.assertGreater(cover.evaluate('e=>e.naturalWidth'), 0)
+        for theme in ['light', 'dark']:
+            if theme == 'dark': self.page.locator('#themeToggle').click()
+            for card, title in zip(section.locator('.film-recommendation-card').all(), ['相骨', '烬海棠', '燕然']):
+                expect(card).to_have_attribute('href', 'reel/')
+                expect(card).to_have_attribute('target', '_self')
+                expect(card).to_have_accessible_name(title)
+            self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth'), 1440)
+        section.locator('.film-recommendation-card').last.click()
+        expect(self.page).to_have_url(BASE + '/reel/')
+        self.assertEqual(len(self.context.pages), 1)
 
     def test_home_nav_lands_project_section_then_opens_project_page(self):
         self.page.goto(BASE + '/')

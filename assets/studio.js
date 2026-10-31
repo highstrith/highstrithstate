@@ -22,7 +22,7 @@
       worksIntro: '一些故事，一些实验。\n在不同的媒介里，寻找自己的表达。',
       all: '全部作品', story: '叙事短片', motion: '三维与动画', edit: '剪辑与视觉',
       empty: '还没有找到这部作品', emptyHint: '试试其他关键词，或查看全部作品。', reset: '查看全部作品',
-      aboutLabel: '镜头背后', aboutTitle: '创作的起点，\n是好奇心', portrait: '我的数字人形象',
+      aboutLabel: '镜头背后', aboutTitle: '创作的起点，\n是好奇心',
       aboutLead: '你好，我是橘小桔，也叫 Highstrith。',
       aboutCopy: '我在南京，创作 AI 短片、三维动画和动态影像。从脚本、角色到剪辑与成片，我喜欢把不同的工具放在一起，让脑海里的世界有自己的光线、节奏和情绪。',
       aboutSecond: '这里既有完整的故事，也有尚在探索的视觉实验。比起固定的风格，我更在意每一次创作是否带来新的表达。',
@@ -62,7 +62,7 @@
       worksIntro: 'A few stories. A few experiments.\nFinding my own expression across different media.',
       all: 'All works', story: 'Narrative films', motion: '3D & animation', edit: 'Editing & visuals',
       empty: 'No works found', emptyHint: 'Try another keyword, or browse all the works.', reset: 'Show all works',
-      aboutLabel: 'Behind the lens', aboutTitle: 'It starts\nwith curiosity', portrait: 'My digital persona',
+      aboutLabel: 'Behind the lens', aboutTitle: 'It starts\nwith curiosity',
       aboutLead: 'Hello, I’m 橘小桔, also known as Highstrith.',
       aboutCopy: 'Based in Nanjing, I make AI short films, 3D animation and moving images. From scripts and characters to editing and the finished film, I enjoy bringing different tools together to give imagined worlds their own light, rhythm and emotion.',
       aboutSecond: 'Some of these works tell complete stories; others are visual experiments still being explored. Each project is a chance to find a new way to express an idea.',
@@ -473,7 +473,7 @@
     // Initial anchor navigation happens before the asynchronous catalogue has
     // established the lower sections' final positions.
     const section = location.hash.slice(1);
-    if (['works', 'in-progress', 'stills', 'projects', 'about', 'contact'].includes(section)) {
+    if (['works', 'in-progress', 'stills', 'projects', 'filmRecommendations', 'about', 'contact'].includes(section)) {
       document.getElementById(section)?.scrollIntoView({ behavior: 'instant' });
     }
   }

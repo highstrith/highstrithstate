@@ -130,7 +130,6 @@ button { color: inherit; border: 0; }
 .about-layout { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1fr); align-items: center; gap: 10%; }
 .about-portrait { position: relative; height: 580px; overflow: hidden; background: #222625; }
 .about-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: center 23%; }
-.portrait-caption { position: absolute; bottom: 18px; left: 20px; color: #fff; font-size: 11px; }
 .about-content .section-label { color: #b3b7b1; margin-bottom: 28px; }
 .about-content h2 { font-size: 34px; font-weight: 500; line-height: 1.5; letter-spacing: -.02em; margin-bottom: 26px; }
 .about-content p:not(.section-label) { max-width: 480px; font-size: 14px; line-height: 1.95; color: #bfc3bd; margin-bottom: 17px; }

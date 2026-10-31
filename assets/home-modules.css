@@ -1,5 +1,5 @@
 /* Homepage chapters: one subject per screen, with room for longer collections. */
-#home > :is(.works-section, .home-progress-section, .stills-section, .tools-preview, .about-section, .contact-section) {
+#home > :is(.works-section, .home-progress-section, .stills-section, .tools-preview, .film-recommendation, .about-section, .contact-section) {
   padding-block: clamp(96px, 12svh, 160px) clamp(72px, 8svh, 112px);
 }
 #projects {
@@ -19,7 +19,7 @@
 
 @media (min-width: 801px) {
   #home > .hero { min-height: calc(100svh - 100px); }
-  #home > :is(.works-section, .home-progress-section, .stills-section, .tools-preview, .about-section, .contact-section) {
+  #home > :is(.works-section, .home-progress-section, .stills-section, .tools-preview, .film-recommendation, .about-section, .contact-section) {
     min-height: 100svh;
     /* Cancel the header inset: each chapter already has safe internal padding. */
     scroll-margin-top: -110px;
@@ -43,7 +43,7 @@
   #projects .tools-preview-copy { max-width: 40rem; }
 }
 @media (max-width: 800px) {
-  #home > :is(.works-section, .home-progress-section, .stills-section, .tools-preview, .about-section, .contact-section) {
+  #home > :is(.works-section, .home-progress-section, .stills-section, .tools-preview, .film-recommendation, .about-section, .contact-section) {
     padding-block: 96px 56px;
     scroll-margin-top: -96px;
   }
@@ -52,5 +52,5 @@
   #about .about-portrait { width: min(100%, 420px); height: clamp(360px, 95vw, 480px); }
 }
 @media (max-width: 600px) {
-  #home > :is(.works-section, .home-progress-section, .stills-section, .tools-preview, .about-section, .contact-section) { scroll-margin-top: -92px; }
+  #home > :is(.works-section, .home-progress-section, .stills-section, .tools-preview, .film-recommendation, .about-section, .contact-section) { scroll-margin-top: -92px; }
 }
