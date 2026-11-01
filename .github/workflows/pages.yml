@@ -24,6 +24,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Prepare site
         run: |
           rm -rf public
@@ -42,6 +46,11 @@ jobs:
           rsync -a --exclude '*.mp4' assets/uploads/ public/assets/uploads/
           cp -R data/. public/data/
           touch public/.nojekyll
+
+      - name: Configure media CDN
+        env:
+          MEDIA_CDN_BASE_URL: ${{ vars.MEDIA_CDN_BASE_URL }}
+        run: node scripts/prepare-media-cdn.mjs --site public
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

@@ -278,8 +278,8 @@
   let musicGeneration = 0;
   let activeQrButton = null;
   let qrReturnFocus = null;
-  // Fetch previews only after the visitor explicitly enables them.
-  let featurePaused = true;
+  // Only the single currently visible film is allowed to fetch a preview.
+  let featurePaused = false;
   let selectedStill = 0;
   let stillReturnFocus = null;
   let noticeTimer = 0;
@@ -324,11 +324,14 @@
   }
 
   function mediaURL(value) {
-    const path = text(value).trim().replace(/^\.\//, '');
+    let path = text(value).trim().replace(/^\.\//, '');
+    const configuredBase = window.STUDIO_MEDIA_BASE_URL;
+    const base = configuredBase ? new URL(configuredBase, siteBaseURL) : siteBaseURL;
+    if (configuredBase && path.startsWith(new URL('assets/', base).href)) path = path.slice(base.href.length);
     if (!path.startsWith('assets/') || path.includes('\\') || /(^|\/)\.\.?(\/|$)/.test(path)) return '';
     try {
-      const url = new URL(path, siteBaseURL);
-      return url.href.startsWith(new URL('assets/', siteBaseURL).href) ? url.href : '';
+      const url = new URL(path, base);
+      return url.href.startsWith(new URL('assets/', base).href) ? url.href : '';
     } catch (_) {
       return '';
     }
@@ -860,7 +863,7 @@
   }
 
   function previewAllowed() {
-    return !reducedMotion.matches && !document.hidden && !player?.open && !qrDialog?.open && !stillViewer?.open;
+    return !reducedMotion.matches && !navigator.connection?.saveData && !document.hidden && !player?.open && !qrDialog?.open && !stillViewer?.open;
   }
 
   function nearViewport(element) {
@@ -977,6 +980,7 @@
     }, { signal: controller.signal });
     video.muted = true;
     video.defaultMuted = true;
+    video.crossOrigin = 'anonymous';
     video.playsInline = true;
     video.setAttribute('muted', '');
     video.setAttribute('playsinline', '');
@@ -1006,9 +1010,19 @@
 
   function syncPreview() {
     if (featurePaused || !previewAllowed()) { stopPreview(); return; }
-    const card = !narrowScreen.matches && finePointer.matches
-      ? [hoveredCard, focusedCard].find((record) => record && nearViewport(record.card))
-      : null;
+    const visible = cardRecords.filter(record => {
+      if (record.item.hidden) return false;
+      const rect = record.media.getBoundingClientRect();
+      const shown = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+      return rect.width > 0 && shown > 0 && shown >= Math.min(rect.height * .25, 120);
+    });
+    const card = [hoveredCard, focusedCard].find(record => visible.includes(record)) || visible.sort((a, b) => {
+      const distance = record => {
+        const rect = record.media.getBoundingClientRect();
+        return Math.abs((rect.top + rect.bottom) / 2 - window.innerHeight / 2);
+      };
+      return distance(a) - distance(b);
+    })[0];
     if (card) { startPreview(card.work, card.video, card.card); return; }
     const work = featuredWorks.find((item) => item.id === selectedFeatureId);
     if (work && !featurePaused && heroNearViewport && nearViewport(heroVideo)) startPreview(work, heroVideo, hero);
@@ -1804,7 +1818,10 @@
       else link.removeAttribute('aria-current');
     });
   }
-  window.addEventListener('resize', updateActiveNavigation, { passive: true });
+  window.addEventListener('resize', () => {
+    syncPreview();
+    updateActiveNavigation();
+  }, { passive: true });
 
   if (search) search.value = new URLSearchParams(location.search).get('q') || '';
   initDirectorCarousel();

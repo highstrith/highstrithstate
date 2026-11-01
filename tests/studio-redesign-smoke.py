@@ -240,10 +240,9 @@ class StudioRedesign(unittest.TestCase):
             self.assertEqual(json.loads((root / 'data/works.json').read_text())[0]['software'], [])
             self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'), 391)
 
-    def test_desktop_cards_preview_on_hover_or_focus_after_opt_in(self):
+    def test_desktop_cards_preview_on_hover_or_focus_when_visible(self):
         page = self.page(viewport={"width": 1440, "height": 1000})
         self.ready(page)
-        page.locator('#featurePreviewToggle').click()
         self.assertEqual(page.locator(CARDS + " video").evaluate_all(SOURCE_COUNT), 0)
         first, second = page.locator(CARDS).nth(0), page.locator(CARDS).nth(1)
         first.hover()
@@ -279,7 +278,6 @@ class StudioRedesign(unittest.TestCase):
     def test_hero_preview_pauses_for_player_and_reduced_motion(self):
         page = self.page(viewport={"width": 1440, "height": 900})
         self.ready(page)
-        page.locator('#featurePreviewToggle').click()
         page.wait_for_function("document.querySelector('#heroPreview')?.currentTime > 0")
         hero_button = page.locator("[data-hero-play]").first
         # The desktop badge follows the pointer; activate its real keyboard path.
@@ -297,7 +295,6 @@ class StudioRedesign(unittest.TestCase):
     def test_feature_switches_follow_newest_visible_films_and_play_full_media(self):
         page = self.page(viewport={"width": 1440, "height": 900})
         self.ready(page)
-        page.locator('#featurePreviewToggle').click()
         controls = page.locator("#featureControls button[data-feature]")
         featured = FEATURED
         expect(controls).to_have_count(len(featured))
@@ -316,10 +313,9 @@ class StudioRedesign(unittest.TestCase):
                 page.locator("#workPlayerClose").click()
                 self.assert_closed_with_focus(page, hero_button)
 
-    def test_mobile_hero_opt_in_switches_and_stops_outside_view(self):
+    def test_mobile_hero_plays_only_in_view(self):
         page = self.page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
         self.ready(page)
-        page.locator('#featurePreviewToggle').click()
         def assert_preview(source):
             page.wait_for_function("""suffix => {
                 const video = document.querySelector('#heroPreview');
@@ -336,7 +332,7 @@ class StudioRedesign(unittest.TestCase):
         assert_preview(FEATURED[1]["previewVideo"])
         page.locator(CARDS + ":visible").last.scroll_into_view_if_needed()
         page.wait_for_function("!document.querySelector('#heroPreview').getAttribute('src')")
-        self.assertEqual(page.locator(CARDS + " video").evaluate_all(SOURCE_COUNT), 0)
+        self.assertLessEqual(page.locator(CARDS + " video").evaluate_all(SOURCE_COUNT), 1)
         page.locator("#heroTitle").scroll_into_view_if_needed()
         assert_preview(FEATURED[1]["previewVideo"])
         page.emulate_media(reduced_motion="reduce")
@@ -393,7 +389,6 @@ class StudioRedesign(unittest.TestCase):
     def test_hero_rotates_after_ten_seconds_of_real_muted_mobile_playback(self):
         page = self.page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
         self.ready(page)
-        page.locator('#featurePreviewToggle').click()
         page.wait_for_function("document.querySelector('#heroPreview').currentTime > 0")
         first = page.locator('#featureControls button').first
         expect(first).to_have_attribute('aria-pressed', 'true')
@@ -413,7 +408,6 @@ class StudioRedesign(unittest.TestCase):
     def test_hero_hover_changes_film_and_revisits_use_another_moving_segment(self):
         page = self.page(viewport={"width": 1440, "height": 900})
         self.ready(page)
-        page.locator('#featurePreviewToggle').click()
         page.wait_for_function("document.querySelector('#heroPreview').currentTime > 0")
         picks = page.locator('#featureControls button')
         picks.nth(3).hover()
@@ -450,7 +444,6 @@ class StudioRedesign(unittest.TestCase):
         fixture = [dict(work, previewVideo=short['previewVideo']) if work['id'] == FEATURED[0]['id'] else work for work in CATALOG]
         page.route('**/api/works', lambda route: route.fulfill(json={'works': fixture}))
         self.ready(page)
-        page.locator('#featurePreviewToggle').click()
         page.wait_for_function("document.querySelector('#heroPreview').currentTime > 0")
         duration = page.locator('#heroPreview').evaluate('v => v.duration')
         self.assertLess(duration, 10)
@@ -567,7 +560,8 @@ class StudioRedesign(unittest.TestCase):
         print("Cold mobile initial image network: " + json.dumps(report, ensure_ascii=False), flush=True)
         self.assertEqual(page.evaluate("window.scrollY"), 0, "Measure the initial view without scrolling")
         video_requests = [url for url in requests if urlsplit(url).path.lower().endswith(".mp4")]
-        self.assertEqual(video_requests, [], "The initial portfolio must not download video before a click")
+        self.assertTrue(video_requests, "The visible Hero may request its lightweight preview")
+        self.assertTrue(all(url.endswith(FEATURED[0]['previewVideo']) for url in video_requests), video_requests)
         self.assertGreaterEqual(hero_width, 700, "A lightweight Hero must remain sharp at mobile DPR 2")
         self.assertTrue(all(image.get("finished") and image.get("status") == 200
                             for image in images.values()), report)

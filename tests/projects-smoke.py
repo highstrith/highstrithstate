@@ -208,16 +208,16 @@ class ProjectPages(unittest.TestCase):
         self.page.goto(BASE + '/')
         expect(self.page.locator('#toolsTitle')).to_have_text('导演工作台')
         canvas_link = self.page.locator('.tools-secondary a[data-i18n="toolCanvas"]')
-        reel_link = self.page.locator('.tools-secondary a[data-i18n="toolReel"]')
+        reel_link = self.page.locator('#filmRecommendations .film-recommendation-link')
         expect(canvas_link).to_have_text('AI 无限画布')
-        # 片单是独立站点（reel/），固定中文站，不做 ?lang=en 透传，新标签打开
-        expect(reel_link).to_have_text('AI 影像片单')
+        # 当前已确认入口在独立推荐章节，同标签进入中文片单。
+        expect(reel_link).to_have_text('浏览片单')
         expect(reel_link).to_have_attribute('href', 'reel/')
-        expect(reel_link).to_have_attribute('target', '_blank')
+        expect(reel_link).to_have_attribute('target', '_self')
         self.page.locator('#langSwitch').click()
         expect(self.page.locator('#toolsTitle')).to_have_text('Director’s workbench')
         expect(canvas_link).to_have_attribute('href', 'projects.html?lang=en#canvasTitle')
-        expect(reel_link).to_have_text('AI film index')
+        expect(reel_link).to_have_text('Browse films')
         expect(reel_link).to_have_attribute('href', 'reel/')
 
     def test_project_entries_work_without_javascript(self):

@@ -87,7 +87,6 @@ class HeroFrameSmoke(unittest.TestCase):
         page.goto(BASE + ('/?lang=en' if language == 'en' else '/'), wait_until='domcontentloaded')
         expect(page.locator('#featureControls .hero-pick')).to_have_count(5)
         expect(page.locator('html')).to_have_attribute('lang', 'en' if language == 'en' else 'zh-CN')
-        page.locator('#featurePreviewToggle').dispatch_event('click')
         page.evaluate('document.fonts.ready')
         # Initial reveal intentionally scales the entire hero. Start the switch
         # contract after that animation, while leaving normal media motion on.
