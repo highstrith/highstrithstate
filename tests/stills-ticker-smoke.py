@@ -1,4 +1,4 @@
-"""Ticker Loop presents the eight real stills without changing the image viewer."""
+"""Ticker Loop presents every real still without changing the image viewer."""
 import os
 import unittest
 from playwright.sync_api import sync_playwright, expect
@@ -23,16 +23,16 @@ class StillsTicker(unittest.TestCase):
         if random is not None:
             page.add_init_script('Math.random=()=>'+str(random))
         page.goto(BASE + '/#stills', wait_until='load')
-        expect(page.locator('#stillsGrid .still-card')).to_have_count(8)
+        expect(page.locator('#stillsGrid .still-card')).to_have_count(11)
         return page
 
-    def test_three_tilted_rows_contain_all_eight_images_in_shuffled_order(self):
+    def test_three_tilted_rows_contain_all_images_in_shuffled_order(self):
         orders = []
         for random in [.01, .99]:
             page = self.page(random=random)
             expect(page.locator('#stillsGrid .still-ticker-row')).to_have_count(3)
             order = page.locator('#stillsGrid .still-card [data-still]').evaluate_all('es=>es.map(e=>Number(e.dataset.still))')
-            self.assertEqual(sorted(order), list(range(8)))
+            self.assertEqual(sorted(order), list(range(11)))
             orders.append(order)
             plane = page.locator('.still-ticker-plane')
             self.assertNotEqual(plane.evaluate('e=>getComputedStyle(e).transform'), 'none')
@@ -69,7 +69,7 @@ class StillsTicker(unittest.TestCase):
         original.focus()
         page.keyboard.press('Enter')
         expect(page.locator('#stillViewerTitle')).to_have_text('酒馆光影')
-        expect(page.locator('#stillViewerPosition')).to_have_text('05 / 08')
+        expect(page.locator('#stillViewerPosition')).to_have_text('05 / 11')
         page.keyboard.press('Escape')
         expect(original).to_be_focused()
         echo = page.locator('[data-ticker-echo="4"]').first
@@ -77,7 +77,7 @@ class StillsTicker(unittest.TestCase):
         expect(page.locator('#stillViewer')).to_be_visible()
         expect(page.locator('#stillViewerTitle')).to_have_text('酒馆光影')
         page.keyboard.press('ArrowRight')
-        expect(page.locator('#stillViewerPosition')).to_have_text('06 / 08')
+        expect(page.locator('#stillViewerPosition')).to_have_text('06 / 11')
         page.keyboard.press('Escape')
         expect(original).to_be_focused()
 
@@ -90,9 +90,9 @@ class StillsTicker(unittest.TestCase):
             page.close()
         page = self.page(390, motion='reduce')
         expect(page.locator('.still-ticker-row')).to_have_count(0)
-        expect(page.locator('[data-still]')).to_have_count(8)
+        expect(page.locator('[data-still]')).to_have_count(11)
         page.locator('[data-still="0"]').click()
-        expect(page.locator('#stillViewerPosition')).to_have_text('01 / 08')
+        expect(page.locator('#stillViewerPosition')).to_have_text('01 / 11')
 
     def test_resize_and_motion_preference_keep_the_focused_image_reachable(self):
         page = self.page()
@@ -105,7 +105,7 @@ class StillsTicker(unittest.TestCase):
         expect(image).to_be_focused()
         expect(image).to_be_in_viewport()
         page.keyboard.press('Enter')
-        expect(page.locator('#stillViewerPosition')).to_have_text('08 / 08')
+        expect(page.locator('#stillViewerPosition')).to_have_text('08 / 11')
 
     def test_first_real_pointer_click_does_not_move_the_card_before_release(self):
         page = self.page()
@@ -122,7 +122,7 @@ class StillsTicker(unittest.TestCase):
         self.assertAlmostEqual(before['y'], pressed['y'], delta=2)
         page.mouse.up()
         expect(page.locator('#stillViewer')).to_be_visible()
-        expect(page.locator('#stillViewerPosition')).to_have_text(f'{index + 1:02} / 08')
+        expect(page.locator('#stillViewerPosition')).to_have_text(f'{index + 1:02} / 11')
 
 
 if __name__ == '__main__':

@@ -36,7 +36,7 @@ class ProgressPage(unittest.TestCase):
         page = self.page()
         page.goto(BASE + '/')
         expect(page.locator('.main-nav [data-progress-section]')).to_have_count(1, timeout=1500)
-        expect(page.locator('#stillsGrid .still-card')).to_have_count(8)
+        expect(page.locator('#stillsGrid .still-card')).to_have_count(11)
         self.assertTrue(page.locator('#stillsGrid img').evaluate_all('images => images.every(image => image.src.includes("/assets/stills/"))'))
         page.locator('.nav-collection summary').click()
         page.locator('.main-nav [data-progress-section]').click()
@@ -160,7 +160,7 @@ class ProgressPage(unittest.TestCase):
         expect(first).to_be_focused()
         page.locator('[data-still="0"]').click()
         expect(page.locator('#stillViewerTitle')).to_have_text('月下少年')
-        expect(page.locator('#stillViewerPosition')).to_have_text('01 / 08')
+        expect(page.locator('#stillViewerPosition')).to_have_text('01 / 11')
 
     def test_production_contact_sheet_groups_and_full_sequence(self):
         page = self.page()

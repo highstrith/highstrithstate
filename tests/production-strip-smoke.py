@@ -235,7 +235,7 @@ class ProductionStrip(unittest.TestCase):
         expect(last).to_be_in_viewport()
         expect(page.locator('body')).not_to_have_class(re.compile(r'\bmodal-open\b'))
         page.locator('[data-still="0"]').click()
-        expect(page.locator('#stillViewerPosition')).to_have_text('01 / 08')
+        expect(page.locator('#stillViewerPosition')).to_have_text('01 / 11')
 
     def test_motion_preference_change_keeps_the_focused_image_visible(self):
         page = self.page(width=390)

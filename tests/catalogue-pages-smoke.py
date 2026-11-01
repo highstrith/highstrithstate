@@ -126,12 +126,12 @@ class CataloguePages(unittest.TestCase):
 
     def test_later_films_supply_four_new_stills(self):
         page = self.page()
-        expect(page.locator('#stillsGrid .still-card')).to_have_count(8)
+        expect(page.locator('#stillsGrid .still-card')).to_have_count(11)
         images = page.locator('#stillsGrid img').evaluate_all('images=>images.map(image=>image.src)')
-        self.assertEqual(len(set(images)),8)
-        self.assertTrue(all('/assets/stills/catalogue-' in source for source in images[4:]))
+        self.assertEqual(len(set(images)),11)
+        self.assertTrue(all('/assets/stills/catalogue-' in source for source in images[4:8]))
         page.locator('[data-still="4"]').click()
-        expect(page.locator('#stillViewerPosition')).to_have_text('05 / 08')
+        expect(page.locator('#stillViewerPosition')).to_have_text('05 / 11')
         expect(page.locator('#stillViewerTitle')).to_have_text('酒馆光影')
         page.keyboard.press('Escape')
         captures = os.environ.get('PAGES_CAPTURE_DIR')

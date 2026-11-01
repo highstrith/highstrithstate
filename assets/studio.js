@@ -107,6 +107,9 @@
     {"image": "assets/stills/catalogue-robot.webp", "thumbnail": "assets/stills/catalogue-robot-preview.webp", "cnTitle": "门廊里的机器人", "enTitle": "Robot in the doorway", "cnDesc": "《机器人短片》成片画面：明暗交界中的角色与空间。", "enDesc": "A frame from Robot Short: character and space at the edge of light."},
     {"image": "assets/stills/catalogue-approach.webp", "thumbnail": "assets/stills/catalogue-approach-preview.webp", "cnTitle": "窗边对话", "enTitle": "Conversation by the window", "cnDesc": "《搭讪》成片画面：咖啡馆窗边的人物与对话。", "enDesc": "A frame from Approach: characters and conversation beside the café window."},
     {"image": "assets/stills/catalogue-fireflies.webp", "thumbnail": "assets/stills/catalogue-fireflies-preview.webp", "cnTitle": "花丛微光", "enTitle": "Garden glow", "cnDesc": "《萤火虫》成片画面：花丛、枝叶与游动光点。", "enDesc": "A frame from Fireflies: flowers, leaves and drifting points of light."},
+    {"image": "assets/stills/particle-bloom.webp", "thumbnail": "assets/stills/particle-bloom-preview.webp", "cnTitle": "粒子花", "enTitle": "Particle bloom", "cnDesc": "点阵粒子构成的花枝：粉白花蕊与橄榄绿叶片，在暗场里自发光。", "enDesc": "A branch built from point particles: pale pink blossoms and olive leaves glowing out of the dark."},
+    {"image": "assets/stills/mech-monk.webp", "thumbnail": "assets/stills/mech-monk-preview.webp", "cnTitle": "机械禅僧", "enTitle": "Mech monk", "cnDesc": "多臂机械僧侣结跏趺坐于水面上空，云海与远山在身后展开。", "enDesc": "A many-armed mech monk seated above still water, with cloud seas and distant peaks behind."},
+    {"image": "assets/stills/night-desk.webp", "thumbnail": "assets/stills/night-desk-preview.webp", "cnTitle": "深夜工位", "enTitle": "Night desk", "cnDesc": "深夜的办公室，只剩屏幕和台灯还亮着。", "enDesc": "A late-night office where only the screen and a desk lamp are still lit."},
   ];
   const progressFrames = [
     {

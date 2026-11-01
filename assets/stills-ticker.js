@@ -13,7 +13,7 @@
     const en = document.documentElement.lang === 'en';
     toggle.textContent = en ? (paused ? 'Resume motion' : 'Pause motion') : (paused ? '继续动效' : '暂停动效');
     toggle.setAttribute('aria-pressed', String(paused));
-    hint.textContent = en ? '8 stills · Hover to pause, select to view in full' : '8 张画面 · 悬停暂停，点击查看完整画面';
+    hint.textContent = en ? 'Hover to pause, select to view in full' : '悬停暂停，点击查看完整画面';
   }
   function sync() {
     const hold = paused || hovered || grid.contains(document.activeElement) || document.hidden
