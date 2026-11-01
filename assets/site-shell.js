@@ -33,10 +33,17 @@
 
   // Long one-page sites make native hash scrolling read as a flight instead of a
   // jump: Chrome spends ~1.5s crossing 8 000px and every section blurs past.
-  // Cap the duration so the move reads as a deliberate cut, and keep the URL
+  // Keep a short ease-in/out and keep the URL
   // hash in sync without letting the browser scroll a second time.
   const relaxed = matchMedia('(prefers-reduced-motion: reduce)');
   let scrollToken = 0;
+
+  function jumpState(active) {
+    const root = document.documentElement;
+    if (root.classList.contains('anchor-jumping') === active) return;
+    root.classList.toggle('anchor-jumping', active);
+    window.dispatchEvent(new CustomEvent('site:anchor-jump', { detail: { active } }));
+  }
 
   function sameDocumentTarget(link) {
     const destination = new URL(link.href, location.href);
@@ -71,21 +78,23 @@
     const token = ++scrollToken;
     const from = window.scrollY;
     const distance = top - from;
+    jumpState(true);
     // Native anchor navigation moves focus; keep that for keyboard and screen readers.
     if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
     target.focus({ preventScroll: true });
     if (hash && location.hash !== hash) {
       try { history.pushState(null, '', hash); } catch { /* file:// denies history changes */ }
     }
-    if (instant || relaxed.matches || Math.abs(distance) < 6) { hardScroll(top); return; }
-    const duration = Math.min(460, 200 + Math.abs(distance) * 0.025);
+    if (instant || relaxed.matches || Math.abs(distance) < 6) { hardScroll(top); jumpState(false); return; }
+    const duration = Math.min(620, 320 + Math.abs(distance) * 0.025);
     const start = performance.now();
-    const ease = progress => 1 - Math.pow(1 - progress, 3);
+    const ease = progress => progress < .5 ? 4 * progress ** 3 : 1 - (-2 * progress + 2) ** 3 / 2;
     const step = now => {
       if (token !== scrollToken) return;
       const progress = Math.min(1, (now - start) / duration);
       hardScroll(Math.round(from + distance * ease(progress)));
       if (progress < 1) requestAnimationFrame(step);
+      else jumpState(false);
     };
     requestAnimationFrame(step);
   }
@@ -93,7 +102,7 @@
   // Any manual input takes over from a jump in progress, the way native smooth
   // scrolling yields to the wheel.
   ['wheel', 'touchstart', 'keydown'].forEach(type => {
-    window.addEventListener(type, () => { scrollToken += 1; }, { passive: true });
+    window.addEventListener(type, () => { scrollToken += 1; jumpState(false); }, { passive: true });
   });
 
   document.addEventListener('click', event => {

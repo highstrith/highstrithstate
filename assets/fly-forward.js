@@ -13,6 +13,7 @@
   };
   let cards = [], sources = [], frame = 0, current = null, previousTime = 0;
   let visible = false, imagesLoaded = false;
+  let jumping = document.documentElement.classList.contains('anchor-jumping');
 
   function translate() {
     const english = document.documentElement.lang === 'en';
@@ -64,14 +65,14 @@
   }
 
   function schedule() {
-    if (!frame && motion.matches && visible && !document.hidden && cards.length) {
+    if (!frame && !jumping && motion.matches && visible && !document.hidden && cards.length) {
       frame = requestAnimationFrame(render);
     }
   }
 
   function render(time) {
     frame = 0;
-    if (!motion.matches || !visible || document.hidden) return;
+    if (jumping || !motion.matches || !visible || document.hidden) return;
     const rect = section.getBoundingClientRect();
     const target = clamp(-rect.top / Math.max(1, rect.height - stage.clientHeight));
     const delta = previousTime ? Math.min(64, time - previousTime) : 16.7;
@@ -125,6 +126,15 @@
   motion.addEventListener('change', configure);
   addEventListener('scroll', schedule, { passive: true });
   addEventListener('catalogue:ready', build);
+  addEventListener('site:anchor-jump', event => {
+    jumping = event.detail.active;
+    cancelAnimationFrame(frame);
+    frame = 0;
+    previousTime = 0;
+    // On arrival, draw the actual position once instead of chasing skipped scroll.
+    current = null;
+    if (!jumping) schedule();
+  });
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) { cancelAnimationFrame(frame); frame = 0; previousTime = 0; }
     else schedule();
