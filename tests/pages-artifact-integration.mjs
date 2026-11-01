@@ -7,6 +7,14 @@ import { test } from 'node:test';
 
 const root = path.resolve(import.meta.dirname, '..');
 
+test('Pages push trigger uses the branch permitted by the production environment', () => {
+  const workflow = fs.readFileSync(path.join(root, '.github/workflows/pages.yml'), 'utf8');
+  const push = workflow.match(/^  push:\r?\n    branches: \[([^\]]+)\]/m);
+  assert.ok(push, 'Pages push trigger must declare its publishing branch');
+  const branches = [...push[1].matchAll(/["']([^"']+)["']/g)].map(match => match[1]);
+  assert.deepEqual(branches, ['main'], 'github-pages permits main; a release-only push cannot publish');
+});
+
 test('Pages Prepare site packages the real local CSS and JavaScript references', () => {
   const workflow = fs.readFileSync(path.join(root, '.github/workflows/pages.yml'), 'utf8');
   const step = workflow.match(/^      - name: Prepare site\r?\n        run: \|\r?\n((?:          [^\r\n]*(?:\r?\n|$)|\r?\n)*)/m);
