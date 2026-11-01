@@ -1,0 +1,80 @@
+/* Real imagery gives the three chapters distinct scale and depth. */
+#home > #in-progress {
+  --muted: #c8d6d0;
+  --line: rgb(255 255 255 / .22);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  color: #fff;
+  background: #10251f;
+}
+.production-chapter-inner { min-width: 0; }
+.production-scene { position: absolute; z-index: -1; inset: 0; pointer-events: none; }
+.production-scene img { width: 100%; height: 100%; object-fit: cover; object-position: 62% center; }
+.production-scene::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgb(5 15 14 / .6), transparent 44%), linear-gradient(0deg, rgb(5 15 14 / .96), rgb(5 15 14 / .2) 80%), linear-gradient(90deg, rgb(7 28 24 / .88), transparent 85%);
+}
+#in-progress .section-heading { margin-bottom: clamp(32px, 5svh, 56px); }
+#in-progress .section-heading h2 { font-size: clamp(36px, 3.6vw, 56px); }
+#in-progress .section-label { color: #c8d6d0; }
+#in-progress .home-progress-layout { display: flex; flex-direction: column; align-items: stretch; gap: clamp(28px, 5svh, 56px); }
+#in-progress .home-progress-summary { max-width: 650px; padding: 0; }
+#in-progress .home-progress-heading h3 { font-size: clamp(27px, 2.5vw, 38px); }
+#in-progress .home-progress-summary > p { max-width: 42ch; }
+#in-progress .home-progress-count { color: #dbe3df; margin-top: 14px; }
+#in-progress .text-link { color: #fff; text-decoration-color: rgb(255 255 255 / .55); }
+#in-progress .text-link:hover { text-decoration-color: #fff; }
+#in-progress .production-feature-link { margin-left: 24px; }
+#in-progress .home-progress-filmstrip { width: 100%; padding: 12px 16px 0; background: rgb(4 18 14 / .46); border: 1px solid rgb(255 255 255 / .16); border-radius: 7px; }
+#in-progress .home-progress-card img { background: rgb(255 255 255 / .13); }
+#in-progress .home-progress-card h4 { color: #fff; }
+#in-progress .production-strip-controls button { color: #e5ece8; }
+#in-progress .production-strip-controls button:hover { color: #fff; }
+
+#projects { overflow: clip; }
+.tools-preview-visual { position: relative; min-width: 0; isolation: isolate; }
+.tools-preview-visual::before { content: ''; position: absolute; z-index: -1; inset: -48px -24px -48px -36px; border-radius: 50%; background: radial-gradient(ellipse, var(--exhibit-soft), transparent 72%); }
+#projects .tools-preview-image { padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: #171b19; box-shadow: 0 28px 60px rgb(0 0 0 / .16); transform: perspective(1300px) rotateY(-9deg) rotateZ(1.4deg); transform-origin: 65% 50%; transition: transform .6s ease, box-shadow .6s ease; }
+#projects .tools-preview-image:hover { transform: perspective(1300px) rotateY(-2deg); box-shadow: 0 32px 70px rgb(0 0 0 / .2); }
+#projects .tools-carousel-viewport { border: 0; border-radius: 4px; }
+#projects .tools-carousel-label { left: auto; right: 102px; bottom: 22px; }
+.tools-preview-detail { position: absolute; left: -28px; bottom: -36px; width: 37%; padding: 7px; border: 1px solid var(--line); border-radius: 5px; background: var(--paper); box-shadow: 0 12px 32px rgb(0 0 0 / .2); transform: rotate(-3deg); pointer-events: none; }
+.tools-preview-detail img { display: block; width: 100%; height: auto; }
+
+#filmRecommendations .film-recommendation-films { grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); grid-template-rows: repeat(2, minmax(0, 1fr)); height: clamp(340px, 54svh, 600px); gap: 20px; }
+#filmRecommendations .film-recommendation-card:first-child { grid-row: 1 / span 2; }
+#filmRecommendations .film-recommendation-card figure { height: 100%; position: relative; overflow: hidden; border-radius: 4px; }
+#filmRecommendations .film-recommendation-card figure::after { content: ''; position: absolute; inset: 40% 0 0; background: linear-gradient(transparent, rgb(0 0 0 / .76)); pointer-events: none; }
+#filmRecommendations .film-recommendation-card img { height: 100%; aspect-ratio: auto; transition: transform .6s ease; }
+#filmRecommendations .film-recommendation-card:hover img { transform: scale(1.025); }
+#filmRecommendations .film-recommendation-card figcaption { position: absolute; z-index: 1; left: 24px; right: 24px; bottom: 22px; padding: 0; color: #fff; }
+#filmRecommendations .film-recommendation-card:first-child h3 { font-size: clamp(28px, 3vw, 44px); }
+#filmRecommendations .film-recommendation-card:is(:hover, :focus-visible) h3 { color: #fff; text-decoration: underline; text-underline-offset: 6px; }
+
+@media (max-width: 999px) {
+  #projects .tools-preview-image { transform: none; }
+  .tools-preview-detail { display: none; }
+}
+@media (max-width: 800px) {
+  #in-progress .section-heading { margin-bottom: 32px; }
+  #in-progress .section-heading h2 { font-size: 34px; }
+  #in-progress .home-progress-layout { gap: 28px; }
+  #in-progress .home-progress-filmstrip { padding-inline: 10px; }
+  #in-progress .production-feature-link { margin-left: 16px; }
+  #projects .tools-carousel-label { right: 94px; bottom: 18px; font-size: 9px; }
+}
+@media (max-width: 600px) {
+  #filmRecommendations .film-recommendation-films { height: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto; gap: 16px; }
+  #filmRecommendations .film-recommendation-card:first-child { grid-column: 1 / -1; grid-row: auto; }
+  #filmRecommendations .film-recommendation-card figure { height: auto; aspect-ratio: 16/10; }
+  #filmRecommendations .film-recommendation-card figcaption { left: 14px; right: 14px; bottom: 12px; }
+  #filmRecommendations .film-recommendation-card:first-child h3 { font-size: 25px; }
+  #filmRecommendations .film-recommendation-card h3 { font-size: 17px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #projects .tools-preview-image, #projects .tools-preview-image:hover, .tools-preview-detail, #filmRecommendations .film-recommendation-card img { transform: none; transition: none; }
+}
