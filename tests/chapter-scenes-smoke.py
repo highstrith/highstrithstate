@@ -1,6 +1,9 @@
 """Three visual chapters retain their real content, controls and fallbacks."""
 import os
+import io
+import re
 import unittest
+from PIL import Image
 from playwright.sync_api import sync_playwright, expect
 
 BASE = os.environ.get('STUDIO_BASE_URL', 'http://127.0.0.1:3000').rstrip('/')
@@ -101,32 +104,55 @@ class ChapterScenes(unittest.TestCase):
             self.assertAlmostEqual(box['width'] - style['left'] - style['right'], 1440, delta=1, msg=selector)
         for selector in ['#projects', '#filmRecommendations']:
             self.assertIn('radial-gradient', page.locator(selector).evaluate('e=>getComputedStyle(e).backgroundImage'), selector)
-        self.assertEqual(page.locator('#stills').evaluate('e=>getComputedStyle(e).color'), 'rgb(244, 244, 240)')
-        self.assertEqual(page.locator('#stills .still-card h3').first.evaluate('e=>getComputedStyle(e).color'), 'rgb(244, 244, 240)')
         page.locator('#themeToggle').click()
         expect(page.locator('html')).to_have_attribute('data-theme', 'dark')
         self.assertIn('radial-gradient', page.locator('#works').evaluate('e=>getComputedStyle(e,"::before").backgroundImage'))
         self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'), 1440)
 
-    def test_dark_feature_chapters_shift_between_light_and_dark_themes(self):
-        page = self.page()
-        selectors = {
-            'progress': ('#in-progress .production-scene', '::after'),
-            'stills': ('#stills', '::before'),
-            'about': ('#about', None),
-        }
-        def backdrop_styles():
-            values = {}
-            for key, (selector, pseudo) in selectors.items():
-                values[key] = page.locator(selector).evaluate(
-                    '(e,pseudo)=>getComputedStyle(e,pseudo).backgroundImage', pseudo)
-            return values
-        light = backdrop_styles()
-        page.locator('#themeToggle').click()
-        expect(page.locator('html')).to_have_attribute('data-theme', 'dark')
-        dark = backdrop_styles()
-        for key in selectors:
-            self.assertNotEqual(light[key], dark[key], key)
+    def test_light_chapters_are_visibly_light_and_dark_chapters_are_dark(self):
+        # Catch fixed dark canvases and white text leaking into light mode.
+        # Sample rendered pixels so different-but-equally-dark gradients fail.
+        def luminance(rgb):
+            values = [v / 255 for v in rgb[:3]]
+            values = [v / 12.92 if v <= .04045 else ((v + .055) / 1.055) ** 2.4 for v in values]
+            return sum(v * weight for v, weight in zip(values, [.2126, .7152, .0722]))
+
+        for width, height in [(390, 844), (1440, 900)]:
+            page = self.page(width, height)
+            for theme in ['light', 'dark']:
+                if theme == 'dark':
+                    page.locator('#themeToggle').evaluate('e=>e.click()')
+                expect(page.locator('html')).to_have_attribute('data-theme', theme)
+                for selector, copy in [
+                    ('#in-progress', 'h2, h3, .home-progress-summary > p, .text-link, .home-progress-card h4, .production-strip-controls button'),
+                    ('#stills', 'h2, .section-label, .still-card h3, .still-card p'),
+                    ('#about', 'h2, .about-content p, .practice-list, .text-link'),
+                ]:
+                    section = page.locator(selector)
+                    section.evaluate('e=>e.scrollIntoView({behavior:"instant",block:"start"})')
+                    if selector == '#in-progress':
+                        page.locator('.production-scene img').evaluate('e=>e.decode()')
+                    page.wait_for_function('''()=>[...document.querySelectorAll('#in-progress img')]
+                        .filter(e=>e.currentSrc).every(e=>e.complete)''')
+                    pixels = Image.open(io.BytesIO(page.screenshot())).convert('RGB')
+                    # The production scene deliberately exposes photography on
+                    # the right; judge its reading canvas on the left.
+                    edges = [8] if selector == '#in-progress' else [8, width - 9]
+                    canvas = [luminance(pixels.getpixel((x, y)))
+                              for x in edges for y in [180, 420, 650]]
+                    if theme == 'light':
+                        self.assertGreater(min(canvas), .6, (width, selector, theme, canvas))
+                    else:
+                        self.assertLess(max(canvas), .12, (width, selector, theme, canvas))
+                    colors = section.locator(copy).evaluate_all('es=>es.map(e=>getComputedStyle(e).color)')
+                    for color in colors:
+                        fg = luminance([float(v) for v in re.findall(r'[\d.]+', color)[:3]])
+                        for bg in canvas:
+                            contrast = (max(fg, bg) + .05) / (min(fg, bg) + .05)
+                            self.assertGreaterEqual(contrast, 4.5, (width, selector, theme, color, contrast))
+                page.reload(wait_until='load')
+                expect(page.locator('html')).to_have_attribute('data-theme', theme)
+            page.close()
 
     def test_no_script_retains_scene_link_and_film_entries(self):
         page = self.page(390, 844, javascript=False)

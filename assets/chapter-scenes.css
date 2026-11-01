@@ -1,39 +1,40 @@
 /* Real imagery gives the three chapters distinct scale and depth. */
 #home > #in-progress {
-  --muted: #c8d6d0;
-  --line: rgb(255 255 255 / .22);
+  --muted: var(--text-secondary);
+  --production-image-opacity: .48;
+  --production-strip-surface: rgb(248 249 243 / .86);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: center;
   position: relative;
   isolation: isolate;
   overflow: clip;
-  color: #fff;
-  background: #18372e;
+  color: var(--ink);
+  background: #eff2e9;
 }
 .production-chapter-inner { min-width: 0; }
 .production-scene { position: absolute; z-index: -1; inset: 0; pointer-events: none; }
-.production-scene img { width: 100%; height: 100%; object-fit: cover; object-position: 62% center; }
+.production-scene img { width: 100%; height: 100%; object-fit: cover; object-position: 62% center; opacity: var(--production-image-opacity); }
 .production-scene::after {
   content: ''; position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgb(9 25 22 / .52), transparent 42%), linear-gradient(0deg, rgb(10 24 20 / .92), rgb(10 24 20 / .18) 80%), linear-gradient(90deg, rgb(18 45 37 / .78), transparent 84%);
+  background: linear-gradient(0deg, rgb(239 242 233 / .94), transparent 74%), linear-gradient(90deg, rgb(248 248 240 / .94), rgb(244 246 237 / .8) 46%, rgb(239 242 233 / .65));
 }
 #in-progress .section-heading { margin-bottom: clamp(32px, 5svh, 56px); }
 #in-progress .section-heading h2 { font-size: clamp(36px, 3.6vw, 56px); }
-#in-progress .section-label { color: #c8d6d0; }
+#in-progress .section-label { color: var(--muted); }
 #in-progress .home-progress-layout { display: flex; flex-direction: column; align-items: stretch; gap: clamp(28px, 5svh, 56px); }
 #in-progress .home-progress-summary { max-width: 650px; padding: 0; }
 #in-progress .home-progress-heading h3 { font-size: clamp(27px, 2.5vw, 38px); }
 #in-progress .home-progress-summary > p { max-width: 42ch; }
-#in-progress .home-progress-count { color: #dbe3df; margin-top: 14px; }
-#in-progress .text-link { color: #fff; text-decoration-color: rgb(255 255 255 / .55); }
-#in-progress .text-link:hover { text-decoration-color: #fff; }
+#in-progress .home-progress-count { color: var(--muted); margin-top: 14px; }
+#in-progress .text-link { color: var(--ink); text-decoration-color: currentColor; }
+#in-progress .text-link:hover { text-decoration-color: var(--orange-dark); }
 #in-progress .production-feature-link { margin-left: 24px; }
-#in-progress .home-progress-filmstrip { width: 100%; padding: 12px 16px 0; background: rgb(4 18 14 / .46); border: 1px solid rgb(255 255 255 / .16); border-radius: 7px; }
-#in-progress .home-progress-card img { background: rgb(255 255 255 / .13); }
-#in-progress .home-progress-card h4 { color: #fff; }
-#in-progress .production-strip-controls button { color: #e5ece8; }
-#in-progress .production-strip-controls button:hover { color: #fff; }
+#in-progress .home-progress-filmstrip { width: 100%; padding: 12px 16px 0; background: var(--production-strip-surface); border: 1px solid var(--line); border-radius: 7px; }
+#in-progress .home-progress-card img { background: var(--exhibit-soft); }
+#in-progress .home-progress-card h4 { color: var(--ink); }
+#in-progress .production-strip-controls button { color: var(--text-secondary); }
+#in-progress .production-strip-controls button:hover { color: var(--ink); }
 
 #projects { overflow: clip; }
 .tools-preview-visual { position: relative; min-width: 0; isolation: isolate; }
@@ -99,30 +100,28 @@
 }
 #works .works-grid .work-media { box-shadow: 0 13px 32px rgb(30 43 35 / .09); }
 #home .motion-marquee {
-  background: #14261f;
-  color: #c8d6d0;
-  border-color: #14261f;
+  background: #e8ede4;
+  color: var(--text-secondary);
+  border-color: var(--line);
 }
 
-/* A dark gallery continues the production chapter while shifting its colour temperature. */
+/* The gallery canvas follows the theme; photographs retain their original colour. */
 #home > #stills {
-  --muted: #b9c5bf;
-  --line: rgb(255 255 255 / .17);
-  --text-secondary: #d2dad5;
-  color: var(--on-dark);
+  --muted: var(--text-secondary);
+  color: var(--ink);
   border-top: 0;
 }
 #home > #stills::before {
   background:
-    radial-gradient(ellipse at 84% 10%, rgb(107 141 121 / .44), transparent 46%),
-    radial-gradient(ellipse at 8% 82%, rgb(180 124 84 / .2), transparent 42%),
-    linear-gradient(135deg, #1c2924 0%, #314138 52%, #18241f 100%);
+    radial-gradient(ellipse at 84% 10%, rgb(200 218 204 / .5), transparent 46%),
+    radial-gradient(ellipse at 8% 82%, rgb(233 210 186 / .26), transparent 42%),
+    linear-gradient(135deg, #f4f4ec 0%, #e7ede4 52%, #f1f3eb 100%);
 }
 #stills .still-media {
-  background: rgb(4 10 8 / .58);
-  box-shadow: 0 18px 46px rgb(0 0 0 / .24);
+  background: var(--paper);
+  box-shadow: 0 18px 46px rgb(30 43 35 / .1);
 }
-#stills .still-card h3 { color: var(--on-dark); }
+#stills .still-card h3 { color: var(--ink); }
 #stills :focus-visible { outline-color: var(--orange); }
 
 /* The workbench sits in cool ambient light; the existing perspective supplies the depth. */
@@ -153,10 +152,18 @@
 
 /* Portrait and contact remain quieter anchors at the end of the page. */
 #home > #about {
+  --muted: var(--text-secondary);
+  color: var(--ink);
   background:
-    radial-gradient(ellipse at 22% 44%, rgb(88 112 99 / .42), transparent 44%),
-    linear-gradient(120deg, #25302a 0%, #171d1a 100%);
+    radial-gradient(ellipse at 22% 44%, rgb(203 217 201 / .5), transparent 44%),
+    linear-gradient(120deg, #edf1e7 0%, #f5f3ec 100%);
 }
+#home #about .section-label { color: var(--muted); }
+#home #about p:not(.section-label) { color: var(--text-secondary); }
+#home #about p.about-lead { color: var(--ink); }
+#home #about .practice-list { color: var(--text-secondary); border-color: var(--line); }
+#home #about .text-link { color: var(--orange-dark); text-decoration-color: currentColor; }
+#home #about .text-link:is(:hover, :focus-visible) { color: var(--ink); }
 #home > #contact::before {
   background:
     radial-gradient(ellipse at 12% 10%, rgb(234 190 150 / .16), transparent 40%),
