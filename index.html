@@ -29,6 +29,7 @@
   <link rel="stylesheet" href="assets/home-modules.css?v=20261101-reel-screen">
   <link rel="stylesheet" href="assets/chapter-scenes.css?v=20261101-theme-contrast4">
   <link rel="stylesheet" href="assets/section-jump.css?v=20261101-jump1">
+  <link rel="stylesheet" href="assets/stills-ticker.css?v=20261101-ticker2">
 </head>
 <body>
   <a class="skip-link" href="#works" data-i18n="skip">跳转到作品</a>
@@ -175,6 +176,7 @@
     </section>
     <section class="stills-section page-width" id="stills" aria-labelledby="stillsTitle">
       <div class="section-heading"><div data-reveal><p class="section-label" data-i18n="stillsLabel">画面定格</p><h2 id="stillsTitle" data-i18n="stillsTitle" data-lines>作品截图</h2></div><p class="works-intro" data-i18n="stillsIntro" data-reveal>过往创作留下的画面，<br>记录不同阶段的光线与情绪。</p></div>
+      <div class="stills-ticker-controls" id="stillsTickerControls" hidden><p id="stillsTickerHint">8 张画面 · 悬停暂停，点击查看完整画面</p><button type="button" id="stillsTickerToggle" aria-pressed="false">暂停动效</button></div>
       <div class="stills-grid" id="stillsGrid"></div>
       <noscript>
         <div class="stills-grid">
@@ -1008,13 +1010,14 @@
   <script src="assets/comment-config.js?v=20261010-comments" defer></script>
   <script src="assets/scroll-reveal.js?v=20261030-linefix" defer></script>
   <script src="assets/gallery-navigation.js?v=20261029-motion2" defer></script>
-  <script src="assets/studio.js?v=20261101-viewport-cdn" defer></script>
+  <script src="assets/studio.js?v=20261101-stills-ticker1" defer></script>
   <script src="assets/site-shell.js?v=20261101-chapters2" defer></script>
   <script src="assets/section-jump.js?v=20261101-jump1" defer></script>
   <script src="assets/vendor/gsap-3.15.0/gsap.min.js" defer></script>
   <script src="assets/vendor/gsap-3.15.0/ScrollTrigger.min.js" defer></script>
   <script src="assets/production-strip.js?v=20261030-strip-final" defer></script>
   <script src="assets/production-motion.js?v=20261030-strip-final" defer></script>
+  <script src="assets/stills-ticker.js?v=20261101-ticker2" defer></script>
   <script src="assets/fly-forward.js?v=20261030-vortex3" defer></script>
   <script src="assets/director-word.js?v=20261030-word2" defer></script>
   <script src="assets/motion-extra.js?v=20261030-m1" defer></script>

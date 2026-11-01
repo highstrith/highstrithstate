@@ -1,0 +1,37 @@
+/* Original adaptation of the three tilted rows seen in Ai×Lab's Ticker Loop. */
+.stills-ticker-controls { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin: -12px 0 20px; }
+.stills-ticker-controls p { color: var(--muted); font-size: 12px; line-height: 1.6; }
+#stillsTickerToggle { min-height: 44px; padding: 8px 14px; flex-shrink: 0; border: 1px solid var(--line); border-radius: 24px; background: var(--paper); color: var(--ink); font-size: 12px; }
+#stillsTickerToggle:hover { border-color: var(--orange-dark); }
+#stillsGrid.ticker-ready {
+  --ticker-card-width: clamp(190px, 23vw, 320px);
+  --ticker-gap: 20px;
+  display: block;
+  position: relative;
+  height: clamp(460px, 50vw, 720px);
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--exhibit-white);
+  mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+}
+.still-ticker-plane { position: absolute; top: 50%; left: 0; width: 100%; display: flex; flex-direction: column; gap: 24px; padding-inline: 54px; transform: translateY(-50%) rotate(-8deg); }
+.still-ticker-row { min-width: 0; }
+.still-ticker-track, .still-ticker-set { display: flex; align-items: start; width: max-content; }
+.still-ticker-set { position: relative; flex-shrink: 0; gap: var(--ticker-gap); padding-right: var(--ticker-gap); }
+#stills .ticker-ready :is(.still-card, .ticker-echo) { flex: 0 0 var(--ticker-card-width); width: var(--ticker-card-width); display: block; margin: 0; opacity: 1; visibility: visible; transform: none; }
+#stills .ticker-ready :is(.still-media, .ticker-echo-media) { position: relative; display: block; width: 100%; aspect-ratio: 16/10; flex: none; padding: 0; border: 0; border-radius: 10px; overflow: hidden; background: #151817; box-shadow: 0 10px 24px rgb(0 0 0 / .14); cursor: zoom-in; transition: transform .25s ease, box-shadow .25s ease; }
+#stills .ticker-ready :is(.still-media, .ticker-echo-media) img { width: 100%; height: 100%; object-fit: contain; transform: none; }
+#stills .ticker-ready :is(.still-media, .ticker-echo-media):is(:hover, :focus-visible) { transform: scale(1.035); box-shadow: 0 14px 32px rgb(0 0 0 / .24); }
+#stills .ticker-ready figcaption { padding: 9px 2px 0; }
+#stills .ticker-ready h3 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink); font-size: 12px; line-height: 1.6; font-weight: 500; }
+#stills .ticker-ready figcaption p { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+#stills .ticker-ready .still-open-hint { display: none; }
+@media (max-width: 800px) {
+  #stillsGrid.ticker-ready { --ticker-card-width: 220px; --ticker-gap: 14px; height: 510px; }
+  .still-ticker-plane { gap: 20px; padding-inline: 28px; transform: translateY(-50%) rotate(-6deg); }
+  .stills-ticker-controls { align-items: start; gap: 12px; }
+  .stills-ticker-controls p { max-width: 22ch; }
+}
+@media print { .stills-ticker-controls { display: none; } }

@@ -230,6 +230,7 @@
       return figure;
     }));
     window.StudioReveal?.refresh(stillsGrid);
+    window.dispatchEvent(new Event('stills:ready'));
   }
   const grid = $('#worksGrid');
   const stillsGrid = $('#stillsGrid');
