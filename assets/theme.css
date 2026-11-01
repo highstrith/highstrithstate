@@ -28,6 +28,49 @@
 [data-theme="dark"] .hero::before { opacity: .22; animation: none; }
 [data-theme="dark"] .motion-marquee { background: var(--paper); color: var(--muted); border-color: var(--line); }
 [data-theme="dark"] :is(.text-link, .hero-foot a, .footer-top a, .contact-details a, .tools-secondary a, .progress-return, .progress-index a, .comment-toggle, .view-switch button, .production-strip-controls button, .work-filters button, #musicToggle) { text-decoration-color: currentColor; }
+/* Homepage ambient chapters keep the same spatial hierarchy in dark mode. */
+[data-theme="dark"] #home > .hero::before {
+  background:
+    radial-gradient(ellipse at 16% 8%, rgb(157 100 65 / .2), transparent 42%),
+    radial-gradient(ellipse at 88% 44%, rgb(76 108 88 / .24), transparent 48%),
+    linear-gradient(180deg, #191917 0%, #151a17 72%, #101512 100%);
+}
+[data-theme="dark"] #home > #works::before {
+  background:
+    radial-gradient(ellipse at 86% 7%, rgb(68 78 70 / .36), transparent 40%),
+    radial-gradient(ellipse at 4% 72%, rgb(66 94 76 / .24), transparent 44%),
+    linear-gradient(180deg, #171c19 0%, #151715 54%, #111713 100%);
+}
+[data-theme="dark"] #home > #stills::before {
+  background:
+    radial-gradient(ellipse at 84% 10%, rgb(67 100 81 / .3), transparent 46%),
+    radial-gradient(ellipse at 8% 82%, rgb(120 77 51 / .14), transparent 42%),
+    linear-gradient(135deg, #0c1210 0%, #151d19 52%, #0c1110 100%);
+}
+[data-theme="dark"] #home > #projects {
+  background:
+    radial-gradient(ellipse at 76% 40%, rgb(49 70 57 / .7), transparent 54%),
+    radial-gradient(ellipse at 8% 88%, rgb(120 83 55 / .16), transparent 44%),
+    linear-gradient(120deg, #18211b 0%, #131714 100%);
+}
+[data-theme="dark"] #home > #filmRecommendations {
+  background:
+    radial-gradient(ellipse at 10% 12%, rgb(93 81 65 / .24), transparent 42%),
+    radial-gradient(ellipse at 90% 88%, rgb(103 73 51 / .2), transparent 50%),
+    linear-gradient(135deg, #211e19 0%, #151914 100%);
+}
+[data-theme="dark"] #home > #about {
+  background:
+    radial-gradient(ellipse at 22% 44%, rgb(53 76 62 / .32), transparent 44%),
+    linear-gradient(120deg, #121815 0%, #0e1110 100%);
+}
+[data-theme="dark"] #home > #contact::before {
+  background:
+    radial-gradient(ellipse at 12% 10%, rgb(129 86 56 / .15), transparent 40%),
+    radial-gradient(ellipse at 90% 84%, rgb(63 91 72 / .18), transparent 44%),
+    linear-gradient(180deg, #161714 0%, #111612 100%);
+}
+[data-theme="dark"] #home .motion-marquee { background: #0c1713; border-color: #0c1713; }
 @media (max-width: 360px) {
   .site-header .brand > span { display: none; }
 }

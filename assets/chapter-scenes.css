@@ -55,6 +55,115 @@
 #filmRecommendations .film-recommendation-card:first-child h3 { font-size: clamp(28px, 3vw, 44px); }
 #filmRecommendations .film-recommendation-card:is(:hover, :focus-visible) h3 { color: #fff; text-decoration: underline; text-underline-offset: 6px; }
 
+/* A shared ambient system gives every chapter a place, without adding wallpaper images. */
+#home > :is(.hero, #works, #stills, #contact) {
+  position: relative;
+  isolation: isolate;
+}
+#home > :is(.hero, #works, #stills, #contact)::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  inset: 0 calc(50% - 50vw);
+  pointer-events: none;
+}
+#home > :is(.hero, #works, #stills, #contact) > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* The opening frame: warm paper, a restrained sage edge and light around the film. */
+#home > .hero::before {
+  height: auto;
+  background:
+    radial-gradient(ellipse at 16% 8%, rgb(229 170 122 / .24), transparent 42%),
+    radial-gradient(ellipse at 88% 44%, rgb(139 162 147 / .24), transparent 48%),
+    linear-gradient(180deg, #f6f3ed 0%, #edf0ea 72%, #e4e9e2 100%);
+  filter: none;
+  opacity: 1;
+  animation: none;
+}
+#home .hero-feature {
+  border: 1px solid rgb(44 58 49 / .1);
+  border-radius: 5px;
+  box-shadow: 0 26px 70px rgb(33 48 39 / .13);
+}
+#home .feature-screen { border-radius: 4px 0 0 4px; }
+
+/* Browsing stays light, but no longer sits on a featureless white canvas. */
+#home > #works::before {
+  background:
+    radial-gradient(ellipse at 86% 7%, rgb(255 255 255 / .82), transparent 40%),
+    radial-gradient(ellipse at 4% 72%, rgb(143 164 148 / .2), transparent 44%),
+    linear-gradient(180deg, #e7ece6 0%, #f2f3ee 54%, #e5eae3 100%);
+}
+#works .works-grid .work-media { box-shadow: 0 13px 32px rgb(30 43 35 / .09); }
+#home .motion-marquee {
+  background: #14261f;
+  color: #c8d6d0;
+  border-color: #14261f;
+}
+
+/* A dark gallery continues the production chapter while shifting its colour temperature. */
+#home > #stills {
+  --muted: #b9c5bf;
+  --line: rgb(255 255 255 / .17);
+  --text-secondary: #d2dad5;
+  color: var(--on-dark);
+  border-top: 0;
+}
+#home > #stills::before {
+  background:
+    radial-gradient(ellipse at 84% 10%, rgb(87 119 101 / .34), transparent 46%),
+    radial-gradient(ellipse at 8% 82%, rgb(158 105 69 / .14), transparent 42%),
+    linear-gradient(135deg, #101715 0%, #1b2420 52%, #101514 100%);
+}
+#stills .still-media {
+  background: rgb(4 10 8 / .58);
+  box-shadow: 0 18px 46px rgb(0 0 0 / .24);
+}
+#stills .still-card h3 { color: var(--on-dark); }
+#stills :focus-visible { outline-color: var(--orange); }
+
+/* The workbench sits in cool ambient light; the existing perspective supplies the depth. */
+#home > #projects {
+  background:
+    radial-gradient(ellipse at 76% 40%, rgb(218 229 219 / .96), transparent 54%),
+    radial-gradient(ellipse at 8% 88%, rgb(229 194 157 / .2), transparent 44%),
+    linear-gradient(120deg, #e3eae3 0%, #f1f3ed 100%);
+  border-block-color: rgb(58 75 64 / .12);
+}
+#projects .tools-preview-visual::before {
+  inset: -80px -60px;
+  background: radial-gradient(ellipse, rgb(255 255 255 / .7), transparent 70%);
+}
+#projects .tools-preview-image { box-shadow: 0 34px 80px rgb(20 33 26 / .22); }
+
+/* The film index has a warmer projection-room atmosphere, using the existing covers. */
+#home > #filmRecommendations {
+  background:
+    radial-gradient(ellipse at 10% 12%, rgb(255 255 255 / .76), transparent 42%),
+    radial-gradient(ellipse at 90% 88%, rgb(157 133 108 / .22), transparent 50%),
+    linear-gradient(135deg, #eee9e1 0%, #e4e8e1 100%);
+  border-block-color: rgb(76 67 56 / .13);
+}
+#filmRecommendations .film-recommendation-card figure {
+  box-shadow: 0 20px 48px rgb(43 36 29 / .16);
+}
+
+/* Portrait and contact remain quieter anchors at the end of the page. */
+#home > #about {
+  background:
+    radial-gradient(ellipse at 22% 44%, rgb(70 91 79 / .36), transparent 44%),
+    linear-gradient(120deg, #151c19 0%, #111413 100%);
+}
+#home > #contact::before {
+  background:
+    radial-gradient(ellipse at 12% 10%, rgb(234 190 150 / .16), transparent 40%),
+    radial-gradient(ellipse at 90% 84%, rgb(141 160 146 / .18), transparent 44%),
+    linear-gradient(180deg, #f3f2ec 0%, #ecefe8 100%);
+}
+
 @media (max-width: 999px) {
   #projects .tools-preview-image { transform: none; }
   .tools-preview-detail { display: none; }

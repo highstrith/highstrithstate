@@ -86,6 +86,28 @@ class ChapterScenes(unittest.TestCase):
                 self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'), width)
                 page.close()
 
+    def test_ambient_backgrounds_form_full_bleed_chapters_without_new_images(self):
+        page = self.page()
+        for selector in ['.hero', '#works', '#stills', '#contact']:
+            section = page.locator(selector)
+            style = section.evaluate('''e=>{
+                const s=getComputedStyle(e,'::before');
+                return {image:s.backgroundImage,left:parseFloat(s.left),right:parseFloat(s.right),content:s.content};
+            }''')
+            self.assertNotEqual(style['content'], 'none', selector)
+            self.assertIn('radial-gradient', style['image'], selector)
+            box = section.bounding_box()
+            self.assertAlmostEqual(box['x'] + style['left'], 0, delta=1, msg=selector)
+            self.assertAlmostEqual(box['width'] - style['left'] - style['right'], 1440, delta=1, msg=selector)
+        for selector in ['#projects', '#filmRecommendations']:
+            self.assertIn('radial-gradient', page.locator(selector).evaluate('e=>getComputedStyle(e).backgroundImage'), selector)
+        self.assertEqual(page.locator('#stills').evaluate('e=>getComputedStyle(e).color'), 'rgb(244, 244, 240)')
+        self.assertEqual(page.locator('#stills .still-card h3').first.evaluate('e=>getComputedStyle(e).color'), 'rgb(244, 244, 240)')
+        page.locator('#themeToggle').click()
+        expect(page.locator('html')).to_have_attribute('data-theme', 'dark')
+        self.assertIn('radial-gradient', page.locator('#works').evaluate('e=>getComputedStyle(e,"::before").backgroundImage'))
+        self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'), 1440)
+
     def test_no_script_retains_scene_link_and_film_entries(self):
         page = self.page(390, 844, javascript=False)
         expect(page.locator('[data-production-feature]')).to_have_attribute('href', 'assets/progress/weishizhinuo/forest-city.webp')
