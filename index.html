@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="assets/theme.css?v=20261101-theme-contrast4">
   <link rel="stylesheet" href="assets/home-modules.css?v=20261101-reel-screen">
   <link rel="stylesheet" href="assets/chapter-scenes.css?v=20261101-theme-contrast4">
+  <link rel="stylesheet" href="assets/section-jump.css?v=20261101-jump1">
 </head>
 <body>
   <a class="skip-link" href="#works" data-i18n="skip">跳转到作品</a>
@@ -250,6 +251,25 @@
     </div></div>
     <div class="footer-top"><span>© <span id="copyrightYear">2026</span> Highstrith · 橘小桔</span><div><button type="button" id="musicToggle" aria-label="播放背景音乐" aria-pressed="false"><span data-i18n="sound">背景音乐</span><span id="musicState">关</span><span class="music-equalizer" aria-hidden="true"><span></span><span></span><span></span></span></button><a href="#home" data-i18n="backTop">回到顶部</a></div></div><div class="footer-wordmark" aria-hidden="true">Highstrith<span>®</span></div>
   </footer>
+  <div id="pageBottom" tabindex="-1"></div>
+  <details class="section-jump" id="sectionJump">
+    <summary aria-label="展开区块导航" aria-controls="sectionJumpNav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r=".7"/><circle cx="4" cy="12" r=".7"/><circle cx="4" cy="18" r=".7"/></svg><span data-jump-cn="导航" data-jump-en="Navigate">导航</span></summary>
+    <nav id="sectionJumpNav" aria-label="区块导航">
+      <p class="section-jump-title" data-jump-cn="快速定位" data-jump-en="Jump to a chapter">快速定位</p>
+      <div class="section-jump-actions">
+        <a href="#home"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3h12M10 17V6m-5 5 5-5 5 5"/></svg><span data-jump-cn="到顶部" data-jump-en="Top">到顶部</span></a>
+        <a href="#pageBottom"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 17h12M10 3v11m-5-5 5 5 5-5"/></svg><span data-jump-cn="到底部" data-jump-en="Bottom">到底部</span></a>
+      </div>
+      <a href="#flyWorks" data-jump-section><span aria-hidden="true">01</span><span data-jump-cn="精选放映" data-jump-en="Selected screenings">精选放映</span></a>
+      <a href="#works" data-jump-section><span aria-hidden="true">02</span><span data-jump-cn="全部作品" data-jump-en="All works">全部作品</span></a>
+      <a href="#in-progress" data-jump-section><span aria-hidden="true">03</span><span data-jump-cn="正在制作" data-jump-en="In production">正在制作</span></a>
+      <a href="#stills" data-jump-section><span aria-hidden="true">04</span><span data-jump-cn="作品截图" data-jump-en="Frame gallery">作品截图</span></a>
+      <a href="#projects" data-jump-section><span aria-hidden="true">05</span><span data-jump-cn="导演工作台" data-jump-en="Director Workbench">导演工作台</span></a>
+      <a href="#filmRecommendations" data-jump-section><span aria-hidden="true">06</span><span data-jump-cn="推荐片单" data-jump-en="Recommended films">推荐片单</span></a>
+      <a href="#about" data-jump-section><span aria-hidden="true">07</span><span data-jump-cn="关于我" data-jump-en="About me">关于我</span></a>
+      <a href="#contact" data-jump-section><span aria-hidden="true">08</span><span data-jump-cn="联系" data-jump-en="Contact">联系</span></a>
+    </nav>
+  </details>
   <audio id="bgMusic" src="assets/background-music.mp3" preload="none" loop></audio>
   <dialog class="work-player" id="workPlayer" aria-labelledby="playerTitle">
     <div class="player-header"><div><p id="playerCategory"></p><h2 id="playerTitle"></h2></div><button type="button" class="icon-button" id="workPlayerClose" aria-label="关闭视频">×</button></div>
@@ -990,6 +1010,7 @@
   <script src="assets/gallery-navigation.js?v=20261029-motion2" defer></script>
   <script src="assets/studio.js?v=20261101-viewport-cdn" defer></script>
   <script src="assets/site-shell.js?v=20261101-chapters2" defer></script>
+  <script src="assets/section-jump.js?v=20261101-jump1" defer></script>
   <script src="assets/vendor/gsap-3.15.0/gsap.min.js" defer></script>
   <script src="assets/vendor/gsap-3.15.0/ScrollTrigger.min.js" defer></script>
   <script src="assets/production-strip.js?v=20261030-strip-final" defer></script>
