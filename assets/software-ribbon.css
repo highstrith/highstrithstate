@@ -1,0 +1,31 @@
+/* A quiet, monochrome tools line; the work above it remains the focal point. */
+.footer-software.software-ribbon { display: block; padding-block: 10px 28px; }
+.software-ribbon-head { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 10px; }
+.software-ribbon-head p { color: var(--muted); font-size: 11px; letter-spacing: .05em; line-height: 1.6; }
+#softwareRibbonToggle { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; color: var(--muted); background: transparent; }
+#softwareRibbonToggle:hover { color: var(--ink); }
+#softwareRibbonToggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+#softwareRibbonToggle .software-resume, #softwareRibbonToggle[aria-pressed="true"] .software-pause { display: none; }
+#softwareRibbonToggle[aria-pressed="true"] .software-resume { display: block; }
+.software-logo-window { --software-gap: clamp(30px, 5vw, 76px); overflow-x: auto; scrollbar-width: none; mask-image: linear-gradient(90deg, transparent, #000 28px, #000 calc(100% - 28px), transparent); }
+.software-logo-window::-webkit-scrollbar { display: none; }
+.software-logo-window.is-looping { overflow: hidden; }
+.software-logo-track { display: flex; width: max-content; }
+.software-logo-set { display: flex; flex: none; align-items: start; justify-content: space-around; gap: var(--software-gap); width: max-content; min-width: var(--software-window-width, 0px); padding: 14px var(--software-gap) 14px 0; }
+.software-logo { display: flex; flex: 0 0 86px; width: 86px; flex-direction: column; align-items: center; gap: 12px; color: var(--ink); text-align: center; }
+.software-logo > svg { display: block; width: 30px; height: 30px; fill: currentColor; opacity: .58; transition: opacity .2s; }
+.software-logo:hover > svg { opacity: .85; }
+.software-logo [data-software-name] { color: var(--muted); font-size: 10px; line-height: 1.5; letter-spacing: .015em; white-space: nowrap; }
+.software-logo-window.is-looping .software-logo-track { animation: software-logo-roll var(--software-duration, 70s) linear infinite; animation-play-state: paused; }
+.software-ribbon[data-running="true"] .software-logo-track { animation-play-state: running; }
+.software-logo-window:focus-visible { outline: 2px solid var(--orange-dark); outline-offset: 3px; }
+@keyframes software-logo-roll { to { transform: translateX(calc(-1 * var(--software-period))); } }
+@media (max-width: 800px) {
+  .footer-software.software-ribbon { padding-bottom: 24px; }
+  .software-logo { flex-basis: 78px; width: 78px; }
+  .software-logo > svg { width: 28px; height: 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .software-logo-window .software-logo-track { animation: none !important; }
+  .software-logo > svg { transition: none; }
+}

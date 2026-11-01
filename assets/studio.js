@@ -1435,7 +1435,12 @@
       el.setAttribute('href', language === 'en' ? 'resume.html?lang=en' : 'resume.html');
     });
     document.querySelectorAll('.footer-software [data-software]').forEach(element => {
-      element.textContent = softwareNames.get(element.dataset.software)[language];
+      const label = softwareNames.get(element.dataset.software)[language];
+      const caption = element.querySelector('[data-software-name]');
+      if (caption) caption.textContent = element.dataset.logoLabel || label;
+      else element.textContent = label;
+      element.setAttribute('aria-label', label);
+      element.title = label;
     });
     document.documentElement.lang = language === 'cn' ? 'zh-CN' : 'en';
     document.querySelectorAll('[data-i18n]').forEach((element) => {

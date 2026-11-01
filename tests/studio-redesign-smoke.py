@@ -200,7 +200,8 @@ class StudioRedesign(unittest.TestCase):
         fixture = [dict(work, software=['blender', 'after-effects', 'blender', '<script>']) if work['id'] == VISIBLE[0]['id'] else work for work in CATALOG]
         page.route("**/api/works", lambda route: route.fulfill(json={"works": fixture}))
         self.ready(page)
-        expect(page.locator(".footer-software .software-tag")).to_have_count(5)
+        expect(page.locator("#softwareLogoSet [data-software]")).to_have_count(8)
+        expect(page.locator("#softwareLogoSet svg")).to_have_count(8)
         card = page.locator(CARDS).first
         expect(card.locator(".work-software .software-tag")).to_have_text(['Blender', 'After Effects · AE'])
         expect(card.locator(".work-software-label")).to_have_text('制作软件')

@@ -1,0 +1,68 @@
+[
+  {
+    "file": "davinciresolve.svg",
+    "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/11.15.0/icons/davinciresolve.svg",
+    "bytes": 1775,
+    "sha256": "0b5b2ac424bb9116a76e8b85508d6b38879676dbb32a9df15a39ac51627545b2"
+  },
+  {
+    "file": "blender.svg",
+    "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/11.15.0/icons/blender.svg",
+    "bytes": 1294,
+    "sha256": "ec86e2c9cf9fc25f5c8d3bf2e8d201c0dce6683137f37a1e61f992da6566bff5"
+  },
+  {
+    "file": "unrealengine.svg",
+    "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/11.15.0/icons/unrealengine.svg",
+    "bytes": 817,
+    "sha256": "06bbd4833c91e4ad085dd8203b26739538a881e38755a3efc9ed8d57cfadbb73"
+  },
+  {
+    "file": "adobephotoshop.svg",
+    "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/11.15.0/icons/adobephotoshop.svg",
+    "bytes": 1686,
+    "sha256": "11f791a18f274a494148fa2b2b04b81e4cb21561537ce5ac0af38ec8fdce97c1"
+  },
+  {
+    "file": "adobepremierepro.svg",
+    "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/11.15.0/icons/adobepremierepro.svg",
+    "bytes": 993,
+    "sha256": "99b48567deeb7f54d95d5d3e7cb8b9394f3fdabc2fa7845fff377f80c2c975db"
+  },
+  {
+    "file": "adobeaftereffects.svg",
+    "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/11.15.0/icons/adobeaftereffects.svg",
+    "bytes": 1530,
+    "sha256": "ccd2af60b2d926939f1f39d21f4798dbafdba61258754aef31547517ffaa3412"
+  },
+  {
+    "file": "openai.svg",
+    "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/11.15.0/icons/openai.svg",
+    "bytes": 1570,
+    "sha256": "2b4a04ddc2395b20d168694d3850ce2050a702c4a0cdeb4d8b31b9a970481a8c"
+  },
+  {
+    "file": "capcut.svg",
+    "source": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/capcut/mono.svg",
+    "bytes": 474,
+    "sha256": "845dfbf5eb17f3c73abda60fa1c62556f618d593e6ec91c220cafb60a5e6bb7b"
+  },
+  {
+    "file": "LICENSE-simple-icons.md",
+    "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/11.15.0/LICENSE.md",
+    "bytes": 6568,
+    "sha256": "4674b210d8a1a0926e070843950aef43367cf44dcac86081c25540e03c089e58"
+  },
+  {
+    "file": "DISCLAIMER-simple-icons.md",
+    "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/11.15.0/DISCLAIMER.md",
+    "bytes": 4675,
+    "sha256": "45c923583e871b269370fc0a1becc1d9354c5e1687d3a2207b9db4cbf1076df6"
+  },
+  {
+    "file": "LICENSE-thesvg.txt",
+    "source": "https://raw.githubusercontent.com/glincker/thesvg/main/LICENSE",
+    "bytes": 1067,
+    "sha256": "7a679e60d78db32455aea3b4613d2d3f3bec929edf8cbb608ccc40b37c663aed"
+  }
+]
