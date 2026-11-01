@@ -41,14 +41,11 @@
     });
 
     // Update cross-page links with language query parameter
-    document.querySelectorAll('a[href*="index.html#works"]').forEach(el => {
-      el.setAttribute('href', currentLang === 'en' ? 'index.html?lang=en#works' : 'index.html#works');
-    });
-    document.querySelectorAll('a[href*="projects.html"]').forEach(el => {
-      el.setAttribute('href', currentLang === 'en' ? 'projects.html?lang=en' : 'projects.html');
-    });
-    document.querySelectorAll('.dual-brand').forEach(el => {
-      el.setAttribute('href', currentLang === 'en' ? 'index.html?lang=en' : 'index.html');
+    document.querySelectorAll('a[href^="index.html"], a[href^="projects.html"]').forEach(el => {
+      const url = new URL(el.getAttribute('href'), window.location.href);
+      if (currentLang === 'en') url.searchParams.set('lang', 'en');
+      else url.searchParams.delete('lang');
+      el.setAttribute('href', url.pathname.split('/').pop() + url.search + url.hash);
     });
 
     if (langSwitchBtn) {
@@ -114,15 +111,6 @@
       } else {
         showToast(`微信号：${textToCopy}`);
       }
-    });
-  });
-
-  // Print buttons
-  document.querySelectorAll('#printBtn, #printBtn2').forEach(btn => {
-    btn.addEventListener('click', () => {
-      setTimeout(() => {
-        window.print();
-      }, 150);
     });
   });
 

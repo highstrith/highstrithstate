@@ -23,8 +23,9 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
   const source = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
   const projects = fs.readFileSync(path.join(root, 'projects.html'), 'utf8');
   const progress = fs.readFileSync(path.join(root, 'in-progress.html'), 'utf8');
+  const resume = fs.readFileSync(path.join(root, 'resume.html'), 'utf8');
   const reel = fs.readFileSync(path.join(root, 'reel/index.html'), 'utf8');
-  const references = [...(source + projects + progress).matchAll(/<(?:link|script)\b[^>]*>/gi)].flatMap(([tag]) => {
+  const references = [...(source + projects + progress + resume).matchAll(/<(?:link|script)\b[^>]*>/gi)].flatMap(([tag]) => {
     const attribute = /^<script\b/i.test(tag) ? 'src' : /\brel=["']stylesheet["']/i.test(tag) ? 'href' : null;
     const reference = attribute && tag.match(new RegExp(`\\b${attribute}=["']([^"']+)["']`, 'i'))?.[1];
     if (!reference) return [];
@@ -32,7 +33,7 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
     return url.origin === 'https://pages.fixture' ? [decodeURIComponent(url.pathname.slice(1))] : [];
   });
   assert.ok(references.length > 0, 'real index must reference local CSS or JavaScript');
-  const projectFiles = [...(projects + progress).matchAll(/(?:href|src)="(assets\/[^"]+)"/g)].map(match => match[1].split('?')[0]);
+  const projectFiles = [...(projects + progress + resume).matchAll(/(?:href|src)="(assets\/[^"]+)"/g)].map(match => match[1].split('?')[0]);
   const fixture = fs.mkdtempSync(path.join(os.tmpdir(), 'highstrith-pages-'));
   try {
     for (const file of ['index.html', 'projects.html', 'in-progress.html', 'resume.html', 'admin.html', 'admin.css', 'serve.js']) {
@@ -59,6 +60,8 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
     assert.equal(html, source);
     assert.equal(fs.readFileSync(path.join(publicRoot, 'projects.html'), 'utf8'), projects);
     assert.equal(fs.readFileSync(path.join(publicRoot, 'in-progress.html'), 'utf8'), progress);
+    assert.equal(fs.readFileSync(path.join(publicRoot, 'resume.html'), 'utf8'), resume);
+    assert.deepEqual(fs.readFileSync(path.join(publicRoot, 'assets/lin-junjie-resume.pdf')), fs.readFileSync(path.join(root, 'assets/lin-junjie-resume.pdf')));
     assert.equal(fs.readFileSync(path.join(publicRoot, 'reel/index.html'), 'utf8'), reel, 'standalone reel page must be published unchanged');
     for (const cover of ['xianggu', 'jinhaitang', 'yanran']) {
       assert.ok(fs.existsSync(path.join(publicRoot, `reel/img/${cover}.webp`)), `reel cover ${cover} must be published`);
