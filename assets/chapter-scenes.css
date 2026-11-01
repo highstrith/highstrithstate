@@ -9,14 +9,14 @@
   isolation: isolate;
   overflow: clip;
   color: #fff;
-  background: #10251f;
+  background: #18372e;
 }
 .production-chapter-inner { min-width: 0; }
 .production-scene { position: absolute; z-index: -1; inset: 0; pointer-events: none; }
 .production-scene img { width: 100%; height: 100%; object-fit: cover; object-position: 62% center; }
 .production-scene::after {
   content: ''; position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgb(5 15 14 / .6), transparent 44%), linear-gradient(0deg, rgb(5 15 14 / .96), rgb(5 15 14 / .2) 80%), linear-gradient(90deg, rgb(7 28 24 / .88), transparent 85%);
+  background: linear-gradient(180deg, rgb(9 25 22 / .52), transparent 42%), linear-gradient(0deg, rgb(10 24 20 / .92), rgb(10 24 20 / .18) 80%), linear-gradient(90deg, rgb(18 45 37 / .78), transparent 84%);
 }
 #in-progress .section-heading { margin-bottom: clamp(32px, 5svh, 56px); }
 #in-progress .section-heading h2 { font-size: clamp(36px, 3.6vw, 56px); }
@@ -114,9 +114,9 @@
 }
 #home > #stills::before {
   background:
-    radial-gradient(ellipse at 84% 10%, rgb(87 119 101 / .34), transparent 46%),
-    radial-gradient(ellipse at 8% 82%, rgb(158 105 69 / .14), transparent 42%),
-    linear-gradient(135deg, #101715 0%, #1b2420 52%, #101514 100%);
+    radial-gradient(ellipse at 84% 10%, rgb(107 141 121 / .44), transparent 46%),
+    radial-gradient(ellipse at 8% 82%, rgb(180 124 84 / .2), transparent 42%),
+    linear-gradient(135deg, #1c2924 0%, #314138 52%, #18241f 100%);
 }
 #stills .still-media {
   background: rgb(4 10 8 / .58);
@@ -154,8 +154,8 @@
 /* Portrait and contact remain quieter anchors at the end of the page. */
 #home > #about {
   background:
-    radial-gradient(ellipse at 22% 44%, rgb(70 91 79 / .36), transparent 44%),
-    linear-gradient(120deg, #151c19 0%, #111413 100%);
+    radial-gradient(ellipse at 22% 44%, rgb(88 112 99 / .42), transparent 44%),
+    linear-gradient(120deg, #25302a 0%, #171d1a 100%);
 }
 #home > #contact::before {
   background:

@@ -108,6 +108,26 @@ class ChapterScenes(unittest.TestCase):
         self.assertIn('radial-gradient', page.locator('#works').evaluate('e=>getComputedStyle(e,"::before").backgroundImage'))
         self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'), 1440)
 
+    def test_dark_feature_chapters_shift_between_light_and_dark_themes(self):
+        page = self.page()
+        selectors = {
+            'progress': ('#in-progress .production-scene', '::after'),
+            'stills': ('#stills', '::before'),
+            'about': ('#about', None),
+        }
+        def backdrop_styles():
+            values = {}
+            for key, (selector, pseudo) in selectors.items():
+                values[key] = page.locator(selector).evaluate(
+                    '(e,pseudo)=>getComputedStyle(e,pseudo).backgroundImage', pseudo)
+            return values
+        light = backdrop_styles()
+        page.locator('#themeToggle').click()
+        expect(page.locator('html')).to_have_attribute('data-theme', 'dark')
+        dark = backdrop_styles()
+        for key in selectors:
+            self.assertNotEqual(light[key], dark[key], key)
+
     def test_no_script_retains_scene_link_and_film_entries(self):
         page = self.page(390, 844, javascript=False)
         expect(page.locator('[data-production-feature]')).to_have_attribute('href', 'assets/progress/weishizhinuo/forest-city.webp')
