@@ -178,6 +178,9 @@ class ExhibitionUpgrade(unittest.TestCase):
     def test_preview_pause_survives_feature_selection(self):
         page = self.page(viewport={'width': 1440, 'height': 1000})
         expect(page.locator('#featurePreviewToggle')).to_have_count(1, timeout=1500)
+        # Previews start only after the visitor opts in.
+        page.locator('#featurePreviewToggle').click()
+        page.wait_for_function('document.querySelector("#heroPreview").currentTime > 0')
         page.locator('#featurePreviewToggle').click()
         expect(page.locator('#featurePreviewToggle')).to_have_attribute('aria-pressed', 'true')
         page.locator('[data-feature="featured-prove-it"]').click()

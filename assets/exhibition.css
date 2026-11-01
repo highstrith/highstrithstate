@@ -104,8 +104,8 @@
 .hero-pick[aria-pressed="true"]::after { transform: scaleX(var(--preview-progress, 0)); }
 .hero-pick:focus-visible { outline-color: var(--orange-dark); outline-offset: 2px; }
 .feature-preview-control { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-top: -14px; font-size: 9px; color: var(--muted); }
-#featurePreviewToggle { background: transparent; padding: 0; min-height: 44px; display: inline-flex; align-items: center; gap: 5px; font-size: 10px; color: #fff; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; text-decoration-color: rgba(255,255,255,.65); }
-#featurePreviewToggle:hover, #featurePreviewToggle:focus-visible { text-decoration-thickness: 2px; text-decoration-color: #fff; }
+#featurePreviewToggle { background: transparent; padding: 0; min-height: 44px; display: inline-flex; align-items: center; gap: 5px; font-size: 10px; color: var(--ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; text-decoration-color: currentColor; }
+#featurePreviewToggle:hover, #featurePreviewToggle:focus-visible { text-decoration-thickness: 2px; text-decoration-color: currentColor; }
 #featurePreviewToggle svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.5; }
 .resume-symbol, #featurePreviewToggle[aria-pressed="true"] .pause-symbol { display: none; }
 #featurePreviewToggle[aria-pressed="true"] .resume-symbol { display: block; }

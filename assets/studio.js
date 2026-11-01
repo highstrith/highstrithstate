@@ -43,7 +43,7 @@
       softwareTools: '熟练使用的软件', madeWith: '制作软件',
       navStills: '画面截图', stillsLabel: '画面定格', stillsTitle: '作品截图',
       stillsIntro: '过往创作留下的画面，\n记录不同阶段的光线与情绪。',
-      galleryView: '画廊', listView: '目录', previewNote: '静音片段预览', pausePreview: '暂停预览', resumePreview: '继续预览',
+      galleryView: '画廊', listView: '目录', previewNote: '静音片段预览', pausePreview: '暂停预览', resumePreview: '播放预览',
       toolsLabel: '项目与应用', toolsTitle: '导演工作台', toolsIntro: '把剧本、分镜、资产和提示词，放在一个工作台里。', toolsExplore: '查看项目与应用', toolFeatured: '导演工作台 App', toolsAlso: '也在做', toolCanvas: 'AI 无限画布',
       recommendedFilms: '推荐 AI 片单', recommendedFilmsIntro: '发现其他创作者的 AI 影像，直达原片观看。', recommendedFilmsBrowse: '浏览片单', progressScene: '查看场景大图',
       toolCarouselPause: '暂停轮播', toolCarouselResume: '继续轮播', toolCarouselLink: '查看导演工作台项目',
@@ -83,7 +83,7 @@
       softwareTools: 'Tools I work with', madeWith: 'Made with',
       navStills: 'Stills', stillsLabel: 'Frozen frames', stillsTitle: 'Stills',
       stillsIntro: 'Frames left behind by past works,\ncapturing light and mood at different stages.',
-      galleryView: 'Gallery', listView: 'Directory', previewNote: 'Silent film excerpts', pausePreview: 'Pause preview', resumePreview: 'Resume preview',
+      galleryView: 'Gallery', listView: 'Directory', previewNote: 'Silent film excerpts', pausePreview: 'Pause preview', resumePreview: 'Play preview',
       toolsLabel: 'Projects & apps', toolsTitle: 'Director’s workbench', toolsIntro: 'Scripts, storyboards, assets and prompts in one workspace.', toolsExplore: 'Explore projects & apps', toolFeatured: 'Director’s workbench app', toolsAlso: 'Also making', toolCanvas: 'AI infinite canvas',
       recommendedFilms: 'Recommended AI films', recommendedFilmsIntro: 'Explore AI films by other creators, with links to the originals.', recommendedFilmsBrowse: 'Browse films', progressScene: 'View scene image',
       toolCarouselPause: 'Pause slideshow', toolCarouselResume: 'Resume slideshow', toolCarouselLink: 'View Director’s workbench project',
@@ -278,7 +278,8 @@
   let musicGeneration = 0;
   let activeQrButton = null;
   let qrReturnFocus = null;
-  let featurePaused = false;
+  // Fetch previews only after the visitor explicitly enables them.
+  let featurePaused = true;
   let selectedStill = 0;
   let stillReturnFocus = null;
   let noticeTimer = 0;
@@ -1004,7 +1005,7 @@
   }
 
   function syncPreview() {
-    if (!previewAllowed()) { stopPreview(); return; }
+    if (featurePaused || !previewAllowed()) { stopPreview(); return; }
     const card = !narrowScreen.matches && finePointer.matches
       ? [hoveredCard, focusedCard].find((record) => record && nearViewport(record.card))
       : null;
