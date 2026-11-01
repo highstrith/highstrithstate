@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="assets/chapter-scenes.css?v=20261101-theme-contrast4">
   <link rel="stylesheet" href="assets/section-jump.css?v=20261101-jump1">
   <link rel="stylesheet" href="assets/stills-ticker.css?v=20261101-ticker2">
+  <link rel="stylesheet" href="assets/player-seek.css?v=20261101-seek2">
 </head>
 <body>
   <a class="skip-link" href="#works" data-i18n="skip">跳转到作品</a>
@@ -276,6 +277,11 @@
   <dialog class="work-player" id="workPlayer" aria-labelledby="playerTitle">
     <div class="player-header"><div><p id="playerCategory"></p><h2 id="playerTitle"></h2></div><button type="button" class="icon-button" id="workPlayerClose" aria-label="关闭视频">×</button></div>
     <div class="player-screen"><video id="workPlayerVideo" controls playsinline preload="none"></video><div id="workPlayerStatus" role="status" aria-live="polite" hidden><p id="workPlayerMessage"></p><button type="button" id="workPlayerAction" class="button" hidden>重试播放</button></div></div>
+    <div class="player-seek-controls" id="playerSeekControls" role="group" aria-label="播放进度">
+      <button type="button" id="playerRewind10" disabled><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M5 9a10 10 0 1 1-1 8M5 4v5h5"/><text x="14" y="18">10</text></svg><span data-i18n="rewindTen">后退 10 秒</span></button>
+      <div class="player-seek-information"><output id="playerSeekTime" aria-live="off">0:00 / 0:00</output><span id="playerScrubHint" data-i18n="scrubHint">画面内左右滑动调进度</span></div>
+      <button type="button" id="playerForward10" disabled><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M23 9a10 10 0 1 0 1 8M23 4v5h-5"/><text x="14" y="18">10</text></svg><span data-i18n="forwardTen">前进 10 秒</span></button>
+    </div>
     <div class="player-footer"><div class="player-copy"><p id="playerDescription"></p><div id="playerSoftware" class="work-software" hidden></div></div><span data-i18n="playerHint">Esc 关闭</span></div>
   </dialog>
   <dialog id="social-qr-dialog" class="qr-dialog" aria-labelledby="social-qr-title"><button type="button" id="socialQrClose" class="icon-button" aria-label="关闭二维码">×</button><h2 id="social-qr-title">微信</h2><p id="social-qr-account">Gw1sgdsj_787</p><img id="social-qr-image" alt="微信二维码"><p class="qr-instruction" data-i18n="qrHint">打开对应 App 扫码，和我打个招呼</p></dialog>
@@ -1010,7 +1016,7 @@
   <script src="assets/comment-config.js?v=20261010-comments" defer></script>
   <script src="assets/scroll-reveal.js?v=20261030-linefix" defer></script>
   <script src="assets/gallery-navigation.js?v=20261029-motion2" defer></script>
-  <script src="assets/studio.js?v=20261101-stills-ticker1" defer></script>
+  <script src="assets/studio.js?v=20261101-mobile-seek2" defer></script>
   <script src="assets/site-shell.js?v=20261101-chapters2" defer></script>
   <script src="assets/section-jump.js?v=20261101-jump1" defer></script>
   <script src="assets/vendor/gsap-3.15.0/gsap.min.js" defer></script>

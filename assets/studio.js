@@ -35,6 +35,7 @@
       sound: '背景音乐', backTop: '回到顶部', playerHint: 'Esc 关闭', qrHint: '打开对应 App 扫码，和我打个招呼',
       searchPlaceholder: '寻找一部作品', searchLabel: '搜索作品', filterLabel: '作品分类', featureLabel: '选择精选作品',
       closeVideo: '关闭视频', closeQR: '关闭二维码', play: '播放', retry: '重试播放',
+      rewindTen: '后退 10 秒', forwardTen: '前进 10 秒', scrubHint: '画面内左右滑动调进度',
       loading: '正在加载作品…', buffering: '正在缓冲…', restricted: '点击播放，开始观看这部作品。',
       error: '暂时无法加载这部作品，请重试。', slow: '加载比平时慢，可以继续等待或重试。',
       musicOn: '开', musicOff: '关', playMusic: '播放背景音乐', pauseMusic: '暂停背景音乐',
@@ -75,6 +76,7 @@
       sound: 'Background music', backTop: 'Back to top', playerHint: 'Esc to close', qrHint: 'Scan in the matching app and say hello',
       searchPlaceholder: 'Find a work', searchLabel: 'Search works', filterLabel: 'Filter works', featureLabel: 'Choose a featured work',
       closeVideo: 'Close video', closeQR: 'Close QR code', play: 'Play', retry: 'Try again',
+      rewindTen: 'Back 10 seconds', forwardTen: 'Forward 10 seconds', scrubHint: 'Swipe the picture to seek',
       loading: 'Loading the film…', buffering: 'Buffering…', restricted: 'Press play to watch this film.',
       error: 'This film could not be loaded. Please try again.', slow: 'Loading is taking longer than usual. Keep waiting or try again.',
       musicOn: 'On', musicOff: 'Off', playMusic: 'Play background music', pauseMusic: 'Pause background music',
@@ -275,6 +277,8 @@
   let playerController = null;
   let playerTimer = null;
   let playerState = '';
+  let playerScrub = null;
+  let suppressPlayerClickUntil = 0;
   let musicWanted = false;
   let musicGeneration = 0;
   let activeQrButton = null;
@@ -1040,6 +1044,8 @@
   }
 
   function cancelPlayerSession() {
+    endPlayerScrub(false);
+    suppressPlayerClickUntil = 0;
     clearPlayerTimer();
     playerController?.abort();
     playerController = null;
@@ -1084,9 +1090,10 @@
     const listen = (event, callback) => playerVideo.addEventListener(event, callback, { signal: controller.signal });
     listen('loadedmetadata', () => setMediaAspect(player, playerVideo.videoWidth / playerVideo.videoHeight));
     listen('playing', () => { clearPlayerTimer(); showPlayerState(''); });
-    listen('waiting', () => { showPlayerState('buffering'); schedulePlayerWait(controller); });
-    listen('stalled', () => { showPlayerState('buffering'); schedulePlayerWait(controller); });
+    listen('waiting', () => { if (!playerScrub?.active) { showPlayerState('buffering'); schedulePlayerWait(controller); } });
+    listen('stalled', () => { if (!playerScrub?.active) { showPlayerState('buffering'); schedulePlayerWait(controller); } });
     listen('canplay', () => {
+      if (playerScrub?.active) return;
       clearPlayerTimer();
       if (playerVideo.paused && ['loading', 'buffering', 'slow'].includes(playerState)) showPlayerState('restricted');
     });
@@ -1118,6 +1125,7 @@
     $('#playerCategory').textContent = workText(playerWork, 'Sub');
     $('#playerDescription').textContent = workText(playerWork, 'Desc');
     renderSoftware(playerWork, $('#playerSoftware'));
+    updatePlayerSeekControls();
     showPlayerState(playerState);
   }
 
@@ -1168,6 +1176,99 @@
     player.close();
     finishPlayer();
   }
+
+  function playerTime(value) {
+    const seconds = Math.max(0, Math.floor(Number.isFinite(value) ? value : 0));
+    return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+  }
+  function canSeekPlayer() {
+    return player?.open && playerVideo.readyState >= 1 && Number.isFinite(playerVideo.duration) && playerVideo.duration > 0;
+  }
+  function updatePlayerSeekControls() {
+    const enabled = canSeekPlayer();
+    ['#playerRewind10', '#playerForward10'].forEach(selector => { const button = $(selector); if (button) button.disabled = !enabled; });
+    const output = $('#playerSeekTime');
+    if (output) output.textContent = `${playerTime(playerScrub?.active ? playerScrub.target : playerVideo?.currentTime)} / ${playerTime(playerVideo?.duration)}`;
+    $('#playerSeekControls')?.setAttribute('aria-label', language === 'en' ? 'Playback position' : '播放进度');
+  }
+  function clampPlayerTime(time) { return Math.min(playerVideo.duration, Math.max(0, time)); }
+  function seekPlayerBy(seconds) {
+    if (!canSeekPlayer()) return;
+    playerVideo.currentTime = clampPlayerTime(playerVideo.currentTime + seconds);
+    updatePlayerSeekControls();
+    showPlayerHud(seconds < 0 ? '↶' : '↷', `${seconds > 0 ? '+' : ''}${seconds}s`);
+  }
+  function queuePlayerScrub() {
+    const scrub = playerScrub;
+    if (!scrub?.active || scrub.frame || scrub.pending === null) return;
+    scrub.frame = requestAnimationFrame(() => {
+      scrub.frame = 0;
+      if (playerScrub !== scrub || playerVideo.seeking || !canSeekPlayer()) return;
+      const target = scrub.pending;
+      scrub.pending = null;
+      if (target !== null && Math.abs(playerVideo.currentTime - target) > .03) playerVideo.currentTime = target;
+    });
+  }
+  function endPlayerScrub(commit = true) {
+    const scrub = playerScrub;
+    if (!scrub) return;
+    playerScrub = null;
+    cancelAnimationFrame(scrub.frame);
+    player.classList.remove('is-scrubbing');
+    const screen = player.querySelector('.player-screen');
+    if (screen.hasPointerCapture(scrub.id)) screen.releasePointerCapture(scrub.id);
+    if (scrub.active && commit && canSeekPlayer()) {
+      // Intermediate seeks are serialized; release always commits the exact target.
+      playerVideo.currentTime = scrub.target;
+      suppressPlayerClickUntil = performance.now() + 450;
+      if (scrub.wasPlaying && !document.hidden && playerController === scrub.controller) attemptPlayerPlay(playerController);
+    }
+    updatePlayerSeekControls();
+  }
+  $('#playerRewind10')?.addEventListener('click', () => seekPlayerBy(-10));
+  $('#playerForward10')?.addEventListener('click', () => seekPlayerBy(10));
+  ['loadedmetadata', 'durationchange', 'timeupdate', 'emptied'].forEach(type => playerVideo?.addEventListener(type, updatePlayerSeekControls));
+  playerVideo?.addEventListener('emptied', () => endPlayerScrub(false));
+  playerVideo?.addEventListener('seeked', () => { queuePlayerScrub(); updatePlayerSeekControls(); });
+  const playerScreen = player?.querySelector('.player-screen');
+  playerScreen?.addEventListener('pointerdown', event => {
+    if (event.pointerType !== 'touch') return;
+    if (!event.isPrimary) { endPlayerScrub(); return; }
+    if (!canSeekPlayer() || event.target.closest('button, a, input') || playerState === 'error') return;
+    const box = playerVideo.getBoundingClientRect();
+    // The native progress/volume/fullscreen controls retain their own gestures.
+    if (event.clientY >= box.bottom - 56 || event.clientY < box.top || event.clientX < box.left || event.clientX > box.right) return;
+    playerScrub = { id: event.pointerId, x: event.clientX, y: event.clientY, width: box.width,
+      time: playerVideo.currentTime, target: playerVideo.currentTime, wasPlaying: !playerVideo.paused,
+      active: false, pending: null, frame: 0, controller: playerController };
+  });
+  playerScreen?.addEventListener('pointermove', event => {
+    const scrub = playerScrub;
+    if (!scrub || scrub.id !== event.pointerId) return;
+    const dx = event.clientX - scrub.x, dy = event.clientY - scrub.y;
+    if (!scrub.active) {
+      if (Math.abs(dy) > 8 && Math.abs(dy) > Math.abs(dx)) { endPlayerScrub(false); return; }
+      if (Math.abs(dx) < 10 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
+      scrub.active = true;
+      player.classList.add('is-scrubbing');
+      clearPlayerTimer();
+      showPlayerState('');
+      playerVideo.pause();
+      playerScreen.setPointerCapture(event.pointerId);
+    }
+    if (event.cancelable) event.preventDefault();
+    scrub.target = clampPlayerTime(scrub.time + dx / scrub.width * playerVideo.duration);
+    scrub.pending = scrub.target;
+    queuePlayerScrub();
+    updatePlayerSeekControls();
+    showPlayerHud('↔', `${playerTime(scrub.target)} / ${playerTime(playerVideo.duration)}`);
+  });
+  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(type => playerScreen?.addEventListener(type, event => {
+    if (playerScrub?.id === event.pointerId) endPlayerScrub();
+  }));
+  playerScreen?.addEventListener('click', event => {
+    if (performance.now() < suppressPlayerClickUntil) { event.preventDefault(); event.stopImmediatePropagation(); }
+  }, true);
 
   function updateMusicUI() {
     if (!musicButton) return;
@@ -1708,6 +1809,7 @@
 
   player?.addEventListener('keydown', (event) => {
     if (event.target && (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA')) return;
+    if (event.code === 'Space' && event.target.closest?.('button, a[href], select, [role="button"]')) return;
     if (event.code === 'Space') {
       event.preventDefault();
       if (!playerVideo) return;
