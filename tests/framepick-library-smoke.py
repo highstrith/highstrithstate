@@ -153,6 +153,25 @@ class FramepickLibrary(unittest.TestCase):
         expect(self.cards()).to_have_count(0)
         expect(self.page.locator('#emptyState img')).to_have_count(0)
 
+    def test_detail_follows_the_real_source_platform(self):
+        # The watch button must name the platform the author published on, never a default.
+        self.open('?film=pinzi')
+        expect(self.page.locator('#detailTitle')).to_have_text('牌子')
+        expect(self.page.locator('#detailWatch')).to_contain_text('前往哔哩哔哩观看')
+        expect(self.page.locator('#detailAuthor')).to_contain_text('DiDi_OK')
+        expect(self.page.locator('#detailAuthor')).to_contain_text('哔哩哔哩')
+        expect(self.page.locator('#detailKind')).to_contain_text('剧情短片')
+        expect(self.page.locator('#detailWatch')).to_have_attribute('href', 'https://www.bilibili.com/video/BV11mFLziEyP/')
+        self.page.keyboard.press('Escape')
+        self.open('?film=xianggu')
+        expect(self.page.locator('#detailWatch')).to_contain_text('前往抖音观看')
+        expect(self.page.locator('#detailAuthor')).to_contain_text('抖音')
+        expect(self.page.locator('#detailKind')).to_contain_text('系列短剧')
+        self.page.keyboard.press('Escape')
+        self.open('?film=baiguilu')
+        expect(self.page.locator('#detailWatch')).to_contain_text('前往哔哩哔哩观看')
+        expect(self.page.locator('#detailEpisode')).to_contain_text('狐仙接亲')
+
     def test_bookmarks_persist_and_storage_failure_is_nonfatal(self):
         self.open()
         save = self.page.locator('[data-save-film="jinhaitang"]').first

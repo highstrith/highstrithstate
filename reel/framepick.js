@@ -22,6 +22,9 @@
     };
   });
   const byId = new Map(films.map((film) => [film.id, film]));
+  // A film is watched where its author published it, so the labels follow the card.
+  const SOURCE_LABEL = { douyin: '抖音', xiaohongshu: '小红书', bilibili: '哔哩哔哩' };
+  const CATEGORY_LABEL = { film: '完整电影', series: '系列短剧', short: '剧情短片', ad: '商业广告', music: '音乐影像', experimental: '实验影像' };
   const controls = {
     q: $('#filmSearch'), genre: $('#genreFilter'), source: $('#sourceFilter'),
     rating: $('#scoreFilter'), access: $('#accessFilter'), sort: $('#sortFilter'), scoreBasis: $('#scoreBasis')
@@ -177,15 +180,20 @@
     currentFilm = film;
     if (trigger) opener = trigger;
     $('#detailTitle').textContent = film.title;
-    $('#detailKind').textContent = film.kind + ' / 系列短剧';
-    $('#detailAuthor').textContent = film.author + ' / 抖音';
+    const sourceLabel = SOURCE_LABEL[film.source] || '原平台';
+    const categoryLabel = CATEGORY_LABEL[film.category] || '作品';
+    $('#detailKind').textContent = film.kind + ' / ' + categoryLabel;
+    $('#detailAuthor').textContent = film.author + ' / ' + sourceLabel;
     $('#detailEpisode').textContent = film.episode;
     $('#detailDescription').textContent = film.description;
     $('#detailReason').textContent = film.reason;
     $('#detailImage').src = film.image.src;
     $('#detailImage').alt = film.image.alt;
-    $('#detailWatch').href = film.link;
-    $('#detailWatch').dataset.outboundFilm = film.id;
+    const watch = $('#detailWatch');
+    watch.href = film.link;
+    watch.dataset.outboundFilm = film.id;
+    watch.textContent = '前往' + sourceLabel + '观看';
+    watch.insertAdjacentHTML('beforeend', '<svg aria-hidden="true"><use href="#arrow"/></svg>');
     $('#detailScore').textContent = film.score === null ? '编辑评分：待评。完成审核后公开，不计入评分榜单。' : '编辑评分：' + film.score.toFixed(1) + ' / 10';
     syncSaved();
     if (push) {
