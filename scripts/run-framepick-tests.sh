@@ -37,7 +37,8 @@ python3 -m unittest \
   tests/framepick-library-smoke.py \
   tests/framepick-rankings-smoke.py \
   tests/framepick-reviews-smoke.py \
-  tests/framepick-accounts-smoke.py
+  tests/framepick-accounts-smoke.py \
+  tests/framepick-demo-smoke.py
 
 node --test tests/framepick-reviews-api-integration.mjs
 node --test tests/framepick-library-store-integration.mjs

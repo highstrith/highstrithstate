@@ -18,6 +18,8 @@
 <script src="framepick-reviews.js?v=20261102-outbound1" defer></script>
 <script src="framepick-rankings.js?v=20261102-outbound1" defer></script>
 <script src="framepick-accounts.js?v=20261102-accounts1" defer></script>
+<script src="framepick-creators.js?v=20261102-creators1" defer></script>
+<script src="framepick-demo.js?v=20261102-prototype1" defer></script>
 <script src="framepick.js?v=20261102-cinema1" defer></script>
 </head>
 <body>
@@ -33,6 +35,14 @@
     <button id="guestMode" class="guest-mode js-only" type="button">访客模式</button>
   </div>
 </header>
+
+<div class="prototype-bar" id="prototypeBar">
+  <div class="wrap prototype-bar-in">
+    <p><span class="state-chip" data-state="missing">交互原型</span>账号、支付与分账均未接入；带「演示」标记的内容只保存在此浏览器，不产生真实订单或收益。</p>
+    <button type="button" id="statusOpen" class="link-button">查看服务状态</button>
+    <button type="button" id="prototypeClose" class="prototype-close" aria-label="收起原型提示">×</button>
+  </div>
+</div>
 
 <main>
   <section class="intro wrap" aria-labelledby="introTitle">
@@ -98,12 +108,21 @@
     <div class="section-heading"><div><p class="section-caption">为一个好故事，买一张小票。</p><h2 id="membershipTitle">单片观影，支持创作</h2></div><span class="membership-status">单片放映筹备中</span></div>
     <div class="membership-grid">
       <article class="plan free-plan"><div class="plan-top"><h3>免费发现</h3><span>现在就能看</span></div><p class="plan-description">从公开作品里，找到想继续关注的创作者。</p><ul><li>浏览作品介绍、榜单与站内评价</li><li>前往原平台观看免费原作</li><li>收藏喜欢的作品，留下观影感受</li></ul><a href="#entries" class="button" id="browseFree">浏览免费片库</a></article>
-      <article class="plan paid-plan"><div class="plan-top"><h3>单片观影</h3><span class="plan-label">拟定 3 元 / 5 元</span></div><p class="plan-description">为一部经过审片的完整 AI 电影买单。</p><ul><li>聚焦 40 分钟内的优质原创电影</li><li>购买后，在作品授权期内反复观看</li><li>每笔有效购买，为创作者记录收益</li></ul><button type="button" class="button js-only" data-membership>了解单片观影计划</button><p class="plan-status">尚未开放购票，站内放映与订单服务筹备中。</p></article>
+      <article class="plan paid-plan"><div class="plan-top"><h3>单片观影</h3><span class="plan-label">拟定 3 元 / 5 元</span></div><p class="plan-description">为一部经过审片的完整 AI 电影买单。</p><ul><li>聚焦 40 分钟内的优质原创电影</li><li>购买后，在作品授权期内反复观看</li><li>每笔有效购买，为创作者记录收益</li></ul><div class="plan-actions"><button type="button" class="button js-only" data-membership>了解单片观影计划</button><button type="button" class="button secondary demo-button js-only" data-demo-purchase data-demo-price="3">演示：单片购票流程（3 元）</button></div><p class="plan-status">尚未开放购票，站内放映与订单服务筹备中；上面的购票按钮只演示界面状态。</p></article>
     </div>
     <p class="membership-note">当前免费作品在原平台观看。未来购票解锁本站授权正片，购前展示价格、授权期和观看范围。<a href="#cinemaPlan">我是创作者</a></p>
   </section>
 
-  <section class="cinema-plan wrap" id="cinemaPlan" aria-labelledby="cinemaPlanTitle"><div><p class="section-caption">创作者发行</p><h2 id="cinemaPlanTitle">把你的 AI 电影，<br>放上帧选银幕。</h2><p>面向 40 分钟内、具备完整故事与视听完成度的原创 AI 电影。未来通过创作者工作台投稿、管理作品，并查看每笔有效订单产生的收益。</p><p class="cinema-plan-status">创作者工作台尚未开放；当前可通过邮箱交流作品合作。</p><a href="mailto:highstrith@gmail.com?subject=帧选短片合作">交流作品合作</a></div><div class="cinema-plan-detail"><h3>你的作品，每一份支持都有记录。</h3><ol class="creator-flow"><li><h4>投稿并确认授权</h4><p>提交完整成片、试看、作品物料与授权资料。</p></li><li><h4>审片通过后上架</h4><p>核实故事、画面、声音和完成度，再确认价格与放映授权期。</p></li><li><h4>按有效订单记录收益</h4><p>每笔有效订单按约定比例计入创作者收益，退款与结算状态单独列明。</p></li></ol><p class="cinema-plan-status">尚未开放创作者发布、收款或收益结算。分成比例与结算周期将在开放前明确。</p></div></section>
+  <section class="cinema wrap" id="cinema" aria-labelledby="cinemaTitle">
+    <div class="section-heading"><div><p class="section-caption">已购影片与授权状态</p><h2 id="cinemaTitle" tabindex="-1">我的影院</h2></div><span class="state-chip" data-state="missing" data-demo-chip="演示 · 未接入">演示</span></div>
+    <p class="cinema-lead">真实购票、授权放映与订单记录均未接入。下面只演示「未登录 → 未购买 → 支付中 → 确认中 → 已购有效 → 退款／到期／下架」这些界面状态，不收任何费用，也不产生真实权益。</p>
+    <div id="cinemaList" class="cinema-list"></div>
+    <p id="cinemaEmpty" class="cinema-empty" role="status"></p>
+    <p id="cinemaNote" class="cinema-note" role="status"></p>
+    <div class="cinema-actions-row"><button id="cinemaClear" type="button" class="button secondary demo-button" hidden>清除本浏览器的演示订单</button></div>
+  </section>
+
+  <section class="cinema-plan wrap" id="cinemaPlan" aria-labelledby="cinemaPlanTitle"><div><p class="section-caption">创作者发行</p><h2 id="cinemaPlanTitle">把你的 AI 电影，<br>放上帧选银幕。</h2><p>面向 40 分钟内、具备完整故事与视听完成度的原创 AI 电影。未来通过创作者工作台投稿、管理作品，并查看每笔有效订单产生的收益。</p><p class="cinema-plan-status">创作者工作台尚未开放；当前可通过邮箱交流作品合作。</p><a href="mailto:highstrith@gmail.com?subject=帧选短片合作">交流作品合作</a><button id="creatorEntry" class="button secondary js-only" type="button">申请成为创作者</button></div><div class="cinema-plan-detail"><h3>你的作品，每一份支持都有记录。</h3><ol class="creator-flow"><li><h4>投稿并确认授权</h4><p>提交完整成片、试看、作品物料与授权资料。</p></li><li><h4>审片通过后上架</h4><p>核实故事、画面、声音和完成度，再确认价格与放映授权期。</p></li><li><h4>按有效订单记录收益</h4><p>每笔有效订单按约定比例计入创作者收益，退款与结算状态单独列明。</p></li></ol><p class="cinema-plan-status">尚未开放创作者发布、收款或收益结算。分成比例与结算周期将在开放前明确。</p></div></section>
 
   <section class="standard wrap" id="standard" aria-labelledby="standardTitle">
     <div class="standard-intro"><p class="section-caption">热度帮助发现，质量决定收录。</p><h2 id="standardTitle">每次推荐，都有理由。</h2><p>关注热门，也给高质量的新作留位置。<br>粉丝多少，不是作品进入片库的门槛。</p></div>
@@ -145,12 +164,38 @@
   </div>
 </dialog>
 <dialog id="guestDialog" class="membership-dialog" aria-labelledby="guestTitle"><button type="button" class="dialog-close" id="guestClose" aria-label="关闭访客说明">×</button><p class="kind">无需注册</p><h2 id="guestTitle">用访客身份，留下观影感受。</h2><p>共享评价服务通过此浏览器的访客 Cookie 识别你的评价。你可以为每部作品评分、留言，并在此浏览器更新或撤回。</p><p>昵称可在评价表单填写。换浏览器、清除 Cookie 或使用无痕窗口后，将视为另一位访客，无法管理原评价。</p><p id="guestAvailability" role="status">正在检查评价服务…</p><button id="guestDone" class="button" type="button">知道了</button></dialog>
-<dialog id="membershipDialog" class="membership-dialog" aria-labelledby="memberDialogTitle"><button type="button" class="dialog-close" data-close-membership aria-label="关闭观影计划">×</button><span class="plan-label">单片观影</span><h2 id="memberDialogTitle">为一部好电影，买一张小票。</h2><p>计划提供 3 元 / 5 元的单片购买。购买后可在该作品授权期内反复观看，观看期限与适用范围会在购票前清楚展示。</p><p>每笔有效购买为创作者记录收益；具体分成与结算规则将在合作前明确。</p><p>本站尚未开放购票、站内放映或收益结算。当前三部免费原作继续在原平台观看。</p><a href="#entries" class="button" id="memberBrowse">先浏览免费精选</a></dialog>
-<dialog id="accountDialog" class="membership-dialog" aria-labelledby="accountTitle"><button type="button" class="dialog-close" id="accountClose" aria-label="关闭账号">×</button><span class="plan-label">可选账号</span><h2 id="accountTitle">登录后，换设备也能找回。</h2><p>账号用于承载后续的单片购买与观影权益。当前尚未开放购票，登录后依然可以免费发现、评价与跳转原作。</p><p id="accountAvailability" role="status">正在检查账号服务…</p>
+<dialog id="membershipDialog" class="membership-dialog" aria-labelledby="memberDialogTitle"><button type="button" class="dialog-close" data-close-membership aria-label="关闭观影计划">×</button><span class="plan-label">单片观影</span><span class="state-chip" data-state="missing" data-demo-chip="演示 · 未接入">演示</span><h2 id="memberDialogTitle">为一部好电影，买一张小票。</h2><p>计划提供 3 元 / 5 元的单片购买。购买后可在该作品授权期内反复观看，观看期限与适用范围会在购票前清楚展示。</p><p>每笔有效购买为创作者记录收益；具体分成与结算规则将在合作前明确。</p><p>本站尚未开放购票、站内放映或收益结算。当前三部免费原作继续在原平台观看。</p><a href="#entries" class="button" id="memberBrowse">先浏览免费精选</a></dialog>
+<dialog id="accountDialog" class="membership-dialog" aria-labelledby="accountTitle"><button type="button" class="dialog-close" id="accountClose" aria-label="关闭账号">×</button><span class="plan-label">可选账号</span><span class="state-chip" data-state="local" data-demo-chip="本地演示 · 非线上账号">演示</span><h2 id="accountTitle">登录后，换设备也能找回。</h2><p>账号用于承载后续的单片购买与观影权益。当前尚未开放购票，登录后依然可以免费发现、评价与跳转原作。</p><p id="accountAvailability" role="status">正在检查账号服务…</p>
   <form id="accountForm" class="account-form"><label for="accountEmail">邮箱<input id="accountEmail" name="email" type="email" inputmode="email" autocomplete="email" maxlength="200" required></label><label for="accountPassword">密码<input id="accountPassword" name="password" type="password" autocomplete="current-password" minlength="8" maxlength="200" required></label><label for="accountNickname" id="accountNicknameRow" hidden>昵称（可选）<input id="accountNickname" name="nickname" maxlength="24" autocomplete="nickname" placeholder="不填则用邮箱前缀"></label><div class="account-actions"><button id="accountSubmit" class="button" type="submit">登录</button><button id="accountSwitch" class="button secondary" type="button">还没有账号？注册</button></div></form>
   <p id="accountError" role="alert"></p><p id="accountStatus" role="status"></p>
   <div id="accountSignedIn" hidden><p id="accountWho" class="account-note"></p><div class="account-actions"><button id="accountLogout" class="button secondary" type="button">退出登录</button></div></div>
   <p class="account-note">访客评价基于浏览器身份，登录后不会自动合并，也不能凭昵称认领旧评价；合并规则待定。找回密码的邮件发送尚未接通，需要重置请通过页尾邮箱联系。</p>
+</dialog>
+<dialog id="creatorDialog" class="membership-dialog creator-dialog" aria-labelledby="creatorTitle"><button type="button" class="dialog-close" id="creatorClose" aria-label="关闭创作者申请">×</button><span class="plan-label">创作者</span><span class="state-chip" data-state="missing" data-demo-chip="演示 · 未接入">演示</span><h2 id="creatorTitle">先申请身份，再投一部成片。</h2><p>申请通过后可提交完整成片、试看物料与授权资料。人工审片通过后作品才会进入片库；<strong>通过申请不等于作品可售</strong>，价格与分成会在开放前单独确认。</p><p id="creatorAvailability" role="status">正在检查创作者服务…</p>
+  <div id="creatorBody" hidden>
+    <div id="creatorState" class="account-note"></div>
+    <form id="creatorApplyForm" class="account-form" hidden><label for="creatorName">创作者名称／署名<input id="creatorName" name="name" maxlength="80" required></label><label for="creatorContact">主页或联系链接（可选）<input id="creatorContact" name="contact" type="url" inputmode="url" placeholder="https://" maxlength="300"></label><label for="creatorSamples">代表作品链接<input id="creatorSamples" name="samples" type="url" inputmode="url" placeholder="https://" maxlength="300" required></label><label for="creatorIntro">创作简介<textarea id="creatorIntro" name="intro" rows="3" maxlength="600" required></textarea></label><label for="creatorAiUsage">AI 使用情况说明<textarea id="creatorAiUsage" name="aiUsage" rows="3" maxlength="600" required></textarea></label><div class="account-actions"><button id="creatorApplySubmit" class="button" type="submit">提交申请</button></div></form>
+    <form id="creatorSubmitForm" class="account-form" hidden><label for="creatorFilmTitle">片名<input id="creatorFilmTitle" name="title" maxlength="80" required></label><label for="creatorFilmAuthor">作者署名<input id="creatorFilmAuthor" name="author" maxlength="80" required></label><label for="creatorFilmSource">原作来源<select id="creatorFilmSource" name="source"><option value="douyin">抖音</option><option value="bilibili" selected>哔哩哔哩</option><option value="xiaohongshu">小红书</option></select></label><label for="creatorFilmUrl">原作链接<input id="creatorFilmUrl" name="sourceUrl" type="url" inputmode="url" placeholder="https://" maxlength="300" required></label><label for="creatorFilmCategory">作品类型<select id="creatorFilmCategory" name="category"><option value="film" selected>完整电影</option><option value="series">系列短剧</option><option value="short">剧情短片</option><option value="experimental">实验影像</option></select></label><label for="creatorFilmGenre">题材<select id="creatorFilmGenre" name="genre"><option value="scifi" selected>科幻</option><option value="fantasy">奇幻</option><option value="wuxia">武侠</option><option value="xianxia">仙侠</option></select></label><label for="creatorFilmEpisode">集号说明（系列短剧必填）<input id="creatorFilmEpisode" name="episode" maxlength="120" placeholder="第 01 集"></label><label for="creatorFilmRuntime">时长（mm:ss）<input id="creatorFilmRuntime" name="runtime" inputmode="numeric" placeholder="42:10" maxlength="12" required></label><label for="creatorFilmSynopsis">简介<textarea id="creatorFilmSynopsis" name="synopsis" rows="3" maxlength="600" required></textarea></label><label for="creatorFilmPreview">试看物料链接<input id="creatorFilmPreview" name="previewUrl" type="url" inputmode="url" placeholder="https://" maxlength="300" required></label><label for="creatorFilmRights">授权状态<select id="creatorFilmRights" name="rightsStatus"><option value="none" selected>尚未确认</option><option value="pending">确认中</option><option value="confirmed">已确认</option></select></label><label for="creatorFilmEvidence">权利材料说明<textarea id="creatorFilmEvidence" name="rightsEvidence" rows="2" maxlength="600" required></textarea></label><label for="creatorFilmAi">AI 使用情况说明<textarea id="creatorFilmAi" name="materialsAiUsage" rows="2" maxlength="600" required></textarea></label><label class="creator-check" for="creatorFilmComplete"><input id="creatorFilmComplete" name="completeFilm" type="checkbox" checked>这是完整成片，不是单集或片段</label><div class="account-actions"><button id="creatorSubmitSubmit" class="button" type="submit">提交投稿</button><button id="creatorSaveDraft" class="button secondary" type="button">存为草稿</button></div></form>
+    <div id="creatorMine" class="account-note" hidden></div>
+  </div>
+  <p id="creatorError" role="alert"></p><p id="creatorStatus" role="status"></p>
+  <p class="account-note">投稿为人工审核制：审片意见会写进记录，需修改的作品退回后可再提交。付费放映必须同时具备完整成片与已确认授权，单集与片段不会作为付费正片。</p>
+</dialog>
+<dialog id="statusDialog" class="membership-dialog status-dialog" aria-labelledby="statusTitle"><button type="button" class="dialog-close" id="statusClose" aria-label="关闭服务状态">×</button><span class="plan-label">原型说明</span><h2 id="statusTitle">哪些是真的，哪些还没接入。</h2>
+  <p class="status-lead">帧选目前是可交互原型：找片、判断与观看入口已经可用；账号、支付、授权放映与创作者结算均未接入，界面里的相关流程只作为演示状态展示。</p>
+  <div id="statusList" class="status-list"></div>
+  <p class="account-note">演示购票与演示订单只保存在这个浏览器，不上传、不收费、不产生任何真实权益或收益。</p>
+</dialog>
+<dialog id="purchaseDialog" class="membership-dialog purchase-dialog" aria-labelledby="purchaseTitle">
+  <button type="button" class="dialog-close" id="purchaseClose" aria-label="关闭演示购票">×</button>
+  <span class="plan-label">演示购票</span><span class="state-chip" id="purchaseChip" data-state="missing">未购买</span>
+  <h2 id="purchaseTitle">确认价格与权益（演示）</h2>
+  <p id="purchaseBody" class="purchase-body"></p>
+  <p id="purchaseMeta" class="purchase-meta"></p>
+  <p class="purchase-rights">购买权益：在该作品授权期内反复观看；不是永久拥有，也不是 48 小时租赁。价格与授权期由服务端决定，本站当前不收取任何费用。</p>
+  <div class="account-actions"><button id="purchaseAction" class="button" type="button">演示支付</button><button id="purchaseSecondary" class="button secondary" type="button">取消</button></div>
+  <div class="account-actions purchase-tools"><button id="purchaseSimulate" class="review-retry" type="button">演示：支付失败</button><button id="purchaseUnavailable" class="review-retry" type="button">演示：影片下架</button><a class="review-retry" href="#cinema">查看我的影院（演示）</a></div>
+  <p id="purchaseNote" class="account-note">没有真实支付渠道、订单接口或服务端确认。此流程仅用于评审界面状态，重复点击不会重复发放权益或重复计算收益。</p>
 </dialog>
 <p id="notice" class="notice" role="status" aria-live="polite"></p>
 </body>
