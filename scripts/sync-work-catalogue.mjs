@@ -55,9 +55,11 @@ function syncStaticImages(html, images) {
   });
 }
 
-export function syncWorkCatalogue(root) {
+// Returns whether anything changed. Callers that only want to verify the shipped
+// snapshot pass { write: false } so a stale page is reported, never rewritten.
+export function syncWorkCatalogue(root, { write = true } = {}) {
   const file = path.join(root, 'index.html');
-  if (!fs.existsSync(file)) return;
+  if (!fs.existsSync(file)) return { changed: false, before: '', after: '' };
   const works = JSON.parse(fs.readFileSync(path.join(root, 'data/works.json')));
   const visibleWorks = works.filter(work => work.id !== 'featured-giant-wheel')
     .sort((a, b) => (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0));
@@ -70,10 +72,27 @@ export function syncWorkCatalogue(root) {
   const imageSnapshot = JSON.stringify(images, null, 2).replace(/</g, '\\u003c');
   after = after.replace(/<!-- generated-images:start -->[\s\S]*?<!-- generated-images:end -->/, () => `<!-- generated-images:start -->\n  <script>const posterImageData = ${imageSnapshot};</script>\n  <!-- generated-images:end -->`);
   after = syncStaticImages(after, images);
-  if (after !== before) fs.writeFileSync(file, after);
+  if (after !== before && write) fs.writeFileSync(file, after);
+  return { changed: after !== before, before, after };
+}
+
+export function checkWorkCatalogue(root) {
+  return syncWorkCatalogue(root, { write: false }).changed;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
-  syncWorkCatalogue(path.resolve(import.meta.dirname, '..'));
-  console.log('Static snapshot and no-JavaScript work links synchronized.');
+  const root = path.resolve(import.meta.dirname, '..');
+  if (process.argv.includes('--check')) {
+    // Editing works.json from the admin page or by hand leaves the in-page
+    // snapshot behind; this is how the drift is caught before publishing.
+    if (checkWorkCatalogue(root)) {
+      console.error('静态快照与 data/works.json 不一致：请运行 node scripts/sync-work-catalogue.mjs');
+      process.exitCode = 1;
+    } else {
+      console.log('静态快照与 data/works.json 一致。');
+    }
+  } else {
+    syncWorkCatalogue(root);
+    console.log('Static snapshot and no-JavaScript work links synchronized.');
+  }
 }

@@ -58,6 +58,9 @@ def disposable_admin(catalogue=None):
         root = Path(directory)
         for name in ("serve.js", "admin.html", "admin.css"):
             shutil.copy2(ROOT / name, root / name)
+        # serve.js loads its shared handlers from server/, so the entry point
+        # alone cannot boot a copy of the site.
+        shutil.copytree(ROOT / "server", root / "server")
         (root / "data").mkdir()
         (root / "data/works.json").write_text(json.dumps(catalogue or [], ensure_ascii=False) + "\n")
         fixture = next(w for w in CATALOG if w["id"] == "added-render-test")

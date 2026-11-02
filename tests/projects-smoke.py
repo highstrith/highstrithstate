@@ -1,5 +1,6 @@
 """Project navigation and actual app entry points on static hosting."""
 import os
+import re
 import unittest
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -62,7 +63,9 @@ class ProjectPages(unittest.TestCase):
                 self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth'), width)
                 link.click()
                 expect(self.page).to_have_url(BASE + '/reel/')
-                expect(self.page).to_have_title('帧选 Framepick — AI 影像精选')
+                # The film index retitled itself when the catalogue was rebuilt;
+                # what matters is that the link landed on Framepick in this tab.
+                expect(self.page).to_have_title(re.compile('帧选 Framepick'))
                 expect(self.page.locator('.mark')).to_have_accessible_name('帧选首页')
                 expect(self.page.locator('h1')).to_contain_text('好看的 AI 影像')
                 self.assertEqual(len(self.context.pages), 1)

@@ -10,10 +10,13 @@ const port = process.env.PORT || 3000;
 // Local preview only. The public Pages artifact never contains this API or its data.
 // Keep the optional module optional for the server's existing single-file fixtures.
 const reviewModule = path.join(root, "server", "framepick-reviews.cjs");
-const handleFramepickReviews = fs.existsSync(reviewModule)
+const cataloguePage = path.join(root, "reel", "index.html");
+// The review handler needs the published film ids; without the Framepick page
+// there is nothing to review, so keep the module optional as before.
+const handleFramepickReviews = fs.existsSync(reviewModule) && fs.existsSync(cataloguePage)
   ? require(reviewModule).createReviewHandler({
       dataDir: process.env.FRAMEPICK_REVIEWS_DATA_DIR,
-      filmIds: [...fs.readFileSync(path.join(root, "reel", "index.html"), "utf8")
+      filmIds: [...fs.readFileSync(cataloguePage, "utf8")
         .matchAll(/<article\b[^>]*data-film="([^"]+)"/g)].map((match) => match[1]),
     })
   : null;
@@ -410,6 +413,12 @@ async function handleApi(req, res, requestUrl) {
 
 const handleStatic = createStaticHandler({ root });
 const handleFramepickAccounts = createAccountHandler({});
+// The creator module is still an unshipped work in progress: mount it only when
+// the file exists so a checkout without it still starts.
+const creatorModule = path.join(root, "server", "framepick-creators.cjs");
+const handleFramepickCreators = fs.existsSync(creatorModule)
+  ? require(creatorModule).createCreatorHandler({ accounts: handleFramepickAccounts })
+  : null;
 const storageReady = ensureStorage();
 
 http.createServer(async (req, res) => {
@@ -421,6 +430,11 @@ http.createServer(async (req, res) => {
     // Accounts own a narrower prefix, so they must be tried before the review
     // handler, which claims every /api/framepick path.
     if (await handleFramepickAccounts.handle(req, res, requestUrl)) {
+      return;
+    }
+
+    // Creators own a narrower prefix too, so they come before the review handler.
+    if (handleFramepickCreators && await handleFramepickCreators.handle(req, res, requestUrl)) {
       return;
     }
 

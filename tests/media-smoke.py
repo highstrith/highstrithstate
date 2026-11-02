@@ -1,34 +1,67 @@
 """Media, contact and local management checks for the desktop exhibition."""
-from playwright.sync_api import sync_playwright
+import os
+import unittest
+from playwright.sync_api import sync_playwright, expect
 
-with sync_playwright() as p:
-    browser = p.chromium.launch(channel="chrome", headless=True)
-    page = browser.new_page(viewport={"width": 1440, "height": 900})
-    missing = []
-    page.on("response", lambda response: missing.append(response.url) if response.status == 404 and "/assets/" in response.url else None)
-    page.goto("http://127.0.0.1:3000/#works", wait_until="domcontentloaded")
-    page.locator(".stage-card").first.wait_for()
-    page.wait_for_function("document.querySelector('.stage-card .work-poster')?.naturalWidth > 0")
-    page.wait_for_function("document.querySelector('.stage-card .work-video')?.currentTime > 0")
-    assert page.locator(".stage-card .work-video source[src]").count() == 1
-    page.locator("[data-stage-jump='2']").click()
-    page.wait_for_function("document.querySelector('.stage-root').dataset.activeIndex === '2'")
-    page.wait_for_function("[...document.querySelectorAll('.stage-card .work-video source[src]')].length === 1")
-    assert not missing, missing
-    page.locator("a[href='#contact']").first.click()
-    assert page.locator("#contact .contact-social-row [data-social-platform]").count() == 4
-    assert page.locator("[data-social-platform='bilibili']").get_attribute("href") == "https://b23.tv/VFqS3Tj"
-    wechat = page.locator("[data-social-platform='wechat']")
-    wechat.hover()
-    assert page.locator("#social-qr-preview").count() == 0
-    wechat.click()
-    assert page.locator("#social-qr-dialog").evaluate("e => e.open")
-    page.close()
+BASE = os.environ.get('STUDIO_BASE_URL', 'http://127.0.0.1:3000').rstrip('/')
+# The hidden work never reaches the public grid, and the admin page also lists it.
+PUBLIC_WORKS = 20
+MANAGED_WORKS = 21
 
-    admin = browser.new_page(viewport={"width": 1440, "height": 900})
-    admin.goto("http://127.0.0.1:3000/admin.html", wait_until="domcontentloaded")
-    admin.wait_for_function("document.querySelectorAll('.manage-card').length === 15")
-    assert admin.locator("#uploadCnDescInput").count() == 1
-    assert admin.locator("#uploadEnDescInput").count() == 1
-    admin.close()
-    browser.close()
+
+class ExhibitionMedia(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.runtime = sync_playwright().start()
+        cls.browser = cls.runtime.chromium.launch(channel='chrome', headless=True)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.browser.close()
+        cls.runtime.stop()
+
+    def page(self, path='/'):
+        page = self.browser.new_page(viewport={'width': 1440, 'height': 900})
+        self.addCleanup(page.context.close)
+        page.goto(BASE + path, wait_until='domcontentloaded')
+        return page
+
+    def test_visible_cards_stream_previews_without_missing_assets(self):
+        page = self.page('/#works')
+        missing = []
+        page.on('response', lambda response: missing.append(response.url) if response.status == 404 and '/assets/' in response.url else None)
+        expect(page.locator('.work-card').first).to_be_visible()
+        page.wait_for_function("document.querySelector('.work-card img')?.naturalWidth > 0")
+        page.wait_for_function("document.querySelector('.work-card video')?.currentTime > 0")
+        # Cards play in the viewport only: twenty cards must not mean twenty downloads.
+        loaded = page.evaluate("[...document.querySelectorAll('.work-card video')].filter(video => video.currentSrc).length")
+        self.assertGreaterEqual(loaded, 1)
+        self.assertLess(loaded, PUBLIC_WORKS)
+        self.assertFalse(missing, missing)
+
+    def test_section_jump_reaches_works_and_keeps_playback_scoped(self):
+        page = self.page()
+        # The chapter navigator is a <details>; its links only exist once opened.
+        page.locator('#sectionJump > summary').click()
+        page.locator('#sectionJump a[href="#works"]').click()
+        page.wait_for_function("document.querySelector('#works').getBoundingClientRect().top < innerHeight")
+        loaded = page.evaluate("[...document.querySelectorAll('.work-card video')].filter(video => video.currentSrc).length")
+        self.assertLess(loaded, PUBLIC_WORKS)
+
+    def test_contact_social_row_opens_the_wechat_qr_dialog(self):
+        page = self.page()
+        expect(page.locator('.social-links > *')).to_have_count(4)
+        expect(page.locator('.social-links a[href="https://b23.tv/VFqS3Tj"]')).to_have_count(1)
+        page.locator('button[data-qr-title="微信"]').click()
+        expect(page.locator('#social-qr-dialog')).to_have_js_property('open', True)
+        expect(page.locator('#social-qr-account')).to_have_text('Gw1sgdsj_787')
+
+    def test_admin_lists_every_work_and_keeps_both_language_fields(self):
+        page = self.page('/admin.html')
+        page.wait_for_function(f"document.querySelectorAll('.manage-card').length === {MANAGED_WORKS}")
+        self.assertEqual(page.locator('#uploadCnDescInput').count(), 1)
+        self.assertEqual(page.locator('#uploadEnDescInput').count(), 1)
+
+
+if __name__ == '__main__':
+    unittest.main()

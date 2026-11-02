@@ -45,25 +45,33 @@ class Typography(unittest.TestCase):
     def test_film_index_lead_uses_available_space_and_mobile_reading_order(self):
         page = self.browser.new_page(reduced_motion='reduce')
         self.addCleanup(page.context.close)
-        for width in [320, 390, 820, 1191, 1440]:
+        for width in [320, 390, 760, 820, 1191, 1440]:
             page.set_viewport_size({'width': width, 'height': 1000})
             page.goto(BASE + '/reel/', wait_until='domcontentloaded')
             metrics = page.evaluate('''() => {
-              const rect=s=>{const e=document.querySelector(s),r=e.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom}};
-              return {title:rect('.hero h1'),copy:rect('.lede'),ledger:rect('.ledger'),image:rect('.feature'),
+              // The film index was rebuilt around .intro / .feature / .card, so the
+              // old .hero and .ledger hooks no longer exist. Missing pieces must
+              // read as null rather than throw, or the failure is unreadable.
+              const box=s=>{const e=document.querySelector(s); if(!e) return null;
+                const r=e.getBoundingClientRect();
+                return {x:Math.round(r.x),y:Math.round(r.y),right:Math.round(r.right),bottom:Math.round(r.bottom)}};
+              return {title:box('.intro h1'),copy:box('.lede'),note:box('.source-note'),
+                feature:box('.feature-media'),
                 overflow:document.documentElement.scrollWidth>innerWidth,
                 clipped:[...document.querySelectorAll('h1,h2,h3,.lede,.desc')].some(e=>e.scrollWidth>e.clientWidth+2)};
             }''')
+            for key in ['title', 'copy', 'note', 'feature']:
+                self.assertTrue(metrics[key], (width, key, metrics))
             self.assertFalse(metrics['overflow'], (width, metrics))
             self.assertFalse(metrics['clipped'], (width, metrics))
-            if width > 820:
-                self.assertGreaterEqual(metrics['copy']['x'], metrics['title']['right'])
+            if width > 760:
+                self.assertGreaterEqual(metrics['copy']['x'], metrics['title']['right'], (width, metrics))
             else:
-                self.assertGreaterEqual(metrics['copy']['y'], metrics['title']['bottom'])
-            self.assertGreaterEqual(metrics['ledger']['y'], max(metrics['title']['bottom'], metrics['copy']['bottom']))
-            self.assertGreaterEqual(metrics['image']['y'], metrics['ledger']['bottom'])
-            expect(page.locator('article')).to_have_count(3)
-            expect(page.locator('.watch')).to_have_count(3)
+                self.assertGreaterEqual(metrics['copy']['y'], metrics['title']['bottom'], (width, metrics))
+            self.assertGreaterEqual(metrics['note']['y'], metrics['copy']['bottom'], (width, metrics))
+            self.assertGreaterEqual(metrics['feature']['y'], max(metrics['title']['bottom'], metrics['note']['bottom']), (width, metrics))
+            expect(page.locator('article.card')).to_have_count(3)
+            expect(page.locator('article.card .watch')).to_have_count(3)
 
 
 if __name__ == '__main__':

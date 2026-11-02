@@ -29,6 +29,12 @@ const handleFramepickReviews = fs.existsSync(reviewModule)
 
 const handleStatic = createStaticHandler({ root: siteRoot });
 const handleFramepickAccounts = createAccountHandler({});
+// The creator module is still an unshipped work in progress: mount it only when
+// the file exists so a checkout without it still starts.
+const creatorModule = path.join(root, "server", "framepick-creators.cjs");
+const handleFramepickCreators = fs.existsSync(creatorModule)
+  ? require(creatorModule).createCreatorHandler({ accounts: handleFramepickAccounts })
+  : null;
 
 http.createServer(async (req, res) => {
   const requestUrl = new URL(req.url || "/", `http://${req.headers.host || `127.0.0.1:${port}`}`);
@@ -37,6 +43,9 @@ http.createServer(async (req, res) => {
     // Accounts own a narrower prefix: try them before the review handler, which
     // claims every /api/framepick path.
     if (await handleFramepickAccounts.handle(req, res, requestUrl)) return;
+    // Creators own a narrower prefix: try them before the review handler, which
+    // claims every /api/framepick path.
+    if (handleFramepickCreators && await handleFramepickCreators.handle(req, res, requestUrl)) return;
     if (handleFramepickReviews && await handleFramepickReviews(req, res, requestUrl)) return;
     handleStatic(req, res, requestUrl);
   } catch (error) {

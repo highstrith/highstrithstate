@@ -60,9 +60,18 @@ class ReadingCursor(unittest.TestCase):
             expect(field).to_have_value('测试文字')
         page = self.page('/reel/')
         paragraph = page.locator('.lede')
-        box = paragraph.bounding_box()
-        page.mouse.dblclick(box['x'] + 18, box['y'] + 12)
-        self.assertTrue(page.evaluate('!!getSelection().toString().trim()'))
+        # Aim at real glyphs: a fixed offset into the box can land on the gap
+        # around the line break and select nothing, which is a test artefact.
+        point = page.evaluate('''() => {
+          const node = document.querySelector('.lede').firstChild;
+          const range = document.createRange();
+          range.setStart(node, 0);
+          range.setEnd(node, Math.min(8, node.textContent.length));
+          const rect = range.getBoundingClientRect();
+          return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+        }''')
+        page.mouse.dblclick(point['x'], point['y'])
+        self.assertTrue(page.evaluate('!!getSelection().toString().trim()'), page.evaluate('getSelection().toString()'))
         self.assertFalse(paragraph.evaluate('e=>e.isContentEditable'))
 
 

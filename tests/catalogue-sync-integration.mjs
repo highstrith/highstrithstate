@@ -57,6 +57,25 @@ for (const [metadata, escaped] of fixtures) {
   });
 }
 
+// The admin page and hand edits write data/works.json only; the in-page snapshot
+// that file:// and no-script visitors rely on has to be regenerated. This keeps
+// that drift from shipping.
+test('the shipped static snapshot matches data/works.json', () => {
+  const root = path.join(import.meta.dirname, '..');
+  const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-shipped-snapshot-'));
+  try {
+    fs.mkdirSync(path.join(temporary, 'data'));
+    fs.copyFileSync(path.join(root, 'index.html'), path.join(temporary, 'index.html'));
+    fs.copyFileSync(path.join(root, 'data/works.json'), path.join(temporary, 'data/works.json'));
+    const manifest = path.join(root, 'data/image-variants.json');
+    if (fs.existsSync(manifest)) fs.copyFileSync(manifest, path.join(temporary, 'data/image-variants.json'));
+    assert.equal(syncWorkCatalogue(temporary, { write: false }).changed, false,
+      'index.html 的静态快照已落后于 data/works.json，请运行 node scripts/sync-work-catalogue.mjs');
+  } finally {
+    fs.rmSync(temporary, { recursive: true, force: true });
+  }
+});
+
 test('optional image manifest reaches offline data, static hero and no-script responsive covers safely', () => {
   const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-responsive-sync-'));
   try {
