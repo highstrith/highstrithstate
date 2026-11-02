@@ -184,6 +184,14 @@ dialog::backdrop { background:rgba(0,0,0,.8) }
 
 /* Shared guest reviews keep editorial, original-platform and community voices separate. */
 .guest-mode { flex-shrink:0;background:none;border:1px solid var(--line);border-radius:4px;padding:7px 11px;font-size:12px;white-space:nowrap }
+/* Optional accounts: needed before any purchase, never required to browse. */
+.account-entry { flex-shrink:0;background:none;border:1px solid var(--line);border-radius:4px;padding:7px 11px;font-size:12px;white-space:nowrap }
+.account-entry[data-signed-in="true"] { border-color:var(--gold);color:var(--gold) }
+.account-form { display:grid;gap:12px;margin:16px 0 6px }
+.account-form label { display:grid;gap:6px;font-size:12px;color:var(--body) }
+.account-form input { background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:9px 11px;color:inherit;font-size:16px }
+.account-actions { display:flex;gap:10px;flex-wrap:wrap;align-items:center }
+.account-note { color:var(--muted);font-size:12px;line-height:1.7 }
 .community-score { color:var(--muted);font-size:10px;margin:4px 0 7px;font-variant-numeric:tabular-nums }
 .detail-copy { min-width:0 }.detail-layout { align-items:start }.detail-cover { position:sticky;top:0;height:min(560px,calc(100dvh - 48px)) }.detail-tabs { display:flex;border-bottom:1px solid var(--line);margin:22px 0 19px;gap:22px }
 .detail-tabs button { background:none;border:0;border-bottom:2px solid transparent;padding:10px 0;color:var(--muted);font-size:12px;white-space:nowrap }
@@ -209,4 +217,4 @@ dialog::backdrop { background:rgba(0,0,0,.8) }
 .review-edit,.review-retry { border:0;background:none;color:var(--gold);font-size:11px;padding:8px 0 }.review-item .review-edit { margin-top:4px }#reviewMore { margin-top:17px;font-size:12px }
 @media (max-width:1000px) { .bar-in { gap:20px } }
 @media (max-width:760px) { .bar-in { gap:12px }.guest-mode { padding:6px 8px;font-size:11px }.detail-tabs { gap:20px }.detail-copy { padding:24px }.detail-cover { position:relative;height:auto } }
-@media (max-width:520px) { .bar nav a[href="#membership"] { display:none }.bar nav { margin-left:auto }.saved-toggle { margin-left:0 }.detail-tabs { justify-content:space-between;gap:9px }.detail-tabs button { font-size:11px }.review-input-row { grid-template-columns:minmax(0,1fr) 95px;gap:10px }#reviewForm input,#reviewForm textarea,#reviewForm select { font-size:16px;padding:8px }.detail-copy { padding:22px 19px } }
+@media (max-width:520px) { .bar-in { flex-wrap:wrap;row-gap:8px;min-height:0;padding:10px 0 }.bar nav a[href="#membership"] { display:none }.bar nav { margin-left:auto }.saved-toggle { margin-left:0 }.account-entry { margin-left:0;padding:6px 8px;font-size:11px }.detail-tabs { justify-content:space-between;gap:9px }.detail-tabs button { font-size:11px }.review-input-row { grid-template-columns:minmax(0,1fr) 95px;gap:10px }#reviewForm input,#reviewForm textarea,#reviewForm select { font-size:16px;padding:8px }.detail-copy { padding:22px 19px } }

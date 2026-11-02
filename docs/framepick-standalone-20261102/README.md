@@ -23,10 +23,12 @@ reel/                        站点内容（发布时整目录进 Pages，排除
 ├── framepick.js             片库、详情、收藏
 ├── framepick-reviews.js     访客评价与评分
 ├── framepick-rankings.js    三个榜单
+├── framepick-accounts.js    可选账号的登录入口与会话状态
 ├── review-config.js         共享服务地址配置
 └── img/                     封面（img/raw/ 是母版，不发布）
 server/
 ├── framepick-library.cjs    作品表／候选池／审核状态机／变更日志
+├── framepick-accounts.cjs   账号：注册、登录、会话（scrypt + 签名 cookie）
 ├── framepick-reviews.cjs    评价 + 原作跳转统计（共享服务）
 └── static-site.cjs          静态文件服务（与个人站共用）
 serve-framepick.js           只服务帧选的本地预览
@@ -35,6 +37,7 @@ scripts/
 ├── check-framepick-library.mjs  片库字段校验
 ├── framepick-library-cli.mjs    片库后台命令（候选池、审片、上下架、日志）
 ├── build-framepick-library.mjs  由作品表生成静态片库页面
+├── framepick-accounts-cli.mjs   账号管理（找回密码的人工环节）
 └── prepare-media-cdn.mjs    发布时改媒体前缀
 tests/
 ├── framepick-layout.py       测试用的布局适配
@@ -112,8 +115,10 @@ node scripts/framepick-library-cli.mjs log -n 20       # 变更记录
 ## 6. 数据与共享服务
 
 - 评价与跳转数据在 `~/.framepick/reviews/reviews.json`，**站点根目录之外**，不进 Git、不进发布产物。
-- 正式 Pages **没有部署**这个 API，线上显示「未配置」。统计或评价失败时，原作跳转照常可用。
-- 运维细节、备份与降级：见 [片库运营流程](../framepick-library-operations-20261102.md) 第 4 节。
+- 作品表与候选池在 `~/.framepick/library/library.json`，同样在仓库外。
+- 账号在 `~/.framepick/accounts/`，密码只存 scrypt 哈希。三个目录都可以用对应的 `FRAMEPICK_*_DATA_DIR` 临时改指做演练。
+- 正式 Pages **没有部署**这些 API，线上显示「未配置」或「尚未部署」。这是已知边界，不是故障；统计、评价或账号失败时，原作跳转照常可用。
+- 运维细节、备份与降级：见 [片库运营流程](../framepick-library-operations-20261102.md) 第 5 节与 [账号说明](../framepick-accounts-20261102.md)。
 
 ## 7. 补片
 

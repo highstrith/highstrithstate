@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const { URL } = require("url");
 const { createStaticHandler } = require("./server/static-site.cjs");
+const { createAccountHandler } = require("./server/framepick-accounts.cjs");
 
 const root = __dirname;
 const port = process.env.PORT || 3000;
@@ -408,6 +409,7 @@ async function handleApi(req, res, requestUrl) {
 }
 
 const handleStatic = createStaticHandler({ root });
+const handleFramepickAccounts = createAccountHandler({});
 const storageReady = ensureStorage();
 
 http.createServer(async (req, res) => {
@@ -415,6 +417,12 @@ http.createServer(async (req, res) => {
 
   try {
     await storageReady;
+
+    // Accounts own a narrower prefix, so they must be tried before the review
+    // handler, which claims every /api/framepick path.
+    if (await handleFramepickAccounts.handle(req, res, requestUrl)) {
+      return;
+    }
 
     if (handleFramepickReviews && await handleFramepickReviews(req, res, requestUrl)) {
       return;

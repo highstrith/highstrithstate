@@ -17,6 +17,7 @@
 <script src="review-config.js?v=20261102-reviews1" defer></script>
 <script src="framepick-reviews.js?v=20261102-outbound1" defer></script>
 <script src="framepick-rankings.js?v=20261102-outbound1" defer></script>
+<script src="framepick-accounts.js?v=20261102-accounts1" defer></script>
 <script src="framepick.js?v=20261102-cinema1" defer></script>
 </head>
 <body>
@@ -27,6 +28,7 @@
   <div class="wrap bar-in">
     <a class="mark" href="./" aria-label="帧选首页"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 11V4h7M22 4h7v7M29 21v7h-7M10 28H3v-7"/><path d="m13 11 8 5-8 5z"/></svg><span class="mark-cn">帧选</span><span class="mark-en">Framepick</span></a>
     <nav aria-label="站内导航"><a href="#rankings">榜单</a><a href="#entries">发现片库</a><a href="#membership">观影计划</a><a href="#cinemaPlan">创作者</a></nav>
+    <button id="accountEntry" class="account-entry js-only" type="button">登录 / 注册</button>
     <button id="savedToggle" class="saved-toggle js-only" type="button" aria-pressed="false"><svg aria-hidden="true"><use href="#bookmark"/></svg><span>我的收藏</span><span id="savedCount">0</span></button>
     <button id="guestMode" class="guest-mode js-only" type="button">访客模式</button>
   </div>
@@ -144,6 +146,12 @@
 </dialog>
 <dialog id="guestDialog" class="membership-dialog" aria-labelledby="guestTitle"><button type="button" class="dialog-close" id="guestClose" aria-label="关闭访客说明">×</button><p class="kind">无需注册</p><h2 id="guestTitle">用访客身份，留下观影感受。</h2><p>共享评价服务通过此浏览器的访客 Cookie 识别你的评价。你可以为每部作品评分、留言，并在此浏览器更新或撤回。</p><p>昵称可在评价表单填写。换浏览器、清除 Cookie 或使用无痕窗口后，将视为另一位访客，无法管理原评价。</p><p id="guestAvailability" role="status">正在检查评价服务…</p><button id="guestDone" class="button" type="button">知道了</button></dialog>
 <dialog id="membershipDialog" class="membership-dialog" aria-labelledby="memberDialogTitle"><button type="button" class="dialog-close" data-close-membership aria-label="关闭观影计划">×</button><span class="plan-label">单片观影</span><h2 id="memberDialogTitle">为一部好电影，买一张小票。</h2><p>计划提供 3 元 / 5 元的单片购买。购买后可在该作品授权期内反复观看，观看期限与适用范围会在购票前清楚展示。</p><p>每笔有效购买为创作者记录收益；具体分成与结算规则将在合作前明确。</p><p>本站尚未开放购票、站内放映或收益结算。当前三部免费原作继续在原平台观看。</p><a href="#entries" class="button" id="memberBrowse">先浏览免费精选</a></dialog>
+<dialog id="accountDialog" class="membership-dialog" aria-labelledby="accountTitle"><button type="button" class="dialog-close" id="accountClose" aria-label="关闭账号">×</button><span class="plan-label">可选账号</span><h2 id="accountTitle">登录后，换设备也能找回。</h2><p>账号用于承载后续的单片购买与观影权益。当前尚未开放购票，登录后依然可以免费发现、评价与跳转原作。</p><p id="accountAvailability" role="status">正在检查账号服务…</p>
+  <form id="accountForm" class="account-form"><label for="accountEmail">邮箱<input id="accountEmail" name="email" type="email" inputmode="email" autocomplete="email" maxlength="200" required></label><label for="accountPassword">密码<input id="accountPassword" name="password" type="password" autocomplete="current-password" minlength="8" maxlength="200" required></label><label for="accountNickname" id="accountNicknameRow" hidden>昵称（可选）<input id="accountNickname" name="nickname" maxlength="24" autocomplete="nickname" placeholder="不填则用邮箱前缀"></label><div class="account-actions"><button id="accountSubmit" class="button" type="submit">登录</button><button id="accountSwitch" class="button secondary" type="button">还没有账号？注册</button></div></form>
+  <p id="accountError" role="alert"></p><p id="accountStatus" role="status"></p>
+  <div id="accountSignedIn" hidden><p id="accountWho" class="account-note"></p><div class="account-actions"><button id="accountLogout" class="button secondary" type="button">退出登录</button></div></div>
+  <p class="account-note">访客评价基于浏览器身份，登录后不会自动合并，也不能凭昵称认领旧评价；合并规则待定。找回密码的邮件发送尚未接通，需要重置请通过页尾邮箱联系。</p>
+</dialog>
 <p id="notice" class="notice" role="status" aria-live="polite"></p>
 </body>
 </html>

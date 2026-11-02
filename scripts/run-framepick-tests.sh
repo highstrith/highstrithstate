@@ -36,10 +36,12 @@ fi
 python3 -m unittest \
   tests/framepick-library-smoke.py \
   tests/framepick-rankings-smoke.py \
-  tests/framepick-reviews-smoke.py
+  tests/framepick-reviews-smoke.py \
+  tests/framepick-accounts-smoke.py
 
 node --test tests/framepick-reviews-api-integration.mjs
 node --test tests/framepick-library-store-integration.mjs
+node --test tests/framepick-accounts-integration.mjs
 
 # Publish-time guards: card fields, and the page matching the catalogue store.
 node scripts/check-framepick-library.mjs --site "$FRAMEPICK_SITE_ROOT"

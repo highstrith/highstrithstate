@@ -6,6 +6,7 @@ const fs = require("fs");
 const path = require("path");
 const { URL } = require("url");
 const { createStaticHandler } = require("./server/static-site.cjs");
+const { createAccountHandler } = require("./server/framepick-accounts.cjs");
 
 const root = __dirname;
 const siteRoot = path.join(root, "reel");
@@ -27,11 +28,15 @@ const handleFramepickReviews = fs.existsSync(reviewModule)
   : null;
 
 const handleStatic = createStaticHandler({ root: siteRoot });
+const handleFramepickAccounts = createAccountHandler({});
 
 http.createServer(async (req, res) => {
   const requestUrl = new URL(req.url || "/", `http://${req.headers.host || `127.0.0.1:${port}`}`);
 
   try {
+    // Accounts own a narrower prefix: try them before the review handler, which
+    // claims every /api/framepick path.
+    if (await handleFramepickAccounts.handle(req, res, requestUrl)) return;
     if (handleFramepickReviews && await handleFramepickReviews(req, res, requestUrl)) return;
     handleStatic(req, res, requestUrl);
   } catch (error) {

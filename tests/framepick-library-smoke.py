@@ -74,7 +74,9 @@ class FramepickLibrary(unittest.TestCase):
         self.page.locator('[data-membership]').first.click()
         expect(self.page.locator('#membershipDialog')).to_be_visible()
         expect(self.page.locator('#membershipDialog')).to_contain_text('尚未开放购票')
-        self.assertEqual(self.page.locator('input[type="password"], input[name="card"], [data-vip-toggle]').count(), 0)
+        # No fake checkout anywhere; the sign-in password field is not a payment field,
+        # so the password check stays scoped to what the purchase dialog offers.
+        self.assertEqual(self.page.locator('#membershipDialog input[type="password"], input[name="card"], [data-vip-toggle]').count(), 0)
         self.page.keyboard.press('Escape')
         expect(self.page.locator('#membershipDialog')).not_to_be_visible()
 
