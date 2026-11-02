@@ -40,7 +40,8 @@ class ProjectPages(unittest.TestCase):
                 section = self.page.locator('#filmRecommendations')
                 self.assertEqual(section.evaluate('e=>e.previousElementSibling.id'), 'projects')
                 self.assertEqual(section.evaluate('e=>e.nextElementSibling.id'), 'about')
-                expect(section.locator('h2')).to_have_text('Recommended AI films' if 'lang=en' in path else '推荐 AI 片单')
+                expect(section.locator('h2')).to_have_text('Framepick' if 'lang=en' in path else '帧选')
+                expect(section.locator('.film-product-label')).to_have_text('A product by Highstrith · AI film discovery' if 'lang=en' in path else '我的产品 · AI 影像精选')
                 expect(self.page.locator('#projects a[href="reel/"]')).to_have_count(0)
                 expect(section.locator('img')).to_have_count(3)
                 self.assertEqual(section.locator('img').evaluate_all('images=>images.map(i=>i.getAttribute("src"))'),
@@ -54,12 +55,15 @@ class ProjectPages(unittest.TestCase):
                 if width > 800:
                     self.assertGreaterEqual(section.bounding_box()['height'], 900)
                 link = section.locator('.film-recommendation-link')
+                expect(link).to_have_text('Explore Framepick' if 'lang=en' in path else '进入帧选')
                 link.scroll_into_view_if_needed()
                 expect(link).to_be_visible()
                 expect(link).to_have_attribute('target', '_self')
                 self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth'), width)
                 link.click()
                 expect(self.page).to_have_url(BASE + '/reel/')
+                expect(self.page).to_have_title('帧选 Framepick — AI 影像精选')
+                expect(self.page.locator('.mark')).to_have_accessible_name('帧选首页')
                 expect(self.page.locator('h1')).to_contain_text('影像，正在')
                 self.assertEqual(len(self.context.pages), 1)
 
@@ -73,8 +77,12 @@ class ProjectPages(unittest.TestCase):
         expect(page.locator('#about .portrait-caption')).to_have_count(0)
         page.locator('#filmRecommendations .film-recommendation-link').click()
         expect(page).to_have_url(BASE + '/reel/')
+        expect(page.locator('.mark-cn')).to_have_text('帧选')
+        page.get_by_role('link', name='橘小桔的主页').click()
+        expect(page).to_have_url(BASE + '/#filmRecommendations')
 
     def test_recommended_covers_load_and_are_current_tab_links_in_both_themes(self):
+        self.page.set_viewport_size({'width': 1440, 'height': 900})
         self.page.goto(BASE + '/#filmRecommendations', wait_until='load')
         section = self.page.locator('#filmRecommendations')
         self.page.wait_for_function("Math.abs(document.querySelector('#filmRecommendations').getBoundingClientRect().top) < 1", timeout=3000)
@@ -211,13 +219,13 @@ class ProjectPages(unittest.TestCase):
         reel_link = self.page.locator('#filmRecommendations .film-recommendation-link')
         expect(canvas_link).to_have_text('AI 无限画布')
         # 当前已确认入口在独立推荐章节，同标签进入中文片单。
-        expect(reel_link).to_have_text('浏览片单')
+        expect(reel_link).to_have_text('进入帧选')
         expect(reel_link).to_have_attribute('href', 'reel/')
         expect(reel_link).to_have_attribute('target', '_self')
         self.page.locator('#langSwitch').click()
         expect(self.page.locator('#toolsTitle')).to_have_text('Director’s workbench')
         expect(canvas_link).to_have_attribute('href', 'projects.html?lang=en#canvasTitle')
-        expect(reel_link).to_have_text('Browse films')
+        expect(reel_link).to_have_text('Explore Framepick')
         expect(reel_link).to_have_attribute('href', 'reel/')
 
     def test_project_entries_work_without_javascript(self):

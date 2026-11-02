@@ -249,9 +249,13 @@
 .film-recommendation { display: flex; align-items: center; background: var(--paper); border-block: 1px solid var(--line); }
 .film-recommendation-header { display: grid; grid-template-columns: 1.1fr 1fr; align-items: end; gap: 8%; margin-bottom: clamp(32px, 5svh, 64px); }
 .film-recommendation-header > * { min-width: 0; }
-.film-recommendation h2 { font-size: clamp(34px,4vw,60px); line-height: 1.2; font-weight: 500; letter-spacing: -.035em; text-wrap: balance; }
+.film-recommendation h2 { font-size: clamp(48px,6vw,88px); line-height: 1.1; font-weight: 500; letter-spacing: -.045em; text-wrap: balance; overflow-wrap: anywhere; }
 .film-recommendation p { max-width: 40ch; font-size: 16px; line-height: 1.85; color: var(--muted); }
-.film-recommendation-link { margin-top: 16px; }
+.film-recommendation p.film-product-label { margin-bottom: 20px; font-size: 12px; color: var(--orange-dark); letter-spacing: .08em; }
+.film-product-wordmark { display: block; margin-top: 14px; color: var(--muted); font-size: 11px; letter-spacing: .3em; }
+html[lang="en"] .film-product-wordmark { display: none; }
+.film-recommendation p.film-product-tagline { margin-bottom: 12px; color: var(--ink); font-size: clamp(20px,1.8vw,26px); line-height: 1.5; }
+.film-recommendation-link { margin-top: 22px; min-height: 44px; }
 .film-recommendation-films { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: clamp(20px, 2.5vw, 40px); }
 .film-recommendation-card { display: block; min-width: 0; }
 .film-recommendation-card figure { margin: 0; }
@@ -262,7 +266,7 @@
 .film-recommendation-card:focus-visible { outline-offset: 8px; }
 @media (max-width: 600px) {
   .film-recommendation-header { grid-template-columns: 1fr; gap: 20px; }
-  .film-recommendation h2 { font-size: 32px; }
+  .film-recommendation h2 { font-size: clamp(44px,12vw,60px); }
   .film-recommendation p { font-size: 15px; }
   .film-recommendation-films { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px 16px; }
   .film-recommendation-card:first-child { grid-column: 1 / -1; }

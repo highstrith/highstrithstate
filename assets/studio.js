@@ -46,7 +46,7 @@
       stillsIntro: '过往创作留下的画面，\n记录不同阶段的光线与情绪。',
       galleryView: '画廊', listView: '目录', previewNote: '静音片段预览', pausePreview: '暂停预览', resumePreview: '播放预览',
       toolsLabel: '项目与应用', toolsTitle: '导演工作台', toolsIntro: '把剧本、分镜、资产和提示词，放在一个工作台里。', toolsExplore: '查看项目与应用', toolFeatured: '导演工作台 App', toolsAlso: '也在做', toolCanvas: 'AI 无限画布',
-      recommendedFilms: '推荐 AI 片单', recommendedFilmsIntro: '发现其他创作者的 AI 影像，直达原片观看。', recommendedFilmsBrowse: '浏览片单', progressScene: '查看场景大图',
+      recommendedFilms: '帧选', recommendedFilmsLabel: '我的产品 · AI 影像精选', recommendedFilmsTagline: '好看的 AI 影像，从这里发现。', recommendedFilmsIntro: '我做的 AI 影像精选片单。把值得看的作品、创作者和原片出处整理在一起，让找片更简单。', recommendedFilmsBrowse: '进入帧选', progressScene: '查看场景大图',
       toolCarouselPause: '暂停轮播', toolCarouselResume: '继续轮播', toolCarouselLink: '查看导演工作台项目',
       viewImage: '查看大图', zoomImage: '放大查看', fitImage: '适应画面', previousImage: '上一张', nextImage: '下一张', closeImage: '关闭图片浏览', backImages: '返回图集',
       imageLoading: '正在加载图片…', imageError: '图片暂时无法加载，请切换其他图片后重试。', copyEmail: '复制邮箱', emailCopied: '邮箱已复制', emailCopyFailed: '请手动复制：highstrith@gmail.com',
@@ -87,7 +87,7 @@
       stillsIntro: 'Frames left behind by past works,\ncapturing light and mood at different stages.',
       galleryView: 'Gallery', listView: 'Directory', previewNote: 'Silent film excerpts', pausePreview: 'Pause preview', resumePreview: 'Play preview',
       toolsLabel: 'Projects & apps', toolsTitle: 'Director’s workbench', toolsIntro: 'Scripts, storyboards, assets and prompts in one workspace.', toolsExplore: 'Explore projects & apps', toolFeatured: 'Director’s workbench app', toolsAlso: 'Also making', toolCanvas: 'AI infinite canvas',
-      recommendedFilms: 'Recommended AI films', recommendedFilmsIntro: 'Explore AI films by other creators, with links to the originals.', recommendedFilmsBrowse: 'Browse films', progressScene: 'View scene image',
+      recommendedFilms: 'Framepick', recommendedFilmsLabel: 'A product by Highstrith · AI film discovery', recommendedFilmsTagline: 'Find your next AI film.', recommendedFilmsIntro: 'An AI film guide I built to bring together films worth watching, their creators and original sources. Spend less time looking and more time watching.', recommendedFilmsBrowse: 'Explore Framepick', progressScene: 'View scene image',
       toolCarouselPause: 'Pause slideshow', toolCarouselResume: 'Resume slideshow', toolCarouselLink: 'View Director’s workbench project',
       viewImage: 'View full image', zoomImage: 'Zoom in', fitImage: 'Fit to screen', previousImage: 'Previous', nextImage: 'Next', closeImage: 'Close image viewer', backImages: 'Back to images',
       imageLoading: 'Loading image…', imageError: 'This image could not be loaded. Switch to another image and try again.', copyEmail: 'Copy email', emailCopied: 'Email copied', emailCopyFailed: 'Copy this address: highstrith@gmail.com',
@@ -488,7 +488,10 @@
     // established the lower sections' final positions.
     const section = location.hash.slice(1);
     if (['works', 'in-progress', 'stills', 'projects', 'filmRecommendations', 'about', 'contact'].includes(section)) {
-      document.getElementById(section)?.scrollIntoView({ behavior: 'instant' });
+      const restoreAnchor = () => document.getElementById(section)?.scrollIntoView({ behavior: 'instant' });
+      // Let the product chapter's final text layout settle before restoring its anchor.
+      if (section === 'filmRecommendations') requestAnimationFrame(restoreAnchor);
+      else restoreAnchor();
     }
   }
 
