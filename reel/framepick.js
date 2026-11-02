@@ -12,7 +12,7 @@
     const score = raw !== '' && Number.isFinite(number) && number >= 0 && number <= 10 ? number : null;
     const text = (selector) => card.querySelector(selector)?.textContent.trim() || '';
     return {
-      id: card.dataset.film, card, index, score,
+      id: card.dataset.film, card, index, score, communityScore: null,
       category: card.dataset.category, genres: card.dataset.genres.split(' '),
       source: card.dataset.source, access: card.dataset.access, date: card.dataset.date,
       title: text('h3'), author: text('.author-name'), kind: text('.kind'),
@@ -24,9 +24,9 @@
   const byId = new Map(films.map((film) => [film.id, film]));
   const controls = {
     q: $('#filmSearch'), genre: $('#genreFilter'), source: $('#sourceFilter'),
-    rating: $('#scoreFilter'), access: $('#accessFilter'), sort: $('#sortFilter')
+    rating: $('#scoreFilter'), access: $('#accessFilter'), sort: $('#sortFilter'), scoreBasis: $('#scoreBasis')
   };
-  const defaults = { q: '', category: 'all', genre: 'all', source: 'all', rating: 'all', access: 'all', sort: 'curated', saved: false };
+  const defaults = { q: '', category: 'all', genre: 'all', source: 'all', rating: 'all', access: 'all', sort: 'curated', scoreBasis: 'editor', saved: false };
   const categories = [...document.querySelectorAll('[data-category]')].filter((node) => node.tagName === 'BUTTON');
   const storageKey = 'framepick:saved:v1';
   let storageAvailable = true;
@@ -53,7 +53,7 @@
     state = { ...defaults, q: (params.get('q') || '').slice(0, 100), saved: params.get('saved') === '1' };
     const category = params.get('category');
     if (categories.some((button) => button.dataset.category === category)) state.category = category;
-    for (const key of ['genre', 'source', 'rating', 'access', 'sort']) {
+    for (const key of ['genre', 'source', 'rating', 'access', 'sort', 'scoreBasis']) {
       const value = params.get(key);
       if ([...controls[key].options].some((option) => option.value === value)) state[key] = value;
     }
@@ -91,6 +91,7 @@
   }
 
   function render() {
+    const selectedScore = (film) => state.scoreBasis === 'community' ? film.communityScore : film.score;
     const query = state.q.trim().toLocaleLowerCase();
     const visible = films.filter((film) =>
       (!query || film.search.includes(query)) &&
@@ -98,10 +99,10 @@
       (state.genre === 'all' || film.genres.includes(state.genre)) &&
       (state.source === 'all' || film.source === state.source) &&
       (state.access === 'all' || film.access === state.access) &&
-      (state.rating === 'all' || (film.score !== null && film.score >= Number(state.rating))) &&
+      (state.rating === 'all' || (selectedScore(film) !== null && selectedScore(film) >= Number(state.rating))) &&
       (!state.saved || saved.has(film.id))
     );
-    if (state.sort === 'score') visible.sort((a, b) => (b.score ?? -1) - (a.score ?? -1) || a.index - b.index);
+    if (state.sort === 'score') visible.sort((a, b) => (selectedScore(b) ?? -1) - (selectedScore(a) ?? -1) || a.index - b.index);
     if (state.sort === 'newest') visible.sort((a, b) => b.date.localeCompare(a.date) || a.index - b.index);
     const ids = new Set(visible.map((film) => film.id));
     for (const film of films) film.card.hidden = !ids.has(film.id);
@@ -120,9 +121,9 @@
     } else if (state.saved && saved.size === 0) {
       title = '还没有收藏的作品';
       copy = '点击作品上的收藏按钮，把想看的好片留在这台设备。';
-    } else if (state.rating !== 'all' && films.every((film) => film.score === null)) {
-      title = '正式评分还在补充';
-      copy = '当前作品均为待评，完成审核后才会进入评分筛选。';
+    } else if (state.rating !== 'all' && films.every((film) => selectedScore(film) === null)) {
+      title = state.scoreBasis === 'community' ? '暂无可用的站内评分' : '正式评分还在补充';
+      copy = state.scoreBasis === 'community' ? '站内用户评分只统计已发布的访客评分；未评分作品不进入此筛选。' : '当前作品均为待评，完成审核后才会进入评分筛选。';
     } else if (state.source !== 'all' && !films.some((film) => film.source === state.source)) {
       title = '这个来源还没有公开收录';
       copy = '作品核实后会补充到片库，也可以先看看其他来源。';
@@ -161,6 +162,7 @@
   function closeFilmUI() {
     if (!filmDialog.open) return;
     currentFilm = null;
+    window.dispatchEvent(new CustomEvent('framepick:film-close'));
     filmDialog.close();
     document.title = defaultTitle;
     syncDialogBody();
@@ -192,6 +194,7 @@
     if (!filmDialog.open) filmDialog.showModal();
     document.title = film.title + ' — ' + defaultTitle;
     syncDialogBody();
+    window.dispatchEvent(new CustomEvent('framepick:film-open', { detail: { id: film.id, title: film.title, link: film.link, score: film.score } }));
   }
 
   function requestCloseFilm() {
@@ -257,10 +260,27 @@
   $('#browseFree').addEventListener('click', () => resetFilters('free'));
   $('#memberBrowse').addEventListener('click', () => { membershipDialog.close(); resetFilters('free'); });
   window.addEventListener('popstate', syncFromURL);
+  // The independent review client supplies shared aggregates; editor scores stay intact.
+  for (const film of films) {
+    const summary = document.createElement('p');
+    summary.className = 'community-score';
+    summary.textContent = '站内评分 · 暂未连接';
+    film.card.querySelector('.card-topline').after(summary);
+  }
+  window.addEventListener('framepick:review-summary', ({ detail }) => {
+    const summaries = new Map((detail.films || []).map((item) => [item.filmId, item]));
+    for (const film of films) {
+      const entry = summaries.get(film.id);
+      film.communityScore = detail.available && entry && Number.isFinite(entry.averageRating) && entry.averageRating >= 1 && entry.averageRating <= 10 && entry.ratingCount > 0 ? entry.averageRating : null;
+      film.card.querySelector('.community-score').textContent = !detail.available || !entry ? '站内评分 · 暂未连接' : film.communityScore === null ? '站内评分 · 暂无评分' : '站内 ' + film.communityScore.toFixed(1) + ' / 10 · ' + entry.ratingCount + ' 人评分';
+    }
+    render();
+  });
   for (const film of films) if (film.score !== null) {
     film.card.querySelector('.score').textContent = film.score.toFixed(1);
     film.card.querySelector('.score').setAttribute('aria-label', '编辑评分：' + film.score.toFixed(1) + '分');
   }
   document.documentElement.classList.add('js');
   syncFromURL();
+  window.dispatchEvent(new CustomEvent('framepick:catalogue-ready'));
 })();

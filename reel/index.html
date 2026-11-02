@@ -13,8 +13,10 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://highstrith.github.io/highstrithstate/reel/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%23101114'/%3E%3Crect x='7' y='9' width='18' height='14' fill='none' stroke='%23eeeee8' stroke-width='1.6'/%3E%3Cpath d='M13 13.5l7 2.5-7 2.5z' fill='%23eeeee8'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="framepick.css?v=20261102-library1">
-<script src="framepick.js?v=20261102-library1" defer></script>
+<link rel="stylesheet" href="framepick.css?v=20261102-reviews1">
+<script src="review-config.js?v=20261102-reviews1" defer></script>
+<script src="framepick-reviews.js?v=20261102-reviews1" defer></script>
+<script src="framepick.js?v=20261102-reviews1" defer></script>
 </head>
 <body>
 <a class="skip" href="#entries">跳到片库</a>
@@ -25,6 +27,7 @@
     <a class="mark" href="./" aria-label="帧选首页"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 11V4h7M22 4h7v7M29 21v7h-7M10 28H3v-7"/><path d="m13 11 8 5-8 5z"/></svg><span class="mark-cn">帧选</span><span class="mark-en">Framepick</span></a>
     <nav aria-label="站内导航"><a href="#entries">发现片库</a><a href="#standard">选片标准</a><a href="#membership">会员计划</a></nav>
     <button id="savedToggle" class="saved-toggle js-only" type="button" aria-pressed="false"><svg aria-hidden="true"><use href="#bookmark"/></svg><span>我的收藏</span><span id="savedCount">0</span></button>
+    <button id="guestMode" class="guest-mode js-only" type="button">访客模式</button>
   </div>
 </header>
 
@@ -52,6 +55,7 @@
       <div class="filter-row">
         <label>题材<select id="genreFilter"><option value="all">全部题材</option><option value="fantasy">奇幻</option><option value="scifi">科幻</option><option value="wuxia">武侠</option><option value="xianxia">仙侠</option></select></label>
         <label>来源<select id="sourceFilter"><option value="all">全部来源</option><option value="xiaohongshu">小红书</option><option value="douyin">抖音</option><option value="bilibili">哔哩哔哩</option></select></label>
+        <label>评分依据<select id="scoreBasis"><option value="editor">编辑评分</option><option value="community">站内用户评分</option></select></label>
         <label>评分<select id="scoreFilter"><option value="all">全部评分</option><option value="8">8 分及以上</option><option value="9">9 分及以上</option></select></label>
         <label>片库<select id="accessFilter"><option value="all">全部精选</option><option value="free">免费精选</option><option value="vip">VIP 精选</option></select></label>
         <span class="filter-note">已收录 3 部 · 正式评分陆续补充</span>
@@ -96,7 +100,36 @@
 
 <footer class="wrap foot"><a class="footer-brand" href="./">帧选 <span>Framepick</span></a><p>© 2026 · 让好作品被看见</p><a href="../#filmRecommendations">橘小桔的主页</a></footer>
 
-<dialog id="filmDialog" class="film-dialog" aria-labelledby="detailTitle"><button type="button" class="dialog-close" data-close-film aria-label="关闭作品详情">×</button><div class="detail-layout"><div class="detail-cover"><img id="detailImage" alt=""><span>概念封面 · 非官方海报</span></div><div class="detail-copy"><p id="detailKind" class="kind"></p><h2 id="detailTitle"></h2><p id="detailAuthor" class="detail-author"></p><p id="detailEpisode" class="detail-episode"></p><p id="detailDescription"></p><div class="detail-reason"><h3>选片线索</h3><p id="detailReason"></p></div><p id="detailScore" class="detail-score"></p><div class="detail-actions"><a id="detailWatch" class="button" target="_blank" rel="noopener noreferrer">前往抖音观看<svg aria-hidden="true"><use href="#arrow"/></svg></a><button type="button" id="detailSave" class="button secondary" aria-pressed="false">收藏作品</button></div><p class="detail-disclaimer">免费原片 · 在原平台播放，可能需要登录。</p></div></div></dialog>
+<dialog id="filmDialog" class="film-dialog" aria-labelledby="detailTitle">
+  <button type="button" class="dialog-close" data-close-film aria-label="关闭作品详情">×</button>
+  <div class="detail-layout"><div class="detail-cover"><img id="detailImage" alt=""><span>概念封面 · 非官方海报</span></div>
+    <div class="detail-copy"><p id="detailKind" class="kind"></p><h2 id="detailTitle"></h2><p id="detailAuthor" class="detail-author"></p><p id="detailEpisode" class="detail-episode"></p>
+      <div class="detail-tabs" role="tablist" aria-label="作品信息">
+        <button id="introTab" type="button" role="tab" aria-selected="true" aria-controls="introPanel" tabindex="0">作品介绍</button>
+        <button id="originalTab" type="button" role="tab" aria-selected="false" aria-controls="originalPanel" tabindex="-1">原平台评价</button>
+        <button id="reviewsTab" type="button" role="tab" aria-selected="false" aria-controls="reviewsPanel" tabindex="-1">站内评价</button>
+      </div>
+      <section id="introPanel" role="tabpanel" aria-labelledby="introTab" tabindex="0"><p class="detail-origin">帧选整理 · 作品简介</p><p id="detailDescription"></p><div class="detail-reason"><h3>选片线索</h3><p id="detailReason"></p></div></section>
+      <section id="originalPanel" role="tabpanel" aria-labelledby="originalTab" tabindex="0" hidden><h3>到原平台看作者介绍与评价</h3><p>原作者发布的介绍与观众评论，请在原平台查看。帧选暂未同步原平台评论或评分。</p><a id="originalReviews" class="button secondary" target="_blank" rel="noopener noreferrer">查看原作介绍与评论<svg aria-hidden="true"><use href="#arrow"/></svg></a><p class="review-note">可能需要登录原平台；原平台评价不计入站内评分。</p></section>
+      <section id="reviewsPanel" role="tabpanel" aria-labelledby="reviewsTab" tabindex="0" hidden>
+        <h3 id="reviewHeading">站内评价</h3><p id="reviewSummary" class="review-summary">站内评分加载后显示</p><p class="review-note">10 分制 · 仅汇总本站访客评分，与编辑评分、原平台评价分别展示。</p>
+        <p id="reviewAvailability" role="status"></p>
+        <form id="reviewForm"><fieldset id="reviewFields" disabled><legend>写下你的评价</legend>
+          <p class="review-note">无需注册。此浏览器每部作品可保留一份评价，再次发布会更新原评价。</p>
+          <div class="review-input-row"><label for="reviewNickname">访客昵称 <span>（可选）</span><input id="reviewNickname" name="nickname" maxlength="24" autocomplete="nickname" placeholder="不填则显示访客"></label><label for="reviewRating">我的评分<select id="reviewRating" name="rating"><option value="">暂不评分</option><option value="1">1 分</option><option value="2">2 分</option><option value="3">3 分</option><option value="4">4 分</option><option value="5">5 分</option><option value="6">6 分</option><option value="7">7 分</option><option value="8">8 分</option><option value="9">9 分</option><option value="10">10 分</option></select></label></div>
+          <label for="reviewText">评价正文<textarea id="reviewText" name="text" maxlength="1000" rows="4" placeholder="聊聊作品给你的感受（最多 1000 字）"></textarea></label>
+          <p class="review-note">评分或正文至少填写一项。昵称会公开显示，请勿填写联系方式。</p>
+          <div class="review-actions"><button id="reviewSubmit" class="button" type="submit">发布评价</button><button id="reviewDelete" class="button secondary" type="button" hidden>撤回我的评价</button></div>
+        </fieldset></form>
+        <p id="reviewError" role="alert"></p><p id="reviewStatus" role="status"></p>
+        <div class="review-list-heading"><h3>大家的评价</h3><button id="reviewRetry" class="review-retry" type="button" hidden>重试加载</button></div>
+        <p id="reviewListStatus" role="status"></p><div id="reviewList" aria-label="站内评价列表"></div><button id="reviewMore" class="button secondary" type="button" hidden>加载更多评价</button>
+      </section>
+      <p id="detailScore" class="detail-score"></p><div class="detail-actions"><a id="detailWatch" class="button" target="_blank" rel="noopener noreferrer">前往抖音观看<svg aria-hidden="true"><use href="#arrow"/></svg></a><button type="button" id="detailSave" class="button secondary" aria-pressed="false">收藏作品</button></div><p class="detail-disclaimer">免费原片 · 在原平台播放，可能需要登录。</p>
+    </div>
+  </div>
+</dialog>
+<dialog id="guestDialog" class="membership-dialog" aria-labelledby="guestTitle"><button type="button" class="dialog-close" id="guestClose" aria-label="关闭访客说明">×</button><p class="kind">无需注册</p><h2 id="guestTitle">用访客身份，留下观影感受。</h2><p>共享评价服务通过此浏览器的访客 Cookie 识别你的评价。你可以为每部作品评分、留言，并在此浏览器更新或撤回。</p><p>昵称可在评价表单填写。换浏览器、清除 Cookie 或使用无痕窗口后，将视为另一位访客，无法管理原评价。</p><p id="guestAvailability" role="status">正在检查评价服务…</p><button id="guestDone" class="button" type="button">知道了</button></dialog>
 <dialog id="membershipDialog" class="membership-dialog" aria-labelledby="memberDialogTitle"><button type="button" class="dialog-close" data-close-membership aria-label="关闭会员说明">×</button><span class="vip-label">帧选 VIP</span><h2 id="memberDialogTitle">更多好片，正在准备。</h2><p>会员尚未开放订阅。开放后，计划提供完整精选片库、专题与持续更新；现有免费作品继续开放。</p><p>价格、可解锁内容和更新频率会在订阅前明确展示。</p><a href="#entries" class="button" id="memberBrowse">先浏览免费精选</a></dialog>
 <p id="notice" class="notice" role="status" aria-live="polite"></p>
 </body>

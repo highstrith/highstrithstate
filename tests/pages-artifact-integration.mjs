@@ -63,7 +63,7 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
     assert.equal(fs.readFileSync(path.join(publicRoot, 'resume.html'), 'utf8'), resume);
     assert.deepEqual(fs.readFileSync(path.join(publicRoot, 'assets/lin-junjie-resume.pdf')), fs.readFileSync(path.join(root, 'assets/lin-junjie-resume.pdf')));
     assert.equal(fs.readFileSync(path.join(publicRoot, 'reel/index.html'), 'utf8'), reel, 'standalone reel page must be published unchanged');
-    for (const file of ['framepick.css', 'framepick.js']) {
+    for (const file of ['framepick.css', 'framepick.js', 'review-config.js', 'framepick-reviews.js']) {
       assert.deepEqual(fs.readFileSync(path.join(publicRoot, 'reel', file)), fs.readFileSync(path.join(root, 'reel', file)), `reel ${file} must be packaged unchanged`);
     }
     for (const cover of ['xianggu', 'jinhaitang', 'yanran']) {
@@ -71,6 +71,7 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
       assert.ok(fs.existsSync(path.join(publicRoot, `reel/img/${cover}-640w.webp`)), `reel cover ${cover}-640w must be published`);
     }
     assert.equal(fs.existsSync(path.join(publicRoot, 'reel/img/raw')), false, 'reel master images must stay out of the artifact');
+    assert.equal(fs.existsSync(path.join(publicRoot, 'server')), false, 'review server must stay outside the static artifact');
     assert.deepEqual(references.filter(file => !fs.existsSync(path.join(publicRoot, file))), [], 'Pages artifact is missing local CSS/JS referenced by index.html');
     for (const file of [...references, ...projectFiles, 'assets/studio-mark.svg', 'data/works.json']) {
       assert.deepEqual(fs.readFileSync(path.join(publicRoot, file)), fs.readFileSync(path.join(root, file)), `${file} must be copied unchanged`);

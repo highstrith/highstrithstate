@@ -161,3 +161,32 @@ dialog::backdrop { background:rgba(0,0,0,.8) }
 }
 @media (prefers-reduced-motion:no-preference) { html { scroll-behavior:smooth } }
 @media (prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none!important;scroll-behavior:auto!important } }
+
+/* Shared guest reviews keep editorial, original-platform and community voices separate. */
+.guest-mode { flex-shrink:0;background:none;border:1px solid var(--line);border-radius:4px;padding:7px 11px;font-size:12px;white-space:nowrap }
+.community-score { color:var(--muted);font-size:10px;margin:4px 0 7px;font-variant-numeric:tabular-nums }
+.detail-copy { min-width:0 }.detail-layout { align-items:start }.detail-cover { position:sticky;top:0;height:min(560px,calc(100dvh - 48px)) }.detail-tabs { display:flex;border-bottom:1px solid var(--line);margin:22px 0 19px;gap:22px }
+.detail-tabs button { background:none;border:0;border-bottom:2px solid transparent;padding:10px 0;color:var(--muted);font-size:12px;white-space:nowrap }
+.detail-tabs button[aria-selected="true"] { color:var(--text);border-color:var(--gold) }
+[role="tabpanel"] { min-width:0;overflow-wrap:anywhere;outline-offset:3px }
+.detail-origin { color:var(--gold);font-size:10px }#detailDescription { margin-top:10px }
+#originalPanel h3,#reviewHeading,.review-list-heading h3 { font-size:14px;font-weight:500;margin-bottom:8px }
+#originalPanel>p { font-size:12px;color:var(--body);margin-bottom:18px }#originalPanel .button { margin-bottom:13px }
+.detail-score { padding-top:19px;border-top:1px solid var(--line);margin-top:24px }
+.review-summary { color:var(--gold);font-size:15px;font-variant-numeric:tabular-nums;margin:6px 0 }
+.review-note { color:var(--muted);font-size:11px;line-height:1.8 }
+#reviewAvailability { color:var(--body);font-size:11px;margin:13px 0 }
+#reviewForm { margin-top:20px }#reviewForm fieldset { padding:0;border:0;margin:0;min-width:0 }#reviewForm legend { font-size:13px;margin-bottom:7px }
+#reviewForm label { display:block;font-size:12px }#reviewForm label span { color:var(--muted);font-size:10px }
+.review-input-row { display:grid;grid-template-columns:minmax(0,1fr) 112px;gap:14px;margin:15px 0 12px }
+#reviewForm input,#reviewForm textarea,#reviewForm select { display:block;box-sizing:border-box;width:100%;min-height:42px;margin-top:6px;padding:9px 11px;border:1px solid #51545b;background:var(--bg);color:var(--text);border-radius:4px;font:13px/1.5 var(--sans) }
+#reviewForm textarea { resize:vertical;min-height:100px;cursor:text }#reviewForm>.review-note { margin-top:7px }
+#reviewForm :disabled { opacity:.65;cursor:not-allowed }.review-actions { display:flex;flex-wrap:wrap;gap:9px;margin:15px 0 8px }.review-actions .button { font-size:12px }
+#reviewError { font-size:12px;color:#ffb7a5;margin-top:9px }#reviewStatus { font-size:12px;color:var(--gold);margin-top:9px }
+.review-list-heading { display:flex;align-items:baseline;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding-top:22px;margin-top:22px }
+#reviewListStatus { color:var(--muted);font-size:11px;margin:8px 0 15px }
+.review-item { padding:15px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere }.review-item h4 { margin:0 0 4px;font-size:12px;font-weight:500 }.review-meta { font-size:10px;color:var(--muted);margin-bottom:8px }.review-body { color:var(--body);font-size:12px;line-height:1.85;white-space:pre-wrap }
+.review-edit,.review-retry { border:0;background:none;color:var(--gold);font-size:11px;padding:8px 0 }.review-item .review-edit { margin-top:4px }#reviewMore { margin-top:17px;font-size:12px }
+@media (max-width:1000px) { .bar-in { gap:20px } }
+@media (max-width:760px) { .bar-in { gap:12px }.guest-mode { padding:6px 8px;font-size:11px }.detail-tabs { gap:20px }.detail-copy { padding:24px }.detail-cover { position:relative;height:auto } }
+@media (max-width:520px) { .bar nav a[href="#membership"] { display:none }.bar nav { margin-left:auto }.saved-toggle { margin-left:0 }.detail-tabs { justify-content:space-between;gap:9px }.detail-tabs button { font-size:11px }.review-input-row { grid-template-columns:minmax(0,1fr) 95px;gap:10px }#reviewForm input,#reviewForm textarea,#reviewForm select { font-size:16px;padding:8px }.detail-copy { padding:22px 19px } }
