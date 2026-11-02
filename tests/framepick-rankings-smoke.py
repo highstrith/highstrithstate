@@ -153,7 +153,7 @@ class FramepickRankings(unittest.TestCase):
         self.open()
         self.assertTrue(self.page.evaluate('document.documentElement.scrollWidth <= innerWidth'))
         expect(self.page.locator('#cinemaPlan')).to_contain_text('40 分钟')
-        expect(self.page.locator('#cinemaPlan')).to_contain_text('3–5 元')
+        expect(self.page.locator('#membership')).to_contain_text('3 元 / 5 元')
         expect(self.page.locator('#cinemaPlan')).to_contain_text('尚未开放')
         self.page.goto((ROOT / 'reel/index.html').as_uri())
         expect(self.page.locator('#rankingDaily [data-ranking-film]')).to_have_count(3)

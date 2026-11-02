@@ -55,6 +55,7 @@
     if (categories.some((button) => button.dataset.category === category)) state.category = category;
     for (const key of ['genre', 'source', 'rating', 'access', 'sort', 'scoreBasis']) {
       const value = params.get(key);
+      if (key === 'access' && value === 'vip') { state.access = 'paid'; continue; }
       if ([...controls[key].options].some((option) => option.value === value)) state[key] = value;
     }
   }
@@ -112,12 +113,12 @@
     });
     $('#resultCount').textContent = visible.length + ' 部' + (state.saved ? '已收藏作品' : '精选作品');
     $('#emptyState').hidden = visible.length !== 0;
-    $('#emptyMembership').hidden = state.access !== 'vip';
+    $('#emptyMembership').hidden = state.access !== 'paid';
     let title = '暂时没有匹配的作品';
     let copy = '试试其他题材，或清除筛选条件。';
-    if (state.access === 'vip') {
-      title = 'VIP 片库正在筹备';
-      copy = '订阅尚未开放，先从免费精选里发现好作品。';
+    if (state.access === 'paid') {
+      title = '付费放映正在筹备';
+      copy = '本站尚未开放购票，先从免费原作认识这些创作者。';
     } else if (state.saved && saved.size === 0) {
       title = '还没有收藏的作品';
       copy = '点击作品上的收藏按钮，把想看的好片留在这台设备。';
