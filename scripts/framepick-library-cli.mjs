@@ -66,6 +66,7 @@ function seed() {
       coverAlt: body.match(/<img\b[^>]*alt="([^"]*)"/)?.[1] || '',
       coverWidth: Number(body.match(/<img\b[^>]*width="(\d+)"/)?.[1]) || 640,
       coverHeight: Number(body.match(/<img\b[^>]*height="(\d+)"/)?.[1]) || 397,
+      coverNote: textOf(body, 'image-note'),
       description: textOf(body, 'desc'),
       recommendation: textOf(body, 'recommendation'),
       episode: textOf(body, 'episode'),

@@ -164,11 +164,19 @@ test('publishing a new film adds its card and updates the counts', async (t) => 
   publish(createLibraryStore({ dataDir }), 'guiyuan');
   run(['scripts/build-framepick-library.mjs', '--site', site]);
 
+  // Counts follow the shipped catalogue, so adding a work never hardcodes a total.
+  const shipped = fs.readFileSync(path.join(root, 'reel', 'index.html'), 'utf8');
+  const cardsOf = (html) => [...html.matchAll(/<article\b[^>]*\bdata-film="/g)].length;
+  const shortsOf = (html) => [...html.matchAll(/<article\b[^>]*\bdata-category="short"/g)].length;
+  const total = cardsOf(shipped) + 1;
+  const shorts = shortsOf(shipped) + 1;
+
   const page = fs.readFileSync(path.join(site, 'index.html'), 'utf8');
   assert.match(page, /data-film="guiyuan"/);
-  assert.match(page, /4 部公开精选/);
-  assert.match(page, /已收录 4 部/);
-  assert.match(page, /data-category="short" aria-pressed="false">剧情短片 <span>1<\/span>/);
+  assert.equal(cardsOf(page), total);
+  assert.match(page, new RegExp(`${total} 部公开精选`));
+  assert.match(page, new RegExp(`已收录 ${total} 部`));
+  assert.match(page, new RegExp(`data-category="short" aria-pressed="false">剧情短片 <span>${shorts}<\\/span>`));
   // Delisting removes the card again without deleting the record.
   const s = createLibraryStore({ dataDir });
   s.setStatus('guiyuan', 'delisted');
