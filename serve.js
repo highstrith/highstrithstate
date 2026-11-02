@@ -1,8 +1,8 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
-const zlib = require("zlib");
 const { URL } = require("url");
+const { createStaticHandler } = require("./server/static-site.cjs");
 
 const root = __dirname;
 const port = process.env.PORT || 3000;
@@ -28,22 +28,6 @@ const DERIVED_VIDEO_FIELDS = ["previewVideo", "webVideo", "mobileVideo"];
 const MAX_METADATA_BYTES = 256 * 1024;
 const MAX_VIDEO_BYTES = 180 * 1024 * 1024;
 const MAX_POSTER_BYTES = 12 * 1024 * 1024;
-
-const types = {
-  ".html": "text/html; charset=utf-8",
-  ".css": "text/css; charset=utf-8",
-  ".js": "application/javascript; charset=utf-8",
-  ".json": "application/json; charset=utf-8",
-  ".svg": "image/svg+xml",
-  ".png": "image/png",
-  ".jpg": "image/jpeg",
-  ".jpeg": "image/jpeg",
-  ".gif": "image/gif",
-  ".webp": "image/webp",
-  ".mp3": "audio/mpeg",
-  ".mp4": "video/mp4",
-  ".wav": "audio/wav",
-};
 
 const ALLOWED_VIDEO_EXTENSIONS = new Set([".mp4"]);
 const ALLOWED_POSTER_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".webp"]);
@@ -80,19 +64,6 @@ function safeDecode(value) {
 
 function resolveInsideWorkspace(targetPath) {
   return path.resolve(targetPath);
-}
-
-function pathInsideWorkspace(targetPath) {
-  return resolveInsideWorkspace(targetPath).startsWith(resolveInsideWorkspace(root));
-}
-
-function resolveFile(urlPath) {
-  const clean = safeDecode(urlPath.split("?")[0].split("#")[0]);
-  // 目录请求回落到 index.html，和 GitHub Pages 的行为保持一致（片单站点在 /reel/）。
-  const relative = clean.endsWith("/") ? `${clean}index.html` : clean;
-  const full = path.join(root, relative);
-  if (!pathInsideWorkspace(full)) return null;
-  return full;
 }
 
 function sanitizeText(value, fallback, maxLength = 90) {
@@ -436,91 +407,7 @@ async function handleApi(req, res, requestUrl) {
   return false;
 }
 
-function handleStatic(req, res, requestUrl) {
-  const file = resolveFile(requestUrl.pathname || "/");
-  if (!file) {
-    res.writeHead(403);
-    res.end("Forbidden");
-    return;
-  }
-
-  fs.stat(file, (err, stat) => {
-    if (err || !stat.isFile()) {
-      res.writeHead(404);
-      res.end("Not found");
-      return;
-    }
-
-    const ext = path.extname(file).toLowerCase();
-    const type = types[ext] || "application/octet-stream";
-    const cacheControl = [".html", ".json"].includes(ext)
-      ? "no-cache"
-      : "public, max-age=31536000, immutable";
-    const headers = {
-      "Content-Type": type,
-      "Cache-Control": cacheControl,
-    };
-    const range = req.headers.range;
-    const supportsRange = [".mp3", ".mp4", ".wav"].includes(ext);
-
-    if (supportsRange) headers["Accept-Ranges"] = "bytes";
-
-    if (supportsRange && range) {
-      const match = range.match(/^bytes=(\d*)-(\d*)$/);
-      if (!match) {
-        res.writeHead(416, { ...headers, "Content-Range": `bytes */${stat.size}` });
-        res.end();
-        return;
-      }
-
-      const start = match[1] === "" ? 0 : Number(match[1]);
-      const end = match[2] === "" ? stat.size - 1 : Number(match[2]);
-
-      if (!Number.isInteger(start) || !Number.isInteger(end) || start > end || end >= stat.size) {
-        res.writeHead(416, { ...headers, "Content-Range": `bytes */${stat.size}` });
-        res.end();
-        return;
-      }
-
-      res.writeHead(206, {
-        ...headers,
-        "Content-Length": end - start + 1,
-        "Content-Range": `bytes ${start}-${end}/${stat.size}`,
-      });
-
-      fs.createReadStream(file, { start, end }).pipe(res);
-      return;
-    }
-
-    const supportsCompression = [".html", ".css", ".js", ".json", ".svg"].includes(ext);
-    const acceptEncoding = String(req.headers["accept-encoding"] || "");
-    const compression = supportsCompression && acceptEncoding.includes("br")
-      ? "br"
-      : supportsCompression && acceptEncoding.includes("gzip")
-        ? "gzip"
-        : "";
-
-    if (!compression) {
-      res.writeHead(200, {
-        ...headers,
-        "Content-Length": stat.size,
-      });
-      fs.createReadStream(file).pipe(res);
-      return;
-    }
-
-    res.writeHead(200, {
-      ...headers,
-      "Content-Encoding": compression,
-      "Vary": "Accept-Encoding",
-    });
-    const compressor = compression === "br"
-      ? zlib.createBrotliCompress()
-      : zlib.createGzip();
-    fs.createReadStream(file).pipe(compressor).pipe(res);
-  });
-}
-
+const handleStatic = createStaticHandler({ root });
 const storageReady = ensureStorage();
 
 http.createServer(async (req, res) => {

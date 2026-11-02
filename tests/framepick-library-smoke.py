@@ -1,12 +1,16 @@
 """Real browser paths for the public Framepick catalogue (no mock membership)."""
 import os
 import re
+import sys
 import unittest
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import framepick_layout as fp  # noqa: E402
+
 from playwright.sync_api import sync_playwright, expect
 
 BASE = os.environ.get('STUDIO_BASE_URL', 'http://127.0.0.1:3000').rstrip('/')
-ROOT = Path(__file__).resolve().parents[1]
 
 
 class FramepickLibrary(unittest.TestCase):
@@ -31,7 +35,7 @@ class FramepickLibrary(unittest.TestCase):
         self.assertEqual(self.errors, [])
 
     def open(self, query=''):
-        self.page.goto(BASE + '/reel/' + query, wait_until='load')
+        self.page.goto(BASE + fp.url(query), wait_until='load')
 
     def cards(self):
         return self.page.locator('#filmGrid [data-film]:visible')
@@ -94,12 +98,12 @@ class FramepickLibrary(unittest.TestCase):
         expect(self.page.locator('#emptyState')).to_contain_text('付费放映')
 
     def test_rating_sort_is_numeric_and_unrated_stays_last(self):
-        source = (ROOT / 'reel/index.html').read_text()
+        source = (fp.SITE_ROOT / 'index.html').read_text()
         for film_id, score in [('xianggu', '8.6'), ('jinhaitang', '10'), ('yanran', '')]:
             source, n = re.subn(r'(<article\b[^>]*data-film="' + film_id + r'"[^>]*data-score=")[^"]*(")',
                                 lambda m: m[1] + score + m[2], source)
             self.assertEqual(n, 1, film_id)
-        self.page.route('**/reel/', lambda route: route.fulfill(body=source, content_type='text/html'))
+        self.page.route(fp.is_index, lambda route: route.fulfill(body=source, content_type='text/html'))
         self.open()
         self.page.locator('#sortFilter').select_option('score')
         self.assertEqual(self.cards().evaluate_all('cards=>cards.map(c=>c.dataset.film)'), ['jinhaitang', 'xianggu', 'yanran'])
@@ -153,7 +157,7 @@ class FramepickLibrary(unittest.TestCase):
         self.addCleanup(blocked.close)
         blocked.add_init_script("Object.defineProperty(window,'localStorage',{get(){throw new DOMException('blocked','SecurityError')}})")
         page = blocked.new_page()
-        page.goto(BASE + '/reel/')
+        page.goto(BASE + fp.url())
         page.locator('[data-save-film="xianggu"]').first.click()
         expect(page.locator('#notice')).to_contain_text('本次浏览')
         page.locator('#savedToggle').click()
@@ -171,12 +175,12 @@ class FramepickLibrary(unittest.TestCase):
         context = self.browser.new_context(java_script_enabled=False, viewport={'width': 320, 'height': 844})
         self.addCleanup(context.close)
         page = context.new_page()
-        page.goto(BASE + '/reel/')
+        page.goto(BASE + fp.url())
         expect(page.locator('#filmGrid [data-film]')).to_have_count(3)
         expect(page.locator('#filmGrid .watch')).to_have_count(3)
         expect(page.locator('#filmSearch')).not_to_be_visible()
         expect(page.get_by_role('link', name='橘小桔的主页')).to_be_visible()
-        self.page.goto((ROOT / 'reel/index.html').as_uri())
+        self.page.goto((fp.SITE_ROOT / 'index.html').as_uri())
         self.page.locator('#filmSearch').fill('相骨')
         expect(self.cards()).to_have_count(1)
 

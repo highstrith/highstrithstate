@@ -8,18 +8,23 @@ import os
 import re
 import socket
 import subprocess
+import sys
 import tempfile
 import time
 import unittest
 import urllib.request
 from pathlib import Path
-from playwright.sync_api import sync_playwright, expect
 
-ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import framepick_layout as fp  # noqa: E402
+
+from playwright.sync_api import sync_playwright, expect
 FIXTURE = r"""
 const http = require('node:http'), fs = require('node:fs'), path = require('node:path');
 const root = process.env.FRAMEPICK_ROOT;
-const modulePath = path.join(root, 'server/framepick-reviews.cjs');
+// The shared service lives next to the repository, not inside the published site root,
+// so standalone layouts must point at it explicitly.
+const modulePath = process.env.FRAMEPICK_REVIEW_MODULE || path.join(root, 'server/framepick-reviews.cjs');
 const handler = fs.existsSync(modulePath) ? require(modulePath).createReviewHandler({
   dataDir: process.env.FRAMEPICK_TEST_DATA, filmIds: ['xianggu','jinhaitang','yanran'], cooldownMs: 0
 }) : async () => false;
@@ -48,11 +53,12 @@ class FramepickReviews(unittest.TestCase):
             port = sock.getsockname()[1]
         cls.base = f'http://127.0.0.1:{port}'
         cls.server = subprocess.Popen(['node', str(fixture)], env={**os.environ, 'PORT': str(port),
-            'FRAMEPICK_ROOT': str(ROOT), 'FRAMEPICK_TEST_DATA': str(Path(cls.temp.name) / 'private-data')},
+            'FRAMEPICK_ROOT': str(fp.SITE_SERVE_ROOT), 'FRAMEPICK_TEST_DATA': str(Path(cls.temp.name) / 'private-data'),
+            'FRAMEPICK_REVIEW_MODULE': str(fp.ROOT / 'server' / 'framepick-reviews.cjs')},
             stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
         for _ in range(100):
             try:
-                urllib.request.urlopen(cls.base + '/reel/').close()
+                urllib.request.urlopen(cls.base + fp.url()).close()
                 break
             except OSError:
                 time.sleep(.05)
@@ -82,7 +88,7 @@ class FramepickReviews(unittest.TestCase):
 
     def open_review(self, page=None, film='xianggu'):
         page = page or self.page
-        page.goto(self.base + '/reel/?film=' + film)
+        page.goto(self.base + fp.url('?film=' + film))
         page.get_by_role('tab', name='站内评价', exact=True).click()
         expect(page.locator('#reviewForm')).to_be_visible()
         expect(page.locator('#reviewText')).to_be_enabled()
@@ -107,7 +113,7 @@ class FramepickReviews(unittest.TestCase):
     def test_outbound_native_links_share_deduplicated_counts_but_detail_never_counts(self):
         self.context.route('https://www.douyin.com/**', lambda route: route.fulfill(body='<title>Original fixture</title>'))
         baseline = self.outbound_count()
-        self.page.goto(self.base + '/reel/')
+        self.page.goto(self.base + fp.url())
         self.page.locator('button[data-open-film="xianggu"]').click()
         self.assertEqual(self.outbound_count(), baseline)
         self.leave_for_original(self.page, self.context, '#detailWatch')
@@ -122,7 +128,7 @@ class FramepickReviews(unittest.TestCase):
         self.addCleanup(other.close)
         other.route('https://www.douyin.com/**', lambda route: route.fulfill(body='<title>Original fixture</title>'))
         second = other.new_page()
-        second.goto(self.base + '/reel/')
+        second.goto(self.base + fp.url())
         self.leave_for_original(second, other, '#filmGrid [data-film="xianggu"] .watch')
         second.wait_for_function('(n)=>document.querySelector("#rankingPopular [data-ranking-film=xianggu]")?.textContent.includes(n+" 次原作跳转")', arg=baseline + 2)
         self.page.reload()
@@ -132,7 +138,7 @@ class FramepickReviews(unittest.TestCase):
         self.context.route('https://www.douyin.com/**', lambda route: route.fulfill(body='<title>Original fixture</title>'))
         baseline = self.outbound_count()
         self.page.route('**/films/xianggu/outbound', lambda route: route.fulfill(status=503, json={'error': 'Temporary fixture failure'}))
-        self.page.goto(self.base + '/reel/')
+        self.page.goto(self.base + fp.url())
         self.leave_for_original(self.page, self.context, '#filmGrid [data-film="xianggu"] .watch')
         self.assertEqual(self.outbound_count(), baseline)
         expect(self.page.locator('#filmDialog')).not_to_be_visible()
@@ -149,7 +155,7 @@ class FramepickReviews(unittest.TestCase):
             }
             return response;
           };""")
-        self.page.goto(self.base + '/reel/')
+        self.page.goto(self.base + fp.url())
         self.leave_for_original(self.page, self.context, '#filmGrid [data-film="xianggu"] .watch')
         row = self.page.locator('#rankingPopular [data-ranking-film="xianggu"]')
         expect(row).to_contain_text(str(baseline + 1) + ' 次原作跳转')
@@ -228,7 +234,7 @@ class FramepickReviews(unittest.TestCase):
         expect(self.page.locator('#reviewList')).not_to_contain_text('原有公开昵称')
 
     def test_guest_entry_and_original_site_separation(self):
-        self.page.goto(self.base + '/reel/')
+        self.page.goto(self.base + fp.url())
         self.page.get_by_role('button', name='访客模式', exact=True).click()
         expect(self.page.locator('#guestDialog')).to_contain_text('浏览器')
         self.page.keyboard.press('Escape')
@@ -414,7 +420,7 @@ class FramepickReviews(unittest.TestCase):
             return new Response(body,{status:response.status,headers:response.headers});
           });return result;
         };""")
-        self.page.goto(self.base + '/reel/?film=xianggu')
+        self.page.goto(self.base + fp.url('?film=xianggu'))
         with self.page.expect_request('**/api/framepick/films/xianggu/reviews?offset=0'):
             self.page.get_by_role('tab', name='站内评价', exact=True).click()
         self.page.wait_for_function('window.__reviewADelayed === true')
@@ -432,15 +438,15 @@ class FramepickReviews(unittest.TestCase):
     def test_offline_file_and_static_host_do_not_publish(self):
         requests = []
         self.page.on('request', lambda request: requests.append(request.url))
-        self.page.goto((ROOT / 'reel/index.html').as_uri() + '?film=xianggu')
+        self.page.goto((fp.SITE_ROOT / 'index.html').as_uri() + '?film=xianggu')
         self.page.get_by_role('tab', name='站内评价', exact=True).click()
         expect(self.page.locator('#reviewAvailability')).to_contain_text('未配置')
         expect(self.page.locator('#reviewSubmit')).to_be_disabled()
         self.assertFalse(any('/api/framepick' in url for url in requests))
         self.page.route('http://framepick-static.test/**', lambda route: route.fulfill(
-            path=str(ROOT / route.request.url.split('framepick-static.test/')[1].split('?')[0].replace('reel/', 'reel/', 1))
-            if not route.request.url.split('?')[0].endswith('/reel/') else str(ROOT / 'reel/index.html')))
-        self.page.goto('http://framepick-static.test/reel/?film=xianggu')
+            path=str(fp.site_file(route.request.url))
+            if not fp.is_index(route.request.url) else str(fp.SITE_ROOT / 'index.html')))
+        self.page.goto('http://framepick-static.test' + fp.url('?film=xianggu'))
         self.page.get_by_role('tab', name='站内评价', exact=True).click()
         expect(self.page.locator('#reviewAvailability')).to_contain_text('未配置')
         expect(self.page.locator('#reviewSubmit')).to_be_disabled()

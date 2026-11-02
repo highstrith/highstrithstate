@@ -1,13 +1,16 @@
 """Public ranking behavior, using a read-only static fixture and explicit snapshots."""
 import functools
 import http.server
+import sys
 import threading
 import time
 import unittest
 from pathlib import Path
-from playwright.sync_api import sync_playwright, expect
 
-ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import framepick_layout as fp  # noqa: E402
+
+from playwright.sync_api import sync_playwright, expect
 
 
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
@@ -18,7 +21,8 @@ class QuietHandler(http.server.SimpleHTTPRequestHandler):
 class FramepickRankings(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), functools.partial(QuietHandler, directory=str(ROOT)))
+        # Combined layout serves the repo root and visits /reel/; standalone serves the site root.
+        cls.server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), functools.partial(QuietHandler, directory=str(fp.SITE_SERVE_ROOT)))
         cls.thread = threading.Thread(target=cls.server.serve_forever, daemon=True)
         cls.thread.start()
         cls.base = 'http://127.0.0.1:' + str(cls.server.server_port)
@@ -50,11 +54,11 @@ class FramepickRankings(unittest.TestCase):
         if snapshot is not None:
             self.page.route('**/api/framepick/outbound/summary', lambda route: route.fulfill(json=snapshot))
         if source is not None:
-            self.page.route('**/reel/', lambda route: route.fulfill(body=source, content_type='text/html'))
-        self.page.goto(self.base + '/reel/')
+            self.page.route(fp.is_index, lambda route: route.fulfill(body=source, content_type='text/html'))
+        self.page.goto(self.base + fp.url())
 
     def test_three_home_rankings_and_daily_detail_return_focus(self):
-        source = (ROOT / 'reel/index.html').read_text().replace('data-date="2026-10-31"', 'data-date="2026-11-01"', 1)
+        source = (fp.SITE_ROOT / 'index.html').read_text().replace('data-date="2026-10-31"', 'data-date="2026-11-01"', 1)
         self.open(source=source)
         expect(self.page.locator('#rankings')).to_be_visible()
         expect(self.page.locator('#rankingDaily [data-ranking-film]')).to_have_count(3)
@@ -155,7 +159,7 @@ class FramepickRankings(unittest.TestCase):
         expect(self.page.locator('#cinemaPlan')).to_contain_text('40 分钟')
         expect(self.page.locator('#membership')).to_contain_text('3 元 / 5 元')
         expect(self.page.locator('#cinemaPlan')).to_contain_text('尚未开放')
-        self.page.goto((ROOT / 'reel/index.html').as_uri())
+        self.page.goto((fp.SITE_ROOT / 'index.html').as_uri())
         expect(self.page.locator('#rankingDaily [data-ranking-film]')).to_have_count(3)
         expect(self.page.locator('#rankingPopular [data-ranking-film]')).to_have_count(0)
 
