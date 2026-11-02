@@ -39,3 +39,12 @@ python3 -m unittest \
   tests/framepick-reviews-smoke.py
 
 node --test tests/framepick-reviews-api-integration.mjs
+node --test tests/framepick-library-store-integration.mjs
+
+# Publish-time guards: card fields, and the page matching the catalogue store.
+node scripts/check-framepick-library.mjs --site "$FRAMEPICK_SITE_ROOT"
+if [ -f "$HOME/.framepick/library/library.json" ]; then
+  node scripts/build-framepick-library.mjs --site "$FRAMEPICK_SITE_ROOT" --check
+else
+  echo "跳过片库一致性检查：还没有作品表（先跑 scripts/framepick-library-cli.mjs seed）"
+fi

@@ -21,7 +21,7 @@ const SOURCES = {
   bilibili: { label: '哔哩哔哩', hosts: ['www.bilibili.com', 'bilibili.com', 'b23.tv'] },
 };
 const ACCESS = new Set(['free', 'paid']);
-const CATEGORIES = new Set(['film', 'series', 'short']);
+const CATEGORIES = new Set(['film', 'series', 'short', 'ad', 'music', 'experimental']);
 const RUNTIME = /^(?:\d+:)?\d{1,2}:\d{2}$/;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 

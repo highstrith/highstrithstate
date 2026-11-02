@@ -1,7 +1,7 @@
 # 帧选片库运营流程
 
-- 日期：2026-11-02
-- 范围：阶段 A「独立维护与免费发现」里的**片库运营流程与共享服务**。不含片库后台、创作者投稿、账号与交易（属阶段 B／C）。
+- 日期：2026-11-02（2026-11-02 晚更新：补片改为作品表 + 生成，不再改 HTML）
+- 范围：阶段 A「独立维护与免费发现」里的**片库运营流程与共享服务**，以及阶段 B 的**片库后台（CLI 版）**。不含带界面的后台、创作者自助投稿、账号与交易。
 - 依据：`docs/framepick-prd-20261102.md` 第 5、6 节与第 14 节阶段 A；[影院路线与片库更新](framepick-cinema-roadmap-20261102.md)。
 
 现在补片仍然是改 `reel/index.html` 里的作品卡（阶段 B 才有后台）。这份文档把「怎么改」从口述变成**字段规范 + 机器校验 + 固定清单**，避免每次靠记忆。
@@ -32,20 +32,70 @@
 
 **免费外链不等于可收费放映。** 公开片源链接只证明能跳转观看，不构成本站转载或收费的权利（LIB-10、PRD 12.7）。
 
-## 2. 补片清单
+## 2. 作品表、候选池与状态机
+
+补片**不再改 HTML**。作品写在仓库外的作品表里，页面由表生成。
+
+| 项 | 位置 |
+| --- | --- |
+| 作品表／候选池／变更日志 | `~/.framepick/library/library.json`（站点根目录之外，不进 Git、不进发布产物） |
+| 存储与规则 | `server/framepick-library.cjs` |
+| 管理命令 | `scripts/framepick-library-cli.mjs` |
+| 生成静态页面 | `scripts/build-framepick-library.mjs` |
+
+`FRAMEPICK_LIBRARY_DATA_DIR` 可临时指向别处做演练，不指定就用上面的默认位置。
+
+### 作品状态机
+
+```
+draft → reviewing → approved → scheduled → published → delisted
+          ↓            ↓           ↓           ↓
+       rejected     reviewing   reviewing   reviewing（重要变更复审）
+```
+
+- 只有 `published` 的作品会进入静态片库；`delisted` 从页面移除但**记录保留**。
+- 状态跳跃会被拒绝，例如 `draft` 不能直接 `published`。
+- 付费作品（`access=paid`）排期／上架前必须 `rights.status=confirmed`；没有确认授权就不能收费放映（CRE-05）。
+- 系列单集缺集号说明不能上架（LIB-04）。
+- 已排期／已上架的作品改收费或授权，必须先退回 `reviewing`（CRE-06）。
+
+### 候选池状态机
+
+```
+new → verifying → watching → converted
+        ↓            ↓  ↓
+     rejected   need-material → watching
+```
+
+- 同一原作链接不能重复进池；已在作品表里的会被拦下。
+- `converted` 会把候选转成一条 `draft` 作品并回写 `filmId`，避免同一部片被重复收录。
+- 每次状态变更都写变更日志（时间、操作者、动作、说明），最近 2000 条。
+
+### 发布哪些字段
+
+`publishedFilms()` 只吐出公开字段：片名、作者、来源、原作链接、类型、题材、时长、封面、简介、推荐语、集号、编辑评分、收录日期。**授权材料、审核意见、价格草案不进页面也不进 Git。**
+
+## 3. 补片清单
 
 按顺序做，每步都能独立检查：
 
 1. **看完全片**，确认不是预告、混剪、制作教程或赛事合集；确认是完整故事还是某一集。
-2. **核实来源**：原作者、准确原片链接、标题、集号、时长、原片发布时间、可访问状态。留证据（截图／链接），存进 `docs/ai-film-discovery-trial-20261102/` 或候选记录。
-3. **去重**：同一部作品在多个平台有链接时，以原作／作者／版本关联，不把转发重复算成新片。有疑问交人工确认。
-4. **确认封面来源**：自己画的概念图要标注；不要用官方海报或他人素材冒充。
-5. **改卡片**：复制现有卡片结构，填第 1 节全部字段。`data-score` 没有正式编辑评分就留空。
-6. **跑校验**：`node scripts/check-framepick-library.mjs`，错误必须为 0。
-7. **重启本地服务**（`node serve.js` 或 `node serve-framepick.js`），让评价服务读到新作品 ID。
-8. **跑测试**：`scripts/run-framepick-tests.sh`，确认筛选、详情、每日更新榜、无脚本原片入口都正常。
-9. **看一遍页面**：桌面与 390px 手机，确认无横向溢出、封面加载正常。
-10. **提交**，发布另按 [部署说明](部署说明.md) 执行。
+2. **核实来源**：原作者、准确原片链接、标题、集号、时长、原片发布时间、可访问状态。留证据（截图／链接）。
+3. **进候选池**（可选但推荐）：
+   `node scripts/framepick-library-cli.mjs candidate add --json '{...}'`，再按 `verifying → watching` 推进。
+4. **建作品记录**：
+   `node scripts/framepick-library-cli.mjs add --file newfilm.json`（或从候选转换：`candidate convert <候选ID> --file newfilm.json`）。
+5. **审片推进**：
+   `node scripts/framepick-library-cli.mjs status <id> reviewing --note "…"` → `approved` → `scheduled` → `published`。
+6. **生成页面**：
+   `node scripts/framepick-library-cli.mjs build`。
+7. **跑校验**：`node scripts/check-framepick-library.mjs`，错误必须为 0。
+8. **重启本地服务**（`node serve.js` 或 `node serve-framepick.js`），让评价服务读到新作品 ID。
+9. **跑测试**：`scripts/run-framepick-tests.sh`（会自动检查页面与作品表是否一致）。
+10. **看一遍页面**：桌面与 390px 手机，确认无横向溢出、封面加载正常。
+11. **提交**，发布另按 [部署说明](部署说明.md) 执行。
+
+不用再手改卡片：封面文件名、时长、类型计数、「已收录 N 部」这些文案全部由 `build` 生成。要让页面回到与作品表一致，跑 `node scripts/build-framepick-library.mjs` 即可；`--check` 只检查不写入，页面过期会以退出码 1 报出。
 
 「每日更新」按收录日期排序，**不要求每天凑数量**；没有合格作品就留空状态。介绍更新不重置 `data-date`，避免旧片反复霸占新片榜。
 
@@ -86,7 +136,8 @@ node scripts/check-framepick-library.mjs --json          机器可读输出
 
 ## 5. 本轮不做
 
-- 不做片库后台、候选池与自助投稿（阶段 B，见路线文档「下一步建设顺序」第 1 项）。
+- 不做带界面的运营后台：现在用 CLI 管理，自助界面可后续再建（PRD 允许运营辅助流程先行）。
+- 不做创作者自助投稿与身份申请（阶段 B 剩余部分）。
 - 不做账号、订单、支付、收益（阶段 C）。
 - 不做常驻搜片 AI 与定时采集（阶段 D）。
 - 不自动抓取原平台评论；原平台评价只给真实入口，页面上不声称已同步（LIB-05）。

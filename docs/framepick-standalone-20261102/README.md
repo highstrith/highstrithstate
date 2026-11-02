@@ -26,21 +26,27 @@ reel/                        站点内容（发布时整目录进 Pages，排除
 ├── review-config.js         共享服务地址配置
 └── img/                     封面（img/raw/ 是母版，不发布）
 server/
+├── framepick-library.cjs    作品表／候选池／审核状态机／变更日志
 ├── framepick-reviews.cjs    评价 + 原作跳转统计（共享服务）
 └── static-site.cjs          静态文件服务（与个人站共用）
 serve-framepick.js           只服务帧选的本地预览
 scripts/
 ├── run-framepick-tests.sh   帧选测试入口
 ├── check-framepick-library.mjs  片库字段校验
+├── framepick-library-cli.mjs    片库后台命令（候选池、审片、上下架、日志）
+├── build-framepick-library.mjs  由作品表生成静态片库页面
 └── prepare-media-cdn.mjs    发布时改媒体前缀
 tests/
 ├── framepick-layout.py       测试用的布局适配
 ├── framepick-library-smoke.py
 ├── framepick-rankings-smoke.py
 ├── framepick-reviews-smoke.py
-└── framepick-reviews-api-integration.mjs
+├── framepick-reviews-api-integration.mjs
+└── framepick-library-store-integration.mjs
 docs/framepick*               帧选专项文档
 ```
+
+作品表、候选池与变更日志不在这里：它们在 `~/.framepick/library/`，页面由 `scripts/build-framepick-library.mjs` 生成。
 
 ## 3. 本地启动
 
@@ -78,6 +84,18 @@ node --test tests/framepick-reviews-api-integration.mjs
 ```
 
 改片库后还要跑：`node scripts/check-framepick-library.mjs`。
+
+**片库后台**：作品写在仓库外的作品表里，页面由表生成，补片不用改 HTML。
+
+```sh
+node scripts/framepick-library-cli.mjs list            # 看作品与状态
+node scripts/framepick-library-cli.mjs candidate add --json '{...}'
+node scripts/framepick-library-cli.mjs status <id> published --note "审片通过"
+node scripts/framepick-library-cli.mjs build           # 重新生成页面
+node scripts/framepick-library-cli.mjs log -n 20       # 变更记录
+```
+
+字段规范、状态机、补片清单见 [片库运营流程](../framepick-library-operations-20261102.md)。
 
 ## 5. 发布
 
