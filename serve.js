@@ -6,6 +6,16 @@ const { URL } = require("url");
 
 const root = __dirname;
 const port = process.env.PORT || 3000;
+// Local preview only. The public Pages artifact never contains this API or its data.
+// Keep the optional module optional for the server's existing single-file fixtures.
+const reviewModule = path.join(root, "server", "framepick-reviews.cjs");
+const handleFramepickReviews = fs.existsSync(reviewModule)
+  ? require(reviewModule).createReviewHandler({
+      dataDir: process.env.FRAMEPICK_REVIEWS_DATA_DIR,
+      filmIds: [...fs.readFileSync(path.join(root, "reel", "index.html"), "utf8")
+        .matchAll(/<article\b[^>]*data-film="([^"]+)"/g)].map((match) => match[1]),
+    })
+  : null;
 const dataDir = path.join(root, "data");
 const worksFile = path.join(dataDir, "works.json");
 const uploadDir = path.join(root, "assets", "uploads");
@@ -518,6 +528,10 @@ http.createServer(async (req, res) => {
 
   try {
     await storageReady;
+
+    if (handleFramepickReviews && await handleFramepickReviews(req, res, requestUrl)) {
+      return;
+    }
 
     if (await handleApi(req, res, requestUrl)) {
       return;
