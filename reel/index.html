@@ -13,10 +13,12 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://highstrith.github.io/highstrithstate/reel/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%23101114'/%3E%3Crect x='7' y='9' width='18' height='14' fill='none' stroke='%23eeeee8' stroke-width='1.6'/%3E%3Cpath d='M13 13.5l7 2.5-7 2.5z' fill='%23eeeee8'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="framepick.css?v=20261102-reviews1">
+<link rel="stylesheet" href="framepick.css?v=20261102-rankings1">
 <script src="review-config.js?v=20261102-reviews1" defer></script>
-<script src="framepick-reviews.js?v=20261102-reviews1" defer></script>
-<script src="framepick.js?v=20261102-reviews1" defer></script>
+<script src="framepick-reviews.js?v=20261102-reviews2" defer></script>
+<script src="ranking-data.js?v=20261102-rankings1" defer></script>
+<script src="framepick-rankings.js?v=20261102-rankings1" defer></script>
+<script src="framepick.js?v=20261102-rankings1" defer></script>
 </head>
 <body>
 <a class="skip" href="#entries">跳到片库</a>
@@ -25,7 +27,7 @@
 <header class="bar">
   <div class="wrap bar-in">
     <a class="mark" href="./" aria-label="帧选首页"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 11V4h7M22 4h7v7M29 21v7h-7M10 28H3v-7"/><path d="m13 11 8 5-8 5z"/></svg><span class="mark-cn">帧选</span><span class="mark-en">Framepick</span></a>
-    <nav aria-label="站内导航"><a href="#entries">发现片库</a><a href="#standard">选片标准</a><a href="#membership">会员计划</a></nav>
+    <nav aria-label="站内导航"><a href="#rankings">榜单</a><a href="#entries">发现片库</a><a href="#membership">会员计划</a></nav>
     <button id="savedToggle" class="saved-toggle js-only" type="button" aria-pressed="false"><svg aria-hidden="true"><use href="#bookmark"/></svg><span>我的收藏</span><span id="savedCount">0</span></button>
     <button id="guestMode" class="guest-mode js-only" type="button">访客模式</button>
   </div>
@@ -44,6 +46,16 @@
     </a>
     <div class="feature-copy"><div class="film-tags"><span>东方奇幻</span><span>兽人武侠</span></div><h2 id="f1Title">相骨</h2><p>一场误入兽人国度的冒险，<br>从客栈里的一次盗宝开始。</p><div class="feature-meta"><span>淮左 · 与梦工作室</span><span>第 01 集 / 13:46</span></div><a class="watch" href="https://www.douyin.com/video/7675120105457487104" target="_blank" rel="noopener noreferrer">前往抖音观看<svg aria-hidden="true"><use href="#arrow"/></svg></a><span class="watch-note">免费原片 · 在原平台播放</span></div>
   </article>
+
+  <section class="rankings wrap" id="rankings" aria-labelledby="rankingsTitle">
+    <div class="section-heading"><div><p class="section-caption">新片、热度与口碑，各有一份片单。</p><h2 id="rankingsTitle" tabindex="-1">从榜单开始看</h2></div><a class="rankings-browse" href="#entries">浏览全部作品</a></div>
+    <div class="ranking-columns">
+      <article class="ranking-board" id="rankingDaily" aria-labelledby="dailyRankingTitle"><div class="ranking-heading"><h3 id="dailyRankingTitle">每日更新</h3><span>新收录</span></div><p class="ranking-rule">按本站收录日期，最近上架优先。</p><p id="dailyRankingStatus" class="ranking-status">开启 JavaScript 查看最新收录顺序。</p><ol class="ranking-list"></ol></article>
+      <article class="ranking-board" id="rankingPopular" aria-labelledby="popularRankingTitle"><div class="ranking-heading"><h3 id="popularRankingTitle">近期热门</h3><span>近 10 天</span></div><p class="ranking-rule">仅按本站有效播放量排名。</p><p id="popularRankingStatus" class="ranking-status">站内放映统计尚未接通，暂不生成热门排名。</p><ol class="ranking-list"></ol><p class="ranking-footnote">外链点击、原平台累计播放量不计入。</p></article>
+      <article class="ranking-board" id="rankingAcclaimed" aria-labelledby="acclaimedRankingTitle"><div class="ranking-heading"><h3 id="acclaimedRankingTitle">口碑高分</h3><span>看过的人说了算</span></div><p class="ranking-rule">站内均分 8 分起，至少 5 人评分。</p><p id="acclaimedRankingStatus" class="ranking-status">站内评价加载后显示，编辑评分单独保留。</p><ol class="ranking-list"></ol><p class="ranking-footnote">按评分与人数加权排序，减少少量满分的影响。</p></article>
+    </div>
+    <details class="ranking-explainer"><summary>榜单怎么更新？</summary><p>新作品核实后进入片库，更新榜随收录日期排序；近 10 天热门榜等待本站放映与有效播放统计接通；口碑榜随站内评价更新。当前试行至少 5 人、均分 8 分的门槛，榜单不受付费推荐影响。</p><p>外链精选与未来的授权放映分别标注。单片购买和创作者分成正在筹备，当前原片仍免费前往原平台观看。</p></details>
+  </section>
 
   <section class="library wrap" id="entries" aria-labelledby="entriesTitle">
     <div class="section-heading"><div><p class="section-caption">找一部，值得看的。</p><h2 id="entriesTitle" tabindex="-1">探索片库</h2></div><p id="resultCount" role="status" aria-live="polite">3 部公开精选</p></div>
@@ -89,6 +101,8 @@
     </div>
     <p class="membership-note">免费与 VIP 使用同一选片标准。会员权益是更多精选信息与整理服务，原片仍在作者平台观看。</p>
   </section>
+
+  <section class="cinema-plan wrap" id="cinemaPlan" aria-labelledby="cinemaPlanTitle"><div><p class="section-caption">帧选放映计划</p><h2 id="cinemaPlanTitle">留 40 分钟，<br>看一个完整的好故事。</h2><p>正在筹备 40 分钟内的优质 AI 短片放映。希望把认真讲故事的创作者，带到愿意为作品买单的观众面前。</p></div><div class="cinema-plan-detail"><h3>一张小票，支持一部作品。</h3><p>计划支持单片 3–5 元购买，创作者经审核后发布授权作品，并从有效付费订单获得分成。具体价格、观看期限与分成规则将在开放前明确。</p><p class="cinema-plan-status">尚未开放付费观看、创作者发布或收益结算。现有外链精选继续免费。</p><a href="mailto:highstrith@gmail.com?subject=帧选短片合作">联系短片合作</a></div></section>
 
   <section class="standard wrap" id="standard" aria-labelledby="standardTitle">
     <div class="standard-intro"><p class="section-caption">热度帮助发现，质量决定收录。</p><h2 id="standardTitle">每次推荐，都有理由。</h2><p>关注热门，也给高质量的新作留位置。<br>粉丝多少，不是作品进入片库的门槛。</p></div>

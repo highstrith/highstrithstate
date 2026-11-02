@@ -260,6 +260,7 @@
   $('#browseFree').addEventListener('click', () => resetFilters('free'));
   $('#memberBrowse').addEventListener('click', () => { membershipDialog.close(); resetFilters('free'); });
   window.addEventListener('popstate', syncFromURL);
+  window.addEventListener('framepick:request-film', ({ detail }) => openFilm(detail.id, true, detail.trigger));
   // The independent review client supplies shared aggregates; editor scores stay intact.
   for (const film of films) {
     const summary = document.createElement('p');
