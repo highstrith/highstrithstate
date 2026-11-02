@@ -95,6 +95,77 @@ class FramepickReviews(unittest.TestCase):
         page.locator('#reviewSubmit').click()
         expect(page.locator('#reviewStatus')).to_contain_text('已保存')
 
+    def hold_initial_summary(self):
+        self.page.add_init_script("""const summaryFetch=window.fetch;window.fetch=async(...args)=>{
+          const response=await summaryFetch(...args);
+          if(String(args[0]).endsWith('/summary')){
+            const body=await response.text();
+            await new Promise(resolve=>{window.__releaseSummary=resolve;});
+            return new Response(body,{status:response.status,headers:response.headers});
+          }return response;
+        };""")
+
+    def release_initial_summary(self):
+        self.page.wait_for_function('typeof window.__releaseSummary === "function"')
+        self.page.evaluate("async()=>{window.__releaseSummary();await new Promise(resolve=>setTimeout(resolve,100));}")
+
+    def test_slow_initial_summary_keeps_other_films_after_detail_load(self):
+        visitor = self.runtime.request.new_context(base_url=self.base)
+        self.addCleanup(visitor.dispose)
+        self.assertEqual(visitor.get('/api/framepick/session').status, 200)
+        self.addCleanup(lambda: visitor.delete('/api/framepick/films/jinhaitang/reviews'))
+        self.assertEqual(visitor.post('/api/framepick/films/jinhaitang/reviews', data={
+            'nickname': '另一部影片的访客', 'text': '已存在的九分评价', 'rating': 9}).status, 200)
+        self.hold_initial_summary()
+        self.open_review(film='xianggu')
+        self.release_initial_summary()
+        self.page.keyboard.press('Escape')
+        expect(self.page.locator('[data-film="jinhaitang"] .community-score')).to_contain_text('9.0 / 10')
+        self.page.locator('#scoreBasis').select_option('community')
+        self.page.locator('#scoreFilter').select_option('8')
+        expect(self.page.locator('#filmGrid [data-film]:visible')).to_have_count(1)
+        expect(self.page.locator('#filmGrid [data-film]:visible')).to_have_attribute('data-film', 'jinhaitang')
+
+    def test_slow_failed_summary_keeps_newly_published_score(self):
+        self.page.route('**/api/framepick/summary', lambda route: route.fulfill(
+            status=503, content_type='application/json', body='{"error":"汇总暂不可用"}'))
+        self.hold_initial_summary()
+        self.open_review(film='yanran')
+        self.addCleanup(lambda: self.context.request.delete(self.base + '/api/framepick/films/yanran/reviews'))
+        self.submit(self.page, '旧汇总失败前成功发布', '9')
+        self.release_initial_summary()
+        self.page.keyboard.press('Escape')
+        expect(self.page.locator('[data-film="yanran"] .community-score')).to_contain_text('9.0 / 10')
+        self.page.locator('#scoreBasis').select_option('community')
+        self.page.locator('#scoreFilter').select_option('8')
+        expect(self.page.locator('#filmGrid [data-film]:visible')).to_have_count(1)
+
+    def test_failed_anonymous_draft_stays_blank_after_reopen_and_real_retry(self):
+        self.open_review(film='xianggu')
+        self.addCleanup(lambda: self.context.request.delete(self.base + '/api/framepick/films/xianggu/reviews'))
+        self.submit(self.page, '原有公开评价', '8', '原有公开昵称')
+        self.page.route('**/api/framepick/films/xianggu/reviews', lambda route:
+            route.fulfill(status=503, content_type='application/json', body='{"error":"暂时失败"}')
+            if route.request.method == 'POST' else route.continue_())
+        self.page.get_by_label('访客昵称').fill('')
+        self.page.get_by_label('评价正文').fill('选择匿名后保留的草稿')
+        self.page.locator('#reviewSubmit').click()
+        expect(self.page.locator('#reviewError')).to_contain_text('草稿已保留')
+        expect(self.page.get_by_label('访客昵称')).to_have_value('')
+        self.page.keyboard.press('Escape')
+        self.page.locator('button[data-open-film="xianggu"]').click()
+        self.page.get_by_role('tab', name='站内评价', exact=True).click()
+        expect(self.page.locator('#reviewText')).to_be_enabled()
+        expect(self.page.get_by_label('评价正文')).to_have_value('选择匿名后保留的草稿')
+        expect(self.page.get_by_label('访客昵称')).to_have_value('')
+        self.page.unroute('**/api/framepick/films/xianggu/reviews')
+        self.page.locator('#reviewSubmit').click()
+        expect(self.page.locator('#reviewStatus')).to_contain_text('已保存')
+        response = self.context.request.get(self.base + '/api/framepick/films/xianggu/reviews')
+        self.assertEqual(response.status, 200)
+        self.assertEqual(response.json()['yourReview']['nickname'], '访客')
+        expect(self.page.locator('#reviewList')).not_to_contain_text('原有公开昵称')
+
     def test_guest_entry_and_original_site_separation(self):
         self.page.goto(self.base + '/reel/')
         self.page.get_by_role('button', name='访客模式', exact=True).click()

@@ -14,6 +14,7 @@
   const fields = $('#reviewFields');
   const drafts = new Map();
   const summaries = new Map();
+  const summaryVersions = new Map();
   const pendingWrites = new Set();
   let current = null;
   let generation = 0;
@@ -25,7 +26,6 @@
   let busy = false;
   let shown = 0;
   let yourReview = null;
-  let summaryGeneration = 0;
 
   function setText(selector, text) { $(selector).textContent = text; }
   function isCurrent(id, version) { return current?.id === id && generation === version; }
@@ -33,7 +33,7 @@
     if (current && dirty) drafts.set(current.id, { nickname: $('#reviewNickname').value, text: $('#reviewText').value, rating: $('#reviewRating').value });
   }
   function fillForm(value) {
-    $('#reviewNickname').value = value?.nickname || guestNickname;
+    $('#reviewNickname').value = value?.nickname ?? guestNickname;
     $('#reviewText').value = value?.text || '';
     $('#reviewRating').value = value?.rating == null ? '' : String(value.rating);
   }
@@ -86,16 +86,20 @@
   }
   async function refreshSummary() {
     if (!api) return;
-    const version = summaryGeneration;
+    const versions = new Map(summaryVersions);
     try {
       const data = await request('/summary');
-      if (version !== summaryGeneration) return;
-      for (const entry of data.films || []) summaries.set(entry.filmId, entry);
+      for (const entry of data.films || []) {
+        // Keep newer detail/write results while still accepting unaffected films.
+        if (versions.get(entry.filmId) !== summaryVersions.get(entry.filmId)) continue;
+        summaries.set(entry.filmId, entry);
+        summaryVersions.set(entry.filmId, (summaryVersions.get(entry.filmId) || 0) + 1);
+      }
       dispatchSummary(true);
-    } catch { dispatchSummary(false); }
+    } catch { if (!summaries.size) dispatchSummary(false); }
   }
   function renderSummary(data) {
-    summaryGeneration += 1;
+    summaryVersions.set(current.id, (summaryVersions.get(current.id) || 0) + 1);
     const rating = Number.isFinite(data.averageRating) && data.ratingCount > 0 ? data.averageRating.toFixed(1) + ' / 10 · ' + data.ratingCount + ' 人评分' : '暂无站内评分';
     setText('#reviewSummary', rating + ' · ' + data.total + ' 条评价');
     summaries.set(current.id, { filmId: current.id, averageRating: data.averageRating, ratingCount: data.ratingCount, commentCount: data.total });
