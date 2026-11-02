@@ -64,7 +64,7 @@ class ProjectPages(unittest.TestCase):
                 expect(self.page).to_have_url(BASE + '/reel/')
                 expect(self.page).to_have_title('帧选 Framepick — AI 影像精选')
                 expect(self.page.locator('.mark')).to_have_accessible_name('帧选首页')
-                expect(self.page.locator('h1')).to_contain_text('影像，正在')
+                expect(self.page.locator('h1')).to_contain_text('好看的 AI 影像')
                 self.assertEqual(len(self.context.pages), 1)
 
     def test_film_index_recommendation_works_without_javascript(self):

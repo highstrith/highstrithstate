@@ -63,6 +63,9 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
     assert.equal(fs.readFileSync(path.join(publicRoot, 'resume.html'), 'utf8'), resume);
     assert.deepEqual(fs.readFileSync(path.join(publicRoot, 'assets/lin-junjie-resume.pdf')), fs.readFileSync(path.join(root, 'assets/lin-junjie-resume.pdf')));
     assert.equal(fs.readFileSync(path.join(publicRoot, 'reel/index.html'), 'utf8'), reel, 'standalone reel page must be published unchanged');
+    for (const file of ['framepick.css', 'framepick.js']) {
+      assert.deepEqual(fs.readFileSync(path.join(publicRoot, 'reel', file)), fs.readFileSync(path.join(root, 'reel', file)), `reel ${file} must be packaged unchanged`);
+    }
     for (const cover of ['xianggu', 'jinhaitang', 'yanran']) {
       assert.ok(fs.existsSync(path.join(publicRoot, `reel/img/${cover}.webp`)), `reel cover ${cover} must be published`);
       assert.ok(fs.existsSync(path.join(publicRoot, `reel/img/${cover}-640w.webp`)), `reel cover ${cover}-640w must be published`);

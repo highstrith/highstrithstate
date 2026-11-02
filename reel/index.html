@@ -3,331 +3,101 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0a0a0b">
+<meta name="theme-color" content="#101114">
 <title>帧选 Framepick — AI 影像精选</title>
-<meta name="description" content="帧选 Framepick，由橘小桔制作的 AI 影像精选片单。发现值得看的作品，了解创作者与出处，点开直达原片。">
+<meta name="description" content="发现值得看的AI影像。按类型、题材、来源和评分探索精选片库，了解作者，前往原平台观看。优先关注小红书、抖音与哔哩哔哩。">
 <meta property="og:title" content="帧选 Framepick — AI 影像精选">
-<meta property="og:description" content="好看的 AI 影像，从这里发现。由橘小桔整理作品、创作者与原片出处。">
+<meta property="og:description" content="好看的 AI 影像，从这里发现。精选作品、分类片库与原片出处。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://highstrith.github.io/highstrithstate/reel/img/xianggu.webp">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://highstrith.github.io/highstrithstate/reel/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a0a0b'/%3E%3Crect x='7' y='9' width='18' height='14' fill='none' stroke='%23edece7' stroke-width='1.6'/%3E%3Cpath d='M13 13.5l7 2.5-7 2.5z' fill='%23edece7'/%3E%3C/svg%3E">
-<script>document.documentElement.classList.add('js');</script>
-<style>
-:root{
-  --bg:#0a0a0b; --bg-2:#101011; --fg:#edece7; --body:#b2b3af; --muted:#82837f;
-  --line:#25262a; --line-soft:#1b1c1f; --accent:#e0563c;
-  --serif:"Songti SC","STSong","Source Han Serif SC","Noto Serif CJK SC","SimSun",Georgia,serif;
-  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
-  color-scheme:dark;
-}
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-padding-top:86px}
-@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
-body{margin:0;cursor:default;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:14px;line-height:1.7;
-  -webkit-font-smoothing:antialiased;background-image:radial-gradient(110% 60% at 50% -8%,#151619 0%,rgba(10,10,11,0) 60%);}
-h1,h2,h3,p{margin:0}
-a{color:inherit;text-decoration:none}
-img{display:block;max-width:100%}
-::selection{background:var(--accent);color:#0a0a0b}
-:focus-visible{outline:2px solid var(--fg);outline-offset:4px}
-.wrap{width:min(100% - 56px,1240px);margin-inline:auto}
-.skip{position:fixed;left:16px;top:12px;z-index:50;background:var(--fg);color:var(--bg);padding:10px 14px;transform:translateY(-180%)}
-.skip:focus{transform:none}
-
-/* ── 顶栏 ── */
-.bar{position:sticky;top:0;z-index:30;background:rgba(10,10,11,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line-soft)}
-.bar-in{display:flex;align-items:center;gap:36px;height:66px}
-.mark{display:flex;align-items:baseline;gap:11px;flex-shrink:0}
-.mark-cn{font-family:var(--serif);font-size:21px;letter-spacing:.14em}
-.mark-en{font-size:8.5px;letter-spacing:.26em;color:var(--muted)}
-.bar nav{margin-left:auto;display:flex;gap:28px;font-size:14px;color:#b2b3af}
-.bar nav a{padding:8px 0;border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
-.bar nav a:hover{color:var(--fg);border-color:var(--line)}
-.bar-meta{font-size:10.5px;letter-spacing:.18em;color:var(--muted);padding-left:28px;border-left:1px solid var(--line-soft);white-space:nowrap}
-.bar-meta b{color:var(--fg);font-weight:500;letter-spacing:.06em}
-
-/* ── 首屏 ── */
-.hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);column-gap:clamp(32px,6vw,96px);align-items:end;padding:76px 0 48px}
-.eyebrow{grid-column:1/-1;display:flex;align-items:center;gap:14px;margin-bottom:32px;font-size:11px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
-.eyebrow i{display:block;width:22px;height:1px;background:#35363a}
-.hero h1{font-family:var(--sans);font-weight:600;font-size:clamp(54px,6.5vw,96px);line-height:1.12;letter-spacing:-.055em}
-.hero h1 span{color:#b2b3af}
-.lede{max-width:34ch;font-size:16px;line-height:1.85;color:var(--body);text-wrap:pretty}
-.ledger{grid-column:1/-1;margin-top:48px;display:flex;flex-wrap:wrap;gap:14px 44px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;letter-spacing:.02em;color:var(--muted)}
-.ledger div{display:flex;align-items:baseline;gap:9px}
-.ledger b{font-size:16px;font-weight:500;letter-spacing:.02em;color:var(--fg);font-variant-numeric:tabular-nums}
-
-/* ── 本期主片 ── */
-.feature{position:relative;isolation:isolate}
-.feature-media{display:block;position:relative;height:clamp(340px,64vh,660px);overflow:hidden;background:#000}
-.feature-media img{width:100%;height:100%;object-fit:cover;object-position:center 42%;transition:transform 1.2s cubic-bezier(.2,.6,.2,1)}
-.feature:hover .feature-media img{transform:scale(1.02)}
-.feature-media::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(10,10,11,.72) 0%,rgba(10,10,11,.15) 26%,rgba(10,10,11,.12) 46%,rgba(10,10,11,.86) 88%,#0a0a0b 100%)}
-.feature-tag{position:absolute;top:26px;left:0;right:0;display:flex;justify-content:space-between;font-size:9.5px;letter-spacing:.3em;color:#d8d8d2;pointer-events:none}
-.feature-tag span{background:rgba(10,10,11,.4);padding:5px 10px;backdrop-filter:blur(6px)}
-.feature-copy{position:absolute;left:0;right:0;bottom:0;padding-bottom:clamp(28px,5vh,52px);pointer-events:none}
-.feature-copy>*{pointer-events:auto}
-.overline{font-size:12px;letter-spacing:.06em;color:#c9c9c3}
-.feature h2{margin-top:14px;font-family:var(--serif);font-weight:400;font-size:clamp(34px,5.4vw,72px);line-height:1.08;letter-spacing:-.02em}
-.feature .logline{margin-top:18px;max-width:38ch;font-size:15px;line-height:1.85;color:#c2c3be}
-.meta{margin-top:18px;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;letter-spacing:.02em;color:#a5a6a2}
-.meta i{color:#4a4b4f;font-style:normal}
-.watch{display:inline-flex;align-items:center;gap:9px;min-height:44px;margin-top:24px;padding:11px 20px;border:1px solid rgba(237,236,231,.42);font-size:14px;letter-spacing:.02em;transition:background .2s,color .2s,border-color .2s}
-.watch svg{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.watch:hover{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-
-/* ── 收录列表 ── */
-.entries{padding-top:84px}
-.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding-bottom:16px;border-bottom:1px solid var(--line)}
-.sec-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(22px,2.2vw,27px);letter-spacing:.14em}
-.sec-head p{font-size:13px;letter-spacing:.02em;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:46px 40px;padding-top:44px}
-.card-media{display:block;position:relative;aspect-ratio:16/10;overflow:hidden;background:#000}
-.card-media img{width:100%;height:100%;object-fit:cover;transition:transform .9s cubic-bezier(.2,.6,.2,1)}
-.card:hover .card-media img{transform:scale(1.035)}
-.card-index{position:absolute;top:14px;left:16px;font-size:9.5px;letter-spacing:.24em;color:#f0efe9;text-shadow:0 1px 10px rgba(0,0,0,.9)}
-.card-runtime{position:absolute;right:14px;bottom:12px;font-size:10.5px;letter-spacing:.08em;color:#f0efe9;text-shadow:0 1px 10px rgba(0,0,0,.9);font-variant-numeric:tabular-nums}
-.card-body{padding-top:20px}
-.card-kind{font-size:12px;letter-spacing:.04em;color:var(--muted)}
-.card h3{margin-top:11px;font-family:var(--serif);font-weight:400;font-size:clamp(26px,2.7vw,34px);line-height:1.2;letter-spacing:.02em}
-.card .desc{margin-top:14px;font-size:15px;line-height:1.85;color:var(--body);text-wrap:pretty}
-.card .watch{margin-top:18px;padding:0 0 4px;border:0;border-bottom:1px solid rgba(237,236,231,.28);background:none;color:var(--fg)}
-.card .watch:hover{background:none;color:var(--accent);border-color:var(--accent)}
-.slot{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;min-height:200px;height:100%;border:1px dashed #3b3c42;text-align:center;padding:30px;transition:border-color .2s}
-.slot::before{content:"";width:36px;height:36px;border:1px solid #3d3e43;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(#5f6066,#5f6066) center/13px 1px no-repeat,
-             linear-gradient(#5f6066,#5f6066) center/1px 13px no-repeat;
-  transition:border-color .2s,background-image .2s}
-.slot:hover{border-color:#4d4e54}
-.slot:hover::before{border-color:var(--accent);
-  background:linear-gradient(var(--accent),var(--accent)) center/13px 1px no-repeat,
-             linear-gradient(var(--accent),var(--accent)) center/1px 13px no-repeat}
-.slot strong{font-family:var(--serif);font-weight:400;font-size:19px;letter-spacing:.1em;color:#d6d6d0;transition:color .2s}
-.slot:hover strong{color:var(--fg)}
-.slot span{font-size:14px;line-height:1.8;max-width:30ch;color:#a5a6a2}
-
-/* ── 收录标准 ── */
-.standard{padding:96px 0 0}
-.standard-head{max-width:520px}
-.standard-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(26px,2.9vw,38px);line-height:1.3;letter-spacing:.02em}
-.standard-head p{margin-top:18px;font-size:15px;line-height:1.85;color:var(--body)}
-.standard ol{list-style:none;margin:40px 0 0;padding:0;border-top:1px solid var(--line)}
-.standard li{display:grid;grid-template-columns:60px 190px minmax(0,1fr);gap:26px;align-items:baseline;padding:24px 0;border-bottom:1px solid var(--line)}
-.standard .num{font-size:10.5px;letter-spacing:.14em;color:var(--accent);font-variant-numeric:tabular-nums}
-.standard h3{font-size:20px;font-weight:500;letter-spacing:.02em}
-.standard li p{font-size:15px;line-height:1.85;color:var(--body)}
-
-/* ── 关于 / 声明 ── */
-.about{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(36px,6vw,80px);padding:90px 0 0;margin-top:96px;border-top:1px solid var(--line)}
-.about h2{font-family:var(--serif);font-weight:400;font-size:clamp(26px,2.9vw,36px);line-height:1.3;letter-spacing:.02em}
-.about .copy p{margin-top:22px;font-size:16px;line-height:1.9;color:var(--body);max-width:36ch}
-.declare{border:1px solid var(--line);padding:26px 26px 28px}
-.declare h3{font-size:13px;letter-spacing:.08em;color:var(--body)}
-.declare ul{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:13px}
-.declare li{position:relative;padding-left:15px;font-size:13px;line-height:1.9;color:#a5a6a2}
-.declare li::before{content:"";position:absolute;left:0;top:10px;width:6px;height:1px;background:#3d3e42}
-.submit{display:inline-flex;align-items:center;gap:9px;margin-top:22px;padding-bottom:4px;font-size:12px;border-bottom:1px solid rgba(237,236,231,.3)}
-.submit:hover{color:var(--accent);border-color:var(--accent)}
-.submit span:last-child{transition:transform .2s}
-.submit:hover span:last-child{transform:translateX(3px)}
-
-/* ── 页脚 ── */
-.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px 28px;margin-top:96px;padding:26px 0 44px;border-top:1px solid var(--line);font-size:10.5px;letter-spacing:.1em;color:var(--muted)}
-.foot b{font-weight:400;color:#b6b7b3}
-
-/* ── 入场 ── */
-.js [data-rv]{opacity:0;transform:translateY(22px)}
-.js [data-rv].in{opacity:1;transform:none;transition:opacity .85s cubic-bezier(.2,.65,.25,1),transform .85s cubic-bezier(.2,.65,.25,1)}
-@media (prefers-reduced-motion:reduce){
-  .js [data-rv],.js [data-rv].in{opacity:1!important;transform:none!important;transition:none!important}
-  .feature-media img,.card-media img{transition:none!important}
-}
-
-/* ── 响应式 ── */
-@media (max-width:980px){
-  .standard li{grid-template-columns:44px minmax(0,1fr);gap:8px 18px}
-  .standard li p{grid-column:2}
-  .about{grid-template-columns:minmax(0,1fr);gap:34px;margin-top:74px;padding-top:64px}
-}
-@media (max-width:820px){
-  .wrap{width:calc(100% - 40px)}
-  .bar-in{height:60px;gap:20px}
-  .bar nav{display:none}
-  .bar-meta{margin-left:auto;padding-left:0;border:0}
-  .hero{grid-template-columns:minmax(0,1fr);padding:52px 0 40px}
-  .eyebrow{margin-bottom:26px}
-  .hero h1{font-size:clamp(44px,8vw,64px)}
-  .lede{margin-top:24px;font-size:15px;max-width:44ch}
-  .ledger{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:32px;gap:16px 24px;font-size:12px}
-  .feature-media{height:auto;aspect-ratio:16/10}
-  .feature-media::after{background:linear-gradient(180deg,rgba(10,10,11,.55) 0%,rgba(10,10,11,.05) 34%,rgba(10,10,11,.45) 100%)}
-  .feature-copy{position:static;padding:24px 0 0}
-  .feature:hover .feature-media img{transform:none}
-  .feature-tag{top:16px;font-size:8.5px;letter-spacing:.24em}
-  .entries{padding-top:60px}
-  .grid{grid-template-columns:minmax(0,1fr);gap:38px;padding-top:32px}
-  .standard{padding-top:66px}
-  .standard ol{margin-top:28px}
-  .standard li{padding:20px 0}
-  .foot{margin-top:64px}
-}
-@media (max-width:520px){
-  .hero h1{font-size:clamp(34px,11vw,46px)}
-  .feature h2{font-size:44px}
-  .feature .logline{font-size:15px}
-  .meta{font-size:12px}
-  .watch{padding:10px 16px;font-size:14px}
-  .card h3{font-size:32px}
-  .slot{aspect-ratio:auto;min-height:200px}
-}
-</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%23101114'/%3E%3Crect x='7' y='9' width='18' height='14' fill='none' stroke='%23eeeee8' stroke-width='1.6'/%3E%3Cpath d='M13 13.5l7 2.5-7 2.5z' fill='%23eeeee8'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="framepick.css?v=20261102-library1">
+<script src="framepick.js?v=20261102-library1" defer></script>
 </head>
 <body>
-<a class="skip" href="#entries">跳到收录</a>
+<a class="skip" href="#entries">跳到片库</a>
+<svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><symbol id="bookmark" viewBox="0 0 24 24"><path d="M6 4h12v16l-6-4-6 4z"/></symbol><symbol id="search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol><symbol id="arrow" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"/></symbol></svg>
 
 <header class="bar">
   <div class="wrap bar-in">
-    <a class="mark" href="./" aria-label="帧选首页">
-      <span class="mark-cn">帧选</span>
-      <span class="mark-en">FRAMEPICK</span>
-    </a>
-    <nav aria-label="站内导航">
-      <a href="#entries">收录</a>
-      <a href="#standard">标准</a>
-      <a href="#about">关于</a>
-    </nav>
-    <p class="bar-meta">收录 <b>03</b> · VOL.01</p>
+    <a class="mark" href="./" aria-label="帧选首页"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 11V4h7M22 4h7v7M29 21v7h-7M10 28H3v-7"/><path d="m13 11 8 5-8 5z"/></svg><span class="mark-cn">帧选</span><span class="mark-en">Framepick</span></a>
+    <nav aria-label="站内导航"><a href="#entries">发现片库</a><a href="#standard">选片标准</a><a href="#membership">会员计划</a></nav>
+    <button id="savedToggle" class="saved-toggle js-only" type="button" aria-pressed="false"><svg aria-hidden="true"><use href="#bookmark"/></svg><span>我的收藏</span><span id="savedCount">0</span></button>
   </div>
 </header>
 
 <main>
-  <section class="hero wrap">
-    <p class="eyebrow" data-rv><span>Vol. 01 — 2026 秋</span><i></i><span>持续收录</span></p>
-    <h1 data-rv>影像，正在<br><span>换一种拍法。</span></h1>
-    <p class="lede" data-rv>这里收录在各类平台上真正立得住的 AI 影像：世界观成立、镜头有判断、声音与剪辑收得干净。不排名、不打分，只把作品、作者和出处标清楚，点开直达原片。</p>
-    <div class="ledger" data-rv>
-      <div><b>03</b><span>收录作品</span></div>
-      <div><b>01</b><span>来源平台</span></div>
-      <div><b>2026.10</b><span>本版更新</span></div>
-      <div><b>连载 03</b><span>更新状态</span></div>
-    </div>
+  <section class="intro wrap" aria-labelledby="introTitle">
+    <div><p class="intro-note"><span class="live-dot" aria-hidden="true"></span>AI 影像精选片库</p><h1 id="introTitle">好看的 AI 影像，<br>从这里发现。</h1></div>
+    <div class="intro-aside"><p class="lede">从热门作品到值得被看见的新作，<br class="desktop-break">把好作品、创作者与原片出处整理在一起。</p><div class="source-note"><span>首批关注</span><span>小红书</span><span>抖音</span><span>哔哩哔哩</span></div></div>
   </section>
 
-  <article class="feature" aria-labelledby="f1Title">
-    <a class="feature-media" href="https://www.douyin.com/video/7675120105457487104" target="_blank" rel="noopener noreferrer" aria-label="在抖音观看《相骨》第 01 集">
-      <img src="img/xianggu.webp" srcset="img/xianggu-640w.webp 640w, img/xianggu.webp 1280w" sizes="100vw" width="1280" height="795" alt="《相骨》：戴斗笠的犬首侠客立于客栈木廊，刀身燃起赤色火焰" loading="lazy" decoding="async">
-      <span class="feature-tag"><span>Now Screening / 本期</span><span>13:46</span></span>
+  <article class="feature wrap" aria-labelledby="f1Title">
+    <a class="feature-media" href="https://www.douyin.com/video/7675120105457487104" data-open-film="xianggu" target="_blank" rel="noopener noreferrer" aria-label="查看《相骨》">
+      <img src="img/xianggu.webp" srcset="img/xianggu-640w.webp 640w, img/xianggu.webp 1280w" sizes="(max-width:760px) calc(100vw - 36px), 65vw" width="1280" height="795" alt="《相骨》概念封面：戴斗笠的犬首侠客立于客栈木廊，刀身燃起赤色火焰" fetchpriority="high" decoding="async">
+      <span class="feature-label">编辑选片</span><span class="image-note">概念封面</span>
     </a>
-    <div class="feature-copy wrap">
-      <p class="overline">东方奇幻 · 兽人武侠 · 番剧</p>
-      <h2 id="f1Title">相骨</h2>
-      <p class="logline">人类少女误入兽人国度，伪装成白狼混进酒馆，盗走神器「相骨」，引来夜爪会与一位斗笠柴犬侠客的追杀。</p>
-      <p class="meta"><span>导演 淮左</span><i>·</i><span>与梦工作室</span><i>·</i><span>抖音</span><i>·</i><span>2026.08.18</span><i>·</i><span>第 01 集 13:46</span></p>
-      <a class="watch" href="https://www.douyin.com/video/7675120105457487104" target="_blank" rel="noopener noreferrer">观看第 01 集<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2h6v6M10 2 2.5 9.5"/></svg></a>
-    </div>
+    <div class="feature-copy"><div class="film-tags"><span>东方奇幻</span><span>兽人武侠</span></div><h2 id="f1Title">相骨</h2><p>一场误入兽人国度的冒险，<br>从客栈里的一次盗宝开始。</p><div class="feature-meta"><span>淮左 · 与梦工作室</span><span>第 01 集 / 13:46</span></div><a class="watch" href="https://www.douyin.com/video/7675120105457487104" target="_blank" rel="noopener noreferrer">前往抖音观看<svg aria-hidden="true"><use href="#arrow"/></svg></a><span class="watch-note">免费原片 · 在原平台播放</span></div>
   </article>
 
-  <section class="entries wrap" id="entries" aria-labelledby="entriesTitle">
-    <div class="sec-head" data-rv>
-      <h2 id="entriesTitle">收录</h2>
-      <p>按收录顺序排列，不分名次</p>
+  <section class="library wrap" id="entries" aria-labelledby="entriesTitle">
+    <div class="section-heading"><div><p class="section-caption">找一部，值得看的。</p><h2 id="entriesTitle" tabindex="-1">探索片库</h2></div><p id="resultCount" role="status" aria-live="polite">3 部公开精选</p></div>
+    <div class="library-controls js-only">
+      <div class="search-row"><label class="search-box" for="filmSearch"><svg aria-hidden="true"><use href="#search"/></svg><input id="filmSearch" aria-label="搜索片名、作者或题材" type="search" maxlength="100" placeholder="搜索片名、作者或题材" autocomplete="off"><span class="search-hint">找片</span></label><label class="sort-control" for="sortFilter"><span>排序</span><select id="sortFilter"><option value="curated">编辑精选</option><option value="score">评分最高</option><option value="newest">最新收录</option></select></label></div>
+      <div class="category-tabs" role="group" aria-label="作品类型">
+        <button type="button" data-category="all" aria-pressed="true">全部作品 <span>3</span></button><button type="button" data-category="series" aria-pressed="false">系列短剧 <span>3</span></button><button type="button" data-category="short" aria-pressed="false">剧情短片</button><button type="button" data-category="ad" aria-pressed="false">商业广告</button><button type="button" data-category="music" aria-pressed="false">音乐影像</button><button type="button" data-category="experimental" aria-pressed="false">实验影像</button>
+      </div>
+      <div class="filter-row">
+        <label>题材<select id="genreFilter"><option value="all">全部题材</option><option value="fantasy">奇幻</option><option value="scifi">科幻</option><option value="wuxia">武侠</option><option value="xianxia">仙侠</option></select></label>
+        <label>来源<select id="sourceFilter"><option value="all">全部来源</option><option value="xiaohongshu">小红书</option><option value="douyin">抖音</option><option value="bilibili">哔哩哔哩</option></select></label>
+        <label>评分<select id="scoreFilter"><option value="all">全部评分</option><option value="8">8 分及以上</option><option value="9">9 分及以上</option></select></label>
+        <label>片库<select id="accessFilter"><option value="all">全部精选</option><option value="free">免费精选</option><option value="vip">VIP 精选</option></select></label>
+        <span class="filter-note">已收录 3 部 · 正式评分陆续补充</span>
+      </div>
     </div>
-    <div class="grid">
-      <article class="card" aria-labelledby="c2Title" data-rv>
-        <a class="card-media" href="https://www.douyin.com/video/7670013869703813306" target="_blank" rel="noopener noreferrer" aria-label="在抖音观看《烬海棠》序章">
-          <img src="img/jinhaitang.webp" srcset="img/jinhaitang-640w.webp 640w, img/jinhaitang.webp 1280w" sizes="(max-width:820px) calc(100vw - 40px), 600px" width="1280" height="795" alt="《烬海棠》：发光的伞状异星植被下，航天员与机甲熊猫站在浅海里" loading="lazy" decoding="async">
-          <span class="card-index">02</span>
-          <span class="card-runtime">05:37</span>
-        </a>
-        <div class="card-body">
-          <p class="card-kind">科幻 · 异星生态 · 系列</p>
-          <h3 id="c2Title">烬海棠</h3>
-          <p class="desc">勇敢号抵达代号 TW-17 的烬海星。中国科考队带着动物机甲搭档登陆，采集土壤、水与植物样本——第七十三次外星生态先遣探测。</p>
-          <p class="meta"><span>导演 Mx-Shell</span><i>·</i><span>抖音精选</span><i>·</i><span>2026.08.04</span><i>·</i><span>序章 05:37</span></p>
-          <a class="watch" href="https://www.douyin.com/video/7670013869703813306" target="_blank" rel="noopener noreferrer">从序章看起<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2h6v6M10 2 2.5 9.5"/></svg></a>
-        </div>
-      </article>
 
-      <article class="card" aria-labelledby="c3Title" data-rv>
-        <a class="card-media" href="https://www.douyin.com/video/7675665548755176758" target="_blank" rel="noopener noreferrer" aria-label="在抖音观看《燕然》第 01 集">
-          <img src="img/yanran.webp" srcset="img/yanran-640w.webp 640w, img/yanran.webp 1280w" sizes="(max-width:820px) calc(100vw - 40px), 600px" width="1280" height="790" alt="《燕然》：云海之上，青衣少女与一只巨大的白兔立在崖边石台，远处山脊上层层叠叠的古城亮着灯火" loading="lazy" decoding="async">
-          <span class="card-index">03</span>
-          <span class="card-runtime">04:48</span>
-        </a>
-        <div class="card-body">
-          <p class="card-kind">仙侠 · 御兽 · 连载</p>
-          <h3 id="c3Title">燕然</h3>
-          <p class="desc">大唐安西元年，西域燕然城召开万灵大会：魁首十人将代表大唐进入安西灵境，角逐仙道至尊。一只会法术的兔子「咔咔」与它的主人也来了。</p>
-          <p class="meta"><span>导演 张小千</span><i>·</i><span>wuhu 动画人空间</span><i>·</i><span>抖音</span><i>·</i><span>2026.08</span><i>·</i><span>第 01 集 04:48</span></p>
-          <a class="watch" href="https://www.douyin.com/video/7675665548755176758" target="_blank" rel="noopener noreferrer">从第 01 集看起<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2h6v6M10 2 2.5 9.5"/></svg></a>
-        </div>
+    <div class="grid" id="filmGrid">
+      <article class="card" data-film="xianggu" data-score="" data-category="series" data-genres="fantasy wuxia" data-source="douyin" data-access="free" data-date="2026-10-31" aria-labelledby="c1Title">
+        <a class="card-media" data-open-film="xianggu" href="https://www.douyin.com/video/7675120105457487104" target="_blank" rel="noopener noreferrer" aria-label="查看《相骨》"><img src="img/xianggu-640w.webp" width="640" height="397" alt="相骨概念封面" loading="lazy" decoding="async"><span class="access-badge">免费精选</span><span class="card-runtime">13:46</span></a>
+        <div class="card-body"><div class="card-topline"><span class="kind">奇幻 / 武侠</span><span class="score" aria-label="编辑评分：待评">待评</span></div><h3 id="c1Title">相骨</h3><p class="film-author"><span class="author-name">淮左 · 与梦工作室</span><span class="source-name">抖音</span></p><p class="desc">人类少女误入兽人国度，伪装成白狼混进酒馆，盗走神器「相骨」，引来夜爪会与一位斗笠柴犬侠客的追杀。</p><p class="recommendation" hidden>从兽人国度、神器与追逐展开的东方幻想故事，适合关注原创世界观与角色设定的观众。</p><p class="episode" hidden>第 01 集 · 原片发布于 2026.08.18</p><div class="card-actions"><button class="details-button js-only" type="button" data-open-film="xianggu">作品详情</button><a class="watch" href="https://www.douyin.com/video/7675120105457487104" target="_blank" rel="noopener noreferrer">前往抖音<svg aria-hidden="true"><use href="#arrow"/></svg></a><button class="save-button js-only" type="button" data-save-film="xianggu" aria-label="收藏《相骨》" aria-pressed="false"><svg aria-hidden="true"><use href="#bookmark"/></svg></button></div></div>
       </article>
-
-      <a class="slot" href="mailto:highstrith@gmail.com?subject=%E7%89%87%E5%8D%95%E6%8F%90%E5%90%8D" data-rv>
-        <strong>下一部 · 待收录</strong>
-        <span>有新片想进片单，或想自荐，写信过来。</span>
-      </a>
+      <article class="card" data-film="jinhaitang" data-score="" data-category="series" data-genres="scifi" data-source="douyin" data-access="free" data-date="2026-10-31" aria-labelledby="c2Title">
+        <a class="card-media" data-open-film="jinhaitang" href="https://www.douyin.com/video/7670013869703813306" target="_blank" rel="noopener noreferrer" aria-label="查看《烬海棠》"><img src="img/jinhaitang-640w.webp" width="640" height="397" alt="烬海棠概念封面：发光的伞状异星植被下，航天员与机甲熊猫站在浅海里" loading="lazy" decoding="async"><span class="access-badge">免费精选</span><span class="card-runtime">05:37</span></a>
+        <div class="card-body"><div class="card-topline"><span class="kind">科幻 / 异星生态</span><span class="score" aria-label="编辑评分：待评">待评</span></div><h3 id="c2Title">烬海棠</h3><p class="film-author"><span class="author-name">Mx-Shell</span><span class="source-name">抖音</span></p><p class="desc">勇敢号抵达代号 TW-17 的烬海星。中国科考队带着动物机甲搭档登陆，采集土壤、水与植物样本——第七十三次外星生态先遣探测。</p><p class="recommendation" hidden>以科考队、动物机甲和异星生态组织故事，适合关注科幻场景与生物设计的观众。</p><p class="episode" hidden>序章「勇敢号」 · 原片发布于 2026.08.04</p><div class="card-actions"><button class="details-button js-only" type="button" data-open-film="jinhaitang">作品详情</button><a class="watch" href="https://www.douyin.com/video/7670013869703813306" target="_blank" rel="noopener noreferrer">前往抖音<svg aria-hidden="true"><use href="#arrow"/></svg></a><button class="save-button js-only" type="button" data-save-film="jinhaitang" aria-label="收藏《烬海棠》" aria-pressed="false"><svg aria-hidden="true"><use href="#bookmark"/></svg></button></div></div>
+      </article>
+      <article class="card" data-film="yanran" data-score="" data-category="series" data-genres="fantasy xianxia" data-source="douyin" data-access="free" data-date="2026-10-31" aria-labelledby="c3Title">
+        <a class="card-media" data-open-film="yanran" href="https://www.douyin.com/video/7675665548755176758" target="_blank" rel="noopener noreferrer" aria-label="查看《燕然》"><img src="img/yanran-640w.webp" width="640" height="395" alt="燕然概念封面：青衣少女与巨大的白兔立于云海崖边，远处古城亮着灯火" loading="lazy" decoding="async"><span class="access-badge">免费精选</span><span class="card-runtime">04:48</span></a>
+        <div class="card-body"><div class="card-topline"><span class="kind">仙侠 / 御兽</span><span class="score" aria-label="编辑评分：待评">待评</span></div><h3 id="c3Title">燕然</h3><p class="film-author"><span class="author-name">张小千</span><span class="source-name">抖音</span></p><p class="desc">大唐安西元年，西域燕然城召开万灵大会：魁首十人将代表大唐进入安西灵境，角逐仙道至尊。一只会法术的兔子「咔咔」与它的主人也来了。</p><p class="recommendation" hidden>从少女与灵兽搭档切入仙侠冒险，适合关注东方幻想、角色关系与连载故事的观众。</p><p class="episode" hidden>第 01 集 · 原片发布于 2026.08</p><div class="card-actions"><button class="details-button js-only" type="button" data-open-film="yanran">作品详情</button><a class="watch" href="https://www.douyin.com/video/7675665548755176758" target="_blank" rel="noopener noreferrer">前往抖音<svg aria-hidden="true"><use href="#arrow"/></svg></a><button class="save-button js-only" type="button" data-save-film="yanran" aria-label="收藏《燕然》" aria-pressed="false"><svg aria-hidden="true"><use href="#bookmark"/></svg></button></div></div>
+      </article>
     </div>
+    <div class="empty-state" id="emptyState" hidden><svg aria-hidden="true"><use href="#search"/></svg><h3 id="emptyTitle">暂时没有匹配的作品</h3><p id="emptyCopy">试试其他题材，或清除筛选条件。</p><div><button id="resetFilters" type="button" class="button">清除筛选</button><a id="emptyMembership" href="#membership" hidden>了解会员计划</a></div></div>
+    <div class="catalogue-foot"><p>原片在作者发布的平台观看，可能需要登录原平台。</p><a href="mailto:highstrith@gmail.com?subject=帧选作品推荐">推荐一部好作品<svg aria-hidden="true"><use href="#arrow"/></svg></a></div>
+    <noscript><p class="noscript-note">当前为基础浏览模式，可直接前往原平台观看全部公开作品。开启 JavaScript 后可搜索、筛选和查看详情。</p></noscript>
+  </section>
+
+  <section class="membership wrap" id="membership" aria-labelledby="membershipTitle">
+    <div class="section-heading"><div><p class="section-caption">多一些发现，少一些寻找。</p><h2 id="membershipTitle">你的下一部好片</h2></div><span class="membership-status">会员筹备中</span></div>
+    <div class="membership-grid">
+      <article class="plan free-plan"><div class="plan-top"><h3>免费精选</h3><span>现在就能看</span></div><p class="plan-description">先从一份认真整理的片单开始。</p><ul><li>浏览公开精选与作品介绍</li><li>按类型、题材与来源找片</li><li>直达原片，在本机收藏喜欢的作品</li></ul><a href="#entries" class="button" id="browseFree">浏览免费片库</a></article>
+      <article class="plan vip-plan"><div class="plan-top"><h3>帧选 VIP</h3><span class="vip-label">更多精选</span></div><p class="plan-description">完整精选片库，和持续更新的发现。</p><ul><li>计划解锁更多精选条目与原片出处</li><li>完整主题片单，找到同类好作品</li><li>持续补充新作，维护片源链接</li></ul><button type="button" class="button js-only" data-membership>了解 VIP 计划</button><p class="plan-status">尚未开放订阅，价格与更新频率将在开放时公布。</p></article>
+    </div>
+    <p class="membership-note">免费与 VIP 使用同一选片标准。会员权益是更多精选信息与整理服务，原片仍在作者平台观看。</p>
   </section>
 
   <section class="standard wrap" id="standard" aria-labelledby="standardTitle">
-    <div class="standard-head" data-rv>
-      <h2 id="standardTitle">收录标准</h2>
-      <p>不做排行榜，也不打分数。只看四件事，有一条站不住，作品就先留在外面等。</p>
-    </div>
-    <ol data-rv>
-      <li><span class="num">01</span><h3>世界观</h3><p>设定不止于好看：物种、道具、规则彼此咬合，细节为后面的情节留了位置。</p></li>
-      <li><span class="num">02</span><h3>镜头</h3><p>有镜头判断，而不只是画面堆叠。景别、运镜与节奏能撑起一场戏，不用剪辑去掩盖。</p></li>
-      <li><span class="num">03</span><h3>声音</h3><p>配音、音效与配乐进入叙事，而不是靠一段配乐硬推情绪。</p></li>
-      <li><span class="num">04</span><h3>完成度</h3><p>一部作品能被完整看完；连载中的作品，也要看得出作者知道自己在往哪走。</p></li>
-    </ol>
+    <div class="standard-intro"><p class="section-caption">热度帮助发现，质量决定收录。</p><h2 id="standardTitle">每次推荐，都有理由。</h2><p>关注热门，也给高质量的新作留位置。<br>粉丝多少，不是作品进入片库的门槛。</p></div>
+    <div class="standard-list"><article><h3>创意与表达</h3><p>有明确的想法，让画面表达一件值得说的事。</p></article><article><h3>画面与镜头</h3><p>构图、光影、连续性与剪辑，共同服务于作品。</p></article><article><h3>声音与完成度</h3><p>按作品类型看声音、节奏与整体表达，不只看一张漂亮截图。</p></article><p class="rating-note">编辑评分采用 10 分制，完成审核后才公开。标记「待评」的作品暂不参与评分榜单。</p></div>
   </section>
 
-  <section class="about wrap" id="about" aria-labelledby="aboutTitle">
-    <div class="copy" data-rv>
-      <h2 id="aboutTitle">关于帧选</h2>
-      <p>帧选 Framepick 是橘小桔做的 AI 影像精选产品，把值得看的作品、创作者和原片出处整理在一起，让找片更简单。</p>
-      <p>片单从 2026 年开始整理，第一批收的是在抖音连载的三部作品。之后按题材与来源接着扩：B 站、YouTube 和各家 AI 影像平台的作品会进入同一份索引。</p>
-      <p>现在每一条都跳转到原平台观看。站内播放正在规划：等收录量与授权理清之后，这里会直接能看片，并支持按导演、题材、模型与制作方式检索。</p>
-    </div>
-    <aside class="declare" data-rv>
-      <h3>声明</h3>
-      <ul>
-        <li>作品版权归创作者与首播平台所有；本站只做索引与介绍，不提供下载与转存。</li>
-        <li>封面为按作品调性重绘的概念图，并非官方海报；官方物料以原片平台为准。</li>
-        <li>播放量、奖项等信息为收录时的公开资料，会随时间变化。</li>
-      </ul>
-      <a class="submit" href="mailto:highstrith@gmail.com?subject=%E7%89%87%E5%8D%95%E6%8F%90%E5%90%8D"><span>提名或自荐作品</span><span aria-hidden="true">→</span></a>
-    </aside>
-  </section>
+  <section class="about wrap" id="about"><div><h2>关于帧选</h2><p>帧选 Framepick 是橘小桔做的 AI 影像精选产品。首批关注小红书、抖音与哔哩哔哩，把值得看的作品、作者与原片出处整理在一起。</p><p>当前公开片库来自抖音。其他来源与更多作品将核实后补充；搜片服务与会员订阅正在筹备。</p></div><div class="declare"><h3>关于作品与来源</h3><p>版权归创作者与原平台所有。本站提供索引与介绍，不提供视频下载或转存。</p><p>当前封面为按作品调性重绘的概念图，并非官方海报；官方物料以原平台为准。来源与评分信息以实际核实情况为准。</p></div></section>
 </main>
 
-<footer class="wrap foot">
-  <span>© 2026 帧选 <b>FRAMEPICK</b> · <a href="../#filmRecommendations">橘小桔的主页</a></span>
-  <span>影像版权归各创作者与首播平台所有</span>
-  <span>VOL. 01 · 2026.10</span>
-</footer>
+<footer class="wrap foot"><a class="footer-brand" href="./">帧选 <span>Framepick</span></a><p>© 2026 · 让好作品被看见</p><a href="../#filmRecommendations">橘小桔的主页</a></footer>
 
-<script>
-(() => {
-  const items = [...document.querySelectorAll('[data-rv]')];
-  if (!items.length) return;
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
-    items.forEach(el => el.classList.add('in'));
-    return;
-  }
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add('in');
-      io.unobserve(entry.target);
-    });
-  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
-  items.forEach(el => io.observe(el));
-})();
-</script>
+<dialog id="filmDialog" class="film-dialog" aria-labelledby="detailTitle"><button type="button" class="dialog-close" data-close-film aria-label="关闭作品详情">×</button><div class="detail-layout"><div class="detail-cover"><img id="detailImage" alt=""><span>概念封面 · 非官方海报</span></div><div class="detail-copy"><p id="detailKind" class="kind"></p><h2 id="detailTitle"></h2><p id="detailAuthor" class="detail-author"></p><p id="detailEpisode" class="detail-episode"></p><p id="detailDescription"></p><div class="detail-reason"><h3>选片线索</h3><p id="detailReason"></p></div><p id="detailScore" class="detail-score"></p><div class="detail-actions"><a id="detailWatch" class="button" target="_blank" rel="noopener noreferrer">前往抖音观看<svg aria-hidden="true"><use href="#arrow"/></svg></a><button type="button" id="detailSave" class="button secondary" aria-pressed="false">收藏作品</button></div><p class="detail-disclaimer">免费原片 · 在原平台播放，可能需要登录。</p></div></div></dialog>
+<dialog id="membershipDialog" class="membership-dialog" aria-labelledby="memberDialogTitle"><button type="button" class="dialog-close" data-close-membership aria-label="关闭会员说明">×</button><span class="vip-label">帧选 VIP</span><h2 id="memberDialogTitle">更多好片，正在准备。</h2><p>会员尚未开放订阅。开放后，计划提供完整精选片库、专题与持续更新；现有免费作品继续开放。</p><p>价格、可解锁内容和更新频率会在订阅前明确展示。</p><a href="#entries" class="button" id="memberBrowse">先浏览免费精选</a></dialog>
+<p id="notice" class="notice" role="status" aria-live="polite"></p>
 </body>
 </html>
