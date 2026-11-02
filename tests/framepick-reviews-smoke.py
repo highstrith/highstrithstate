@@ -95,10 +95,71 @@ class FramepickReviews(unittest.TestCase):
         page.locator('#reviewSubmit').click()
         expect(page.locator('#reviewStatus')).to_contain_text('已保存')
 
+    def outbound_count(self, film='xianggu'):
+        data = json.loads(urllib.request.urlopen(self.base + '/api/framepick/outbound/summary').read())
+        return next(entry['outboundClicks'] for entry in data['films'] if entry['filmId'] == film)
+
+    def leave_for_original(self, page, context, selector):
+        with context.expect_page() as popup:
+            page.locator(selector).click()
+        popup.value.close()
+
+    def test_outbound_native_links_share_deduplicated_counts_but_detail_never_counts(self):
+        self.context.route('https://www.douyin.com/**', lambda route: route.fulfill(body='<title>Original fixture</title>'))
+        baseline = self.outbound_count()
+        self.page.goto(self.base + '/reel/')
+        self.page.locator('button[data-open-film="xianggu"]').click()
+        self.assertEqual(self.outbound_count(), baseline)
+        self.leave_for_original(self.page, self.context, '#detailWatch')
+        self.page.wait_for_function('(n)=>document.querySelector("#rankingPopular [data-ranking-film=xianggu]")?.textContent.includes(n+" 次原作跳转")', arg=baseline + 1)
+        self.leave_for_original(self.page, self.context, '#detailWatch')
+        self.assertEqual(self.outbound_count(), baseline + 1)
+        self.page.keyboard.press('Escape')
+        # The header/feature/detail are the same guest identity, not extra views.
+        self.leave_for_original(self.page, self.context, '.feature .watch')
+        self.assertEqual(self.outbound_count(), baseline + 1)
+        other = self.browser.new_context()
+        self.addCleanup(other.close)
+        other.route('https://www.douyin.com/**', lambda route: route.fulfill(body='<title>Original fixture</title>'))
+        second = other.new_page()
+        second.goto(self.base + '/reel/')
+        self.leave_for_original(second, other, '#filmGrid [data-film="xianggu"] .watch')
+        second.wait_for_function('(n)=>document.querySelector("#rankingPopular [data-ranking-film=xianggu]")?.textContent.includes(n+" 次原作跳转")', arg=baseline + 2)
+        self.page.reload()
+        expect(self.page.locator('#rankingPopular [data-ranking-film="xianggu"]')).to_contain_text(str(baseline + 2) + ' 次原作跳转')
+
+    def test_outbound_failure_never_blocks_original_or_invents_count(self):
+        self.context.route('https://www.douyin.com/**', lambda route: route.fulfill(body='<title>Original fixture</title>'))
+        baseline = self.outbound_count()
+        self.page.route('**/films/xianggu/outbound', lambda route: route.fulfill(status=503, json={'error': 'Temporary fixture failure'}))
+        self.page.goto(self.base + '/reel/')
+        self.leave_for_original(self.page, self.context, '#filmGrid [data-film="xianggu"] .watch')
+        self.assertEqual(self.outbound_count(), baseline)
+        expect(self.page.locator('#filmDialog')).not_to_be_visible()
+
+    def test_delayed_initial_outbound_summary_cannot_replace_new_count(self):
+        baseline = self.outbound_count()
+        self.context.route('https://www.douyin.com/**', lambda route: route.fulfill(body='<title>Original fixture</title>'))
+        self.page.add_init_script("""const fetchOutbound = window.fetch; let firstOutbound = true;
+          window.fetch = (url, options) => {
+            const response = fetchOutbound(url, options);
+            if (String(url).endsWith('/outbound/summary') && firstOutbound) {
+              firstOutbound = false;
+              return response.then(async result => { await new Promise(resolve=>setTimeout(resolve, 1200)); return result; });
+            }
+            return response;
+          };""")
+        self.page.goto(self.base + '/reel/')
+        self.leave_for_original(self.page, self.context, '#filmGrid [data-film="xianggu"] .watch')
+        row = self.page.locator('#rankingPopular [data-ranking-film="xianggu"]')
+        expect(row).to_contain_text(str(baseline + 1) + ' 次原作跳转')
+        self.page.wait_for_timeout(1400)
+        expect(row).to_contain_text(str(baseline + 1) + ' 次原作跳转')
+
     def hold_initial_summary(self):
         self.page.add_init_script("""const summaryFetch=window.fetch;window.fetch=async(...args)=>{
           const response=await summaryFetch(...args);
-          if(String(args[0]).endsWith('/summary')){
+          if(String(args[0]).endsWith('/api/framepick/summary')){
             const body=await response.text();
             await new Promise(resolve=>{window.__releaseSummary=resolve;});
             return new Response(body,{status:response.status,headers:response.headers});
@@ -273,7 +334,7 @@ class FramepickReviews(unittest.TestCase):
     def test_delayed_initial_summary_cannot_replace_new_rating(self):
         self.page.add_init_script("""const baseFetch=window.fetch;window.fetch=(url,options)=>{
           const result=baseFetch(url,options);
-          if(String(url).endsWith('/summary')) return result.then(async response=>{
+          if(String(url).endsWith('/api/framepick/summary')) return result.then(async response=>{
             const body=await response.text();window.__oldSummaryReady=true;
             await new Promise(resolve=>setTimeout(resolve,1000));
             return new Response(body,{status:response.status,headers:response.headers});

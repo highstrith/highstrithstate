@@ -5,7 +5,9 @@
   const $ = (selector) => root.querySelector(selector);
   let films = [];
   let latestSummary = null;
+  let latestOutbound = null;
   const dayMs = 86400000;
+  const futureSkewMs = 60000; // Permit small server/browser clock differences.
   const chinaDay = () => new Date(Date.now() + 8 * 3600000).toISOString().slice(0, 10);
   const shortDay = (day) => day.slice(5).replace('-', '.');
   const validDay = (day) => typeof day === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(day) && Number.isFinite(Date.parse(day)) && new Date(day).toISOString().slice(0, 10) === day;
@@ -61,15 +63,18 @@
     renderList('#rankingDaily', entries.map((film) => ({ film, label: shortDay(film.date) + ' 收录 · ' + film.runtime })));
   }
 
-  function renderPopular() {
-    const data = window.FRAMEPICK_RANKING_DATA;
-    if (!data?.available) return;
+  function renderPopular(data) {
+    if (!data?.available) {
+      $('#popularRankingStatus').textContent = data?.configured ? '共享跳转统计暂不可用，连接后恢复榜单。' : '共享跳转统计尚未配置，暂不能显示热门排名。';
+      renderList('#rankingPopular', []);
+      return;
+    }
     const today = chinaDay();
     const start = new Date(Date.parse(today) - 9 * dayMs).toISOString().slice(0, 10);
     const seen = new Set();
     const updated = Date.parse(data.updatedAt);
-    const valid = data.windowStart === start && data.windowEnd === today && Number.isFinite(updated) && updated <= Date.now() && Date.now() - updated < dayMs && Array.isArray(data.films) && data.films.every((entry) => {
-      if (!entry || typeof entry.filmId !== 'string' || seen.has(entry.filmId) || !Number.isSafeInteger(entry.effectivePlays) || entry.effectivePlays < 0) return false;
+    const valid = data.metric === 'outbound-clicks' && data.windowStart === start && data.windowEnd === today && Number.isFinite(updated) && updated <= Date.now() + futureSkewMs && Date.now() - updated < dayMs && Array.isArray(data.films) && data.films.every((entry) => {
+      if (!entry || typeof entry.filmId !== 'string' || seen.has(entry.filmId) || !Number.isSafeInteger(entry.outboundClicks) || entry.outboundClicks < 0) return false;
       seen.add(entry.filmId);
       return true;
     });
@@ -78,10 +83,10 @@
       renderList('#rankingPopular', []);
       return;
     }
-    const counts = new Map(data.films.map((entry) => [entry.filmId, entry.effectivePlays]));
+    const counts = new Map(data.films.map((entry) => [entry.filmId, entry.outboundClicks]));
     const entries = films.filter((film) => (counts.get(film.id) || 0) > 0).sort((a, b) => counts.get(b.id) - counts.get(a.id) || a.index - b.index);
-    $('#popularRankingStatus').textContent = shortDay(start) + '–' + shortDay(today) + (entries.length ? ' · 本站有效播放' : ' · 暂无有效播放记录');
-    renderList('#rankingPopular', entries.map((film) => ({ film, label: counts.get(film.id).toLocaleString('zh-CN') + ' 次有效播放' })));
+    $('#popularRankingStatus').textContent = shortDay(start) + '–' + shortDay(today) + (entries.length ? ' · 本站原作跳转' : ' · 暂无原作跳转，观看后更新');
+    renderList('#rankingPopular', entries.map((film) => ({ film, label: counts.get(film.id).toLocaleString('zh-CN') + ' 次原作跳转' })));
   }
 
   window.addEventListener('framepick:catalogue-ready', () => {
@@ -91,7 +96,7 @@
       link: card.querySelector('.watch').href, runtime: card.querySelector('.card-runtime')?.textContent.trim() || '时长待核实'
     }));
     renderDaily();
-    renderPopular();
+    renderPopular(latestOutbound);
     if (latestSummary) renderAcclaimed(latestSummary);
   });
 
@@ -107,6 +112,10 @@
     latestSummary = detail;
     renderAcclaimed(detail);
   });
+  window.addEventListener('framepick:outbound-summary', ({ detail }) => {
+    latestOutbound = detail;
+    renderPopular(detail);
+  });
 
   root.addEventListener('click', (event) => {
     const link = event.target.closest('[data-ranking-film]');
@@ -115,5 +124,5 @@
     window.dispatchEvent(new CustomEvent('framepick:request-film', { detail: { id: link.dataset.rankingFilm, trigger: link } }));
   });
   // Refresh calendar-bound lists after a background tab passes midnight.
-  document.addEventListener('visibilitychange', () => { if (!document.hidden && films.length) { renderDaily(); renderPopular(); } });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && films.length) { renderDaily(); renderPopular(latestOutbound); } });
 })();

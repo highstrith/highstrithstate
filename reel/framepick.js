@@ -184,6 +184,7 @@
     $('#detailImage').src = film.image.src;
     $('#detailImage').alt = film.image.alt;
     $('#detailWatch').href = film.link;
+    $('#detailWatch').dataset.outboundFilm = film.id;
     $('#detailScore').textContent = film.score === null ? '编辑评分：待评。完成审核后公开，不计入评分榜单。' : '编辑评分：' + film.score.toFixed(1) + ' / 10';
     syncSaved();
     if (push) {

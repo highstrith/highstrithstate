@@ -1,7 +1,6 @@
 """Public ranking behavior, using a read-only static fixture and explicit snapshots."""
 import functools
 import http.server
-import json
 import threading
 import time
 import unittest
@@ -49,7 +48,7 @@ class FramepickRankings(unittest.TestCase):
 
     def open(self, snapshot=None, source=None):
         if snapshot is not None:
-            self.page.route('**/ranking-data.js*', lambda route: route.fulfill(body='window.FRAMEPICK_RANKING_DATA=' + json.dumps(snapshot), content_type='application/javascript'))
+            self.page.route('**/api/framepick/outbound/summary', lambda route: route.fulfill(json=snapshot))
         if source is not None:
             self.page.route('**/reel/', lambda route: route.fulfill(body=source, content_type='text/html'))
         self.page.goto(self.base + '/reel/')
@@ -61,8 +60,8 @@ class FramepickRankings(unittest.TestCase):
         expect(self.page.locator('#rankingDaily [data-ranking-film]')).to_have_count(3)
         expect(self.page.locator('#rankingDaily [data-ranking-film]').first).to_contain_text('相骨')
         expect(self.page.locator('#dailyRankingStatus')).to_contain_text('今日暂无新收录')
-        expect(self.page.locator('#rankingPopular')).to_contain_text('本站有效播放')
-        expect(self.page.locator('#rankingPopular')).to_contain_text('尚未接通')
+        expect(self.page.locator('#rankingPopular')).to_contain_text('去重跳转次数')
+        expect(self.page.locator('#rankingPopular')).to_contain_text('暂不可用')
         expect(self.page.locator('#rankingAcclaimed')).to_contain_text('至少 5 人')
         trigger = self.page.locator('#rankingDaily [data-ranking-film]').first
         trigger.click()
@@ -71,9 +70,9 @@ class FramepickRankings(unittest.TestCase):
         expect(self.page.locator('#filmDialog')).not_to_be_visible()
         expect(trigger).to_be_focused()
 
-    def test_popular_uses_current_ten_day_station_snapshot_only(self):
-        snapshot = {'available': True, 'windowStart': '2026-10-24', 'windowEnd': '2026-11-02', 'updatedAt': '2026-11-02T00:00:00Z',
-                    'films': [{'filmId': 'xianggu', 'effectivePlays': 50}, {'filmId': 'jinhaitang', 'effectivePlays': 300}, {'filmId': 'yanran', 'effectivePlays': 0}]}
+    def test_popular_uses_current_ten_day_outbound_counts_only(self):
+        snapshot = {'metric': 'outbound-clicks', 'windowStart': '2026-10-24', 'windowEnd': '2026-11-02', 'updatedAt': '2026-11-02T00:00:00Z',
+                    'films': [{'filmId': 'xianggu', 'outboundClicks': 50}, {'filmId': 'jinhaitang', 'outboundClicks': 300}, {'filmId': 'yanran', 'outboundClicks': 0}]}
         self.open(snapshot)
         rows = self.page.locator('#rankingPopular [data-ranking-film]')
         expect(rows).to_have_count(2)
@@ -84,14 +83,27 @@ class FramepickRankings(unittest.TestCase):
 
     def test_stale_wrong_window_and_invalid_snapshot_never_rank(self):
         for snapshot in [
-            {'available': True, 'windowStart': '2026-10-23', 'windowEnd': '2026-11-01', 'updatedAt': '2026-11-01T22:00:00Z', 'films': [{'filmId': 'xianggu', 'effectivePlays': 900}]},
-            {'available': True, 'windowStart': '2026-10-25', 'windowEnd': '2026-11-02', 'updatedAt': '2026-11-02T00:00:00Z', 'films': [{'filmId': 'xianggu', 'effectivePlays': 900}]},
-            {'available': True, 'windowStart': '2026-10-24', 'windowEnd': '2026-11-02', 'updatedAt': '2026-11-02T00:00:00Z', 'films': [{'filmId': 'xianggu', 'effectivePlays': -1}]},
+            {'metric': 'outbound-clicks', 'windowStart': '2026-10-23', 'windowEnd': '2026-11-01', 'updatedAt': '2026-11-01T22:00:00Z', 'films': [{'filmId': 'xianggu', 'outboundClicks': 900}]},
+            {'metric': 'outbound-clicks', 'windowStart': '2026-10-25', 'windowEnd': '2026-11-02', 'updatedAt': '2026-11-02T00:00:00Z', 'films': [{'filmId': 'xianggu', 'outboundClicks': 900}]},
+            {'metric': 'outbound-clicks', 'windowStart': '2026-10-24', 'windowEnd': '2026-11-02', 'updatedAt': '2026-11-02T00:00:00Z', 'films': [{'filmId': 'xianggu', 'outboundClicks': -1}]},
+            {'metric': 'effective-plays', 'windowStart': '2026-10-24', 'windowEnd': '2026-11-02', 'updatedAt': '2026-11-02T00:00:00Z', 'films': [{'filmId': 'xianggu', 'outboundClicks': 900}]},
         ]:
             self.open(snapshot)
             expect(self.page.locator('#rankingPopular [data-ranking-film]')).to_have_count(0)
             expect(self.page.locator('#popularRankingStatus')).to_contain_text('数据暂不可用')
-            self.page.unroute('**/ranking-data.js*')
+            self.page.unroute('**/api/framepick/outbound/summary')
+
+    def test_live_outbound_tolerates_small_clock_skew_but_rejects_far_future(self):
+        self.page.clock.set_fixed_time(1793577600)
+        snapshot = {'metric': 'outbound-clicks', 'windowStart': '2026-10-24', 'windowEnd': '2026-11-02',
+                    'updatedAt': '2026-11-02T00:00:05Z', 'films': [{'filmId': 'xianggu', 'outboundClicks': 5}]}
+        self.open(snapshot)
+        expect(self.page.locator('#rankingPopular [data-ranking-film="xianggu"]')).to_contain_text('5 次原作跳转')
+        self.page.unroute('**/api/framepick/outbound/summary')
+        snapshot['updatedAt'] = '2026-11-02T00:02:00Z'
+        self.open(snapshot)
+        expect(self.page.locator('#rankingPopular [data-ranking-film]')).to_have_count(0)
+        expect(self.page.locator('#popularRankingStatus')).to_contain_text('数据暂不可用')
 
     def test_acclaimed_excludes_single_vote_and_orders_with_sample_weight(self):
         self.open()
@@ -112,7 +124,7 @@ class FramepickRankings(unittest.TestCase):
         # Resolve the review client's real fetch path before the deferred main
         # script is delivered. Its catalogue-ready replay then precedes ours.
         self.page.add_init_script("""const originalFetch = window.fetch;
-          window.fetch = (url, options) => String(url).endsWith('/summary')
+          window.fetch = (url, options) => String(url).endsWith('/api/framepick/summary')
             ? Promise.resolve(new Response(JSON.stringify({films:[{filmId:'xianggu',averageRating:9,ratingCount:5}]}), {status:200,headers:{'Content-Type':'application/json'}}))
             : originalFetch(url, options);""")
         def slow_main(route):

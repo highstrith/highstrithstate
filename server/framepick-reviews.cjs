@@ -94,6 +94,18 @@ function validateDatabase(db) {
     if (!/^[a-f0-9]{64}$/.test(id) || !guest || !shortText(guest.nickname, 24)
       || !Number.isFinite(guest.lastWriteAt)) throw new Error("Invalid stored guest");
   }
+  // Version 1 databases created before outbound rankings have no such field.
+  if (db.outbound === undefined) db.outbound = [];
+  if (!Array.isArray(db.outbound)) throw new Error("Invalid outbound database");
+  const outboundPairs = new Set();
+  for (const entry of db.outbound) {
+    if (!entry || !/^[a-f0-9]{64}$/.test(entry.visitorId) || typeof entry.filmId !== "string"
+      || typeof entry.day !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(entry.day)
+      || !Number.isFinite(Date.parse(entry.day)) || new Date(entry.day).toISOString().slice(0, 10) !== entry.day) throw new Error("Invalid outbound entry");
+    const pair = `${entry.visitorId}:${entry.filmId}:${entry.day}`;
+    if (outboundPairs.has(pair)) throw new Error("Duplicate outbound entry");
+    outboundPairs.add(pair);
+  }
   return db;
 }
 
@@ -119,6 +131,7 @@ function createReviewHandler({
   filmIds = DEFAULT_FILM_IDS,
   cooldownMs = Number(process.env.FRAMEPICK_REVIEWS_COOLDOWN_MS ?? 1500),
   allowedOrigin = process.env.FRAMEPICK_REVIEWS_ALLOWED_ORIGIN || "",
+  clock = Date.now,
 } = {}) {
   if (!Number.isFinite(cooldownMs) || cooldownMs < 0) throw new Error("Invalid review cooldown");
   const films = new Set(filmIds);
@@ -142,7 +155,7 @@ function createReviewHandler({
       existing = true;
     } catch (error) {
       if (error.code !== "ENOENT") throw error;
-      db = { version: 1, reviews: [], guests: {} };
+      db = { version: 1, reviews: [], guests: {}, outbound: [] };
     }
     try { secret = await fs.readFile(keyFile, "utf8"); }
     catch (error) {
@@ -199,6 +212,23 @@ function createReviewHandler({
     return result;
   }
 
+  function outboundWindow() {
+    const time = clock();
+    const day = new Date(time + 8 * 3600000).toISOString().slice(0, 10);
+    return { windowStart: new Date(Date.parse(day) - 9 * 86400000).toISOString().slice(0, 10),
+      windowEnd: day, updatedAt: new Date(time).toISOString() };
+  }
+
+  function outboundSummary() {
+    const window = outboundWindow();
+    const counts = new Map();
+    for (const entry of db.outbound) if (entry.day >= window.windowStart && entry.day <= window.windowEnd) {
+      counts.set(entry.filmId, (counts.get(entry.filmId) || 0) + 1);
+    }
+    return { metric: "outbound-clicks", ...window,
+      films: [...films].map(filmId => ({ filmId, outboundClicks: counts.get(filmId) || 0 })) };
+  }
+
   return async function handleReviewRequest(req, res, url) {
     if (url.pathname !== "/api/framepick" && !url.pathname.startsWith("/api/framepick/")) return false;
     res.setHeader("Vary", "Origin");
@@ -214,22 +244,44 @@ function createReviewHandler({
       if (writing && req.headers["sec-fetch-site"] === "cross-site" && (!origin || origin !== allowedOrigin)) throw failure(403, "不允许跨站提交。");
       const isSession = url.pathname === "/api/framepick/session";
       const isSummary = url.pathname === "/api/framepick/summary";
-      const match = url.pathname.match(/^\/api\/framepick\/films\/([^/]+)\/reviews$/);
+      const isOutboundSummary = url.pathname === "/api/framepick/outbound/summary";
+      const match = url.pathname.match(/^\/api\/framepick\/films\/([^/]+)\/(reviews|outbound)$/);
+      const isOutbound = match?.[2] === "outbound";
       const filmId = match ? decodeURIComponent(match[1]) : null;
-      if (!isSession && !isSummary && !match) throw failure(404, "接口不存在。");
+      if (!isSession && !isSummary && !isOutboundSummary && !match) throw failure(404, "接口不存在。");
       if (match && !films.has(filmId)) throw failure(404, "作品不存在。");
+      const methods = isSession || isSummary || isOutboundSummary ? ["GET"] : isOutbound ? ["POST"] : ["GET", "POST", "DELETE"];
       if (req.method === "OPTIONS") {
-        res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+        res.setHeader("Access-Control-Allow-Methods", [...methods, "OPTIONS"].join(", "));
         res.setHeader("Access-Control-Allow-Headers", "Content-Type");
         res.writeHead(204); res.end(); return true;
       }
-      if ((isSession || isSummary) ? req.method !== "GET" : !["GET", "POST", "DELETE"].includes(req.method)) {
-        res.setHeader("Allow", isSession || isSummary ? "GET, OPTIONS" : "GET, POST, DELETE, OPTIONS");
+      if (!methods.includes(req.method)) {
+        res.setHeader("Allow", [...methods, "OPTIONS"].join(", "));
         throw failure(405, "请求方法不支持。");
       }
       try { await (ready ||= initialize()); }
       catch (_) { throw failure(503, "评价存储不可用，请联系站点维护者。"); }
       const visitorId = visitorFromCookie(req);
+      if (isOutboundSummary) { sendJson(res, 200, outboundSummary()); return true; }
+      if (isOutbound) {
+        if (!visitorId) { req.resume(); throw failure(401, "请先开启访客模式。"); }
+        const payload = await readJsonBody(req);
+        if (!payload || typeof payload !== "object" || Array.isArray(payload)) throw failure(400, "跳转记录须为 JSON 对象。");
+        const counted = await serialize(async () => {
+          const window = outboundWindow();
+          if (db.outbound.some(entry => entry.visitorId === visitorId && entry.filmId === filmId && entry.day === window.windowEnd)) return false;
+          const outbound = db.outbound.filter(entry => entry.day >= window.windowStart && entry.day <= window.windowEnd);
+          outbound.push({ visitorId, filmId, day: window.windowEnd });
+          const next = { ...db, outbound };
+          try { await atomicWrite(databaseFile, next); }
+          catch (_) { throw failure(503, "跳转记录保存失败，请稍后重试。"); }
+          db = next;
+          return true;
+        });
+        sendJson(res, 200, { counted });
+        return true;
+      }
       if (isSession) {
         const id = visitorId || crypto.randomBytes(32).toString("hex");
         setGuestCookie(req, res, id);
@@ -256,7 +308,7 @@ function createReviewHandler({
             res.setHeader("Retry-After", String(Math.max(1, Math.ceil((cooldownMs - (now - lastWrite)) / 1000))));
             throw failure(429, "操作太快，请稍后重试。");
           }
-          const next = { version: 1, reviews: [...db.reviews], guests: { ...db.guests } };
+          const next = { ...db, reviews: [...db.reviews], guests: { ...db.guests } };
           const index = next.reviews.findIndex(review => review.filmId === filmId && review.visitorId === visitorId);
           if (payload) {
             const previous = next.reviews[index];

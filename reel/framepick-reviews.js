@@ -26,6 +26,8 @@
   let busy = false;
   let shown = 0;
   let yourReview = null;
+  let outboundReadVersion = 0;
+  let outboundState = { available: false, configured: Boolean(api) };
 
   function setText(selector, text) { $(selector).textContent = text; }
   function isCurrent(id, version) { return current?.id === id && generation === version; }
@@ -80,6 +82,36 @@
     });
     return sessionPromise;
   }
+
+  function emitOutbound(state) {
+    outboundState = state;
+    window.dispatchEvent(new CustomEvent('framepick:outbound-summary', { detail: state }));
+  }
+  async function refreshOutbound() {
+    const version = ++outboundReadVersion;
+    if (!api) { emitOutbound({ available: false, configured: false }); return; }
+    try {
+      const data = await request('/outbound/summary');
+      if (version === outboundReadVersion) emitOutbound({ ...data, available: true, configured: true });
+    } catch {
+      if (version === outboundReadVersion) emitOutbound({ available: false, configured: true });
+    }
+  }
+  const outboundFilmIds = new Set([...document.querySelectorAll('#filmGrid [data-film]')].map(card => card.dataset.film));
+  function trackOutbound(event) {
+    const link = event.target.closest('a[data-outbound-film]');
+    if (!api || !link || !event.isTrusted || event.defaultPrevented || event.altKey
+      || (event.type === 'click' ? event.button !== 0 : event.button !== 1)
+      || !outboundFilmIds.has(link.dataset.outboundFilm)) return;
+    const id = link.dataset.outboundFilm;
+    // Preserve native link behavior; analytics failure must never block viewing.
+    ensureSession().then(() => request('/films/' + encodeURIComponent(id) + '/outbound', {
+      method: 'POST', body: '{}', keepalive: true, headers: { 'Content-Type': 'application/json' }
+    })).then(refreshOutbound).catch(() => {});
+  }
+  document.addEventListener('click', trackOutbound);
+  document.addEventListener('auxclick', trackOutbound);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshOutbound(); });
 
   function dispatchSummary(available) {
     window.dispatchEvent(new CustomEvent('framepick:review-summary', { detail: { films: [...summaries.values()], available } }));
@@ -234,7 +266,10 @@
     loadingController = null;
     current = null;
   });
-  window.addEventListener('framepick:catalogue-ready', () => { if (summaries.size) dispatchSummary(true); });
+  window.addEventListener('framepick:catalogue-ready', () => {
+    if (summaries.size) dispatchSummary(true);
+    emitOutbound(outboundState);
+  });
   $('#reviewForm').addEventListener('input', () => { dirty = true; });
   $('#reviewForm').addEventListener('change', () => { dirty = true; });
 
@@ -292,4 +327,5 @@
   });
   setText('#guestAvailability', api ? '共享评价服务将在首次使用时识别此浏览器。' : offline);
   refreshSummary();
+  refreshOutbound();
 })();

@@ -67,6 +67,86 @@ function checkPublic(result, cookies) {
   assert.doesNotMatch(result.text, /visitorId|guestId|secret|signature/);
 }
 
+test('outbound ranking counts distinct guest/film/China days, shares totals and survives restart', async t => {
+  const f = await fixture(t);
+  const a = await f.session(), b = await f.session();
+  const outbound = '/api/framepick/films/xianggu/outbound';
+  assert.equal((await f.request(outbound, { method: 'POST', body: {} })).status, 401);
+  assert.deepEqual((await f.request(outbound, { cookie: a, method: 'POST', body: {} })).body, { counted: true });
+  assert.deepEqual((await f.request(outbound, { cookie: a, method: 'POST', body: {} })).body, { counted: false });
+  assert.equal((await f.request(outbound, { cookie: b, method: 'POST', body: {} })).status, 200);
+  const summary = await f.request('/api/framepick/outbound/summary');
+  assert.equal(summary.body.metric, 'outbound-clicks');
+  assert.equal(summary.body.films.find(f => f.filmId === 'xianggu').outboundClicks, 2);
+  assert.equal(summary.body.films.find(f => f.filmId === 'yanran').outboundClicks, 0);
+  assert.doesNotMatch(summary.text, /visitorId|nickname|secret|signature/);
+  await f.restart();
+  assert.equal((await f.request('/api/framepick/outbound/summary')).body.films.find(f => f.filmId === 'xianggu').outboundClicks, 2);
+  assert.deepEqual((await f.request(outbound, { cookie: a, method: 'POST', body: {} })).body, { counted: false });
+  // Outbound activity must not consume the review rate limit or change its count.
+  assert.equal((await f.request(route, { cookie: a, method: 'POST', body: { rating: 9 } })).status, 200);
+  assert.equal((await f.request('/api/framepick/summary')).body.films.find(f => f.filmId === 'xianggu').ratingCount, 1);
+  assert.equal((await f.request('/api/framepick/outbound/summary')).body.films.find(f => f.filmId === 'xianggu').outboundClicks, 2);
+});
+
+test('outbound window is ten China calendar days with midnight dedupe reset and old/future days excluded', async t => {
+  let time = Date.parse('2026-10-23T15:59:00Z'); // China October 23.
+  const f = await fixture(t, { clock: () => time });
+  const cookie = await f.session();
+  const outbound = '/api/framepick/films/xianggu/outbound';
+  const click = () => f.request(outbound, { cookie, method: 'POST', body: {} });
+  assert.equal((await click()).body.counted, true);
+  time = Date.parse('2026-10-23T16:01:00Z'); // China October 24.
+  assert.equal((await click()).body.counted, true);
+  time = Date.parse('2026-11-01T16:01:00Z'); // China November 2.
+  assert.equal((await click()).body.counted, true);
+  let summary = (await f.request('/api/framepick/outbound/summary')).body;
+  assert.equal(summary.windowStart, '2026-10-24');
+  assert.equal(summary.windowEnd, '2026-11-02');
+  assert.equal(summary.films.find(f => f.filmId === 'xianggu').outboundClicks, 2);
+  time = Date.parse('2026-11-02T16:01:00Z'); // China November 3, oldest falls out.
+  summary = (await f.request('/api/framepick/outbound/summary')).body;
+  assert.equal(summary.films.find(f => f.filmId === 'xianggu').outboundClicks, 1);
+  time = Date.parse('2026-10-23T16:01:00Z'); // Clock correction must not count future records.
+  summary = (await f.request('/api/framepick/outbound/summary')).body;
+  assert.equal(summary.films.find(f => f.filmId === 'xianggu').outboundClicks, 1);
+});
+
+test('outbound endpoint rejects untrusted origins, unknown films, methods and oversized input', async t => {
+  const f = await fixture(t);
+  const cookie = await f.session();
+  const outbound = '/api/framepick/films/xianggu/outbound';
+  assert.equal((await f.request(outbound, { cookie, method: 'POST', body: {}, headers: { Origin: 'https://evil.example' } })).status, 403);
+  assert.equal((await f.request('/api/framepick/films/unknown/outbound', { cookie, method: 'POST', body: {} })).status, 404);
+  assert.equal((await f.request(outbound, { cookie })).status, 405);
+  assert.equal((await f.request(outbound, { cookie, method: 'POST', body: 'x'.repeat(20000) })).status, 413);
+  assert.equal((await f.request('/api/framepick/outbound/summary')).body.films.find(f => f.filmId === 'xianggu').outboundClicks, 0);
+});
+
+test('legacy review database upgrades without losing identity and concurrent outbound writes deduplicate atomically', async t => {
+  const f = await fixture(t);
+  const cookie = await f.session();
+  assert.equal((await f.request(route, { cookie, method: 'POST', body: { text: '原有评价', rating: 8 } })).status, 200);
+  const file = path.join(f.dataDir, 'reviews.json');
+  const legacy = JSON.parse(await readFile(file, 'utf8'));
+  delete legacy.outbound;
+  await writeFile(file, JSON.stringify(legacy));
+  await f.restart();
+  assert.equal((await f.request(route, { cookie })).body.yourReview.text, '原有评价');
+  const outbound = '/api/framepick/films/xianggu/outbound';
+  const results = await Promise.all(Array.from({ length: 8 }, () => f.request(outbound, { cookie, method: 'POST', body: {} })));
+  assert.ok(results.every(result => result.status === 200));
+  assert.equal(results.filter(result => result.body.counted).length, 1);
+  const other = await f.session();
+  await Promise.all([
+    f.request(outbound, { cookie: other, method: 'POST', body: {} }),
+    f.request(route, { cookie, method: 'POST', body: { text: '并发更新评价', rating: 9 } }),
+  ]);
+  await f.restart();
+  assert.equal((await f.request(route, { cookie })).body.yourReview.text, '并发更新评价');
+  assert.equal((await f.request('/api/framepick/outbound/summary')).body.films.find(f => f.filmId === 'xianggu').outboundClicks, 2);
+});
+
 test('independent guest sessions share reviews and aggregate only ratings; updates and deletes own one review', async t => {
   const f = await fixture(t);
   const a = await f.session(), b = await f.session();
