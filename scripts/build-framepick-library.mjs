@@ -9,7 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
-import { GENRES, SOURCES, ACCESS, CATEGORIES } from '../server/framepick-library.cjs';
+import { GENRES, SOURCES, ACCESS, CATEGORIES, COMPLETION_LABELS } from '../server/framepick-library.cjs';
 
 const require = createRequire(import.meta.url);
 const { createLibraryStore } = require('../server/framepick-library.cjs');
@@ -62,10 +62,17 @@ function card(film, index) {
   const recommendation = film.recommendation
     ? `<p class="recommendation" hidden>${escapeHtml(film.recommendation)}</p>` : '<p class="recommendation" hidden></p>';
   const episode = film.episode ? `<p class="episode" hidden>${escapeHtml(film.episode)}</p>` : '<p class="episode" hidden></p>';
+  // 连载状态与体量：卡片上只露一个小标签，完整信息在详情弹窗里读这几段隐藏文本。
+  const completion = film.completion || '';
+  const statusTag = completion && COMPLETION_LABELS[completion]
+    ? `<span class="status-tag" data-completion="${escapeHtml(completion)}">${escapeHtml(COMPLETION_LABELS[completion])}</span>`
+    : '';
+  const volume = film.volume ? `<p class="volume" hidden>${escapeHtml(film.volume)}</p>` : '<p class="volume" hidden></p>';
+  const relation = film.relation ? `<p class="relation" hidden>${escapeHtml(film.relation)}</p>` : '<p class="relation" hidden></p>';
 
-  return `      <article class="card" data-film="${escapeHtml(film.id)}" data-score="${escapeHtml(scoreValue)}" data-category="${escapeHtml(film.category)}" data-genres="${escapeHtml(film.genres.join(' '))}" data-source="${escapeHtml(film.source)}" data-access="${escapeHtml(film.access)}" data-date="${escapeHtml(film.intakeDate)}" data-published="${escapeHtml(film.originalReleaseDate || '')}" aria-labelledby="${titleId}">
+  return `      <article class="card" data-film="${escapeHtml(film.id)}" data-score="${escapeHtml(scoreValue)}" data-category="${escapeHtml(film.category)}" data-genres="${escapeHtml(film.genres.join(' '))}" data-source="${escapeHtml(film.source)}" data-access="${escapeHtml(film.access)}" data-date="${escapeHtml(film.intakeDate)}" data-published="${escapeHtml(film.originalReleaseDate || '')}" data-completion="${escapeHtml(completion)}" aria-labelledby="${titleId}">
         <a class="card-media" data-open-film="${escapeHtml(film.id)}" href="${escapeHtml(film.sourceUrl)}" target="_blank" rel="noopener noreferrer" aria-label="查看《${escapeHtml(film.title)}》"><img src="${escapeHtml(film.cover)}" width="${film.coverWidth}" height="${film.coverHeight}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async"><span class="access-badge">${escapeHtml(badge)}</span><span class="card-runtime">${escapeHtml(film.runtime)}</span>${note}</a>
-        <div class="card-body"><div class="card-topline"><span class="kind">${escapeHtml(film.kind)}</span><span class="score" aria-label="编辑评分：${escapeHtml(scoreText)}">${escapeHtml(scoreText)}</span></div><h3 id="${titleId}">${escapeHtml(film.title)}</h3><p class="film-author"><span class="author-name">${escapeHtml(film.author)}</span><span class="source-name">${escapeHtml(sourceLabel)}</span></p><p class="desc">${escapeHtml(film.description)}</p>${recommendation}${episode}<div class="card-actions"><button class="details-button js-only" type="button" data-open-film="${escapeHtml(film.id)}">作品详情</button><a class="watch" data-outbound-film="${escapeHtml(film.id)}" href="${escapeHtml(film.sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(watchLabel)}<svg aria-hidden="true"><use href="#arrow"/></svg></a><button class="save-button js-only" type="button" data-save-film="${escapeHtml(film.id)}" aria-label="收藏《${escapeHtml(film.title)}》" aria-pressed="false"><svg aria-hidden="true"><use href="#bookmark"/></svg></button></div></div>
+        <div class="card-body"><div class="card-topline"><span class="kind">${escapeHtml(film.kind)}</span>${statusTag}<span class="score" aria-label="编辑评分：${escapeHtml(scoreText)}">${escapeHtml(scoreText)}</span></div><h3 id="${titleId}">${escapeHtml(film.title)}</h3><p class="film-author"><span class="author-name">${escapeHtml(film.author)}</span><span class="source-name">${escapeHtml(sourceLabel)}</span></p><p class="desc">${escapeHtml(film.description)}</p>${recommendation}${episode}${volume}${relation}<div class="card-actions"><button class="details-button js-only" type="button" data-open-film="${escapeHtml(film.id)}">作品详情</button><a class="watch" data-outbound-film="${escapeHtml(film.id)}" href="${escapeHtml(film.sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(watchLabel)}<svg aria-hidden="true"><use href="#arrow"/></svg></a><button class="save-button js-only" type="button" data-save-film="${escapeHtml(film.id)}" aria-label="收藏《${escapeHtml(film.title)}》" aria-pressed="false"><svg aria-hidden="true"><use href="#bookmark"/></svg></button></div></div>
       </article>`;
 }
 

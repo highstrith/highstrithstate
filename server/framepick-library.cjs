@@ -19,6 +19,9 @@ const CATEGORIES = { film: '完整电影', series: '系列短剧', short: '剧�
 // 情感与悬疑，标签要跟着内容长，不能逼着把片子塞进四个框。
 const GENRES = { fantasy: '奇幻', scifi: '科幻', wuxia: '武侠', xianxia: '仙侠', urban: '都市', romance: '情感', thriller: '悬疑' };
 const ACCESS = { free: '免费精选', paid: '付费放映' };
+// 连载状态：单部完整 / 连载中 / 多集已完结。留空 = 尚未核实。
+const COMPLETIONS = ['standalone', 'ongoing', 'completed'];
+const COMPLETION_LABELS = { standalone: '单部', ongoing: '连载中', completed: '已完结' };
 
 // Roadmap flow: 待核实 → 待看片 → 待补资料／不收录／通过 → 排期 → 上架 → 下架.
 const FILM_STATUSES = ['draft', 'reviewing', 'rejected', 'approved', 'scheduled', 'published', 'delisted'];
@@ -206,6 +209,17 @@ function validateFilmInput(input) {
     description: text(input?.description, '简介', { max: 600 }),
     recommendation: text(input?.recommendation, '', { required: false, max: 300 }) || '',
     episode: text(input?.episode, '', { required: false, max: 120 }) || '',
+    // 连载状态。'' 表示还没核实（页面会写「状态待核实」，不假装知道）。
+    //   standalone 单部完整 / ongoing 连载中 / completed 多集已完结
+    completion: ((value) => {
+      const clean = text(value, '', { required: false, max: 20 }) || '';
+      if (clean && !COMPLETIONS.includes(clean)) fail(`连载状态只能是 ${COMPLETIONS.join(' / ')} 或留空`);
+      return clean;
+    })(input?.completion),
+    // 体量，如「共 6 集」「上下两部」「合集 · 5 个短片」
+    volume: text(input?.volume, '', { required: false, max: 60 }) || '',
+    // 续集／前作关系，如「续作《星辰岛 2》」「《哑镖》续集」
+    relation: text(input?.relation, '', { required: false, max: 120 }) || '',
     originalReleaseDate: releaseDate(input?.originalReleaseDate),
     editorScore,
     intakeDate,
@@ -486,6 +500,7 @@ function createLibraryStore(options = {}) {
           cover: film.cover, coverAlt: film.coverAlt, coverNote: film.coverNote,
           coverWidth: film.coverWidth, coverHeight: film.coverHeight,
           description: film.description, recommendation: film.recommendation, episode: film.episode,
+          completion: film.completion || '', volume: film.volume || '', relation: film.relation || '',
           originalReleaseDate: film.originalReleaseDate,
           editorScore: film.editorScore, intakeDate: film.intakeDate,
         }));
@@ -507,6 +522,8 @@ module.exports = {
   CATEGORIES,
   GENRES,
   ACCESS,
+  COMPLETIONS,
+  COMPLETION_LABELS,
   FILM_STATUSES,
   CANDIDATE_STATUSES,
 };

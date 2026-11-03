@@ -18,6 +18,9 @@
       published: card.dataset.published || '',
       title: text('h3'), author: text('.author-name'), kind: text('.kind'),
       description: text('.desc'), reason: text('.recommendation'), episode: text('.episode'),
+      // 连载状态：卡片只放一个小标签，体量／续集关系是隐藏文本，详情弹窗才展示。
+      completion: card.dataset.completion || '', statusLabel: text('.status-tag'),
+      volume: text('.volume'), relation: text('.relation'),
       image: card.querySelector('img'), link: card.querySelector('.watch').href,
       search: card.textContent.toLocaleLowerCase()
     };
@@ -186,6 +189,13 @@
     $('#detailKind').textContent = film.kind + ' / ' + categoryLabel;
     $('#detailAuthor').textContent = film.author + ' / ' + sourceLabel;
     $('#detailEpisode').textContent = film.episode;
+    // 连载状态一行：状态 + 体量 + 续集关系，缺哪项就少显示哪项；全缺就整行隐藏。
+    const status = $('#detailStatus');
+    if (status) {
+      const parts = [film.statusLabel, film.volume, film.relation].filter(Boolean);
+      status.textContent = parts.length ? parts.join(' · ') : '';
+      status.hidden = !parts.length;
+    }
     // 原片发布日期：有就显示，没有就整行隐藏（收录日期只在今日更新榜里用，不在这里露）。
     const published = $('#detailPublished');
     if (published) {

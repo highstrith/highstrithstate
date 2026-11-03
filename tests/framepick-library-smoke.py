@@ -241,6 +241,28 @@ class FramepickLibrary(unittest.TestCase):
         expect(self.page.locator('#savedToggle')).to_have_accessible_name(re.compile('我的收藏'))
         expect(self.page.locator('#sortFilter')).to_have_accessible_name('排序')
 
+    def test_completion_state_is_on_every_card_and_in_the_detail(self):
+        self.open()
+        # 每张卡都要有连载状态，值必须合法；标签数与有状态的卡片数必须一致（不能标了值却不显示）。
+        states = self.page.locator('#filmGrid [data-film]').evaluate_all(
+            "els => els.map(e => e.dataset.completion || '')")
+        self.assertTrue(all(state in ('standalone', 'ongoing', 'completed') for state in states), states)
+        tagged = self.page.locator('#filmGrid [data-film] .status-tag').count()
+        self.assertEqual(tagged, len([state for state in states if state]))
+        # 至少要有两种状态，否则说明标注没生效。
+        self.assertGreaterEqual(len({state for state in states if state}), 2)
+
+        ongoing = self.page.locator('#filmGrid [data-film][data-completion="ongoing"]').first
+        ongoing.locator('button[data-open-film]').click()
+        expect(self.page.locator('#filmDialog')).to_be_visible()
+        expect(self.page.locator('#detailStatus')).to_be_visible()
+        expect(self.page.locator('#detailStatus')).to_contain_text('连载中')
+        self.page.keyboard.press('Escape')
+
+        single = self.page.locator('#filmGrid [data-film][data-completion="standalone"]').first
+        single.locator('button[data-open-film]').click()
+        expect(self.page.locator('#detailStatus')).to_contain_text('单部')
+
 
 if __name__ == '__main__':
     unittest.main()

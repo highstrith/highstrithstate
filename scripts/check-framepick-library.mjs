@@ -22,6 +22,8 @@ const SOURCES = {
 };
 const ACCESS = new Set(['free', 'paid']);
 const CATEGORIES = new Set(['film', 'series', 'short', 'ad', 'music', 'experimental']);
+// 连载状态；留空表示尚未核实。
+const COMPLETIONS = ['standalone', 'ongoing', 'completed'];
 const RUNTIME = /^(?:\d+:)?\d{1,2}:\d{2}$/;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const RELEASE_DATE = /^\d{4}(?:-\d{2}(?:-\d{2})?)?$/;
@@ -97,6 +99,14 @@ for (const [card, id, body] of cards.map((m) => [m[0], m[1], m[2]])) {
   // LIB-04 / LIB-08: a serialised episode is not a feature film and must not be sold as one.
   if (category === 'series' && !textOf(body, 'episode')) {
     warn(id, '标记为系列单集但缺少集号说明，连载的一集不得被描述成完整电影');
+  }
+  // 连载状态：值必须合法；系列片没标状态只提醒，不拦发布（很多片状态要核实）。
+  const completion = attr(card, 'data-completion');
+  if (completion && !COMPLETIONS.includes(completion)) {
+    fail(id, `data-completion="${completion}" 只能是 ${COMPLETIONS.join(' / ')} 或留空`);
+  }
+  if (category === 'series' && !completion) {
+    warn(id, '系列短剧还没标注连载状态（单部／连载中／已完结），详情里会显示「状态待核实」');
   }
   if (access === 'paid' && category !== 'film') {
     fail(id, '只有完整电影（data-category="film"）可以标为付费，单集不得作为付费正片');

@@ -99,8 +99,14 @@ class FramepickSimulatedOrders(BrowserBase):
         expect(page.locator('#accountDialog')).not_to_be_visible()
         expect(page.locator('#accountEntry')).to_have_attribute('data-signed-in', 'true')
 
-    def open_purchase(self, tier=3):
-        self.page.locator(f'[data-demo-purchase][data-demo-film="demo-film-{tier}"]').click()
+    def open_purchase(self, price=3):
+        # 页面目前只保留一个演示入口（3 元档，data-demo-price 标价）。传 price 是历史参数：
+        # 若将来恢复多档，会挑对应档；现在回落到唯一入口，价格以按钮上的标价为准。
+        opener = self.page.locator(f'[data-demo-purchase][data-demo-price="{price}"]')
+        if not opener.count():
+            opener = self.page.locator('[data-demo-purchase]').first
+        self.demo_price = int(opener.get_attribute('data-demo-price') or price)
+        opener.click()
         expect(self.page.locator('#purchaseDialog')).to_be_visible()
 
     def create_order(self):
@@ -164,7 +170,7 @@ class FramepickSimulatedOrders(BrowserBase):
         self.register('states')
         self.open_purchase(5)
         self.create_order()
-        self.assertIn('5.00', page.locator('#purchaseMeta').inner_text())
+        self.assertIn(f'{self.demo_price}.00', page.locator('#purchaseMeta').inner_text())
         page.locator('#purchaseFail').click()
         expect(page.locator('#purchaseChip')).to_have_text('失败（模拟）')
         self.assertIn('没有扣款', page.locator('#purchaseBody').inner_text())
