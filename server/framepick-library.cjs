@@ -61,7 +61,38 @@ function today() {
 
 function slug(value, fallback) {
   const base = String(value || '').toLocaleLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-  return (base || fallback).slice(0, 40);
+  const result = (base || fallback || '').slice(0, 40);
+  // 中文片名抠不出字母时 base 会只剩一两个字符（甚至空），ID 规则要求至少两位，
+  // 这种时候退回 fallback，别把一个随时会撞号的短 ID 写进库里。
+  return result.length >= 2 ? result : String(fallback || 'candidate').slice(0, 40);
+}
+
+// 抖音、B站、小红书的链接里都带着平台自己的作品编号。用它拼候选 ID，比从中文
+// 片名里抠 ASCII 稳：不会出现 21 条候选都叫「ai」，也不会因为片名重复而撞号。
+const PLATFORM_IDS = [
+  { source: 'douyin', prefix: 'dy', pattern: /\/video\/(\d{6,})/ },
+  { source: 'bilibili', prefix: 'bili', pattern: /(BV[0-9A-Za-z]{8,12})/ },
+  { source: 'xiaohongshu', prefix: 'xhs', pattern: /\/(?:explore|discovery\/item)\/([0-9a-f]{16,})/ },
+];
+
+function candidateBaseId(source, url) {
+  const raw = String(url || '');
+  for (const rule of PLATFORM_IDS) {
+    if (rule.source !== source) continue;
+    const matched = raw.match(rule.pattern);
+    if (matched) return slug(`${rule.prefix}-${matched[1]}`, '');
+  }
+  return '';
+}
+
+function uniqueCandidateId(data, desired) {
+  const taken = new Set(data.candidates.map((item) => item.id));
+  if (!taken.has(desired)) return desired;
+  for (let n = 2; n < 100; n += 1) {
+    const candidate = `${desired.slice(0, 34)}-${n}`;
+    if (!taken.has(candidate)) return candidate;
+  }
+  return fail(`候选 ID ${desired} 已用尽编号`);
 }
 
 function positiveInt(value, fallback) {
@@ -330,7 +361,9 @@ function createLibraryStore(options = {}) {
       if (duplicateCandidate) fail(`候选池已有同一链接：${duplicateCandidate.id}（${duplicateCandidate.title}）`);
       const now = new Date().toISOString();
       const record = {
-        id: text(input?.id, '', { required: false, max: 40 }) || slug(`${author}-${title}`, `cand-${data.candidates.length + 1}`),
+        id: uniqueCandidateId(data, text(input?.id, '', { required: false, max: 40 })
+          || candidateBaseId(source, url)
+          || slug(`${author}-${title}`, `cand-${data.candidates.length + 1}`)),
         title, author, source, url,
         discoveredBy: ['ai', 'manual', 'creator'].includes(input?.discoveredBy) ? input.discoveredBy : 'manual',
         discoveredAt: input?.discoveredAt || now,
@@ -352,6 +385,36 @@ function createLibraryStore(options = {}) {
       appendLog(data, { action: 'candidate.add', target: record.id, actor: meta.actor || 'operator', detail: `${title} · ${source}` });
       write(data);
       return record;
+    },
+
+    // 早期候选 ID 是从「作者-片名」里抠 ASCII 得来的，中文片名会退化成 ai / aigc /
+    // 单个字母，几十条重号。这个操作用平台编号重算一遍，幂等，可反复跑。
+    reindexCandidates({ dryRun = false, actor = 'operator' } = {}) {
+      const data = read();
+      const taken = new Set();
+      const changes = [];
+      data.candidates.forEach((item, index) => {
+        const desired = candidateBaseId(item.source, item.url)
+          || slug(`${item.author}-${item.title}`, `cand-${index + 1}`);
+        let next = desired;
+        for (let n = 2; taken.has(next); n += 1) next = `${desired.slice(0, 34)}-${n}`;
+        taken.add(next);
+        if (next === item.id) return;
+        changes.push({ from: item.id, to: next, title: item.title, status: item.status });
+        if (dryRun) return;
+        item.id = next;
+        item.updatedAt = new Date().toISOString();
+      });
+      if (!dryRun && changes.length) {
+        appendLog(data, {
+          action: 'candidate.reindex',
+          target: `${changes.length} 条`,
+          actor,
+          detail: changes.slice(0, 8).map((item) => `${item.from}→${item.to}`).join('，') + (changes.length > 8 ? ` …共 ${changes.length} 条` : ''),
+        });
+        write(data);
+      }
+      return changes;
     },
 
     setCandidateStatus(id, status, meta = {}) {

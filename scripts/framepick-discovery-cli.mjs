@@ -5,6 +5,7 @@
 //   node scripts/framepick-discovery-cli.mjs screen --file candidates.json [--json]
 //   node scripts/framepick-discovery-cli.mjs add --file candidates.json [--json]
 //   node scripts/framepick-discovery-cli.mjs verify [--file candidates.json] [--id cand-x] [--json]
+//   node scripts/framepick-discovery-cli.mjs rescreen [--apply] [--json]
 //   node scripts/framepick-discovery-cli.mjs report [--json]
 //
 // The pipeline never publishes anything: candidates stop at the candidate pool and
@@ -256,7 +257,39 @@ function report() {
   return target;
 }
 
-const commands = { plan, screen, add: () => screen('add'), verify, report };
+// 排除词会随发现的问题变长（比如「制作分享」「全流程」这类教程腔）。这个命令拿当前
+// 规则重扫一遍候选池，只判标题与备注层面的规则——候选记录里没存时长，所以时长门槛
+// 不在这里复核。默认只报告，加 --apply 才把命中项标成 rejected。
+function rescreen() {
+  const config = loadConfig();
+  const s = store();
+  const apply = rest.includes('--apply');
+  const films = s.listFilms();
+  const pool = s.listCandidates();
+  const hits = [];
+  for (const item of pool) {
+    if (item.status === 'converted') continue;
+    const again = screenCandidate(
+      { title: item.title, author: item.author, source: item.source, url: item.url, aiEvidence: true },
+      { config, films, candidates: pool.filter((other) => other.id !== item.id) },
+    );
+    const keyword = again.reasons.find((reason) => reason.startsWith('命中排除词'));
+    if (!keyword) continue;
+    hits.push({ id: item.id, title: item.title, status: item.status, reason: keyword });
+    if (apply && ['new', 'verifying'].includes(item.status)) {
+      s.setCandidateStatus(item.id, 'rejected', { actor: 'discovery:rescreen', note: keyword });
+    }
+  }
+  const marked = apply ? hits.length : 0;
+  if (asJson) console.log(JSON.stringify({ scanned: pool.length, hits: hits.length, applied: apply, hitsList: hits }, null, 2));
+  else {
+    console.log(`重扫候选池 ${pool.length} 条：命中当前排除词 ${hits.length} 条${apply ? '，已标记 rejected' : '（未改动，加 --apply 才落状态）'}`);
+    for (const hit of hits) console.log(`  - ${hit.id} · ${hit.title} — ${hit.reason}`);
+  }
+  return { hits, marked };
+}
+
+const commands = { plan, screen, add: () => screen('add'), verify, report, rescreen };
 const run = commands[command];
 if (!run) {
   console.log(`用法：
@@ -264,6 +297,7 @@ if (!run) {
   screen --file <发现结果.json> [--json]        只跑初筛，不写候选池
   add --file <发现结果.json> [--json]           初筛通过后写入候选池（discoveredBy=ai）
   verify [--file <发现结果.json>] [--id <候选id>] [--json]   复核链接可达与元数据一致
+  rescreen [--apply] [--json]                   用当前排除词重扫候选池，可选标记 rejected
   report [--json]                              写本轮运行报告到 docs/framepick-discovery-20261103/runs/`);
   process.exit(command ? 1 : 0);
 }

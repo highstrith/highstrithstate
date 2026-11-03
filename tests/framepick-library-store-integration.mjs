@@ -140,6 +140,33 @@ test('candidates move through verification and convert into a film once', async 
   assert.throws(() => s.addCandidate({ title: '归渊', author: '沉舟计划', source: 'bilibili', url: 'https://www.bilibili.com/video/BV1xx411c7mD' }), /已在作品表中/);
 });
 
+test('candidate ids come from the platform clip id, not from the chinese title', async (t) => {
+  const s = await store(t);
+  // 中文片名抠不出字母时，旧写法会把十几条候选都命名成「ai」；平台编号稳定且唯一。
+  const douyin = s.addCandidate({ title: 'AI短片《本体》 国产爱死机有没有说法', author: 'todo', source: 'douyin', url: 'https://www.douyin.com/video/7699342435985476905' });
+  assert.equal(douyin.id, 'dy-7699342435985476905');
+  const bili = s.addCandidate({ title: '归渊', author: '沉舟计划', source: 'bilibili', url: 'https://www.bilibili.com/video/BV1xx411c7mD' });
+  assert.equal(bili.id, 'bili-bv1xx411c7md');
+  // 短链里没有平台编号时退回 cand-N，而不是一个随时会撞号的单字母。
+  const shortLink = s.addCandidate({ title: '某一集', author: '甲', source: 'bilibili', url: 'https://b23.tv/abcd12' });
+  assert.match(shortLink.id, /^cand-\d+$/);
+});
+
+test('candidate ids stay unique and can be reindexed from the clip id', async (t) => {
+  const s = await store(t);
+  const first = s.addCandidate({ id: 'ai', title: '第一条', author: '甲', source: 'douyin', url: 'https://www.douyin.com/video/7000000000000000001' });
+  const second = s.addCandidate({ id: 'ai', title: '第二条', author: '乙', source: 'douyin', url: 'https://www.douyin.com/video/7000000000000000002' });
+  assert.equal(first.id, 'ai');
+  assert.equal(second.id, 'ai-2', '同一个显式 ID 第二次出现时补序号，不能两条候选共用一个 ID');
+  const changes = s.reindexCandidates({ dryRun: true });
+  assert.equal(changes.length, 2);
+  assert.equal(s.listCandidates()[0].id, 'ai', 'dryRun 不改数据');
+  assert.deepEqual(s.reindexCandidates().map((item) => item.to), ['dy-7000000000000000001', 'dy-7000000000000000002']);
+  assert.deepEqual(s.listCandidates().map((item) => item.id), ['dy-7000000000000000001', 'dy-7000000000000000002']);
+  assert.deepEqual(s.reindexCandidates(), [], '重算是幂等的');
+  assert.ok(s.log(10).some((entry) => entry.action === 'candidate.reindex'));
+});
+
 test('every change is recorded with an actor and survives a reload', async (t) => {
   const s = await store(t);
   s.addFilm(film(), { actor: 'operator' });

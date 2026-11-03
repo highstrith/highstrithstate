@@ -7,6 +7,7 @@
 //   node scripts/framepick-library-cli.mjs status xianggu published --note "审片通过"
 //   node scripts/framepick-library-cli.mjs candidate add --json '{...}'
 //   node scripts/framepick-library-cli.mjs candidate convert cand-1 --file film.json
+//   node scripts/framepick-library-cli.mjs candidate reindex [--dry-run]
 //   node scripts/framepick-library-cli.mjs log -n 20
 //   node scripts/framepick-library-cli.mjs build               regenerate the page
 import fs from 'node:fs';
@@ -100,7 +101,8 @@ try {
       else if (action === 'add') print(store.addCandidate(readPayload()));
       else if (action === 'status') print(store.setCandidateStatus(positional[1], positional[2], { note: flag('note') }));
       else if (action === 'convert') print(store.convertCandidate(positional[1], readPayload()));
-      else throw new Error(`未知候选操作 ${action}，可用：list / add / status / convert`);
+      else if (action === 'reindex') print(store.reindexCandidates({ dryRun: has('dry-run'), actor: 'reindex' }));
+      else throw new Error(`未知候选操作 ${action}，可用：list / add / status / convert / reindex`);
       break;
     }
     case 'build': {
@@ -116,6 +118,7 @@ try {
   status <id> <状态> [--note 说明]   推进审核／排期／上下架
   note <id> <审核意见>               记录审核意见
   candidate list|add|status|convert 候选池操作
+  candidate reindex [--dry-run]       用平台编号重算候选 ID（幂等，修重号）
   seed                              从现有 reel/index.html 导入作品
   log [-n 条数]                      查看变更记录
   build [--site <目录>]              重新生成静态片库页面`);

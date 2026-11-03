@@ -63,6 +63,46 @@ test('screening keeps a complete AI short film and explains every rejection', as
   assert.match(noRuntime.reasons.join(), /时长/);
 });
 
+test('screening drops tutorial and workflow clips while keeping the film itself', async (t) => {
+  const dir = await dataDir(t);
+  const store = createLibraryStore({ dataDir: dir });
+  const check = (item) => screenCandidate(item, { config, films: store.listFilms(), candidates: store.listCandidates() });
+
+  // 抖音上一大批「制作分享／全流程／流程解析」其实是教程，不是片子。
+  for (const [index, title] of [
+    'AI短片《骸上城》制作分享',
+    'AIGC短片流程解析EP01',
+    '一条视频讲透AIGC从0到1制作全流程',
+    '我的 AIGC 短片制作流程大公开',
+    '第一次做AI动画就能获奖？丨AI动画创作全流程分享',
+  ].entries()) {
+    const result = check(candidate({ title, url: `https://www.bilibili.com/video/BV1tt${index}00000`, runtime: '08:00' }));
+    assert.equal(result.status, 'rejected', `${title} 应被排除`);
+    assert.match(result.reasons.join(), /排除词/);
+  }
+
+  // 片子本身带「分享」「解析」这类字眼不算教程，关键词不能收得太宽。
+  const film = check(candidate({ title: 'AI短片《潮不语》 讲述妈祖的经典传奇故事', url: 'https://www.bilibili.com/video/BV1uu6666666' }));
+  assert.equal(film.status, 'accepted');
+});
+
+test('rescreen re-applies todays rules to candidates that entered the pool earlier', async (t) => {
+  const dir = await dataDir(t);
+  const store = createLibraryStore({ dataDir: dir });
+  store.addCandidate({ title: 'AI短片《骸上城》制作分享', author: '甲', source: 'bilibili', url: 'https://www.bilibili.com/video/BV1ee5555555' });
+  store.addCandidate({ title: 'AI短片《潮不语》', author: '乙', source: 'bilibili', url: 'https://www.bilibili.com/video/BV1ff6666666' });
+
+  const preview = JSON.parse(cli(dir, ['rescreen', '--json']));
+  assert.equal(preview.scanned, 2);
+  assert.equal(preview.hits, 1);
+  assert.equal(store.listCandidates().find((item) => item.author === '甲').status, 'new', '默认只报告，不动状态');
+
+  JSON.parse(cli(dir, ['rescreen', '--apply', '--json']));
+  const pool = createLibraryStore({ dataDir: dir }).listCandidates();
+  assert.equal(pool.find((item) => item.author === '甲').status, 'rejected');
+  assert.equal(pool.find((item) => item.author === '乙').status, 'new');
+});
+
 test('intake writes screened candidates into the pool and refuses duplicates', async (t) => {
   const dir = await dataDir(t);
   const file = path.join(dir, 'found.json');

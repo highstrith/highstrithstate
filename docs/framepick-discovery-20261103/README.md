@@ -9,6 +9,7 @@
 | **bilibili-api-python 17.4.2**（默认） | ✅ 采用。B 站公开网页接口的封装，库自己处理 wbi 签名与 buvid，无需登录。一条搜索请求直接返回 `bvid／标题／UP 主／时长／播放量／发布时间／简介／标签`，不用解析 DOM |
 | yt-dlp（`bilisearch`） | ❌ 试过。flat 模式只给 id；逐条取详情被 B 站 412 反爬拦下，需登录 cookie 才可能可用 |
 | Playwright 渲染搜索页 | ⚠️ 保留为 `--backend browser` 兜底。能用，但依赖 B 站卡片 DOM，改版即失效，且 37 条要跑 3 分钟 |
+| **ego-browser（抖音专用）** | ✅ 采用。抖音站内搜索必须登录，只能借用你已登录的浏览器会话；脚本 `scripts/framepick-discovery-douyin.js` 在你的窗口里读搜索结果卡片，不接管账号 |
 | Scrapy / Crawlee | ➖ 不采用。它们是通用爬取框架，本场景只有一个有公开接口的站点，框架只增加活动部件 |
 | Apify / Firecrawl 等托管服务 | ➖ 不采用。按量计费、数据出境，抖音 actor 同样要你的登录 cookie |
 
@@ -18,7 +19,7 @@
 
 | 环节 | 谁做 | 说明 |
 | --- | --- | --- |
-| 搜索 | 脚本（B 站公开接口） | 抖音／小红书站内搜索与作者页需登录，只登记线索，不核实、不臆造 |
+| 搜索 | 脚本（B 站公开接口 + 抖音浏览器会话） | 小红书尚未验证，只登记线索，不核实、不臆造 |
 | 初筛 | `framepick-discovery-cli.mjs` | 时长 3–40 分钟、来源与链接匹配、排除教程／解说／合集／预告等、必须带 AI 制作属性证据、去重 |
 | 复核 | 同上 `verify` | 打开原页比对标题与作者，判定链接是否失效 |
 | 入池 | 同上 `add` | 写入候选池（站点外 `~/.framepick/library`），状态 `new` |
@@ -42,8 +43,9 @@ python3 -m pip install bilibili-api-python curl_cffi   # 前者是 B 站接口�
 ## 三块组成
 
 - `docs/framepick-discovery-20261103/sources.json` —— 搜什么：关键词、平台状态、排除词、时长区间、AI 证据要求。
-- `scripts/framepick-discovery-scan.py` —— 怎么搜：`scan`（API 后端批量搜索）、`channel`（按 UP 主 mid 拉最新投稿）、`enrich`（重算 AI 证据，无需开页面）。
-- `scripts/framepick-discovery-cli.mjs` —— 怎么筛和存：`plan / screen / add / verify / report`。规则在 `scripts/framepick-discovery-rules.mjs`，与测试共用一份。
+- `scripts/framepick-discovery-scan.py` —— 怎么搜（B 站）：`scan`（API 后端批量搜索）、`channel`（按 UP 主 mid 拉最新投稿）、`enrich`（重算 AI 证据，无需开页面）。
+- `scripts/framepick-discovery-douyin.js` —— 怎么搜（抖音）：在你的 ego-browser 窗口里逐关键词读搜索结果卡片，输出与上面同格式的 JSON。
+- `scripts/framepick-discovery-cli.mjs` —— 怎么筛和存：`plan / screen / add / verify / rescreen / report`。规则在 `scripts/framepick-discovery-rules.mjs`，与测试共用一份。
 
 ## 一次完整运行
 
@@ -63,6 +65,23 @@ python3 scripts/framepick-discovery-scan.py channel --mid 123456 --out /tmp/fp-c
 node scripts/framepick-discovery-cli.mjs add --file /tmp/fp-channel.json
 ```
 
+## 抖音：借你自己的浏览器会话
+
+抖音站内搜索未登录只返回导航栏，所以这条路必须用你已经登录的浏览器。脚本只读公开搜索结果，
+在你的 ego-browser 窗口里跑，不碰账号设置：
+
+```bash
+ego-browser nodejs < scripts/framepick-discovery-douyin.js     # → /tmp/framepick-douyin.json
+node scripts/framepick-discovery-cli.mjs add --file /tmp/framepick-douyin.json
+```
+
+脚本读的字段只有：时长、播放量、标题与简介、作者、发布时间、链接；每关键词之间停 4.5 秒。
+**不点赞、不关注、不评论、不私信、不下载原片、不改任何设置。**
+
+登录态失效时脚本会提示「没有抓到结果」，把窗口交回本人登录后重跑即可
+（`task.handOff()` 让窗口回到你手上，登完再跑一次）。关键词取自 `sources.json` 的 `queries`
+前 6 条——ego-browser 的 nodejs 运行时收不到 shell 环境变量，别指望用环境变量换词。
+
 ## 人工收口
 
 ```bash
@@ -72,20 +91,37 @@ node scripts/framepick-library-cli.mjs status <作品id> reviewing --note "人�
 node scripts/framepick-library-cli.mjs build                       # 重新生成片库页面
 ```
 
+排除词变长之后，用当前规则回扫一遍存量候选（默认只报告，`--apply` 才标成 `rejected`）：
+
+```bash
+node scripts/framepick-discovery-cli.mjs rescreen
+node scripts/framepick-discovery-cli.mjs rescreen --apply
+```
+
+候选 ID 取平台自己的作品编号（`dy-7699342435985476905` / `bili-bv1xx411c7md` / `xhs-<笔记号>`），
+不用中文片名抠字母——中文片名会退化成 `ai`、`aigc` 甚至单个字母。存量老 ID 可重算，幂等：
+
+```bash
+node scripts/framepick-library-cli.mjs candidate reindex --dry-run
+node scripts/framepick-library-cli.mjs candidate reindex
+```
+
 `作品.json` 必须带 `originalReleaseDate`（原片发布日期）与 `intakeDate`（收录日期，填当天）。片库校验会拦下缺原片发布日期的作品。
 
 ## 实测记录
 
 - 2026-11-03 浏览器后端：3 关键词 → 37 条 → 22 条被拦 → 15 条入池。
 - 2026-11-03 API 后端：2 关键词 × 15 条 → 30 条 → 17 条被拦、4 条重复、9 条入池（与首轮重叠部分被去重）。
+- 2026-11-03 抖音（ego-browser）：6 关键词 → 174 条 → 54 条入池、104 条被拦（时长不足为多）、16 条重复；按新排除词回扫又降 8 条教程。
 - 入池 ≠ 收录：AI 音乐翻唱、同人二创、资讯解说、连续剧单集都会混进来，**初筛只能缩短清单，不能替代看片**。
 
 ## 已知限制
 
-- 抖音／小红书需登录，自动化里无法核实；相关线索只记录不入库。
+- 抖音必须有登录态；扫描器只是读搜索列表，链接失效／作者改名的复核仍要人工点开看。
+- 小红书未验证，相关线索只记录不入库。
 - AI 制作属性只认标题／简介／UP 主自填标签里的明确表述（`\bai\b` 词边界），页面推荐位与评论里的 AI 字样不算。
 - B 站接口字段与风控会变；失败时脚本在 stderr 打印原因并跳过该关键词，不会中断整轮。
-- 候选 ID 由标题生成 slug，可能退化为 `cand-N`；需要可读 ID 时入池时自行指定。
+- 抖音短视频的标题常常就是简介首句，脚本按标点截断，可能截得偏短；判断以链接原页为准。
 
 ## 关联
 
