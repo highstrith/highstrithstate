@@ -73,6 +73,11 @@ function seed() {
       description: textOf(body, 'desc'),
       recommendation: textOf(body, 'recommendation'),
       episode: textOf(body, 'episode'),
+      // 连载状态同样长在卡片上（data-completion 与隐藏的 .volume/.relation），
+      // seed 不回填就会在重建页面时整片丢失，页面也就无法从种子复现。
+      completion: attr(cards[index][0], 'data-completion'),
+      volume: textOf(body, 'volume'),
+      relation: textOf(body, 'relation'),
       editorScore: attr(cards[index][0], 'data-score'),
       intakeDate: attr(cards[index][0], 'data-date'),
     }, { actor: 'seed' });
