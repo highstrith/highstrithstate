@@ -101,6 +101,14 @@ class FramepickRankings(unittest.TestCase):
         self.assertGreater(heights['rankingDaily'], heights['rankingPopular'] * 2, '今日榜是有内容的那一栏，不该和空栏一样高')
         self.assertLess(heights['rankingPopular'], 400, heights)
         self.assertLess(heights['rankingAcclaimed'], 400, heights)
+        # 只有一栏有内容时：它占满整行，空的两栏并排退到下一行，不留大片空白。
+        self.assertIn('is-single', self.page.locator('.ranking-columns').get_attribute('class') or '')
+        boxes = self.page.evaluate("""() => Object.fromEntries(
+            [...document.querySelectorAll('.ranking-board')]
+              .map((board) => { const box = board.getBoundingClientRect();
+                return [board.id, { x: Math.round(box.x), y: Math.round(box.y), w: Math.round(box.width) }]; }))""")
+        self.assertGreater(boxes['rankingDaily']['w'], boxes['rankingPopular']['w'] * 1.5, boxes)
+        self.assertEqual(boxes['rankingPopular']['y'], boxes['rankingAcclaimed']['y'], boxes)
         # 空榜仍然要说清为什么是空的（文案随服务是否可用而变），不能靠留白含糊过去。
         for selector in ['#popularRankingStatus', '#acclaimedRankingStatus']:
             text = self.page.locator(selector).text_content().strip()

@@ -58,6 +58,17 @@
   }
 
   // 今日更新：只列今天收录的作品，条目上不出现任何日期（收录日期仅用于分组）。
+  // 三栏里只有一栏有内容时，那栏独占整行、条目分两列排，空的两栏并排退到下一行——
+  // 否则页面就是左边一根长条、右边两片空白，看着像坏了。
+  const columns = root.querySelector('.ranking-columns');
+  function syncLayout() {
+    if (!columns) return;
+    const populated = ['#rankingDaily', '#rankingPopular', '#rankingAcclaimed']
+      .map((selector) => root.querySelector(selector))
+      .filter((board) => board && board.querySelectorAll('[data-ranking-film]').length > 0);
+    columns.classList.toggle('is-single', populated.length === 1);
+  }
+
   function renderDaily() {
     const today = chinaDay();
     const entries = films.filter((film) => film.date === today);
@@ -73,12 +84,14 @@
     const extra = entries.length - shown.length;
     more.textContent = extra > 0 ? `今日共 ${entries.length} 部，其余 ${extra} 部见下方片库。` : '';
     more.hidden = extra <= 0;
+    syncLayout();
   }
 
   function renderPopular(data) {
     if (!data?.available) {
       $('#popularRankingStatus').textContent = data?.configured ? '共享跳转统计暂不可用，连接后恢复榜单。' : '共享跳转统计尚未配置，暂不能显示热门排名。';
       renderList('#rankingPopular', []);
+      syncLayout();
       return;
     }
     const today = chinaDay();
@@ -93,12 +106,14 @@
     if (!valid) {
       $('#popularRankingStatus').textContent = '当前统计数据暂不可用，更新后恢复榜单。';
       renderList('#rankingPopular', []);
+      syncLayout();
       return;
     }
     const counts = new Map(data.films.map((entry) => [entry.filmId, entry.outboundClicks]));
     const entries = films.filter((film) => (counts.get(film.id) || 0) > 0).sort((a, b) => counts.get(b.id) - counts.get(a.id) || a.index - b.index);
     $('#popularRankingStatus').textContent = shortDay(start) + '–' + shortDay(today) + (entries.length ? ' · 本站原作跳转' : ' · 暂无原作跳转，观看后更新');
     renderList('#rankingPopular', entries.map((film) => ({ film, label: counts.get(film.id).toLocaleString('zh-CN') + ' 次原作跳转' })));
+    syncLayout();
   }
 
   window.addEventListener('framepick:catalogue-ready', () => {
@@ -119,6 +134,7 @@
     entries.sort((a, b) => weighted(b) - weighted(a) || b.summary.ratingCount - a.summary.ratingCount || a.film.index - b.film.index);
     $('#acclaimedRankingStatus').textContent = !detail.available ? '共享评价暂不可用，连接后更新口碑榜。' : entries.length ? '站内口碑 · 随评价更新' : '暂未有作品达到入榜门槛，评分积累后自动更新。';
     renderList('#rankingAcclaimed', entries.map(({ film, summary }) => ({ film, label: summary.averageRating.toFixed(1) + ' / 10 · ' + summary.ratingCount + ' 人评分' })));
+    syncLayout();
   }
   window.addEventListener('framepick:review-summary', ({ detail }) => {
     latestSummary = detail;
