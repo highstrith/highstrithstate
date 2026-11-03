@@ -205,8 +205,16 @@
     }
     $('#detailDescription').textContent = film.description;
     $('#detailReason').textContent = film.reason;
-    $('#detailImage').src = film.image.src;
-    $('#detailImage').alt = film.image.alt;
+    // 详情图优先换 1280w 大图（列表缩略图只有 640w，放大发虚）；没有大图的片就留缩略图。
+    // 预载成功才换 src，避免加载期间闪空白；缩略图的宽高属性让浏览器按原比例占位，不跳版。
+    const detailImage = $('#detailImage');
+    detailImage.src = film.image.src;
+    detailImage.alt = film.image.alt;
+    detailImage.setAttribute('width', film.image.getAttribute('width') || '');
+    detailImage.setAttribute('height', film.image.getAttribute('height') || '');
+    const large = new Image();
+    large.onload = () => { if (currentFilm === film) detailImage.src = large.src; };
+    large.src = film.image.src.replace('-640w.webp', '-1280w.webp');
     const watch = $('#detailWatch');
     watch.href = film.link;
     watch.dataset.outboundFilm = film.id;

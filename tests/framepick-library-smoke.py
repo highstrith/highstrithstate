@@ -263,6 +263,33 @@ class FramepickLibrary(unittest.TestCase):
         single.locator('button[data-open-film]').click()
         expect(self.page.locator('#detailStatus')).to_contain_text('单部')
 
+    def assert_detail_cover_uncropped(self):
+        """详情封面必须完整显示：显示框宽高比 ≈ 图片原始宽高比（裁剪就会不相等）。"""
+        img = self.page.locator('#detailImage')
+        expect(self.page.locator('#filmDialog')).to_be_visible()
+        self.page.evaluate("() => document.querySelector('#detailImage').decode().catch(() => {})")
+        box = img.evaluate(
+            "i => ({nw: i.naturalWidth, nh: i.naturalHeight, w: i.clientWidth, h: i.clientHeight})")
+        self.assertGreater(box['nw'], 0, box)
+        self.assertGreater(box['h'], 0, box)
+        self.assertAlmostEqual(box['w'] / box['h'], box['nw'] / box['nh'], delta=0.03, msg=box)
+
+    def test_detail_cover_shows_the_full_image_and_prefers_the_large_source(self):
+        # 有 1280w 大图的作品（B 站高清原图），详情图要换大图，缩略图放大必糊。
+        self.open('?film=pinzi')
+        expect(self.page.locator('#detailImage')).to_have_attribute('src', re.compile(r'-1280w\.webp'))
+        self.assert_detail_cover_uncropped()
+        # 没有大图的作品（抖音原图仅 440×330，放大无益）回退 640w 缩略图，同样不能裁剪。
+        self.page.keyboard.press('Escape')
+        self.open('?film=xianggu')
+        expect(self.page.locator('#detailImage')).to_have_attribute('src', re.compile(r'-640w\.webp'))
+        self.assert_detail_cover_uncropped()
+        # 手机窄栏以前被强制 16:9 裁剪，4:3 封面砍得最狠；窄屏同样要完整。
+        self.page.set_viewport_size({'width': 390, 'height': 844})
+        self.page.keyboard.press('Escape')
+        self.open('?film=pinzi')
+        self.assert_detail_cover_uncropped()
+
 
 if __name__ == '__main__':
     unittest.main()

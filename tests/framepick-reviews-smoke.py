@@ -450,9 +450,14 @@ class FramepickReviews(unittest.TestCase):
         expect(self.page.locator('#reviewAvailability')).to_contain_text('未配置')
         expect(self.page.locator('#reviewSubmit')).to_be_disabled()
         self.assertFalse(any('/api/framepick' in url for url in requests))
-        self.page.route('http://framepick-static.test/**', lambda route: route.fulfill(
-            path=str(fp.site_file(route.request.url))
-            if not fp.is_index(route.request.url) else str(fp.SITE_ROOT / 'index.html')))
+        def serve_static(route):
+            # 静态托管的诚实模拟：缺文件要回 404，不能像真实主机那样摔异常。
+            target = fp.SITE_ROOT / 'index.html' if fp.is_index(route.request.url) else fp.site_file(route.request.url)
+            if target.is_file():
+                route.fulfill(path=str(target))
+            else:
+                route.fulfill(status=404, body='Missing')
+        self.page.route('http://framepick-static.test/**', serve_static)
         self.page.goto('http://framepick-static.test' + fp.url('?film=xianggu'))
         self.page.get_by_role('tab', name='站内评价', exact=True).click()
         expect(self.page.locator('#reviewAvailability')).to_contain_text('未配置')
