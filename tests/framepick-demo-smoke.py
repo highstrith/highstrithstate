@@ -1,6 +1,7 @@
 """Framepick 演示购票：真实浏览器里的界面状态机。
 
-演示流程不接支付渠道、不产生真实订单，订单只写进这个浏览器的 localStorage。
+演示流程不接支付渠道、不扣款：演示商品与模拟支付回调走本地订单服务，
+订单记录在服务端（换设备登录可恢复），浏览器不留订单副本。
 所有断言都以 data-state 契约为准（login / unpaid / paying / confirming / active /
 failed / canceled / refunding / refunded / expired / unavailable），不依赖中文文案：
 文案可以改，状态机不能悄悄退化。
@@ -25,7 +26,6 @@ from playwright.sync_api import sync_playwright, expect  # noqa: E402
 
 WIDTHS = [320, 390, 820, 1440, 1920]
 PASSWORD = 'framepick-test-pw'
-DEMO_KEY = 'framepick:demo:orders:v1'
 # 与 reel/framepick-demo.js 的 TIMEOUT_MS 对齐：支付中 →（900ms）确认中 →（1300ms）已购。
 STEP_MS = 900
 
@@ -58,7 +58,10 @@ class BrowserBase(unittest.TestCase):
         expect(self.page.locator(selector)).to_have_attribute('data-state', state)
 
     def orders(self):
-        return self.page.evaluate(f"() => JSON.parse(localStorage.getItem('{DEMO_KEY}') || '[]')")
+        """服务端订单（登录后可查）。状态用服务端命名：paid / canceled / …"""
+        return self.page.evaluate(
+            "async () => (await (await fetch('/api/framepick/orders?page=1&pageSize=50',"
+            " {credentials: 'same-origin'})).json()).orders || []")
 
 
 class FramepickSimulatedOrders(BrowserBase):
@@ -152,8 +155,8 @@ class FramepickSimulatedOrders(BrowserBase):
             return page.locator('#statusList .status-row', has_text=name).locator('.state-chip')
 
         expect(chip('片库发现：搜索、组合筛选、排序、收藏、详情')).to_have_attribute('data-state', 'ready')
-        expect(chip('单片购票与支付')).to_have_attribute('data-state', 'missing')
-        expect(chip('我的影院与授权期内反复观看')).to_have_attribute('data-state', 'missing')
+        expect(chip('单片购票与支付')).to_have_attribute('data-state', 'local')
+        expect(chip('我的影院与授权期内反复观看')).to_have_attribute('data-state', 'local')
         expect(chip('账号（邮箱＋密码）')).to_have_attribute('data-state', 'local')
 
         payment = page.locator('#statusList .status-row', has_text='单片购票与支付')
@@ -186,7 +189,7 @@ class FramepickSimulatedOrders(BrowserBase):
         self.assertNotIn('演示授权至', meta)
         self.assertEqual(self.orders(), [])
 
-    def test_purchase_runs_paying_confirming_active_and_persists_locally(self):
+    def test_purchase_runs_paying_confirming_active_and_restores_from_the_server(self):
         page = self.open_page()
         self.sign_in('paid')
         self.open_purchase()
@@ -195,9 +198,10 @@ class FramepickSimulatedOrders(BrowserBase):
         self.assertIn('演示授权至', page.locator('#purchaseMeta').inner_text())
         orders = self.orders()
         self.assertEqual(len(orders), 1)
-        self.assertEqual(orders[0]['state'], 'active')
-        self.assertIsInstance(orders[0]['expiresAt'], int)
-        self.assertIn('演示影片', orders[0]['film'])
+        self.assertEqual(orders[0]['state'], 'paid')
+        self.assertTrue(orders[0]['entitlement']['active'])
+        self.assertTrue(orders[0]['entitlement']['endsAt'])
+        self.assertEqual(orders[0]['filmId'], 'demo-film-3')
 
         page.locator('#purchaseClose').click()
         expect(page.locator('#purchaseDialog')).not_to_be_visible()
@@ -206,9 +210,8 @@ class FramepickSimulatedOrders(BrowserBase):
         self.wait_state('active', '#cinemaList .cinema-row .state-chip')
         self.assertIn('不产生真实付款', rows.first.inner_text())
         expect(page.locator('#cinemaEmpty')).to_be_hidden()
-        expect(page.locator('#cinemaClear')).to_be_visible()
 
-        # 演示订单只存在本浏览器：刷新后仍在，且不需要账号服务重新登录。
+        # 演示订单在服务端：刷新后由服务端恢复，不需要重新登录。
         page.reload(wait_until='load')
         expect(page.locator('#cinemaList .cinema-row')).to_have_count(1)
         self.wait_state('active', '#cinemaList .cinema-row .state-chip')
@@ -279,13 +282,10 @@ class FramepickSimulatedOrders(BrowserBase):
         page.locator('#purchaseAction').click()
         self.wait_state('active')
 
-        # 清除按钮只清本地演示数据。
+        # 订单历史留在服务端，界面不提供「清除订单」（购前说明承诺保留记录）。
         page.locator('#purchaseClose').click()
-        page.locator('#cinemaClear').click()
-        expect(page.locator('#cinemaList .cinema-row')).to_have_count(0)
-        expect(page.locator('#cinemaEmpty')).to_be_visible()
-        self.assertIn('还没有演示订单', page.locator('#cinemaEmpty').inner_text())
-        self.assertEqual(self.orders(), [])
+        self.assertGreaterEqual(page.locator('#cinemaList .cinema-row').count(), 1)
+        self.assertEqual(len(self.orders()), 3)
 
     def test_login_returns_to_purchase_without_losing_filters_or_touching_real_films(self):
         page = self.open_page()
@@ -316,7 +316,7 @@ class FramepickSimulatedOrders(BrowserBase):
                                 ('#creatorDialog', 'missing')):
             with self.subTest(selector=selector):
                 expect(page.locator(f'{selector} .state-chip').first).to_have_attribute('data-state', state)
-        expect(page.locator('#cinema .state-chip').first).to_have_attribute('data-state', 'missing')
+        expect(page.locator('#cinema .state-chip').first).to_have_attribute('data-state', 'local')
 
 
 class FramepickOrdersOffline(BrowserBase):

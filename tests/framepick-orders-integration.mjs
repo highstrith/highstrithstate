@@ -196,6 +196,46 @@ test('failed and cancelled orders have no rights and stale callbacks cannot down
   assert.equal(stored.simulationEvents.length, 1);
 });
 
+test('refund, expiry and delisting move rights without granting them twice', async (t) => {
+  const { client, root } = await service(t);
+  const viewer = client();
+  await viewer.register();
+
+  // 退款：退款中权益保留，退款完成后收回；之后可以重新下单（新订单）。
+  const first = await createOrder(viewer);
+  const firstId = first.json.order.id;
+  await viewer.request(`/api/framepick/orders/${firstId}/simulate`, { method: 'POST', body: { outcome: 'paid' } });
+  const refunding = await viewer.request(`/api/framepick/orders/${firstId}/simulate`, { method: 'POST', body: { outcome: 'refunding' } });
+  assert.equal(refunding.json.order.state, 'refunding');
+  assert.equal(refunding.json.order.entitlement.active, true);
+  const refunded = await viewer.request(`/api/framepick/orders/${firstId}/simulate`, { method: 'POST', body: { outcome: 'refunded' } });
+  assert.equal(refunded.json.order.state, 'refunded');
+  assert.equal(refunded.json.order.entitlement.active, false);
+  const again = await createOrder(viewer, { requestId: 'repurchase-after-refund' });
+  assert.equal(again.status, 201);
+  assert.notEqual(again.json.order.id, firstId);
+
+  // 授权到期：权益收回，到期回调不能复活旧权益。
+  await viewer.request(`/api/framepick/orders/${again.json.order.id}/simulate`, { method: 'POST', body: { outcome: 'paid' } });
+  const expired = await viewer.request(`/api/framepick/orders/${again.json.order.id}/simulate`, { method: 'POST', body: { outcome: 'expired' } });
+  assert.equal(expired.json.order.state, 'expired');
+  assert.equal(expired.json.order.entitlement.active, false);
+
+  // 下架：订单保留、权益暂停；恢复后回到已购，且不重复发权益或事件。
+  const third = await createOrder(viewer, { requestId: 'after-expiry' });
+  await viewer.request(`/api/framepick/orders/${third.json.order.id}/simulate`, { method: 'POST', body: { outcome: 'paid' } });
+  const gone = await viewer.request(`/api/framepick/orders/${third.json.order.id}/simulate`, { method: 'POST', body: { outcome: 'unavailable' } });
+  assert.equal(gone.json.order.state, 'unavailable');
+  assert.equal(gone.json.order.entitlement.active, true);
+  const back = await viewer.request(`/api/framepick/orders/${third.json.order.id}/simulate`, { method: 'POST', body: { outcome: 'paid' } });
+  assert.equal(back.json.order.state, 'paid');
+  assert.equal(back.json.order.entitlement.active, true);
+
+  const stored = JSON.parse(await readFile(path.join(root, 'orders', 'orders.json'), 'utf8'));
+  assert.equal(stored.entitlements.length, 3);
+  assert.equal(stored.simulationEvents.length, 3);
+});
+
 test('one account cannot read or mutate another account order', async (t) => {
   const { client } = await service(t);
   const owner = client();

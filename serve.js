@@ -4,6 +4,7 @@ const path = require("path");
 const { URL } = require("url");
 const { createStaticHandler } = require("./server/static-site.cjs");
 const { createAccountHandler } = require("./server/framepick-accounts.cjs");
+const { createOrderHandler } = require("./server/framepick-orders.cjs");
 
 const root = __dirname;
 const port = process.env.PORT || 3000;
@@ -413,6 +414,9 @@ async function handleApi(req, res, requestUrl) {
 
 const handleStatic = createStaticHandler({ root });
 const handleFramepickAccounts = createAccountHandler({});
+// Demo orders: simulated payment only, data outside the repository
+// (FRAMEPICK_ORDERS_DATA_DIR overrides for tests).
+const handleFramepickOrders = createOrderHandler({ accounts: handleFramepickAccounts });
 // The creator module is still an unshipped work in progress: mount it only when
 // the file exists so a checkout without it still starts.
 const creatorModule = path.join(root, "server", "framepick-creators.cjs");
@@ -430,6 +434,11 @@ http.createServer(async (req, res) => {
     // Accounts own a narrower prefix, so they must be tried before the review
     // handler, which claims every /api/framepick path.
     if (await handleFramepickAccounts.handle(req, res, requestUrl)) {
+      return;
+    }
+
+    // Orders own a narrower prefix too (demo goods, simulated payment).
+    if (await handleFramepickOrders.handle(req, res, requestUrl)) {
       return;
     }
 

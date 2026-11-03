@@ -44,6 +44,7 @@ python3 -m unittest \
 node --test tests/framepick-reviews-api-integration.mjs
 node --test tests/framepick-library-store-integration.mjs
 node --test tests/framepick-accounts-integration.mjs
+node --test tests/framepick-orders-integration.mjs
 node --test tests/framepick-discovery-integration.mjs
 node --test tests/framepick-publish-rules-test.mjs
 node --test tests/framepick-creators-integration.mjs
