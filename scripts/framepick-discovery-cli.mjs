@@ -267,6 +267,7 @@ function rescreen() {
   const films = s.listFilms();
   const pool = s.listCandidates();
   const hits = [];
+  let marked = 0;
   for (const item of pool) {
     if (item.status === 'converted') continue;
     const again = screenCandidate(
@@ -278,12 +279,12 @@ function rescreen() {
     hits.push({ id: item.id, title: item.title, status: item.status, reason: keyword });
     if (apply && ['new', 'verifying'].includes(item.status)) {
       s.setCandidateStatus(item.id, 'rejected', { actor: 'discovery:rescreen', note: keyword });
+      marked += 1;
     }
   }
-  const marked = apply ? hits.length : 0;
-  if (asJson) console.log(JSON.stringify({ scanned: pool.length, hits: hits.length, applied: apply, hitsList: hits }, null, 2));
+  if (asJson) console.log(JSON.stringify({ scanned: pool.length, hits: hits.length, applied: marked, hitsList: hits }, null, 2));
   else {
-    console.log(`重扫候选池 ${pool.length} 条：命中当前排除词 ${hits.length} 条${apply ? '，已标记 rejected' : '（未改动，加 --apply 才落状态）'}`);
+    console.log(`重扫候选池 ${pool.length} 条：命中当前排除词 ${hits.length} 条${apply ? `，本次新标 rejected ${marked} 条（其余早已标注）` : '（未改动，加 --apply 才落状态）'}`);
     for (const hit of hits) console.log(`  - ${hit.id} · ${hit.title} — ${hit.reason}`);
   }
   return { hits, marked };
