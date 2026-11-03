@@ -125,5 +125,6 @@ node scripts/framepick-library-cli.mjs candidate reindex
 
 ## 关联
 
+- [自动化计划](自动化计划.md)——抖音那一路为什么暂时只做手动、接之前要看什么
 - [帧选 PRD](framepick-prd-20261102.md) · [片库运营流程](framepick-library-operations-20261102.md) · [首轮 AI 搜片试跑](../ai-film-discovery-trial-20261102/试跑结果.md)
 - 测试：`tests/framepick-discovery-integration.mjs`（规则／去重／报告）、`tests/framepick-discovery-scan-test.py`（时长与证据解析，无需联网）
