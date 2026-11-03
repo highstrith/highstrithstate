@@ -1,12 +1,12 @@
-"""Framepick simulated orders in a real browser.
+"""Framepick 演示购票：真实浏览器里的界面状态机。
 
-The paid-looking flow is always labelled as a simulation: it uses isolated demo
-products, a local account and server-persisted demo orders, never a payment API.
-Static hosting and service failures must leave free discovery untouched.
+演示流程不接支付渠道、不产生真实订单，订单只写进这个浏览器的 localStorage。
+所有断言都以 data-state 契约为准（login / unpaid / paying / confirming / active /
+failed / canceled / refunding / refunded / expired / unavailable），不依赖中文文案：
+文案可以改，状态机不能悄悄退化。
 """
 import functools
 import http.server
-import json
 import os
 import socket
 import subprocess
@@ -26,6 +26,8 @@ from playwright.sync_api import sync_playwright, expect  # noqa: E402
 WIDTHS = [320, 390, 820, 1440, 1920]
 PASSWORD = 'framepick-test-pw'
 DEMO_KEY = 'framepick:demo:orders:v1'
+# 与 reel/framepick-demo.js 的 TIMEOUT_MS 对齐：支付中 →（900ms）确认中 →（1300ms）已购。
+STEP_MS = 900
 
 
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
@@ -46,6 +48,17 @@ class BrowserBase(unittest.TestCase):
 
     def tearDown(self):
         self.assertEqual(self.errors, [])
+
+    # ---- 状态机小工具：读/等 data-state，而不是读中文标签 ----
+
+    def state(self, selector='#purchaseChip'):
+        return self.page.locator(selector).get_attribute('data-state')
+
+    def wait_state(self, state, selector='#purchaseChip'):
+        expect(self.page.locator(selector)).to_have_attribute('data-state', state)
+
+    def orders(self):
+        return self.page.evaluate(f"() => JSON.parse(localStorage.getItem('{DEMO_KEY}') || '[]')")
 
 
 class FramepickSimulatedOrders(BrowserBase):
@@ -89,108 +102,199 @@ class FramepickSimulatedOrders(BrowserBase):
     def unique_email(self, name):
         return f'{name}-{int(time.time() * 1000)}@example.com'
 
-    def register(self, name='viewer'):
+    def sign_in(self, name='viewer'):
+        """注册并登录。账号对话框可能已经由购票流程打开，也可能需要自己开。"""
         page = self.page
-        page.locator('#accountSwitch').click()
-        page.locator('#accountEmail').fill(self.unique_email(name))
-        page.locator('#accountPassword').fill(PASSWORD)
-        page.locator('#accountNickname').fill('演示观众')
-        page.locator('#accountSubmit').click()
+        if page.locator('#accountEntry').get_attribute('data-signed-in') == 'true':
+            return
+        if not page.locator('#accountDialog').is_visible():
+            page.locator('#accountEntry').click()
+        expect(page.locator('#accountDialog')).to_be_visible()
+        if page.locator('#accountForm').is_visible():
+            if page.locator('#accountNickname').is_hidden():
+                page.locator('#accountSwitch').click()
+            expect(page.locator('#accountNickname')).to_be_visible()
+            page.locator('#accountEmail').fill(self.unique_email(name))
+            page.locator('#accountPassword').fill(PASSWORD)
+            page.locator('#accountNickname').fill('演示观众')
+            page.locator('#accountSubmit').click()
         expect(page.locator('#accountDialog')).not_to_be_visible()
         expect(page.locator('#accountEntry')).to_have_attribute('data-signed-in', 'true')
 
-    def open_purchase(self, price=3):
-        # 页面目前只保留一个演示入口（3 元档，data-demo-price 标价）。传 price 是历史参数：
-        # 若将来恢复多档，会挑对应档；现在回落到唯一入口，价格以按钮上的标价为准。
-        opener = self.page.locator(f'[data-demo-purchase][data-demo-price="{price}"]')
-        if not opener.count():
-            opener = self.page.locator('[data-demo-purchase]').first
-        self.demo_price = int(opener.get_attribute('data-demo-price') or price)
+    def open_purchase(self):
+        opener = self.page.locator('[data-demo-purchase]').first
+        self.demo_price = int(opener.get_attribute('data-demo-price') or 3)
         opener.click()
         expect(self.page.locator('#purchaseDialog')).to_be_visible()
 
-    def create_order(self):
-        self.page.locator('#purchaseAction').click()
-        expect(self.page.locator('#purchaseChip')).to_have_text('未支付')
-        self.assertIn('演示订单', self.page.locator('#purchaseBody').inner_text())
+    def activate(self):
+        """走完 未购买 → 支付中 → 确认中 → 已购；返回时购票对话框仍然开着。"""
+        page = self.page
+        self.wait_state('unpaid')
+        page.locator('#purchaseAction').click()
+        self.wait_state('paying')
+        expect(page.locator('#purchaseAction')).to_be_disabled()
+        self.wait_state('confirming')
+        self.wait_state('active')
+        expect(page.locator('#purchaseAction')).to_be_enabled()
 
-    def test_service_status_marks_orders_local_simulated_and_never_real_payment(self):
+    # ---- 用例 ----
+
+    def test_service_status_separates_what_is_real_from_what_is_demo(self):
         page = self.open_page()
-        expect(page.locator('#prototypeBar')).to_contain_text('模拟')
+        expect(page.locator('#prototypeBar')).to_be_visible()
+        self.assertIn('不产生真实订单', page.locator('#prototypeBar').inner_text())
         page.locator('#statusOpen').click()
         rows = page.locator('#statusList .status-row')
         expect(rows).to_have_count(10)
-        payment = page.locator('#statusList .status-row', has_text='单片购票与订单')
-        expect(payment.locator('.state-chip')).to_have_text('本地演示 · 正式未部署')
-        self.assertIn('服务端保存', payment.inner_text())
-        self.assertIn('不会扣款', payment.inner_text())
-        cinema = page.locator('#statusList .status-row', has_text='我的影院')
-        expect(cinema.locator('.state-chip')).to_have_text('本地演示 · 正式未部署')
-        self.assertIn('授权正片播放仍未接入', cinema.inner_text())
 
-    def test_paid_flow_is_server_backed_recoverable_and_explicitly_simulated(self):
+        def chip(name):
+            return page.locator('#statusList .status-row', has_text=name).locator('.state-chip')
+
+        expect(chip('片库发现：搜索、组合筛选、排序、收藏、详情')).to_have_attribute('data-state', 'ready')
+        expect(chip('单片购票与支付')).to_have_attribute('data-state', 'missing')
+        expect(chip('我的影院与授权期内反复观看')).to_have_attribute('data-state', 'missing')
+        expect(chip('账号（邮箱＋密码）')).to_have_attribute('data-state', 'local')
+
+        payment = page.locator('#statusList .status-row', has_text='单片购票与支付')
+        self.assertIn('不产生真实订单', payment.inner_text())
+        cinema = page.locator('#statusList .status-row', has_text='我的影院与授权期内反复观看')
+        self.assertIn('不代表可以播放授权正片', cinema.inner_text())
+        # 状态弹层里的说明和购票对话框里的说明必须一致地承认没有支付渠道。
+        self.assertIn('没有真实支付渠道', page.locator('#purchaseNote').inner_text())
+
+    def test_signed_out_purchase_hands_over_to_login_then_unpaid(self):
         page = self.open_page()
-        self.open_purchase(3)
-        expect(page.locator('#purchaseChip')).to_have_text('未登录')
+        self.open_purchase()
+        self.wait_state('login')
+        expect(page.locator('#purchaseChip')).not_to_have_text('')
+        expect(page.locator('#purchaseChip')).to_have_count(1)
         self.assertIn('授权期内反复观看', page.locator('.purchase-rights').inner_text())
         self.assertIn('不是永久拥有', page.locator('.purchase-rights').inner_text())
-        self.assertNotIn('48 小时租赁', page.locator('.purchase-rights').inner_text().replace('也不是 48 小时租赁', ''))
+
+        # 未登录点主按钮不是假装下单，而是先要账号。
         page.locator('#purchaseAction').click()
         expect(page.locator('#accountDialog')).to_be_visible()
-        self.register('paid')
-        expect(page.locator('#purchaseDialog')).to_be_visible()
-        expect(page.locator('#purchaseChip')).to_have_text('未支付')
-        self.create_order()
-        self.assertIn('3.00', page.locator('#purchaseMeta').inner_text())
-        self.assertIn('30 天', page.locator('#purchaseMeta').inner_text())
+        self.sign_in('signed-out')
 
-        page.locator('#purchaseSimulate').click()
-        expect(page.locator('#purchaseChip')).to_have_text('确认中')
-        page.reload(wait_until='load')
-        self.open_purchase(3)
-        expect(page.locator('#purchaseChip')).to_have_text('确认中')
-        page.locator('#purchaseAction').click()
-        expect(page.locator('#purchaseChip')).to_have_text('已支付（模拟）')
-        self.assertIn('不会扣款', page.locator('#purchaseBody').inner_text())
-        self.assertIn('模拟授权至', page.locator('#purchaseMeta').inner_text())
+        # 登录回来后原地继续，购票对话框不关、不清空。
+        expect(page.locator('#purchaseDialog')).to_be_visible()
+        self.wait_state('unpaid')
+        meta = page.locator('#purchaseMeta').inner_text()
+        self.assertIn('演示影片', meta)
+        self.assertIn(f'拟定价格 {self.demo_price} 元', meta)
+        self.assertNotIn('演示授权至', meta)
+        self.assertEqual(self.orders(), [])
+
+    def test_purchase_runs_paying_confirming_active_and_persists_locally(self):
+        page = self.open_page()
+        self.sign_in('paid')
+        self.open_purchase()
+        self.activate()
+
+        self.assertIn('演示授权至', page.locator('#purchaseMeta').inner_text())
+        orders = self.orders()
+        self.assertEqual(len(orders), 1)
+        self.assertEqual(orders[0]['state'], 'active')
+        self.assertIsInstance(orders[0]['expiresAt'], int)
+        self.assertIn('演示影片', orders[0]['film'])
+
         page.locator('#purchaseClose').click()
+        expect(page.locator('#purchaseDialog')).not_to_be_visible()
         rows = page.locator('#cinemaList .cinema-row')
         expect(rows).to_have_count(1)
-        expect(rows.first.locator('.state-chip')).to_have_text('已支付（模拟）')
-        self.assertIn('不产生真实付款、放映权益或创作者分账', rows.first.inner_text())
-        self.assertIsNone(page.evaluate(f"() => localStorage.getItem('{DEMO_KEY}')"))
+        self.wait_state('active', '#cinemaList .cinema-row .state-chip')
+        self.assertIn('不产生真实付款', rows.first.inner_text())
+        expect(page.locator('#cinemaEmpty')).to_be_hidden()
+        expect(page.locator('#cinemaClear')).to_be_visible()
 
+        # 演示订单只存在本浏览器：刷新后仍在，且不需要账号服务重新登录。
         page.reload(wait_until='load')
         expect(page.locator('#cinemaList .cinema-row')).to_have_count(1)
-        expect(page.locator('#cinemaList .cinema-row .state-chip')).to_have_text('已支付（模拟）')
+        self.wait_state('active', '#cinemaList .cinema-row .state-chip')
+        self.open_purchase()
+        self.wait_state('active')
 
-    def test_failed_and_cancelled_orders_remain_visible_without_rights(self):
+    def test_failed_payment_stops_the_timers_and_cancel_keeps_a_rightless_row(self):
         page = self.open_page()
-        page.locator('#accountEntry').click()
-        self.register('states')
-        self.open_purchase(5)
-        self.create_order()
-        self.assertIn(f'{self.demo_price}.00', page.locator('#purchaseMeta').inner_text())
-        page.locator('#purchaseFail').click()
-        expect(page.locator('#purchaseChip')).to_have_text('失败（模拟）')
-        self.assertIn('没有扣款', page.locator('#purchaseBody').inner_text())
+        self.sign_in('failed')
+        self.open_purchase()
+        self.wait_state('unpaid')
+        page.locator('#purchaseAction').click()
+        self.wait_state('paying')
+
+        page.locator('#purchaseSimulate').click()
+        self.wait_state('failed')
+        self.assertIn('未产生任何费用', page.locator('#purchaseBody').inner_text())
+        # 失败必须停住：原来的 支付中 → 确认中 定时器要被清掉，不能自己又变成已购。
+        page.wait_for_timeout(STEP_MS * 3)
+        self.wait_state('failed')
+
         page.locator('#purchaseSecondary').click()
-        expect(page.locator('#purchaseChip')).to_have_text('已取消')
-        page.locator('#purchaseClose').click()
-        row = page.locator('#cinemaList .cinema-row').first
-        expect(row.locator('.state-chip')).to_have_text('已取消')
-        self.assertIn('无模拟观影权益', row.inner_text())
+        expect(page.locator('#purchaseDialog')).not_to_be_visible()
+        expect(page.locator('#cinemaList .cinema-row')).to_have_count(1)
+        self.wait_state('canceled', '#cinemaList .cinema-row .state-chip')
+        expect(page.locator('#cinemaEmpty')).to_be_visible()
+        self.assertIn('当前没有有效的演示权益', page.locator('#cinemaEmpty').inner_text())
+
+        # 没有权益的订单也要留痕，刷新后仍能查到。
         page.reload(wait_until='load')
-        expect(page.locator('#cinemaList .cinema-row .state-chip')).to_have_text('已取消')
+        self.wait_state('canceled', '#cinemaList .cinema-row .state-chip')
+        self.assertEqual([o['state'] for o in self.orders()], ['canceled'])
+
+    def test_refund_expiry_and_delisting_move_rights_without_losing_the_row(self):
+        page = self.open_page()
+        self.sign_in('rights')
+        self.open_purchase()
+        self.activate()
+
+        # 退款：处理中权益仍在，处理完收回。
+        page.locator('#purchaseAction').click()
+        self.wait_state('refunding')
+        expect(page.locator('#cinemaEmpty')).to_be_hidden()
+        self.wait_state('refunded')
+        expect(page.locator('#cinemaEmpty')).to_be_visible()
+
+        # 重新购票
+        page.locator('#purchaseAction').click()
+        self.wait_state('unpaid')
+        self.activate()
+
+        # 授权到期：从已购的次按钮走，对话框保持在原处。
+        page.locator('#purchaseSecondary').click()
+        self.wait_state('expired')
+        expect(page.locator('#purchaseDialog')).to_be_visible()
+        expect(page.locator('#cinemaEmpty')).to_be_visible()
+
+        # 下架：订单保留、权益暂停，恢复后还能回到已购。
+        page.locator('#purchaseAction').click()
+        self.wait_state('unpaid')
+        self.activate()
+        page.locator('#purchaseUnavailable').click()
+        self.wait_state('unavailable')
+        expect(page.locator('#cinemaList .cinema-row')).to_have_count(1)
+        self.wait_state('unavailable', '#cinemaList .cinema-row .state-chip')
+        expect(page.locator('#cinemaEmpty')).to_be_hidden()
+
+        page.locator('#purchaseAction').click()
+        self.wait_state('active')
+
+        # 清除按钮只清本地演示数据。
+        page.locator('#purchaseClose').click()
+        page.locator('#cinemaClear').click()
+        expect(page.locator('#cinemaList .cinema-row')).to_have_count(0)
+        expect(page.locator('#cinemaEmpty')).to_be_visible()
+        self.assertIn('还没有演示订单', page.locator('#cinemaEmpty').inner_text())
+        self.assertEqual(self.orders(), [])
 
     def test_login_returns_to_purchase_without_losing_filters_or_touching_real_films(self):
         page = self.open_page()
         page.locator('#filmSearch').fill('相骨')
         expect(page.locator('#filmGrid [data-film]:visible')).to_have_count(1)
         before = page.locator('#filmGrid [data-film]').count()
-        self.open_purchase(3)
+        self.open_purchase()
         page.locator('#purchaseAction').click()
-        self.register('context')
+        self.sign_in('context')
         expect(page.locator('#purchaseDialog')).to_be_visible()
         expect(page.locator('#filmSearch')).to_have_value('相骨')
         self.assertIn('q=', page.url)
@@ -199,18 +303,20 @@ class FramepickSimulatedOrders(BrowserBase):
         self.assertEqual(page.locator('#filmGrid [data-access="paid"]').count(), 0)
         self.assertNotIn('演示影片', page.locator('#filmGrid').inner_text())
 
-    def test_mobile_layout_and_unbuilt_service_labels_survive_order_ui(self):
+    def test_mobile_layout_and_demo_labels_survive_the_order_ui(self):
         page = self.open_page()
         for width in WIDTHS:
             with self.subTest(width=width):
                 page.set_viewport_size({'width': width, 'height': 900})
                 page.wait_for_timeout(100)
                 self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'), width + 1)
-        for selector, label in (('#accountDialog', '本地演示 · 非线上账号'),
-                                ('#creatorDialog', '演示 · 未接入'),
-                                ('#membershipDialog', '演示 · 未接入')):
+        # 未接入的服务在对话框里必须自己挂着标记，不能只靠页面正文里的说明。
+        for selector, state in (('#membershipDialog', 'missing'),
+                                ('#accountDialog', 'local'),
+                                ('#creatorDialog', 'missing')):
             with self.subTest(selector=selector):
-                expect(page.locator(f'{selector} .state-chip').first).to_have_text(label)
+                expect(page.locator(f'{selector} .state-chip').first).to_have_attribute('data-state', state)
+        expect(page.locator('#cinema .state-chip').first).to_have_attribute('data-state', 'missing')
 
 
 class FramepickOrdersOffline(BrowserBase):
@@ -232,14 +338,23 @@ class FramepickOrdersOffline(BrowserBase):
         cls.server.server_close()
         cls.thread.join()
 
-    def test_undeployed_orders_do_not_block_free_browsing_or_guest_reviews(self):
+    def test_static_hosting_blocks_only_the_unbuilt_services(self):
         page = self.make_page()
         page.goto(self.base + fp.url(), wait_until='load')
         page.locator('[data-demo-purchase]').first.click()
         expect(page.locator('#purchaseDialog')).to_be_visible()
-        expect(page.locator('#purchaseBody')).to_contain_text('订单服务尚未')
-        expect(page.locator('#purchaseAction')).to_be_disabled()
+        expect(page.locator('#purchaseChip')).to_have_attribute('data-state', 'login')
+
+        # 没有账号服务时，购票停在未登录，不会假装下单成功。
+        page.locator('#purchaseAction').click()
+        expect(page.locator('#accountDialog')).to_be_visible()
+        expect(page.locator('#accountForm')).to_be_hidden()
+        expect(page.locator('#accountAvailability')).to_contain_text('尚未在正式站点部署')
+        expect(page.locator('#purchaseChip')).to_have_attribute('data-state', 'login')
+        page.locator('#accountClose').click()
         page.locator('#purchaseClose').click()
+
+        # 免费浏览、原作入口与访客评价不受影响。
         cards = page.locator('#filmGrid [data-film]')
         self.assertGreaterEqual(cards.count(), 3)
         expect(page.locator('#filmGrid .watch')).to_have_count(cards.count())
