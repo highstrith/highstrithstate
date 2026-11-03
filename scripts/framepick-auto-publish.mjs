@@ -97,10 +97,13 @@ function publish() {
       continue;
     }
     // 封面必须在盘上：卡片会直接引用它，缺图就是公开页面上的破图。
-    const cover = `img/${entry.id}.webp`;
-    const coverSmall = `img/${entry.id}-640w.webp`;
-    const missing = [cover, coverSmall].filter((file) => !fs.existsSync(path.join(root, 'reel', file)));
-    if (missing.length) { skipped.push({ id: candidate.id, reason: `缺封面 ${missing.join(' / ')}` }); continue; }
+    // 2026-11 起不再自造封面：封面统一取平台原封面（scripts/framepick-cover-build.mjs
+    // 负责下载转换），这里只要求 640w 一档在盘上。
+    const cover = `img/${entry.id}-640w.webp`;
+    if (!fs.existsSync(path.join(root, 'reel', cover))) {
+      skipped.push({ id: candidate.id, reason: `缺封面 ${cover}（先跑 scripts/framepick-cover-build.mjs）` });
+      continue;
+    }
 
     const film = store.convertCandidate(candidate.id, {
       id: entry.id,
@@ -113,10 +116,10 @@ function publish() {
       access: 'free',
       runtime: entry.runtime || candidate.note.match(/时长\s*(\d{1,2}:\d{2})/)?.[1],
       cover,
-      coverAlt: entry.coverAlt || `${entry.title}概念封面`,
-      coverNote: entry.coverNote || '概念封面',
-      coverWidth: 1280,
-      coverHeight: 790,
+      coverAlt: entry.coverAlt || `《${entry.title}》原片封面`,
+      coverNote: entry.coverNote || '原片封面',
+      coverWidth: 640,
+      coverHeight: 480,
       description: entry.description,
       recommendation: entry.recommendation,
       episode: entry.episode,

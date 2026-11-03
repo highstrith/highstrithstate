@@ -5,3 +5,5 @@ serve.*.log
 .__pycache__/
 __pycache__/
 ._*
+reel/img/raw/
+docs/framepick-intake-20261103/covers-src/

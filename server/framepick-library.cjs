@@ -192,6 +192,13 @@ function validateFilmInput(input) {
     access,
     runtime,
     cover: text(input?.cover, '封面路径', { max: 200 }),
+    // 平台原封面地址（B 站 pic 为永久链接；抖音为带签名的 CDN 链接，仅作取材线索）。
+    // 站点不外链它，只作为素材下载的出处记录——封面是「引用原片」，不是自创作品。
+    sourceCover: ((value) => {
+      const clean = text(value, '', { required: false, max: 600 }) || '';
+      if (clean && !/^https?:\/\//i.test(clean)) fail('sourceCover 必须是 http(s) 链接');
+      return clean;
+    })(input?.sourceCover),
     coverAlt: text(input?.coverAlt, '', { required: false, max: 200 }) || '',
     coverNote: text(input?.coverNote, '', { required: false, max: 40 }) || '',
     coverWidth: positiveInt(input?.coverWidth, 640),
@@ -385,6 +392,11 @@ function createLibraryStore(options = {}) {
           capturedAt: item?.capturedAt || now,
         })) : [],
         popularity: input?.popularity ? { metric: text(input.popularity.metric, '热度指标', { required: false, max: 40 }), value: text(input.popularity.value, '热度数值', { required: false, max: 40 }), capturedAt: input.popularity.capturedAt || now } : null,
+        sourceCover: ((value) => {
+          const clean = text(value, '', { required: false, max: 600 }) || '';
+          if (clean && !/^https?:\/\//i.test(clean)) fail('sourceCover 必须是 http(s) 链接');
+          return clean;
+        })(input?.sourceCover),
         note: text(input?.note, '', { required: false, max: 600 }) || '',
         status: 'new',
         filmId: null,
@@ -447,7 +459,7 @@ function createLibraryStore(options = {}) {
       const data = read();
       const candidate = findCandidate(data, id);
       if (candidate.status === 'converted') fail(`候选 ${id} 已转换`);
-      const film = validateFilmInput({ ...filmInput, source: filmInput?.source || candidate.source, sourceUrl: filmInput?.sourceUrl || candidate.url, title: filmInput?.title || candidate.title, author: filmInput?.author || candidate.author });
+      const film = validateFilmInput({ ...filmInput, source: filmInput?.source || candidate.source, sourceUrl: filmInput?.sourceUrl || candidate.url, title: filmInput?.title || candidate.title, author: filmInput?.author || candidate.author, sourceCover: filmInput?.sourceCover || candidate.sourceCover || '' });
       const filmId = text(filmInput?.id, '', { required: false, max: 40 }) || slug(film.title, `film-${data.films.length + 1}`);
       if (!ID.test(filmId)) fail(`作品 ID「${filmId}」只能包含小写字母、数字与连字符`);
       if (data.films.some((item) => item.id === filmId)) fail(`作品 ID ${filmId} 已存在`);

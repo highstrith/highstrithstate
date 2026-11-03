@@ -102,11 +102,15 @@ def build_candidate(item, keyword=''):
     published_at = time.strftime('%Y-%m-%d', time.localtime(int(published))) if isinstance(published, (int, float)) and published > 0 else ''
     plays = item.get('play')
     url = f'https://www.bilibili.com/video/{bvid}'
+    pic = str(item.get('pic') or item.get('image') or '').strip()
+    if pic.startswith('//'):
+        pic = f'https:{pic}'
     return {
         'title': title[:80],
         'author': author[:80],
         'source': 'bilibili',
         'url': url,
+        'sourceCover': pic[:600],
         'runtime': runtime,
         'publishedAt': published_at,
         'popularity': {'metric': '播放', 'value': str(plays)} if isinstance(plays, (int, float)) else None,
