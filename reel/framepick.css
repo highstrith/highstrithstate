@@ -59,7 +59,9 @@ h1 { font-size:clamp(36px,4.3vw,61px);line-height:1.17;letter-spacing:-.045em;fo
 .library { padding-top:60px }
 .rankings { padding-top:48px }
 .rankings-browse { color:var(--muted);font-size:12px;white-space:nowrap }
-.ranking-columns { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px }
+/* align-items:start 必须留着：没有数据的榜单若跟着最高的那一列撑到同样高度，
+   页面上就只剩左边一列有内容、右边两列是大片空白。 */
+.ranking-columns { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;align-items:start }
 .ranking-board { min-width:0;padding-top:18px;border-top:2px solid var(--line) }
 .ranking-board:first-child { border-top-color:var(--accent) }
 .ranking-heading { display:flex;justify-content:space-between;align-items:baseline;gap:12px }

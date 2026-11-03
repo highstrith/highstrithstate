@@ -67,10 +67,16 @@ class FramepickRankings(unittest.TestCase):
         self.open(source=source)
         expect(self.page.locator('#rankings')).to_be_visible()
         # 所有卡片的收录日期都被挪到了"今天"，所以今日榜条数 = 全部卡片数（片库会增长，不写死）。
+        # 榜单最多列 8 条，超出的数字写照在状态行与脚注里。
         expected = self.page.locator('#filmGrid [data-film]').count()
+        shown = min(expected, 8)
         rows = self.page.locator('#rankingDaily [data-ranking-film]')
-        expect(rows).to_have_count(expected)
+        expect(rows).to_have_count(shown)
         expect(self.page.locator('#dailyRankingStatus')).to_have_text(f'今日新收录 {expected} 部')
+        if expected > 8:
+            expect(self.page.locator('#dailyRankingMore')).to_contain_text(f'其余 {expected - 8} 部')
+        else:
+            expect(self.page.locator('#dailyRankingMore')).to_be_hidden()
         # 收录日期只用于分组，条目上不出现任何日期。
         labels = rows.evaluate_all("(rows)=>rows.map(row=>row.innerText)")
         for label in labels:
@@ -82,6 +88,23 @@ class FramepickRankings(unittest.TestCase):
         self.page.keyboard.press('Escape')
         expect(self.page.locator('#filmDialog')).not_to_be_visible()
         expect(trigger).to_be_focused()
+
+    def test_a_long_daily_board_does_not_stretch_the_empty_ones(self):
+        # 一天收录十几部时，没有数据的两栏若跟着最高的那栏撑高，页面就只剩左边一列有内容。
+        source = (fp.SITE_ROOT / 'index.html').read_text()
+        for day in ['2026-10-31', '2026-11-03']:
+            source = source.replace(f'data-date="{day}"', 'data-date="2026-11-02"')
+        self.open(source=source)
+        heights = self.page.evaluate("""() => Object.fromEntries(
+            [...document.querySelectorAll('.ranking-board')]
+              .map((board) => [board.id, Math.round(board.getBoundingClientRect().height)]))""")
+        self.assertGreater(heights['rankingDaily'], heights['rankingPopular'] * 2, '今日榜是有内容的那一栏，不该和空栏一样高')
+        self.assertLess(heights['rankingPopular'], 400, heights)
+        self.assertLess(heights['rankingAcclaimed'], 400, heights)
+        # 空榜仍然要说清为什么是空的（文案随服务是否可用而变），不能靠留白含糊过去。
+        for selector in ['#popularRankingStatus', '#acclaimedRankingStatus']:
+            text = self.page.locator(selector).text_content().strip()
+            self.assertGreater(len(text), 4, f'{selector} 必须给出空榜原因，当前：{text!r}')
 
     def test_daily_board_is_empty_when_nothing_was_added_today(self):
         # Cards are dated 2026-10-31 / 2026-11-03; the clock is frozen on 11-02.

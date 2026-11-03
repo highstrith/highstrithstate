@@ -7,6 +7,8 @@
   let latestSummary = null;
   let latestOutbound = null;
   const dayMs = 86400000;
+  // 每日更新榜最多列几条；超出部分用一句话指向片库，不把这一栏拉成独苗长条。
+  const DAILY_LIMIT = 8;
   const futureSkewMs = 60000; // Permit small server/browser clock differences.
   const chinaDay = () => new Date(Date.now() + 8 * 3600000).toISOString().slice(0, 10);
   const shortDay = (day) => day.slice(5).replace('-', '.');
@@ -62,7 +64,15 @@
     $('#dailyRankingStatus').textContent = entries.length
       ? '今日新收录 ' + entries.length + ' 部'
       : '今日暂无新收录。';
-    renderList('#rankingDaily', entries.map((film) => ({ film, label: film.runtime })), Infinity);
+    // 一天收录十几部时，全塞进这一栏会把它拉成一根长条，旁边两栏却是空的。
+    // 榜单只给前 8 条，剩下的如实说明并指向下方片库，不藏数字。
+    const shown = entries.slice(0, DAILY_LIMIT);
+    renderList('#rankingDaily', shown.map((film) => ({ film, label: film.runtime })), Infinity);
+    const more = $('#dailyRankingMore');
+    if (!more) return;
+    const extra = entries.length - shown.length;
+    more.textContent = extra > 0 ? `今日共 ${entries.length} 部，其余 ${extra} 部见下方片库。` : '';
+    more.hidden = extra <= 0;
   }
 
   function renderPopular(data) {
