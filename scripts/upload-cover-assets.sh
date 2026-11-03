@@ -1,11 +1,10 @@
 #!/bin/sh
-# 把封面素材上传到 OSS（需先临时启用 RAM 子账号 oss-uploader 的 AccessKey）。
+# 把封面素材上传到 OSS（凭据在 ~/.ossutilconfig，AccessKey 长期启用，不必每次开关）。
 #
 #   scripts/upload-cover-assets.sh            上传 reel/img 下的 webp
 #   scripts/upload-cover-assets.sh --dry-run  只列出会传什么
 #
 # 前提：`~/bin/ossutil` 已配好（ossutil config，endpoint 用 oss-cn-hangzhou）。
-# 用完记得在 RAM 控制台禁用 AccessKey，并删除本机配置。
 set -e
 cd "$(dirname "$0")/.."
 
@@ -28,8 +27,11 @@ fi
 
 # 只传 webp 封面；raw/ 是平台原图缓存，属于母版，不进 OSS。
 # 素材不是哈希命名，Cache-Control 与 HTML 对齐 600 秒，换图最多 10 分钟生效。
+# exFAT 盘会给每个文件造 `._原名` 伴生文件，扩展名同样是 .webp，先删掉再传，
+# 否则桶里会多出一堆 4KB 的垃圾对象（framepick-ship.sh 里也有同样一步）。
+find reel/img -name '._*' -type f -delete 2>/dev/null
 "$OSSUTIL" cp -r --update --jobs 4 \
-  --include "*.webp" --exclude "raw/*" \
+  --include "*.webp" --exclude "._*" \
   --meta "Cache-Control:public,max-age=600" \
   reel/img/ "$BUCKET"
 
