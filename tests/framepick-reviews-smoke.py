@@ -247,7 +247,7 @@ class FramepickReviews(unittest.TestCase):
     def test_guest_entry_and_original_site_separation(self):
         self.page.goto(self.base + fp.url())
         self.page.locator('button[data-open-film="xianggu"]').click()
-        expect(self.page.get_by_role('tabpanel', name='作品介绍')).to_contain_text('帧选整理')
+        expect(self.page.get_by_role('tabpanel', name='作品介绍')).to_contain_text('橘生梦厂整理')
         self.page.get_by_role('tab', name='原平台评价', exact=True).click()
         panel = self.page.get_by_role('tabpanel', name='原平台评价')
         expect(panel).to_contain_text('原平台')
