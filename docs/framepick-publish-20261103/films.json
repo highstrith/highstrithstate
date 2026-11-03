@@ -56,6 +56,63 @@
       "originalReleaseDate": "2026-04",
       "description": "被朋友称作「手搓出来的一集爱死机」的原创 AI 动画短片。",
       "recommendation": "爱死机式的成人向科幻短篇，单集完成度拿得出手。"
+    },
+    {
+      "candidate": "dy-7660096168231259426",
+      "id": "nantianmen",
+      "title": "南天门计划：灰蚀危机",
+      "category": "series",
+      "genres": ["scifi"],
+      "episode": "第 1 集",
+      "runtime": "10:46",
+      "originalReleaseDate": "2026-08",
+      "description": "一个人用 AI 拍的硬科幻短片。第一集：如果地球还在，我们为什么要先走。",
+      "recommendation": "单人完成的硬科幻开篇，10 分钟把世界观和疑问一起立住。"
+    },
+    {
+      "candidate": "dy-7702763725375212810",
+      "id": "xiangjianhuan",
+      "title": "相见欢",
+      "category": "series",
+      "genres": ["fantasy"],
+      "episode": "第 1 集：钟山谶",
+      "runtime": "12:36",
+      "originalReleaseDate": "2026-11-01",
+      "description": "第一集：钟山谶。一叶本无去意，满江自有潮声。全片由即梦 AI 短剧工作室制作。",
+      "recommendation": "古风短剧的开篇，台词有章法，先看第一集就知道值不值得追。"
+    },
+    {
+      "candidate": "dy-7661150829201591578",
+      "id": "ruguoai",
+      "title": "如果爱忘了",
+      "category": "short",
+      "genres": ["romance"],
+      "runtime": "08:01",
+      "originalReleaseDate": "2026-08",
+      "description": "根据网友故事改编的 AI 短片。",
+      "recommendation": "8 分钟讲完一段失恋，靠故事推进而不是特效堆料。"
+    },
+    {
+      "candidate": "dy-7674086505354104100",
+      "id": "shijiazhuang",
+      "title": "杀死那个石家庄人",
+      "category": "music",
+      "genres": ["urban"],
+      "runtime": "12:54",
+      "originalReleaseDate": "2026-09",
+      "description": "作者学 AI 做视频后的第一个作品：以同名歌曲为底的 AI 影像，把歌词里的北方工业城市拍了出来。",
+      "recommendation": "歌与画面互相成全的一次练习，12 分钟没有靠空镜凑时长。"
+    },
+    {
+      "candidate": "dy-7662353335671950598",
+      "id": "vantier",
+      "title": "Vantier",
+      "category": "music",
+      "genres": ["urban"],
+      "runtime": "09:26",
+      "originalReleaseDate": "2026-08",
+      "description": "AI 原创短片，主角是一个女团。",
+      "recommendation": "虚拟偶像题材，9 分钟看完一支团的成型。"
     }
   ]
 }

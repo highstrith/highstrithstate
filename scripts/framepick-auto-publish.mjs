@@ -81,8 +81,13 @@ function publish() {
   const eligibleIds = new Set(keep.map((row) => row.item.id));
   const done = [];
   const skipped = [];
+  const already = [];
+  const everyone = store.listCandidates();
 
   for (const entry of batch.films) {
+    const known = everyone.find((item) => item.id === entry.candidate);
+    // 上一批已经转成作品的条目不该每轮都报一遍"找不到"。
+    if (known && known.status === 'converted') { already.push(known.id); continue; }
     const candidate = pool.find((item) => item.id === entry.candidate);
     if (!candidate) { skipped.push({ id: entry.candidate, reason: '候选池里没有这条（已转换或已剔除？）' }); continue; }
     if (only.length && !only.includes(candidate.id)) continue;
@@ -114,6 +119,7 @@ function publish() {
       coverHeight: 790,
       description: entry.description,
       recommendation: entry.recommendation,
+      episode: entry.episode,
       intakeDate: batch.intakeDate,
       originalReleaseDate: entry.originalReleaseDate,
     }, { actor: ACTOR });
@@ -124,7 +130,7 @@ function publish() {
     done.push({ id: film.id, candidate: candidate.id, title: film.title });
   }
 
-  console.log(`已上架 ${done.length} 部，跳过 ${skipped.length} 条`);
+  console.log(`已上架 ${done.length} 部，跳过 ${skipped.length} 条${already.length ? `（另有 ${already.length} 条此前已上架）` : ''}`);
   for (const row of done) console.log(`  ✓ ${row.id} · ${row.title}（候选 ${row.candidate}）`);
   for (const row of skipped) console.log(`  - 跳过 ${row.id}：${row.reason}`);
   if (done.length) console.log('\n下一步：node scripts/framepick-library-cli.mjs build 重新生成页面');

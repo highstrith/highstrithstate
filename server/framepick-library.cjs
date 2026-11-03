@@ -15,7 +15,9 @@ const SOURCES = {
   bilibili: { label: '哔哩哔哩', hosts: ['www.bilibili.com', 'bilibili.com', 'b23.tv'] },
 };
 const CATEGORIES = { film: '完整电影', series: '系列短剧', short: '剧情短片', ad: '商业广告', music: '音乐影像', experimental: '实验影像' };
-const GENRES = { fantasy: '奇幻', scifi: '科幻', wuxia: '武侠', xianxia: '仙侠' };
+// 题材对不上就无法筛选：AI 短片里除了奇幻／科幻／武侠／仙侠，还有大量都市、
+// 情感与悬疑，标签要跟着内容长，不能逼着把片子塞进四个框。
+const GENRES = { fantasy: '奇幻', scifi: '科幻', wuxia: '武侠', xianxia: '仙侠', urban: '都市', romance: '情感', thriller: '悬疑' };
 const ACCESS = { free: '免费精选', paid: '付费放映' };
 
 // Roadmap flow: 待核实 → 待看片 → 待补资料／不收录／通过 → 排期 → 上架 → 下架.
