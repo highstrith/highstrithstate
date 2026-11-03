@@ -1,5 +1,5 @@
 {
-  "batch": "2026-11-03 首批机器放行",
+  "batch": "2026-11-03 机器放行 · 第二批（B 站够格候选）",
   "intakeDate": "2026-11-03",
   "films": [
     {
@@ -7,7 +7,9 @@
       "id": "yabiao",
       "title": "哑镖",
       "category": "film",
-      "genres": ["wuxia"],
+      "genres": [
+        "wuxia"
+      ],
       "runtime": "21:03",
       "originalReleaseDate": "2026-11-02",
       "description": "作者自述为 20 分钟的 AIGC 真人武侠电影，全片 AI 生成：一个不开口的镖客，走一趟不寻常的镖。",
@@ -18,7 +20,9 @@
       "id": "tower32",
       "title": "第32号塔",
       "category": "short",
-      "genres": ["scifi"],
+      "genres": [
+        "scifi"
+      ],
       "runtime": "15:11",
       "originalReleaseDate": "2026-10-28",
       "description": "一次维修任务，逐渐变成一场现实、记忆和精神污染交叠的生存试炼；当幸存者抵达高塔顶端，他发现自己可能早已无法回到真实世界。",
@@ -29,7 +33,9 @@
       "id": "baizhou",
       "title": "白昼禁区",
       "category": "short",
-      "genres": ["scifi"],
+      "genres": [
+        "scifi"
+      ],
       "runtime": "09:07",
       "originalReleaseDate": "2026-11-01",
       "description": "凌晨两点突然天亮，后来整座城市的人都消失了。",
@@ -40,7 +46,9 @@
       "id": "xingchendao",
       "title": "星辰岛",
       "category": "short",
-      "genres": ["fantasy"],
+      "genres": [
+        "fantasy"
+      ],
       "runtime": "13:00",
       "originalReleaseDate": "2026-08",
       "description": "原创 AI 动画短片，全长 13 分钟。",
@@ -51,7 +59,9 @@
       "id": "ticheng",
       "title": "梯城",
       "category": "short",
-      "genres": ["scifi"],
+      "genres": [
+        "scifi"
+      ],
       "runtime": "09:21",
       "originalReleaseDate": "2026-04",
       "description": "被朋友称作「手搓出来的一集爱死机」的原创 AI 动画短片。",
@@ -62,7 +72,9 @@
       "id": "nantianmen",
       "title": "南天门计划：灰蚀危机",
       "category": "series",
-      "genres": ["scifi"],
+      "genres": [
+        "scifi"
+      ],
       "episode": "第 1 集",
       "runtime": "10:46",
       "originalReleaseDate": "2026-08",
@@ -74,7 +86,9 @@
       "id": "xiangjianhuan",
       "title": "相见欢",
       "category": "series",
-      "genres": ["fantasy"],
+      "genres": [
+        "fantasy"
+      ],
       "episode": "第 1 集：钟山谶",
       "runtime": "12:36",
       "originalReleaseDate": "2026-11-01",
@@ -86,7 +100,9 @@
       "id": "ruguoai",
       "title": "如果爱忘了",
       "category": "short",
-      "genres": ["romance"],
+      "genres": [
+        "romance"
+      ],
       "runtime": "08:01",
       "originalReleaseDate": "2026-08",
       "description": "根据网友故事改编的 AI 短片。",
@@ -97,7 +113,9 @@
       "id": "shijiazhuang",
       "title": "杀死那个石家庄人",
       "category": "music",
-      "genres": ["urban"],
+      "genres": [
+        "urban"
+      ],
       "runtime": "12:54",
       "originalReleaseDate": "2026-09",
       "description": "作者学 AI 做视频后的第一个作品：以同名歌曲为底的 AI 影像，把歌词里的北方工业城市拍了出来。",
@@ -108,11 +126,69 @@
       "id": "vantier",
       "title": "Vantier",
       "category": "music",
-      "genres": ["urban"],
+      "genres": [
+        "urban"
+      ],
       "runtime": "09:26",
       "originalReleaseDate": "2026-08",
       "description": "AI 原创短片，主角是一个女团。",
       "recommendation": "虚拟偶像题材，9 分钟看完一支团的成型。"
+    },
+    {
+      "candidate": "bili-bv1yn4g6xeax",
+      "id": "xiyoushiyilu",
+      "title": "西游拾遗录",
+      "category": "series",
+      "genres": [
+        "fantasy",
+        "xianxia"
+      ],
+      "episode": "第 1 集",
+      "runtime": "10:30",
+      "originalReleaseDate": "2026-11-03",
+      "description": "UP 主手搓的西游题材 AI 短剧。这是系列的第一集，讲什么要看片——标题没剧透，简介也留白。",
+      "recommendation": "西游 + AI 短剧的第一集，成色如何先看这 10 分钟。"
+    },
+    {
+      "candidate": "bili-bv1wuyh6veas",
+      "id": "tangguo",
+      "title": "糖果",
+      "category": "short",
+      "genres": [
+        "scifi"
+      ],
+      "runtime": "08:59",
+      "originalReleaseDate": "2026-09-10",
+      "description": "人类终于有望迈入一级文明，获得走向宇宙的资格。与此同时，土卫十八「潘」突然离开轨道，出现在地球上空——从那天起，任何试图伤害他人的人，都会毫无征兆地变成一地五颜六色的糖果。它似乎是一封来自宇宙的邀请。",
+      "recommendation": "一条规则讲到底的科幻短片：设定干净，反转落点也干净，五百多万播放不是白来的。"
+    },
+    {
+      "candidate": "bili-bv1rann6beaw",
+      "id": "lajizhan",
+      "title": "垃圾站",
+      "category": "series",
+      "genres": [
+        "scifi"
+      ],
+      "episode": "第 1 集 · 连载中",
+      "runtime": "11:54",
+      "originalReleaseDate": "2026-07-10",
+      "description": "夜班操作员驾驶机械爪，把人类丢弃的一切送进焚烧厂。直到某个夜晚，他发现垃圾堆里开始出现不该存在的东西——每一车垃圾，都可能藏着一个来自另一个世界的故事。",
+      "recommendation": "千万播放的原创系列开篇，悬念从第一车垃圾就开始堆，适合一口气追更。"
+    },
+    {
+      "candidate": "bili-bv1txdxbsexp",
+      "id": "dangguance",
+      "title": "当观测既是存在",
+      "category": "short",
+      "genres": [
+        "scifi",
+        "thriller"
+      ],
+      "runtime": "11:16",
+      "originalReleaseDate": "2026-04-12",
+      "description": "一个奇怪的网站会不间断播放来自其他世界的新闻，而人们的观测，会把它们带入我们的世界。",
+      "recommendation": "「观测改变现实」的老命题做出新钩子，DiDi_OK 系列短片里悬念最足的一部。"
     }
   ]
 }
