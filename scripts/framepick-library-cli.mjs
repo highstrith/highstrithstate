@@ -67,6 +67,8 @@ function seed() {
       coverWidth: Number(body.match(/<img\b[^>]*width="(\d+)"/)?.[1]) || 640,
       coverHeight: Number(body.match(/<img\b[^>]*height="(\d+)"/)?.[1]) || 397,
       coverNote: textOf(body, 'image-note'),
+      // 原片发布日期写在卡片的 data-published 上，seed 必须回填，否则重建页面会丢。
+      originalReleaseDate: attr(cards[index][0], 'data-published'),
       description: textOf(body, 'desc'),
       recommendation: textOf(body, 'recommendation'),
       episode: textOf(body, 'episode'),

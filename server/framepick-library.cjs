@@ -42,6 +42,8 @@ const CANDIDATE_TRANSITIONS = {
 const ID = /^[a-z0-9][a-z0-9-]{1,40}$/;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const RUNTIME = /^(?:\d+:)?\d{1,2}:\d{2}$/;
+// 原片发布日期：允许年到日、年月、年三种精度（2026-10-20 / 2026-10 / 2026）。
+const RELEASE_DATE = /^(\d{4})(?:-(\d{1,2})(?:-(\d{1,2}))?)?$/;
 
 class LibraryError extends Error {
   constructor(code, message) {
@@ -87,6 +89,22 @@ function validateSourceUrl(source, url) {
     fail(`原作链接域名 ${parsed.host} 与来源「${SOURCES[source].label}」不一致`);
   }
   return raw;
+}
+
+// 原片发布日期：作品在作者原平台发布的日期，和「收录日期」（intakeDate，只用于
+// 今日更新榜分组）分开存。允许三种精度：2026-10-20 / 2026-10 / 2026，也接受
+// 2026.9 这类单数字写法，统一补齐成两位。
+function releaseDate(value) {
+  const raw = text(value, '', { required: false, max: 10 });
+  if (!raw) return '';
+  const matched = raw.replace(/[./]/g, '-').match(RELEASE_DATE);
+  if (!matched) fail(`原片发布日期格式应为 YYYY、YYYY-MM 或 YYYY-MM-DD，当前为「${raw}」`);
+  const [, year, month, day] = matched;
+  if (month && (Number(month) < 1 || Number(month) > 12)) fail(`原片发布日期月份无效：${raw}`);
+  if (day && (Number(day) < 1 || Number(day) > 31)) fail(`原片发布日期日期无效：${raw}`);
+  const normalized = [year, month, day].filter(Boolean).map((part, index) => (index ? part.padStart(2, '0') : part)).join('-');
+  if (day && normalized > today()) fail(`原片发布日期 ${raw} 是未来日期`);
+  return normalized;
 }
 
 function validateFilmInput(input) {
@@ -148,7 +166,7 @@ function validateFilmInput(input) {
     description: text(input?.description, '简介', { max: 600 }),
     recommendation: text(input?.recommendation, '', { required: false, max: 300 }) || '',
     episode: text(input?.episode, '', { required: false, max: 120 }) || '',
-    originalReleaseDate: text(input?.originalReleaseDate, '', { required: false, max: 40 }) || '',
+    originalReleaseDate: releaseDate(input?.originalReleaseDate),
     editorScore,
     intakeDate,
     rights,
@@ -382,6 +400,7 @@ function createLibraryStore(options = {}) {
           cover: film.cover, coverAlt: film.coverAlt, coverNote: film.coverNote,
           coverWidth: film.coverWidth, coverHeight: film.coverHeight,
           description: film.description, recommendation: film.recommendation, episode: film.episode,
+          originalReleaseDate: film.originalReleaseDate,
           editorScore: film.editorScore, intakeDate: film.intakeDate,
         }));
     },

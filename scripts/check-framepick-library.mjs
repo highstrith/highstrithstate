@@ -24,6 +24,7 @@ const ACCESS = new Set(['free', 'paid']);
 const CATEGORIES = new Set(['film', 'series', 'short', 'ad', 'music', 'experimental']);
 const RUNTIME = /^(?:\d+:)?\d{1,2}:\d{2}$/;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
+const RELEASE_DATE = /^\d{4}(?:-\d{2}(?:-\d{2})?)?$/;
 
 const errors = [];
 const warnings = [];
@@ -59,7 +60,7 @@ for (const [card, id, body] of cards.map((m) => [m[0], m[1], m[2]])) {
   if (films.includes(id)) fail(id, '作品 ID 重复，稳定标识必须唯一');
   films.push(id);
 
-  for (const required of ['data-category', 'data-genres', 'data-source', 'data-access', 'data-date']) {
+  for (const required of ['data-category', 'data-genres', 'data-source', 'data-access', 'data-date', 'data-published']) {
     if (attr(card, required) === null) fail(id, `缺少 ${required}`);
   }
 
@@ -67,7 +68,13 @@ for (const [card, id, body] of cards.map((m) => [m[0], m[1], m[2]])) {
   const access = attr(card, 'data-access');
   const source_ = attr(card, 'data-source');
   const date = attr(card, 'data-date');
+  const published = attr(card, 'data-published');
   const score = attr(card, 'data-score');
+
+  // 原片发布日期必须记录；收录日期只用于今日更新榜的分组。
+  if (published !== null && !published) fail(id, '缺少原片发布日期（data-published），作品上架前必须记录');
+  else if (published && !RELEASE_DATE.test(published)) fail(id, `data-published="${published}" 必须是 YYYY、YYYY-MM 或 YYYY-MM-DD`);
+  else if (published && published.length === 10 && published > beijingToday()) fail(id, `data-published="${published}" 是未来日期`);
 
   if (category && !CATEGORIES.has(category)) fail(id, `data-category="${category}" 不在允许值内：${[...CATEGORIES].join(' / ')}`);
   if (access && !ACCESS.has(access)) fail(id, `data-access="${access}" 只能是 free 或 paid`);

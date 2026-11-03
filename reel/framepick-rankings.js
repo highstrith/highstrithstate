@@ -12,11 +12,11 @@
   const shortDay = (day) => day.slice(5).replace('-', '.');
   const validDay = (day) => typeof day === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(day) && Number.isFinite(Date.parse(day)) && new Date(day).toISOString().slice(0, 10) === day;
 
-  function renderList(board, entries) {
+  function renderList(board, entries, limit = 10) {
     const list = $(board + ' .ranking-list');
     const focusedId = list.contains(document.activeElement) ? document.activeElement.dataset.rankingFilm : null;
     const existing = new Map([...list.children].map((item) => [item.querySelector('[data-ranking-film]').dataset.rankingFilm, item]));
-    list.replaceChildren(...entries.slice(0, 5).map(({ film, label }, index) => {
+    list.replaceChildren(...entries.slice(0, limit).map(({ film, label }, index) => {
       const previous = existing.get(film.id);
       if (previous) {
         previous.querySelector('.ranking-position').textContent = String(index + 1).padStart(2, '0');
@@ -55,12 +55,14 @@
     }
   }
 
+  // 今日更新：只列今天收录的作品，条目上不出现任何日期（收录日期仅用于分组）。
   function renderDaily() {
     const today = chinaDay();
-    const entries = films.filter((film) => validDay(film.date) && film.date <= today).sort((a, b) => b.date.localeCompare(a.date) || a.index - b.index);
-    const count = entries.filter((film) => film.date === today).length;
-    $('#dailyRankingStatus').textContent = count ? '今日新收录 ' + count + ' 部' : entries.length ? '今日暂无新收录 · 最近收录 ' + shortDay(entries[0].date) : '作品核实后会出现在这里。';
-    renderList('#rankingDaily', entries.map((film) => ({ film, label: shortDay(film.date) + ' 收录 · ' + film.runtime })));
+    const entries = films.filter((film) => film.date === today);
+    $('#dailyRankingStatus').textContent = entries.length
+      ? '今日新收录 ' + entries.length + ' 部'
+      : '今日暂无新收录。';
+    renderList('#rankingDaily', entries.map((film) => ({ film, label: film.runtime })), Infinity);
   }
 
   function renderPopular(data) {

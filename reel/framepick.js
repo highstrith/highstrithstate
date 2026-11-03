@@ -15,6 +15,7 @@
       id: card.dataset.film, card, index, score, communityScore: null,
       category: card.dataset.category, genres: card.dataset.genres.split(' '),
       source: card.dataset.source, access: card.dataset.access, date: card.dataset.date,
+      published: card.dataset.published || '',
       title: text('h3'), author: text('.author-name'), kind: text('.kind'),
       description: text('.desc'), reason: text('.recommendation'), episode: text('.episode'),
       image: card.querySelector('img'), link: card.querySelector('.watch').href,
@@ -185,6 +186,13 @@
     $('#detailKind').textContent = film.kind + ' / ' + categoryLabel;
     $('#detailAuthor').textContent = film.author + ' / ' + sourceLabel;
     $('#detailEpisode').textContent = film.episode;
+    // 原片发布日期：有就显示，没有就整行隐藏（收录日期只在今日更新榜里用，不在这里露）。
+    const published = $('#detailPublished');
+    if (published) {
+      const when = film.published.replace(/-/g, '.');
+      published.textContent = when ? '原片发布于 ' + when : '';
+      published.hidden = !when;
+    }
     $('#detailDescription').textContent = film.description;
     $('#detailReason').textContent = film.reason;
     $('#detailImage').src = film.image.src;

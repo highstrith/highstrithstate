@@ -86,7 +86,7 @@ test('a serialised episode without an episode note cannot be published', async (
   s.addFilm(film({ id: 'ep', category: 'series' }));
   s.setStatus('ep', 'reviewing'); s.setStatus('ep', 'approved'); s.setStatus('ep', 'scheduled');
   assert.throws(() => s.setStatus('ep', 'published'), /缺少集号说明/);
-  s.updateFilm('ep', { episode: '第 01 集 · 原片发布于 2026.09.01' });
+  s.updateFilm('ep', { episode: '第 01 集' });
   s.setStatus('ep', 'published');
   assert.equal(s.publishedFilms().length, 1);
 });
@@ -101,6 +101,27 @@ test('source, host, runtime, score and intake date are validated', async (t) => 
   assert.throws(() => s.addFilm(film({ id: 'f', intakeDate: '2099-01-01' })), /未来日期/);
   assert.throws(() => s.addFilm(film({ id: 'g', genres: [] })), /至少需要一个题材/);
   assert.throws(() => s.addFilm(film({ id: 'Bad Id' })), /只能包含小写字母/);
+});
+
+test('the original release date is recorded separately from the intake date', async (t) => {
+  const s = await store(t);
+  // 三种精度都接受：日、月、年。
+  const variant = (id, url, extra = {}) => film({ id, title: `作品${id}`, author: `作者${id}`, sourceUrl: url, ...extra });
+  assert.equal(s.addFilm(variant('day', 'https://www.bilibili.com/video/BV1dd411c7mD', { originalReleaseDate: '2026-09-10' })).originalReleaseDate, '2026-09-10');
+  assert.equal(s.addFilm(variant('month', 'https://www.bilibili.com/video/BV1mm411c7mD', { originalReleaseDate: '2026-09' })).originalReleaseDate, '2026-09');
+  assert.equal(s.addFilm(variant('year', 'https://www.bilibili.com/video/BV1yy411c7mD', { originalReleaseDate: '2026.9' })).originalReleaseDate, '2026-09');
+  // 未记录时是空字符串，不猜日期。
+  assert.equal(s.addFilm(variant('none', 'https://www.bilibili.com/video/BV1nn411c7mD')).originalReleaseDate, '');
+  assert.throws(() => s.addFilm(variant('bad', 'https://www.bilibili.com/video/BV1bb411c7mD', { originalReleaseDate: '去年春天' })), /格式应为/);
+  assert.throws(() => s.addFilm(variant('future', 'https://www.bilibili.com/video/BV1ff411c7mD', { originalReleaseDate: '2099-01-01' })), /未来日期/);
+  assert.throws(() => s.addFilm(variant('month13', 'https://www.bilibili.com/video/BV1tt411c7mD', { originalReleaseDate: '2026-13' })), /月份无效/);
+  // 原片发布日期与收录日期互不影响，也一起进入公开字段。
+  const published = s.publishedFilms().find((item) => item.id === 'day');
+  assert.equal(published, undefined, 'still a draft');
+  s.setStatus('day', 'reviewing'); s.setStatus('day', 'approved'); s.setStatus('day', 'scheduled'); s.setStatus('day', 'published');
+  const [publicFilm] = s.publishedFilms();
+  assert.equal(publicFilm.originalReleaseDate, '2026-09-10');
+  assert.equal(publicFilm.intakeDate, film().intakeDate);
 });
 
 test('candidates move through verification and convert into a film once', async (t) => {

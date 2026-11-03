@@ -24,7 +24,12 @@
 | 入池 | 同上 `add` | 写入候选池（站点外 `~/.framepick/library`），状态 `new` |
 | 看片与上架 | **人** | `candidate convert` → `draft → reviewing → approved → scheduled → published` |
 
-自动任务**不会**改 `reel/index.html`、不会提交、不会发布。**收录时间不是重点**：不查证、不核对，需要填 `intakeDate` 时直接取当天。
+自动任务**不会**改 `reel/index.html`、不会提交、不会发布。
+
+两种日期分开记：
+
+- **原片发布日期**（`originalReleaseDate`）必须记录，是作品本身的属性，详情弹窗里显示（支持 `2026-10-20` / `2026-09` / `2026` 三种精度）。候选备注里也带一行「原片发布 …」。
+- **收录日期**（`intakeDate`）只是运营内部字段：唯一用途是「今日更新」榜把当天收录的作品归到一组，**不进详情、不进榜单文案**，也不需要查证——入库时取当天即可。
 
 ## 依赖
 
@@ -67,7 +72,7 @@ node scripts/framepick-library-cli.mjs status <作品id> reviewing --note "人�
 node scripts/framepick-library-cli.mjs build                       # 重新生成片库页面
 ```
 
-`作品.json` 的 `intakeDate` 填当天即可，不用查证发布时间。
+`作品.json` 必须带 `originalReleaseDate`（原片发布日期）与 `intakeDate`（收录日期，填当天）。片库校验会拦下缺原片发布日期的作品。
 
 ## 实测记录
 

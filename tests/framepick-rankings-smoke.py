@@ -1,6 +1,7 @@
 """Public ranking behavior, using a read-only static fixture and explicit snapshots."""
 import functools
 import http.server
+import re
 import sys
 import threading
 import time
@@ -57,22 +58,46 @@ class FramepickRankings(unittest.TestCase):
             self.page.route(fp.is_index, lambda route: route.fulfill(body=source, content_type='text/html'))
         self.page.goto(self.base + fp.url())
 
-    def test_three_home_rankings_and_daily_detail_return_focus(self):
-        source = (fp.SITE_ROOT / 'index.html').read_text().replace('data-date="2026-10-31"', 'data-date="2026-11-01"', 1)
+    def test_daily_board_lists_today_only_without_any_dates(self):
+        # Move every card's intake date onto the frozen "today" (2026-11-02).
+        source = (fp.SITE_ROOT / 'index.html').read_text()
+        today = '2026-11-02'
+        for day in ['2026-10-31', '2026-11-03']:
+            source = source.replace(f'data-date="{day}"', f'data-date="{today}"')
         self.open(source=source)
         expect(self.page.locator('#rankings')).to_be_visible()
-        expect(self.page.locator('#rankingDaily [data-ranking-film]')).to_have_count(3)
-        expect(self.page.locator('#rankingDaily [data-ranking-film]').first).to_contain_text('相骨')
-        expect(self.page.locator('#dailyRankingStatus')).to_contain_text('今日暂无新收录')
-        expect(self.page.locator('#rankingPopular')).to_contain_text('去重跳转次数')
-        expect(self.page.locator('#rankingPopular')).to_contain_text('暂不可用')
-        expect(self.page.locator('#rankingAcclaimed')).to_contain_text('至少 5 人')
-        trigger = self.page.locator('#rankingDaily [data-ranking-film]').first
+        rows = self.page.locator('#rankingDaily [data-ranking-film]')
+        expect(rows).to_have_count(7)
+        expect(self.page.locator('#dailyRankingStatus')).to_have_text('今日新收录 7 部')
+        # 收录日期只用于分组，条目上不出现任何日期。
+        labels = rows.evaluate_all("(rows)=>rows.map(row=>row.innerText)")
+        for label in labels:
+            self.assertNotIn('收录', label)
+            self.assertIsNone(re.search(r'\d{1,2}\.\d{1,2}|\d{4}-\d{2}', label), label)
+        trigger = rows.first
         trigger.click()
         expect(self.page.locator('#detailTitle')).to_have_text('相骨')
         self.page.keyboard.press('Escape')
         expect(self.page.locator('#filmDialog')).not_to_be_visible()
         expect(trigger).to_be_focused()
+
+    def test_daily_board_is_empty_when_nothing_was_added_today(self):
+        # Cards are dated 2026-10-31 / 2026-11-03; the clock is frozen on 11-02.
+        self.open()
+        expect(self.page.locator('#rankingDaily [data-ranking-film]')).to_have_count(0)
+        expect(self.page.locator('#dailyRankingStatus')).to_have_text('今日暂无新收录。')
+        expect(self.page.locator('#rankingPopular')).to_contain_text('去重跳转次数')
+        expect(self.page.locator('#rankingPopular')).to_contain_text('暂不可用')
+        expect(self.page.locator('#rankingAcclaimed')).to_contain_text('至少 5 人')
+
+    def test_detail_shows_the_original_release_date(self):
+        self.open()
+        self.page.locator('#filmGrid [data-film="pinzi"] .details-button').click()
+        expect(self.page.locator('#detailPublished')).to_have_text('原片发布于 2026.02.03')
+        self.page.keyboard.press('Escape')
+        self.page.locator('#filmGrid [data-film="yanran"] .details-button').click()
+        # Month precision stays month precision; no invented day.
+        expect(self.page.locator('#detailPublished')).to_have_text('原片发布于 2026.08')
 
     def test_popular_uses_current_ten_day_outbound_counts_only(self):
         snapshot = {'metric': 'outbound-clicks', 'windowStart': '2026-10-24', 'windowEnd': '2026-11-02', 'updatedAt': '2026-11-02T00:00:00Z',
@@ -160,7 +185,9 @@ class FramepickRankings(unittest.TestCase):
         expect(self.page.locator('#membership')).to_contain_text('3 元 / 5 元')
         expect(self.page.locator('#cinemaPlan')).to_contain_text('尚未开放')
         self.page.goto((fp.SITE_ROOT / 'index.html').as_uri())
-        expect(self.page.locator('#rankingDaily [data-ranking-film]')).to_have_count(3)
+        # 今日更新只算今天收录的，数量随片库规模与时钟变化，不写死。
+        expect(self.page.locator('#rankingDaily')).to_be_visible()
+        expect(self.page.locator('#dailyRankingStatus')).to_contain_text('今日')
         expect(self.page.locator('#rankingPopular [data-ranking-film]')).to_have_count(0)
 
 
