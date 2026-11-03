@@ -204,6 +204,15 @@ function validateFilmInput(input) {
     intakeDate,
     rights,
     priceCents: input?.priceCents ?? null,
+    // Traceability back to a creator submission (PRD 9). Not a public field: it
+    // never reaches publishedFilms() or the generated page.
+    creator: input?.creator?.id
+      ? {
+        id: text(input.creator.id, '创作者申请 ID', { max: 40 }),
+        name: text(input.creator.name, '', { required: false, max: 80 }) || '',
+        submissionId: text(input.creator.submissionId, '', { required: false, max: 40 }) || '',
+      }
+      : null,
   };
 }
 
@@ -477,4 +486,15 @@ function createLibraryStore(options = {}) {
   };
 }
 
-module.exports = { createLibraryStore, LibraryError, SOURCES, CATEGORIES, GENRES, ACCESS, FILM_STATUSES, CANDIDATE_STATUSES };
+module.exports = {
+  createLibraryStore,
+  LibraryError,
+  validateSourceUrl,
+  RUNTIME,
+  SOURCES,
+  CATEGORIES,
+  GENRES,
+  ACCESS,
+  FILM_STATUSES,
+  CANDIDATE_STATUSES,
+};

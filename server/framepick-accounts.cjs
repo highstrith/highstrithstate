@@ -224,6 +224,14 @@ function createAccountHandler({
       return publicAccount(account);
     },
 
+    // Shared with other Framepick handlers so they never parse the cookie twice.
+    async resolveAccount(req) {
+      ready = ready || initialize();
+      await ready;
+      const found = readSession(req);
+      return found ? publicAccount(found.account) : null;
+    },
+
     async listAccounts() {
       await ready;
       return db.accounts.map(publicAccount);
