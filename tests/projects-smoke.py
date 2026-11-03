@@ -41,7 +41,7 @@ class ProjectPages(unittest.TestCase):
                 section = self.page.locator('#filmRecommendations')
                 self.assertEqual(section.evaluate('e=>e.previousElementSibling.id'), 'projects')
                 self.assertEqual(section.evaluate('e=>e.nextElementSibling.id'), 'about')
-                expect(section.locator('h2')).to_have_text('Ju Dream Mill' if 'lang=en' in path else '橘生梦厂')
+                expect(section.locator('h2')).to_have_text('Framepick' if 'lang=en' in path else '帧选')
                 expect(section.locator('.film-product-label')).to_have_text('A product by Highstrith · AI film discovery' if 'lang=en' in path else '我的产品 · AI 影像精选')
                 expect(self.page.locator('#projects a[href="reel/"]')).to_have_count(0)
                 expect(section.locator('img')).to_have_count(3)
@@ -56,7 +56,7 @@ class ProjectPages(unittest.TestCase):
                 if width > 800:
                     self.assertGreaterEqual(section.bounding_box()['height'], 900)
                 link = section.locator('.film-recommendation-link')
-                expect(link).to_have_text('Explore Ju Dream Mill' if 'lang=en' in path else '进入橘生梦厂')
+                expect(link).to_have_text('Explore Framepick' if 'lang=en' in path else '进入帧选')
                 link.scroll_into_view_if_needed()
                 expect(link).to_be_visible()
                 expect(link).to_have_attribute('target', '_self')
@@ -64,10 +64,10 @@ class ProjectPages(unittest.TestCase):
                 link.click()
                 expect(self.page).to_have_url(BASE + '/reel/')
                 # The film index retitled itself when the catalogue was rebuilt;
-                # what matters is that the link landed on Ju Dream Mill in this tab.
-                expect(self.page).to_have_title(re.compile('橘生梦厂'))
-                expect(self.page.locator('.mark')).to_have_accessible_name('橘生梦厂首页')
-                expect(self.page.locator('h1')).to_contain_text('好梦，正在上映')
+                # what matters is that the link landed on Framepick in this tab.
+                expect(self.page).to_have_title(re.compile('帧选 Framepick'))
+                expect(self.page.locator('.mark')).to_have_accessible_name('帧选首页')
+                expect(self.page.locator('h1')).to_contain_text('好看的 AI 影像')
                 self.assertEqual(len(self.context.pages), 1)
 
     def test_film_index_recommendation_works_without_javascript(self):
@@ -80,7 +80,7 @@ class ProjectPages(unittest.TestCase):
         expect(page.locator('#about .portrait-caption')).to_have_count(0)
         page.locator('#filmRecommendations .film-recommendation-link').click()
         expect(page).to_have_url(BASE + '/reel/')
-        expect(page.locator('.mark-cn')).to_have_text('橘生梦厂')
+        expect(page.locator('.mark-cn')).to_have_text('帧选')
         page.get_by_role('link', name='橘小桔的主页').click()
         expect(page).to_have_url(BASE + '/#filmRecommendations')
 
@@ -222,13 +222,13 @@ class ProjectPages(unittest.TestCase):
         reel_link = self.page.locator('#filmRecommendations .film-recommendation-link')
         expect(canvas_link).to_have_text('AI 无限画布')
         # 当前已确认入口在独立推荐章节，同标签进入中文片单。
-        expect(reel_link).to_have_text('进入橘生梦厂')
+        expect(reel_link).to_have_text('进入帧选')
         expect(reel_link).to_have_attribute('href', 'reel/')
         expect(reel_link).to_have_attribute('target', '_self')
         self.page.locator('#langSwitch').click()
         expect(self.page.locator('#toolsTitle')).to_have_text('Director’s workbench')
         expect(canvas_link).to_have_attribute('href', 'projects.html?lang=en#canvasTitle')
-        expect(reel_link).to_have_text('Explore Ju Dream Mill')
+        expect(reel_link).to_have_text('Explore Framepick')
         expect(reel_link).to_have_attribute('href', 'reel/')
 
     def test_project_entries_work_without_javascript(self):
