@@ -28,7 +28,8 @@
   const logout = $('#accountLogout');
   const notice = $('#notice');
 
-  const offline = '账号服务尚未在正式站点部署，当前可继续使用访客模式浏览、评价与跳转原作。';
+  // 不登录就是访客，不需要切换：账号是可选的，不是浏览的前置条件。
+  const offline = '账号服务尚未在正式站点部署。不登录也能继续浏览、评价与跳转原作。';
   let mode = 'login';
   let account = null;
   let opener = null;
@@ -36,7 +37,7 @@
   // Set by refresh(); render() must never clobber it with the default copy.
   let availabilityMessage = '';
   let available = Boolean(api);
-  const unavailable = '账号服务尚未部署，暂不能登录或注册。可以继续使用访客模式浏览、评价与跳转原作。';
+  const unavailable = '账号服务尚未部署，暂不能登录或注册。不登录也能继续浏览、评价与跳转原作。';
 
   function notify(message) {
     if (!notice) return;

@@ -73,7 +73,7 @@
   function ensureSession() {
     if (!sessionPromise) sessionPromise = request('/session').then((data) => {
       guestNickname = typeof data.nickname === 'string' ? data.nickname : '';
-      setText('#guestAvailability', '已连接共享评价服务，当前为访客模式。');
+      setText('#guestAvailability', '已连接共享评价服务，评价以本浏览器的访客身份记录。');
       return data;
     }).catch((error) => {
       sessionPromise = null;
@@ -195,7 +195,7 @@
       if (!isCurrent(id, version) || controller.signal.aborted) return;
       renderReviews(data, append);
       loaded = true;
-      setText('#reviewAvailability', '访客模式 · 评价将对所有访问者公开');
+      setText('#reviewAvailability', '不登录也能评价 · 内容对所有访问者公开');
     } catch (error) {
       if (!isCurrent(id, version) || controller.signal.aborted) return;
       setText('#reviewError', error.message);
@@ -312,8 +312,9 @@
   $('#reviewRetry').addEventListener('click', () => loadReviews());
   $('#reviewMore').addEventListener('click', () => loadReviews(true));
 
+  // 访客是默认状态，不是要切换的模式：顶栏不再放开关，只在评价区留一个说明入口。
   const guest = $('#guestDialog');
-  $('#guestMode').addEventListener('click', () => {
+  $('#guestHow').addEventListener('click', () => {
     guest.showModal();
     document.body.classList.add('has-dialog');
     if (api) ensureSession().catch(() => {});

@@ -32,7 +32,6 @@
     <nav aria-label="站内导航"><a href="#rankings">榜单</a><a href="#entries">发现片库</a><a href="#membership">观影计划</a><a href="#cinemaPlan">创作者</a></nav>
     <button id="accountEntry" class="account-entry js-only" type="button">登录 / 注册</button>
     <button id="savedToggle" class="saved-toggle js-only" type="button" aria-pressed="false"><svg aria-hidden="true"><use href="#bookmark"/></svg><span>我的收藏</span><span id="savedCount">0</span></button>
-    <button id="guestMode" class="guest-mode js-only" type="button">访客模式</button>
   </div>
 </header>
 
@@ -205,7 +204,7 @@
         <h3 id="reviewHeading">站内评价</h3><p id="reviewSummary" class="review-summary">站内评分加载后显示</p><p class="review-note">10 分制 · 仅汇总本站访客评分，与编辑评分、原平台评价分别展示。</p>
         <p id="reviewAvailability" role="status"></p>
         <form id="reviewForm"><fieldset id="reviewFields" disabled><legend>写下你的评价</legend>
-          <p class="review-note">无需注册。此浏览器每部作品可保留一份评价，再次发布会更新原评价。</p>
+          <p class="review-note">无需注册。此浏览器每部作品可保留一份评价，再次发布会更新原评价。<button id="guestHow" class="guest-how" type="button">访客身份怎么算？</button></p>
           <div class="review-input-row"><label for="reviewNickname">访客昵称 <span>（可选）</span><input id="reviewNickname" name="nickname" maxlength="24" autocomplete="nickname" placeholder="不填则显示访客"></label><label for="reviewRating">我的评分<select id="reviewRating" name="rating"><option value="">暂不评分</option><option value="1">1 分</option><option value="2">2 分</option><option value="3">3 分</option><option value="4">4 分</option><option value="5">5 分</option><option value="6">6 分</option><option value="7">7 分</option><option value="8">8 分</option><option value="9">9 分</option><option value="10">10 分</option></select></label></div>
           <label for="reviewText">评价正文<textarea id="reviewText" name="text" maxlength="1000" rows="4" placeholder="聊聊作品给你的感受（最多 1000 字）"></textarea></label>
           <p class="review-note">评分或正文至少填写一项。昵称会公开显示，请勿填写联系方式。</p>

@@ -233,12 +233,19 @@ class FramepickReviews(unittest.TestCase):
         self.assertEqual(response.json()['yourReview']['nickname'], '访客')
         expect(self.page.locator('#reviewList')).not_to_contain_text('原有公开昵称')
 
-    def test_guest_entry_and_original_site_separation(self):
+    def test_guest_is_the_default_and_has_no_toggle(self):
+        # 不登录就是访客，顶栏不放开关；说明留在评价区里，点完回到原按钮。
         self.page.goto(self.base + fp.url())
-        self.page.get_by_role('button', name='访客模式', exact=True).click()
+        expect(self.page.locator('#guestMode')).to_have_count(0)
+        self.page.locator('button[data-open-film="xianggu"]').click()
+        self.page.get_by_role('tab', name='站内评价', exact=True).click()
+        self.page.locator('#guestHow').click()
         expect(self.page.locator('#guestDialog')).to_contain_text('浏览器')
         self.page.keyboard.press('Escape')
-        expect(self.page.get_by_role('button', name='访客模式', exact=True)).to_be_focused()
+        expect(self.page.locator('#guestHow')).to_be_focused()
+
+    def test_guest_entry_and_original_site_separation(self):
+        self.page.goto(self.base + fp.url())
         self.page.locator('button[data-open-film="xianggu"]').click()
         expect(self.page.get_by_role('tabpanel', name='作品介绍')).to_contain_text('帧选整理')
         self.page.get_by_role('tab', name='原平台评价', exact=True).click()
