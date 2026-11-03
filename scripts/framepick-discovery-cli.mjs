@@ -116,7 +116,8 @@ function screen(commandName) {
             discoveredAt: runAt,
             evidence: Array.isArray(item.evidence) ? item.evidence : [],
             popularity: item.popularity || null,
-            note: [oneLine(item.note), oneLine(item.aiEvidenceNote), item.runtime ? `时长 ${oneLine(item.runtime)}` : '', item.publishedAt ? `原片发布 ${oneLine(item.publishedAt)}` : ''].filter(Boolean).join(' · ').slice(0, 600),
+            // 收录时间不是重点：这里只留内容线索，不把发布时间写进备注。
+            note: [oneLine(item.note), oneLine(item.aiEvidenceNote), item.runtime ? `时长 ${oneLine(item.runtime)}` : ''].filter(Boolean).join(' · ').slice(0, 600),
           }, { actor: `discovery:${runBy}` });
           added.push({ id: record.id, title: record.title, url: record.url });
           existing.push(record);
