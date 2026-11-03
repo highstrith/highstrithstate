@@ -33,7 +33,7 @@
     q: $('#filmSearch'), genre: $('#genreFilter'), source: $('#sourceFilter'),
     rating: $('#scoreFilter'), access: $('#accessFilter'), sort: $('#sortFilter'), scoreBasis: $('#scoreBasis')
   };
-  const defaults = { q: '', category: 'all', genre: 'all', source: 'all', rating: 'all', access: 'all', sort: 'curated', scoreBasis: 'editor', saved: false };
+  const defaults = { q: '', category: 'all', genre: 'all', source: 'all', rating: 'all', access: 'all', sort: 'curated', scoreBasis: 'editor', saved: false, hideWatched: true };
   const categories = [...document.querySelectorAll('[data-category]')].filter((node) => node.tagName === 'BUTTON');
   const storageKey = 'framepick:saved:v1';
   let storageAvailable = true;
@@ -57,7 +57,7 @@
 
   function readState() {
     const params = new URL(location.href).searchParams;
-    state = { ...defaults, q: (params.get('q') || '').slice(0, 100), saved: params.get('saved') === '1' };
+    state = { ...defaults, q: (params.get('q') || '').slice(0, 100), saved: params.get('saved') === '1', hideWatched: params.get('hideWatched') !== '0' };
     const category = params.get('category');
     if (categories.some((button) => button.dataset.category === category)) state.category = category;
     for (const key of ['genre', 'source', 'rating', 'access', 'sort', 'scoreBasis']) {
@@ -72,7 +72,7 @@
     for (const key of Object.keys(defaults)) {
       const value = state[key];
       if (value === defaults[key]) url.searchParams.delete(key);
-      else url.searchParams.set(key, key === 'saved' ? '1' : value);
+      else url.searchParams.set(key, key === 'saved' ? '1' : key === 'hideWatched' ? '0' : value);
     }
     try { history.replaceState(history.state, '', url); } catch { /* file viewers may restrict history */ }
   }
@@ -81,6 +81,11 @@
     for (const [key, control] of Object.entries(controls)) control.value = state[key];
     for (const button of categories) button.setAttribute('aria-pressed', String(button.dataset.category === state.category));
     $('#savedToggle').setAttribute('aria-pressed', String(state.saved));
+    const hideWatchedToggle = $('#hideWatchedToggle');
+    if (hideWatchedToggle) {
+      hideWatchedToggle.setAttribute('aria-pressed', String(state.hideWatched));
+      hideWatchedToggle.textContent = state.hideWatched ? '隐藏已看' : '已看可见 · 再点隐藏';
+    }
   }
 
   function syncSaved() {
@@ -98,9 +103,34 @@
     }
   }
 
+  function isWatched(film) {
+    return Boolean(window.FramepickViewing && window.FramepickViewing.isWatched(film.id));
+  }
+
+  function syncWatchedBadges() {
+    for (const film of films) {
+      const watched = isWatched(film);
+      film.card.classList.toggle('is-watched', watched);
+      if (watched) film.card.dataset.watched = 'true';
+      else delete film.card.dataset.watched;
+      const badge = film.card.querySelector('.watched-badge');
+      if (badge) badge.hidden = !watched;
+    }
+    if (currentFilm) syncDetailWatchedButton(currentFilm);
+  }
+
+  function syncDetailWatchedButton(film) {
+    const button = $('#detailWatched');
+    if (!button) return;
+    const active = isWatched(film);
+    button.setAttribute('aria-pressed', String(active));
+    button.textContent = active ? '已看 · 取消' : '标记已看';
+  }
+
   function render() {
     const selectedScore = (film) => state.scoreBasis === 'community' ? film.communityScore : film.score;
     const query = state.q.trim().toLocaleLowerCase();
+    const watchedIds = new Set(films.filter(isWatched).map((film) => film.id));
     const visible = films.filter((film) =>
       (!query || film.search.includes(query)) &&
       (state.category === 'all' || film.category === state.category) &&
@@ -108,7 +138,8 @@
       (state.source === 'all' || film.source === state.source) &&
       (state.access === 'all' || film.access === state.access) &&
       (state.rating === 'all' || (selectedScore(film) !== null && selectedScore(film) >= Number(state.rating))) &&
-      (!state.saved || saved.has(film.id))
+      (!state.saved || saved.has(film.id)) &&
+      (!state.hideWatched || !watchedIds.has(film.id))
     );
     if (state.sort === 'score') visible.sort((a, b) => (selectedScore(b) ?? -1) - (selectedScore(a) ?? -1) || a.index - b.index);
     if (state.sort === 'newest') visible.sort((a, b) => b.date.localeCompare(a.date) || a.index - b.index);
@@ -118,7 +149,16 @@
     ordered.forEach((film, index) => {
       if (grid.children[index] !== film.card) grid.insertBefore(film.card, grid.children[index] || null);
     });
-    $('#resultCount').textContent = visible.length + ' 部' + (state.saved ? '已收藏作品' : '精选作品');
+    const passesOtherFilters = (film) =>
+      (!query || film.search.includes(query)) &&
+      (state.category === 'all' || film.category === state.category) &&
+      (state.genre === 'all' || film.genres.includes(state.genre)) &&
+      (state.source === 'all' || film.source === state.source) &&
+      (state.access === 'all' || film.access === state.access) &&
+      (!state.saved || saved.has(film.id));
+    const matchingExceptWatched = state.hideWatched ? films.filter((film) => passesOtherFilters(film) && watchedIds.has(film.id)) : [];
+    const hiddenWatched = matchingExceptWatched.length;
+    $('#resultCount').textContent = visible.length + ' 部' + (state.saved ? '已收藏作品' : '精选作品') + (state.hideWatched && hiddenWatched ? ` · 已隐藏 ${hiddenWatched} 部已看` : '');
     $('#emptyState').hidden = visible.length !== 0;
     $('#emptyMembership').hidden = state.access !== 'paid';
     let title = '暂时没有匹配的作品';
@@ -129,6 +169,9 @@
     } else if (state.saved && saved.size === 0) {
       title = '还没有收藏的作品';
       copy = '点击作品上的收藏按钮，把想看的好片留在这台设备。';
+    } else if (state.hideWatched && visible.length === 0 && hiddenWatched > 0) {
+      title = '看过的都标记好了';
+      copy = `这批筛选里的 ${hiddenWatched} 部都已看过，已从列表隐藏。切回「显示已看」，或在「我的」页面看观看历史。`;
     } else if (state.rating !== 'all' && films.every((film) => selectedScore(film) === null)) {
       title = state.scoreBasis === 'community' ? '暂无可用的站内评分' : '正式评分还在补充';
       copy = state.scoreBasis === 'community' ? '站内用户评分只统计已发布的访客评分；未评分作品不进入此筛选。' : '当前作品均为待评，完成审核后才会进入评分筛选。';
@@ -139,9 +182,24 @@
     $('#emptyTitle').textContent = title;
     $('#emptyCopy').textContent = copy;
     syncSaved();
+    syncWatchedBadges();
   }
 
   function applyFilters() { syncControls(); render(); writeState(); }
+
+  function viewingSnapshot(film) {
+    return {
+      title: film.title,
+      poster: (film.image.getAttribute('src') || '').split('?')[0],
+      author: film.author,
+      kind: film.kind,
+      source: film.source,
+    };
+  }
+
+  function recordViewing(film, action) {
+    if (window.FramepickViewing) window.FramepickViewing.record(film.id, action, viewingSnapshot(film));
+  }
 
   function resetFilters(access = 'all') {
     state = { ...defaults, access };
@@ -222,6 +280,8 @@
     watch.insertAdjacentHTML('beforeend', '<svg aria-hidden="true"><use href="#arrow"/></svg>');
     $('#detailScore').textContent = film.score === null ? '编辑评分：待评。完成审核后公开，不计入评分榜单。' : '编辑评分：' + film.score.toFixed(1) + ' / 10';
     syncSaved();
+    syncDetailWatchedButton(film);
+    recordViewing(film, 'open');
     if (push) {
       const url = new URL(location.href);
       url.searchParams.set('film', id);
@@ -280,6 +340,23 @@
   }
   for (const button of document.querySelectorAll('[data-save-film]')) button.addEventListener('click', () => toggleSave(button.dataset.saveFilm));
   $('#detailSave').addEventListener('click', () => { if (currentFilm) toggleSave(currentFilm.id); });
+  const detailWatchedButton = $('#detailWatched');
+  if (detailWatchedButton) detailWatchedButton.addEventListener('click', () => {
+    if (!currentFilm || !window.FramepickViewing) return;
+    if (window.FramepickViewing.isWatched(currentFilm.id)) {
+      window.FramepickViewing.unmarkWatched(currentFilm.id);
+      notify('已取消已看标记');
+    } else {
+      window.FramepickViewing.markWatched(currentFilm.id, viewingSnapshot(currentFilm));
+      notify('已标记为看过，默认从片库隐藏');
+    }
+  });
+  $('#detailWatch').addEventListener('click', () => { if (currentFilm) recordViewing(currentFilm, 'watch'); });
+  const hideWatchedToggle = $('#hideWatchedToggle');
+  if (hideWatchedToggle) hideWatchedToggle.addEventListener('click', () => {
+    state.hideWatched = !state.hideWatched;
+    applyFilters();
+  });
   $('[data-close-film]').addEventListener('click', requestCloseFilm);
   filmDialog.addEventListener('cancel', (event) => { event.preventDefault(); requestCloseFilm(); });
   filmDialog.addEventListener('click', (event) => { if (event.target === filmDialog) {
@@ -304,6 +381,16 @@
     summary.textContent = '站内评分 · 暂未连接';
     film.card.querySelector('.card-topline').after(summary);
   }
+  // Watched badges ride on the card media, injected once; visibility follows render().
+  for (const film of films) {
+    const badge = document.createElement('span');
+    badge.className = 'watched-badge';
+    badge.hidden = true;
+    badge.textContent = '已看';
+    film.card.querySelector('.card-media').append(badge);
+  }
+  // Viewing records (watched flags) come from a separate module; re-render on change.
+  window.addEventListener('framepick:viewing', () => render());
   window.addEventListener('framepick:review-summary', ({ detail }) => {
     const summaries = new Map((detail.films || []).map((item) => [item.filmId, item]));
     for (const film of films) {

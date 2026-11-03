@@ -214,7 +214,7 @@ class FramepickRankings(unittest.TestCase):
         self.page.set_viewport_size({'width': 320, 'height': 760})
         self.open()
         self.assertTrue(self.page.evaluate('document.documentElement.scrollWidth <= innerWidth'))
-        expect(self.page.locator('#cinemaPlan')).to_contain_text('40 分钟')
+        expect(self.page.locator('#cinemaPlan')).to_contain_text('完整故事与视听完成度')
         expect(self.page.locator('#membership')).to_contain_text('3 元 / 5 元')
         expect(self.page.locator('#cinemaPlan')).to_contain_text('尚未开放')
         self.page.goto((fp.SITE_ROOT / 'index.html').as_uri())

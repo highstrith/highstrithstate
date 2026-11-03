@@ -284,3 +284,45 @@ dialog::backdrop { background:rgba(0,0,0,.8) }
 .plan-actions { display:flex;flex-wrap:wrap;gap:10px;margin-top:auto }
 @media (max-width:760px) { .prototype-bar-in { flex-wrap:wrap;row-gap:6px;padding-block:10px }.link-button { margin-left:0 } .cinema { margin-top:46px;padding-top:26px } }
 @media (max-width:520px) { .prototype-bar p { font-size:11px }.status-row h3 { display:block;margin-bottom:8px }.cinema-row h3 { display:block;margin-bottom:8px } }
+/* 已看标记与隐藏已看（framepick-viewing） */
+.me-entry { display:flex;align-items:center;padding:8px 0 8px 25px;border-left:1px solid var(--line);font-size:12px;color:var(--body);white-space:nowrap }
+.me-entry:hover { color:var(--text) }
+.hide-watched-toggle { background:none;border:1px solid var(--line);border-radius:999px;padding:7px 16px;font-size:12px;color:var(--body);white-space:nowrap }
+.hide-watched-toggle[aria-pressed="true"] { color:var(--gold);border-color:var(--gold) }
+.watched-badge { position:absolute;z-index:2;bottom:10px;right:10px;display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;background:rgba(216,180,123,.92);color:#26221a;font-size:11px;font-weight:600;letter-spacing:.04em }
+.watched-badge::before { content:"✓";font-size:10px }
+.card.is-watched .card-media img { opacity:.82 }
+.card.is-watched .card-media::after { content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(16,17,20,.35)) }
+.me-page { padding:52px 0 70px }
+.me-kicker { display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-bottom:14px }
+.me-head { display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:18px;margin-bottom:34px }
+.me-head h1 { font-size:clamp(30px,3.4vw,44px) }
+.me-account { display:flex;align-items:center;gap:12px;font-size:13px;color:var(--body) }
+.me-account .account-entry { padding:9px 18px }
+.me-section { margin-top:44px;padding-top:30px;border-top:1px solid var(--line) }
+.me-section-heading { display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:6px }
+.me-section-heading h2 { font-size:21px;font-weight:550 }
+.me-section-heading p { color:var(--muted);font-size:12px }
+.me-stats { display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 4px }
+.me-stat { flex:1 1 150px;border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--surface) }
+.me-stat strong { display:block;font:600 26px/1.1 var(--serif);color:var(--gold) }
+.me-stat span { display:block;margin-top:6px;font-size:12px;color:var(--muted) }
+.me-history-list { display:grid;gap:0 }
+.me-history-row { display:grid;grid-template-columns:150px 1fr auto;gap:20px;align-items:center;padding:18px 0;border-top:1px solid var(--line) }
+.me-history-row:first-child { border-top:0 }
+.me-history-cover { display:block;border-radius:8px;overflow:hidden;background:var(--surface) }
+.me-history-cover img { width:100%;height:auto }
+.me-history-main { min-width:0 }
+.me-history-main h3 { font-size:17px;font-weight:500;overflow-wrap:anywhere }
+.me-history-main h3 .me-watched-chip { display:inline-block;margin-left:10px;font-size:11px;font-weight:600;color:var(--gold);vertical-align:2px }
+.me-history-meta { color:var(--muted);font-size:12px;line-height:1.8;margin-top:6px }
+.me-history-actions { display:flex;flex-direction:column;gap:8px;align-items:flex-end }
+.me-empty { color:var(--body);font-size:13px;line-height:1.9;padding:26px 0 }
+.me-links { display:flex;flex-wrap:wrap;gap:22px;margin-top:10px }
+.me-links a { font-size:13px;color:var(--body);text-decoration:underline;text-underline-offset:4px }
+.me-links a:hover { color:var(--text) }
+@media (max-width:640px) {
+  .me-history-row { grid-template-columns:104px 1fr;row-gap:12px }
+  .me-history-actions { grid-column:1 / -1;flex-direction:row;align-items:center }
+  .watched-badge { bottom:8px;right:8px;padding:3px 8px }
+}

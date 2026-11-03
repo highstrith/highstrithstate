@@ -8,6 +8,7 @@ const { URL } = require("url");
 const { createStaticHandler } = require("./server/static-site.cjs");
 const { createAccountHandler } = require("./server/framepick-accounts.cjs");
 const { createOrderHandler } = require("./server/framepick-orders.cjs");
+const { createViewingHandler } = require("./server/framepick-viewing.cjs");
 
 const root = __dirname;
 const siteRoot = path.join(root, "reel");
@@ -33,6 +34,8 @@ const handleFramepickAccounts = createAccountHandler({});
 // Demo orders: simulated payment only. FRAMEPICK_ORDERS_DATA_DIR isolates data
 // for tests; the default lives outside the repository like the accounts store.
 const handleFramepickOrders = createOrderHandler({ accounts: handleFramepickAccounts });
+// Viewing records: per-account watched flags + open history.
+const handleFramepickViewing = createViewingHandler({ accounts: handleFramepickAccounts });
 // The creator module is still an unshipped work in progress: mount it only when
 // the file exists so a checkout without it still starts.
 const creatorModule = path.join(root, "server", "framepick-creators.cjs");
@@ -49,6 +52,8 @@ http.createServer(async (req, res) => {
     if (await handleFramepickAccounts.handle(req, res, requestUrl)) return;
     // Orders own a narrower prefix too (demo goods, simulated payment).
     if (await handleFramepickOrders.handle(req, res, requestUrl)) return;
+    // Viewing records own a narrower prefix (/api/framepick/viewing).
+    if (await handleFramepickViewing.handle(req, res, requestUrl)) return;
     // Creators own a narrower prefix: try them before the review handler, which
     // claims every /api/framepick path.
     if (handleFramepickCreators && await handleFramepickCreators.handle(req, res, requestUrl)) return;

@@ -39,12 +39,14 @@ python3 -m unittest \
   tests/framepick-reviews-smoke.py \
   tests/framepick-accounts-smoke.py \
   tests/framepick-demo-smoke.py \
+  tests/framepick-viewing-smoke.py \
   tests/framepick-discovery-scan-test.py
 
 node --test tests/framepick-reviews-api-integration.mjs
 node --test tests/framepick-library-store-integration.mjs
 node --test tests/framepick-accounts-integration.mjs
 node --test tests/framepick-orders-integration.mjs
+node --test tests/framepick-viewing-integration.mjs
 node --test tests/framepick-discovery-integration.mjs
 node --test tests/framepick-publish-rules-test.mjs
 node --test tests/framepick-creators-integration.mjs

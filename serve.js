@@ -417,6 +417,10 @@ const handleFramepickAccounts = createAccountHandler({});
 // Demo orders: simulated payment only, data outside the repository
 // (FRAMEPICK_ORDERS_DATA_DIR overrides for tests).
 const handleFramepickOrders = createOrderHandler({ accounts: handleFramepickAccounts });
+// Viewing records: per-account watched flags + open history
+// (FRAMEPICK_VIEWING_DATA_DIR overrides for tests).
+const { createViewingHandler } = require("./server/framepick-viewing.cjs");
+const handleFramepickViewing = createViewingHandler({ accounts: handleFramepickAccounts });
 // The creator module is still an unshipped work in progress: mount it only when
 // the file exists so a checkout without it still starts.
 const creatorModule = path.join(root, "server", "framepick-creators.cjs");
@@ -439,6 +443,11 @@ http.createServer(async (req, res) => {
 
     // Orders own a narrower prefix too (demo goods, simulated payment).
     if (await handleFramepickOrders.handle(req, res, requestUrl)) {
+      return;
+    }
+
+    // Viewing records own a narrower prefix (/api/framepick/viewing).
+    if (await handleFramepickViewing.handle(req, res, requestUrl)) {
       return;
     }
 
