@@ -90,6 +90,7 @@ else
 fi
 
 step "6/7 提交并部署"
+DEPLOYED=0
 if git diff --quiet && git diff --cached --quiet; then
   echo "  没有文件改动，跳过提交与部署"
 else
@@ -99,10 +100,11 @@ else
   if [ "$PUSH" = "1" ]; then
     git push origin release/white-pages 2>&1 | tail -1 || fail "推送失败"
     git push origin HEAD:main 2>&1 | tail -1 || fail "推送 main 失败（没推 main 不会部署）"
+    DEPLOYED=1
   fi
 fi
 
-if [ "$PUSH" = "1" ]; then
+if [ "$DEPLOYED" = "1" ]; then
   step "7/7 等部署并复核线上"
   for _ in $(seq 1 12); do
     sleep 20
