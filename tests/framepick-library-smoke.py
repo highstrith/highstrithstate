@@ -40,6 +40,10 @@ class FramepickLibrary(unittest.TestCase):
     def cards(self):
         return self.page.locator('#filmGrid [data-film]:visible')
 
+    def grid_count(self, attr, value):
+        # 片库会持续增补（机器放行的批次也在进），断言一律从页面数据算，不写死。
+        return self.page.locator(f'#filmGrid [data-film][data-{attr}="{value}"]').count()
+
     def test_search_category_and_source(self):
         self.open()
         total = self.cards().count()
@@ -54,16 +58,15 @@ class FramepickLibrary(unittest.TestCase):
         self.page.locator('#genreFilter').select_option('all')
         expect(self.cards()).to_have_count(total)
         self.page.locator('#sourceFilter').select_option('bilibili')
-        expect(self.cards()).to_have_count(4)
-        expect(self.cards().first).to_contain_text('牌子')
+        expect(self.cards()).to_have_count(self.grid_count('source', 'bilibili'))
         self.page.locator('#sourceFilter').select_option('douyin')
-        expect(self.cards()).to_have_count(3)
+        expect(self.cards()).to_have_count(self.grid_count('source', 'douyin'))
         self.page.locator('#sourceFilter').select_option('all')
         expect(self.cards()).to_have_count(total)
         self.page.locator('button[data-category="series"]').click()
-        expect(self.cards()).to_have_count(4)
+        expect(self.cards()).to_have_count(self.grid_count('category', 'series'))
         self.page.locator('button[data-category="short"]').click()
-        expect(self.cards()).to_have_count(2)
+        expect(self.cards()).to_have_count(self.grid_count('category', 'short'))
         self.page.locator('button[data-category="all"]').click()
         expect(self.cards()).to_have_count(total)
 
@@ -115,10 +118,13 @@ class FramepickLibrary(unittest.TestCase):
             self.assertEqual(n, 1, film_id)
         self.page.route(fp.is_index, lambda route: route.fulfill(body=source, content_type='text/html'))
         self.open()
+        # 无评分的片子会随批次增长，从页面数据算，不写死名单。
+        unrated = set(self.page.locator('#filmGrid [data-film]').evaluate_all(
+            "els => els.filter(e => !e.dataset.score).map(e => e.dataset.film)"))
         self.page.locator('#sortFilter').select_option('score')
         order = self.cards().evaluate_all('cards=>cards.map(c=>c.dataset.film)')
         self.assertEqual(order[:2], ['jinhaitang', 'xianggu'])
-        self.assertEqual(set(order[2:]), {'yanran', 'pinzi', 'jiyi1999', 'baiguilu', 'yanhua'})
+        self.assertEqual(set(order[2:]), unrated)
         self.page.locator('#scoreFilter').select_option('9')
         expect(self.cards()).to_have_count(1)
         expect(self.cards()).to_contain_text('烬海棠')

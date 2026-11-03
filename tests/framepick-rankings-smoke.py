@@ -66,9 +66,11 @@ class FramepickRankings(unittest.TestCase):
             source = source.replace(f'data-date="{day}"', f'data-date="{today}"')
         self.open(source=source)
         expect(self.page.locator('#rankings')).to_be_visible()
+        # 所有卡片的收录日期都被挪到了"今天"，所以今日榜条数 = 全部卡片数（片库会增长，不写死）。
+        expected = self.page.locator('#filmGrid [data-film]').count()
         rows = self.page.locator('#rankingDaily [data-ranking-film]')
-        expect(rows).to_have_count(7)
-        expect(self.page.locator('#dailyRankingStatus')).to_have_text('今日新收录 7 部')
+        expect(rows).to_have_count(expected)
+        expect(self.page.locator('#dailyRankingStatus')).to_have_text(f'今日新收录 {expected} 部')
         # 收录日期只用于分组，条目上不出现任何日期。
         labels = rows.evaluate_all("(rows)=>rows.map(row=>row.innerText)")
         for label in labels:

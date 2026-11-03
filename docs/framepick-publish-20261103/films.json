@@ -1,0 +1,61 @@
+{
+  "batch": "2026-11-03 首批机器放行",
+  "intakeDate": "2026-11-03",
+  "films": [
+    {
+      "candidate": "dy-7703040154843368740",
+      "id": "yabiao",
+      "title": "哑镖",
+      "category": "film",
+      "genres": ["wuxia"],
+      "runtime": "21:03",
+      "originalReleaseDate": "2026-11-02",
+      "description": "作者自述为 20 分钟的 AIGC 真人武侠电影，全片 AI 生成：一个不开口的镖客，走一趟不寻常的镖。",
+      "recommendation": "同类里少见的 21 分钟体量，武侠类型加真人质感，值得从第 1 分钟看起。"
+    },
+    {
+      "candidate": "dy-7701305243283344678",
+      "id": "tower32",
+      "title": "第32号塔",
+      "category": "short",
+      "genres": ["scifi"],
+      "runtime": "15:11",
+      "originalReleaseDate": "2026-10-28",
+      "description": "一次维修任务，逐渐变成一场现实、记忆和精神污染交叠的生存试炼；当幸存者抵达高塔顶端，他发现自己可能早已无法回到真实世界。",
+      "recommendation": "文案自带完整钩子的硬科幻，15 分钟把设定讲完。"
+    },
+    {
+      "candidate": "dy-7702666012889484584",
+      "id": "baizhou",
+      "title": "白昼禁区",
+      "category": "short",
+      "genres": ["scifi"],
+      "runtime": "09:07",
+      "originalReleaseDate": "2026-11-01",
+      "description": "凌晨两点突然天亮，后来整座城市的人都消失了。",
+      "recommendation": "一句话设定就立住的悬疑科幻，开局 30 秒见分晓。"
+    },
+    {
+      "candidate": "dy-7668628832118689024",
+      "id": "xingchendao",
+      "title": "星辰岛",
+      "category": "short",
+      "genres": ["fantasy"],
+      "runtime": "13:00",
+      "originalReleaseDate": "2026-08",
+      "description": "原创 AI 动画短片，全长 13 分钟。",
+      "recommendation": "13 分钟的完整叙事动画，不是碎片化的展示片。"
+    },
+    {
+      "candidate": "dy-7619825546926591284",
+      "id": "ticheng",
+      "title": "梯城",
+      "category": "short",
+      "genres": ["scifi"],
+      "runtime": "09:21",
+      "originalReleaseDate": "2026-04",
+      "description": "被朋友称作「手搓出来的一集爱死机」的原创 AI 动画短片。",
+      "recommendation": "爱死机式的成人向科幻短篇，单集完成度拿得出手。"
+    }
+  ]
+}
