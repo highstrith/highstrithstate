@@ -1,5 +1,5 @@
 {
-  "batch": "2026-11-03 机器放行 · 第三批（B 站新扫描）",
+  "batch": "2026-11-03 机器放行 · 第四批（B 站扩展关键词）",
   "intakeDate": "2026-11-03",
   "films": [
     {
@@ -230,6 +230,75 @@
       "originalReleaseDate": "2026-10-11",
       "description": "她曾拼命保护怀里的幼龙，如今它张开双翼守在她身旁。当巨人逼近村庄，暗红剑光与蓝色龙焰同时燃起——这一战，他们谁也不退。但山的另一边，更多巨人正在赶来。",
       "recommendation": "人龙羁绊的奇幻系列，从第一集看起，后面两集已在 B 站更新。"
+    },
+    {
+      "candidate": "bili-bv1nyna6aesx",
+      "id": "yagaoheshuaya",
+      "title": "牙膏和牙刷",
+      "category": "short",
+      "genres": [
+        "healing",
+        "urban"
+      ],
+      "runtime": "13:27",
+      "originalReleaseDate": "2026-10-20",
+      "description": "青年牙膏靠零活谋生、深陷债务，救下一只受欺负的小黑狗，取名「牙刷」，一人一狗相依为命。讨债冲突里牙刷护主受伤，牙膏持械伤人，被判入狱十五年；十五年后他重返旧街，抱起在老槐树下等了一辈子的牙刷。",
+      "recommendation": "13 分钟讲完十五年的等待，AI 叙事里少见的萌宠治愈向。"
+    },
+    {
+      "candidate": "bili-bv1tbhd6mes2",
+      "id": "xunhuanlvan",
+      "title": "循环绿岸",
+      "category": "short",
+      "genres": [
+        "fantasy",
+        "scifi"
+      ],
+      "runtime": "15:13",
+      "originalReleaseDate": "2026-09-26",
+      "description": "金鸡 AIGC 单元参赛影片。古蜀少女阿霞救父立誓，与月神白马成婚，学养蚕缫丝；一杯毒羹人神永隔，阿霞化蚕、吐丝成茧，换来华夏丝绸绵延不息。故事之外还埋着「绿岸实验」与绿色文明新科技的伏笔。",
+      "recommendation": "把蚕女传说和科幻设定叠在一起，东方神话在 15 分钟里不只是布景。"
+    },
+    {
+      "candidate": "bili-bv1ubeq6reaz",
+      "id": "huanshoujinmen",
+      "title": "幻手津门",
+      "category": "short",
+      "genres": [
+        "fantasy",
+        "urban"
+      ],
+      "runtime": "16:40",
+      "originalReleaseDate": "2026-09-20",
+      "description": "独立自制 AI 民国题材微电影。清末民初的天津卫，古彩戏法一脉暗藏乾坤——戏法从来不是障眼的小把戏，而是手艺人的风骨与底气。",
+      "recommendation": "16 分钟拍津门戏法行当，这个题材在 AI 短片里少见。"
+    },
+    {
+      "candidate": "bili-bv1jhye66e9o",
+      "id": "zuihoudeshiwu",
+      "title": "最后的食物",
+      "category": "short",
+      "genres": [
+        "scifi",
+        "thriller"
+      ],
+      "runtime": "23:52",
+      "originalReleaseDate": "2026-09-08",
+      "description": "个人 AI 手搓的极限伦理科幻短片：空难后仅存的一位科学家，为了等待救援克隆了六个鲜活的自己。作者自述「很极限，很残酷，很实验」，本集序章无血腥。",
+      "recommendation": "23 分钟的伦理科幻，把「吃掉自己」这个设定真的推到底。"
+    },
+    {
+      "candidate": "bili-bv1eu4p6gerc",
+      "id": "qianshaocanxiang",
+      "title": "前哨残响",
+      "category": "short",
+      "genres": [
+        "scifi"
+      ],
+      "runtime": "19:22",
+      "originalReleaseDate": "2026-11-02",
+      "description": "Outpost Echo：七天一轮记忆清零，知晓不等于记得。荒漠星球、逃亡仿生人，与被掩埋的星际真相。",
+      "recommendation": "20 分钟宇宙科幻，「记忆清零」的设定撑起了整段逃亡。"
     }
   ]
 }

@@ -18,6 +18,11 @@
     "ticheng": { "completion": "standalone", "basis": "单片，标题无集号" },
     "ruguoai": { "completion": "standalone", "basis": "单片，标题无集号" },
     "shijiazhuang": { "completion": "standalone", "basis": "音乐影像，单片" },
-    "vantier": { "completion": "standalone", "basis": "音乐影像，单片" }
+    "vantier": { "completion": "standalone", "basis": "音乐影像，单片" },
+    "yagaoheshuaya": { "completion": "standalone", "basis": "B 站单 P，正片，标题无集号" },
+    "xunhuanlvan": { "completion": "standalone", "basis": "B 站单 P，标题标「正片」" },
+    "huanshoujinmen": { "completion": "standalone", "basis": "B 站单 P，标题标「正片」" },
+    "zuihoudeshiwu": { "completion": "standalone", "basis": "B 站单 P，正片；作者提到可能有后续但未上线" },
+    "qianshaocanxiang": { "completion": "standalone", "basis": "B 站单 P，20 分钟完整短片" }
   }
 }
