@@ -18,7 +18,35 @@
 
 抖音没有公开的封面接口：服务端 HTML 里没有 `og:image`、没有 `video[poster]`，`iesdouyin.com/share/video/<id>` 只做 302 跳转，`web/api/v2/aweme/iteminfo` 返回空。所以走登录态浏览器（ego-browser）。
 
-## 操作流程
+## 一条命令上线
+
+日常只需要这一条（在 `site-portfolio-upgrade` 目录下）：
+
+```sh
+scripts/framepick-ship.sh "第三批 5 部上架"
+```
+
+它依次做 7 步，任何一步失败就停下并告诉你原因：
+
+1. 检查环境（node、ossutil 凭据）
+2. 刷新抖音封面（仅 `--with-douyin`，需要 ego-browser 登录态）
+3. 取封面 + 转 640w webp（`framepick-cover-build.mjs`）
+4. 上传 OSS + 逐张 HEAD 自检，有非 200 就拒绝部署
+5. 重建页面 + 卡片校验（`build` / `check`）
+6. 全量测试（`--fast` 跳过，约省 2 分钟）
+7. 提交 → 推 `release/white-pages` 与 `main` → 等部署 → 线上复核卡片数与破图数
+
+常用变体：
+
+```sh
+scripts/framepick-ship.sh "改了文案" --fast        # 不跑浏览器测试
+scripts/framepick-ship.sh "先看看" --no-push       # 只做到本地校验，不碰线上
+scripts/framepick-ship.sh "新片上架" --with-douyin # 顺带刷新抖音封面
+```
+
+**一次性准备**（只做一次，做完不再需要）：`~/bin/ossutil config`，endpoint 填 `oss-cn-hangzhou.aliyuncs.com`，写好 `~/.ossutilconfig`（`chmod 600`）。之后脚本自己读配置，不再要密钥。
+
+## 分步操作（排查问题时用）
 
 ```sh
 # 1) 抖音：登录态浏览器抓封面 URL → douyin-covers.json（B 站不需要这步）
