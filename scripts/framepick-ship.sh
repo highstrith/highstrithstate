@@ -163,7 +163,7 @@ if [ "$JUSHENG_DEPLOYED" = "1" ] || [ "$PORTFOLIO_DEPLOYED" = "1" ]; then
     done
     case "$S" in
       *success*) ;;
-      *) fail "橘生梦厂部署未成功（状态：$S），到 Actions 页面看日志" ;;
+      *) fail "橘生梦厂部署未成功（状态：$S）。到 Actions 看日志；若是 github-pages 产物相关报错，别点 Re-run failed jobs，直接 Run workflow 新开一次运行（见 docs/部署说明.md）" ;;
     esac
     sleep 5
     curl -s "https://highstrith.github.io/jusheng/?cb=$(date +%s)" -o /tmp/jusheng-live.html
@@ -188,7 +188,7 @@ PY
     done
     case "$S" in
       *success*) ;;
-      *) fail "作品集部署未成功（状态：$S），到 Actions 页面看日志" ;;
+      *) fail "作品集部署未成功（状态：$S）。到 Actions 看日志；若是 github-pages 产物相关报错，别点 Re-run failed jobs，直接 Run workflow 新开一次运行（见 docs/部署说明.md）" ;;
     esac
     sleep 5
     HTML=$(curl -s "https://highstrith.github.io/highstrithstate/?cb=$(date +%s)")
