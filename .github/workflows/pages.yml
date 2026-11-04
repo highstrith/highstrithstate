@@ -47,6 +47,9 @@ jobs:
           rsync -a --exclude '*.mp4' assets/uploads/ public/assets/uploads/
           cp -R data/. public/data/
           touch public/.nojekyll
+          # 旧地址 /reel/ 只留一张跳转页：早前分享出去的链接不至于变成 404。
+          mkdir -p public/reel
+          printf '%s' '<!doctype html><meta charset="utf-8"><title>橘生梦厂</title><link rel="canonical" href="https://highstrith.github.io/jusheng/"><meta http-equiv="refresh" content="0; url=https://highstrith.github.io/jusheng/"><p>橘生梦厂已搬到 <a href="https://highstrith.github.io/jusheng/">highstrith.github.io/jusheng</a>。' > public/reel/index.html
 
       - name: Configure media CDN
         env:

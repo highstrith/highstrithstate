@@ -70,8 +70,12 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
     assert.equal(fs.readFileSync(path.join(publicRoot, 'in-progress.html'), 'utf8'), progress);
     assert.equal(fs.readFileSync(path.join(publicRoot, 'resume.html'), 'utf8'), resume);
     assert.deepEqual(fs.readFileSync(path.join(publicRoot, 'assets/lin-junjie-resume.pdf')), fs.readFileSync(path.join(root, 'assets/lin-junjie-resume.pdf')));
-    // 橘生梦厂在独立仓库发布：作品集产物里不允许再出现 /reel/，防止双发布。
-    assert.equal(fs.existsSync(path.join(publicRoot, 'reel')), false, 'reel/ must stay out of the portfolio artifact; it ships from its own repository');
+    // 橘生梦厂在独立仓库发布：作品集产物里的 /reel/ 只允许留一张跳转页，防止双发布。
+    const reelDir = path.join(publicRoot, 'reel');
+    assert.deepEqual(fs.readdirSync(reelDir), ['index.html'], 'reel/ may only keep a redirect stub, the site itself ships from highstrith/jusheng');
+    const stub = fs.readFileSync(path.join(reelDir, 'index.html'), 'utf8');
+    assert.match(stub, /http-equiv="refresh"[^>]*jusheng/, 'the old /reel/ address must redirect to the standalone site');
+    assert.match(stub, /rel="canonical" href="https:\/\/highstrith\.github\.io\/jusheng\/"/, 'the stub must point search engines at the new canonical URL');
     for (const cover of recommendationCovers) {
       assert.ok(fs.existsSync(path.join(publicRoot, cover)), `recommendation cover ${cover} must be published`);
     }

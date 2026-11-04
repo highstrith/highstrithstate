@@ -131,6 +131,9 @@ class ChapterScenes(unittest.TestCase):
                     section = page.locator(selector)
                     section.evaluate('e=>e.scrollIntoView({behavior:"instant",block:"start"})')
                     if selector == '#in-progress':
+                        # 场景图是延迟加载的：先等 src 真正落到元素上，再 decode。
+                        page.wait_for_function('''()=>{const image=document.querySelector('.production-scene img');
+                            return !!(image && (image.currentSrc || image.src));}''')
                         page.locator('.production-scene img').evaluate('e=>e.decode()')
                     page.wait_for_function('''()=>[...document.querySelectorAll('#in-progress img')]
                         .filter(e=>e.currentSrc).every(e=>e.complete)''')
