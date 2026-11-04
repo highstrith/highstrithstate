@@ -64,6 +64,7 @@ class BrowserBase(unittest.TestCase):
             " {credentials: 'same-origin'})).json()).orders || []")
 
 
+@unittest.skipIf(fp.SITE_MODE != 'cinema', '演示订单与购票只在影院形态展示')
 class FramepickSimulatedOrders(BrowserBase):
     @classmethod
     def setUpClass(cls):
@@ -319,6 +320,7 @@ class FramepickSimulatedOrders(BrowserBase):
         expect(page.locator('#cinema .state-chip').first).to_have_attribute('data-state', 'local')
 
 
+@unittest.skipIf(fp.SITE_MODE != 'cinema', '静态托管的订单降级说明只在影院形态展示')
 class FramepickOrdersOffline(BrowserBase):
     @classmethod
     def setUpClass(cls):

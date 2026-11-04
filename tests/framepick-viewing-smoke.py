@@ -28,6 +28,7 @@ class QuietHandler(http.server.SimpleHTTPRequestHandler):
         pass
 
 
+@unittest.skipIf(fp.SITE_MODE != 'cinema', '观影记录入口只在影院形态展示')
 class FramepickViewingSmoke(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

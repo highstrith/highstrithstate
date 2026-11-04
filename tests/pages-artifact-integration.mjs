@@ -24,7 +24,13 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
   const projects = fs.readFileSync(path.join(root, 'projects.html'), 'utf8');
   const progress = fs.readFileSync(path.join(root, 'in-progress.html'), 'utf8');
   const resume = fs.readFileSync(path.join(root, 'resume.html'), 'utf8');
-  const reel = fs.readFileSync(path.join(root, 'reel/index.html'), 'utf8');
+  // 橘生梦厂已独立成站：reel/ 不再进作品集产物，首页入口必须是绝对地址外链。
+  const standaloneEntry = 'https://highstrith.github.io/jusheng/';
+  const externalEntries = [...source.matchAll(/href="(https:\/\/highstrith\.github\.io\/jusheng\/)"/g)].length;
+  assert.ok(externalEntries >= 4, `index must link the standalone site (${standaloneEntry}) from the entry link and all three cards`);
+  assert.equal((source.match(/href="reel\//g) || []).length, 0, 'index must not link the retired /reel/ path');
+  const recommendationCovers = [...new Set([...source.matchAll(/src="(assets\/film-recommendation\/[^"]+)"/g)].map((match) => match[1]))];
+  assert.equal(recommendationCovers.length, 3, 'index must reference three local film-recommendation covers');
   const references = [...(source + projects + progress + resume).matchAll(/<(?:link|script)\b[^>]*>/gi)].flatMap(([tag]) => {
     const attribute = /^<script\b/i.test(tag) ? 'src' : /\brel=["']stylesheet["']/i.test(tag) ? 'href' : null;
     const reference = attribute && tag.match(new RegExp(`\\b${attribute}=["']([^"']+)["']`, 'i'))?.[1];
@@ -47,11 +53,13 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
       fs.copyFileSync(path.join(root, file), path.join(fixture, file));
     }
     fs.copyFileSync(path.join(root, 'assets/studio-mark.svg'), path.join(fixture, 'assets/studio-mark.svg'));
+    for (const cover of recommendationCovers) {
+      fs.mkdirSync(path.join(fixture, path.dirname(cover)), { recursive: true });
+      fs.copyFileSync(path.join(root, cover), path.join(fixture, cover));
+    }
     // The real repository always has an uploads folder; the fixture only copies
     // referenced files, so recreate it or the uploads rsync step has no source.
     fs.mkdirSync(path.join(fixture, 'assets/uploads'), { recursive: true });
-    // 片单是独立站点，整目录进产物。
-    fs.cpSync(path.join(root, 'reel'), path.join(fixture, 'reel'), { recursive: true });
     fs.copyFileSync(path.join(root, 'data/works.json'), path.join(fixture, 'data/works.json'));
     execFileSync('/bin/bash', ['-e', '-o', 'pipefail', '-c', script], { cwd: fixture, stdio: 'pipe' });
 
@@ -62,15 +70,11 @@ test('Pages Prepare site packages the real local CSS and JavaScript references',
     assert.equal(fs.readFileSync(path.join(publicRoot, 'in-progress.html'), 'utf8'), progress);
     assert.equal(fs.readFileSync(path.join(publicRoot, 'resume.html'), 'utf8'), resume);
     assert.deepEqual(fs.readFileSync(path.join(publicRoot, 'assets/lin-junjie-resume.pdf')), fs.readFileSync(path.join(root, 'assets/lin-junjie-resume.pdf')));
-    assert.equal(fs.readFileSync(path.join(publicRoot, 'reel/index.html'), 'utf8'), reel, 'standalone reel page must be published unchanged');
-    for (const file of ['framepick.css', 'framepick.js', 'review-config.js', 'framepick-reviews.js', 'framepick-rankings.js']) {
-      assert.deepEqual(fs.readFileSync(path.join(publicRoot, 'reel', file)), fs.readFileSync(path.join(root, 'reel', file)), `reel ${file} must be packaged unchanged`);
+    // 橘生梦厂在独立仓库发布：作品集产物里不允许再出现 /reel/，防止双发布。
+    assert.equal(fs.existsSync(path.join(publicRoot, 'reel')), false, 'reel/ must stay out of the portfolio artifact; it ships from its own repository');
+    for (const cover of recommendationCovers) {
+      assert.ok(fs.existsSync(path.join(publicRoot, cover)), `recommendation cover ${cover} must be published`);
     }
-    for (const cover of ['xianggu', 'jinhaitang', 'yanran']) {
-      assert.ok(fs.existsSync(path.join(publicRoot, `reel/img/${cover}.webp`)), `reel cover ${cover} must be published`);
-      assert.ok(fs.existsSync(path.join(publicRoot, `reel/img/${cover}-640w.webp`)), `reel cover ${cover}-640w must be published`);
-    }
-    assert.equal(fs.existsSync(path.join(publicRoot, 'reel/img/raw')), false, 'reel master images must stay out of the artifact');
     assert.equal(fs.existsSync(path.join(publicRoot, 'server')), false, 'review server must stay outside the static artifact');
     assert.deepEqual(references.filter(file => !fs.existsSync(path.join(publicRoot, file))), [], 'Pages artifact is missing local CSS/JS referenced by index.html');
     for (const file of [...references, ...projectFiles, 'assets/studio-mark.svg', 'data/works.json']) {

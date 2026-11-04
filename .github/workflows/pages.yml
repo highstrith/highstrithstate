@@ -38,9 +38,8 @@ jobs:
           cp projects.html public/projects.html
           cp in-progress.html public/in-progress.html
           cp resume.html public/resume.html
-          # 片单是独立站点：只发布构建产物，封面母版（img/raw）留在仓库里
-          mkdir -p public/reel
-          rsync -a --exclude '/img/raw/' reel/ public/reel/
+          # 橘生梦厂已独立成站，在独立仓库 highstrith/jusheng 发布：这里不再打包 reel/。
+          # 首页入口 https://highstrith.github.io/jusheng/，封面在 assets/film-recommendation/。
           # Source masters stay in git so media can be re-encoded, but they are
           # never published: every work ships optimized preview/mobile/web files,
           # and the pages only fall back to a source when one is missing.

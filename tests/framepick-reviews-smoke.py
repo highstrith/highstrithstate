@@ -78,6 +78,7 @@ class FramepickReviews(unittest.TestCase):
 
     def setUp(self):
         self.context = self.browser.new_context(viewport={'width': 1440, 'height': 1000}, reduced_motion='reduce')
+        self.observe_outbound(self.context)
         self.page = self.context.new_page()
         self.errors = []
         self.page.on('pageerror', lambda error: self.errors.append(str(error)))
@@ -105,6 +106,13 @@ class FramepickReviews(unittest.TestCase):
         data = json.loads(urllib.request.urlopen(self.base + '/api/framepick/outbound/summary').read())
         return next(entry['outboundClicks'] for entry in data['films'] if entry['filmId'] == film)
 
+    def observe_outbound(self, context):
+        # Observe the real client's public event independently of any ranking UI.
+        context.add_init_script("window.addEventListener('framepick:outbound-summary', event => { window.__observedOutbound = event.detail; });")
+
+    def wait_for_outbound(self, page, count):
+        page.wait_for_function("(n)=>window.__observedOutbound?.films?.find(f=>f.filmId==='xianggu')?.outboundClicks === n", arg=count)
+
     def leave_for_original(self, page, context, selector):
         with context.expect_page() as popup:
             page.locator(selector).click()
@@ -117,7 +125,7 @@ class FramepickReviews(unittest.TestCase):
         self.page.locator('button[data-open-film="xianggu"]').click()
         self.assertEqual(self.outbound_count(), baseline)
         self.leave_for_original(self.page, self.context, '#detailWatch')
-        self.page.wait_for_function('(n)=>document.querySelector("#rankingPopular [data-ranking-film=xianggu]")?.textContent.includes(n+" 次原作跳转")', arg=baseline + 1)
+        self.wait_for_outbound(self.page, baseline + 1)
         self.leave_for_original(self.page, self.context, '#detailWatch')
         self.assertEqual(self.outbound_count(), baseline + 1)
         self.page.keyboard.press('Escape')
@@ -126,13 +134,14 @@ class FramepickReviews(unittest.TestCase):
         self.assertEqual(self.outbound_count(), baseline + 1)
         other = self.browser.new_context()
         self.addCleanup(other.close)
+        self.observe_outbound(other)
         other.route('https://www.douyin.com/**', lambda route: route.fulfill(body='<title>Original fixture</title>'))
         second = other.new_page()
         second.goto(self.base + fp.url())
         self.leave_for_original(second, other, '#filmGrid [data-film="xianggu"] .watch')
-        second.wait_for_function('(n)=>document.querySelector("#rankingPopular [data-ranking-film=xianggu]")?.textContent.includes(n+" 次原作跳转")', arg=baseline + 2)
+        self.wait_for_outbound(second, baseline + 2)
         self.page.reload()
-        expect(self.page.locator('#rankingPopular [data-ranking-film="xianggu"]')).to_contain_text(str(baseline + 2) + ' 次原作跳转')
+        self.wait_for_outbound(self.page, baseline + 2)
 
     def test_outbound_failure_never_blocks_original_or_invents_count(self):
         self.context.route('https://www.douyin.com/**', lambda route: route.fulfill(body='<title>Original fixture</title>'))
@@ -157,10 +166,9 @@ class FramepickReviews(unittest.TestCase):
           };""")
         self.page.goto(self.base + fp.url())
         self.leave_for_original(self.page, self.context, '#filmGrid [data-film="xianggu"] .watch')
-        row = self.page.locator('#rankingPopular [data-ranking-film="xianggu"]')
-        expect(row).to_contain_text(str(baseline + 1) + ' 次原作跳转')
+        self.wait_for_outbound(self.page, baseline + 1)
         self.page.wait_for_timeout(1400)
-        expect(row).to_contain_text(str(baseline + 1) + ' 次原作跳转')
+        self.assertEqual(self.page.evaluate("window.__observedOutbound.films.find(f=>f.filmId==='xianggu').outboundClicks"), baseline + 1)
 
     def hold_initial_summary(self):
         self.page.add_init_script("""const summaryFetch=window.fetch;window.fetch=async(...args)=>{
@@ -247,7 +255,7 @@ class FramepickReviews(unittest.TestCase):
     def test_guest_entry_and_original_site_separation(self):
         self.page.goto(self.base + fp.url())
         self.page.locator('button[data-open-film="xianggu"]').click()
-        expect(self.page.get_by_role('tabpanel', name='作品介绍')).to_contain_text('帧选整理')
+        expect(self.page.get_by_role('tabpanel', name='作品介绍')).to_contain_text('橘生梦厂整理')
         self.page.get_by_role('tab', name='原平台评价', exact=True).click()
         panel = self.page.get_by_role('tabpanel', name='原平台评价')
         expect(panel).to_contain_text('原平台')

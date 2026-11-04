@@ -31,6 +31,7 @@ class QuietHandler(http.server.SimpleHTTPRequestHandler):
         pass
 
 
+@unittest.skipIf(fp.SITE_MODE != 'cinema', '账号入口只在影院形态展示，编选形态下不适用')
 class FramepickAccounts(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -153,6 +154,7 @@ class FramepickAccounts(unittest.TestCase):
             expect(self.page.locator('#accountEntry')).to_be_visible()
 
 
+@unittest.skipIf(fp.SITE_MODE != 'cinema', '静态托管的账号降级说明只在影院形态展示')
 class FramepickAccountsOffline(unittest.TestCase):
     """A static host without the shared service must stay usable."""
 

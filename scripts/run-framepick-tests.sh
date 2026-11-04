@@ -35,7 +35,7 @@ fi
 
 python3 -m unittest \
   tests/framepick-library-smoke.py \
-  tests/framepick-rankings-smoke.py \
+  tests/framepick-picks-smoke.py \
   tests/framepick-reviews-smoke.py \
   tests/framepick-accounts-smoke.py \
   tests/framepick-demo-smoke.py \

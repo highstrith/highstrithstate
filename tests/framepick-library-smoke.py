@@ -11,6 +11,8 @@ import framepick_layout as fp  # noqa: E402
 from playwright.sync_api import sync_playwright, expect
 
 BASE = os.environ.get('STUDIO_BASE_URL', 'http://127.0.0.1:3000').rstrip('/')
+SITE_MODE = re.search(r"FRAMEPICK_SITE_MODE\s*=\s*'([a-z]+)'",
+                      (fp.SITE_ROOT / 'site-mode.js').read_text()).group(1)
 
 
 class FramepickLibrary(unittest.TestCase):
@@ -35,6 +37,11 @@ class FramepickLibrary(unittest.TestCase):
         self.assertEqual(self.errors, [])
 
     def open(self, query=''):
+        # 默认展开全部，断言全量时才不会被首页分页挡住。
+        sep = '&' if '?' in query else '?'
+        self.page.goto(BASE + fp.url(f'{query}{sep}perPage=all'), wait_until='load')
+
+    def open_paged(self, query=''):
         self.page.goto(BASE + fp.url(query), wait_until='load')
 
     def cards(self):
@@ -73,6 +80,41 @@ class FramepickLibrary(unittest.TestCase):
         self.page.locator('button[data-category="all"]').click()
         expect(self.cards()).to_have_count(total)
 
+    def test_home_stays_one_screen_and_links_to_the_full_library(self):
+        # 作品会持续增长，首页只铺一屏，完整列表去 library.html，否则上千部时页面长到无法浏览。
+        self.open_paged()
+        total = self.page.locator('#filmGrid [data-film]').count()
+        self.assertEqual(self.cards().count(), 12, '首屏只铺 12 部')
+        expect(self.page.locator('#resultCount')).to_contain_text('显示前 12 部')
+        expect(self.page.locator('#loadMore')).to_be_visible()
+        link = self.page.locator('#loadMoreLink')
+        expect(link).to_have_attribute('href', 'library.html')
+        expect(link).to_contain_text(f'查看全部 {total} 部')
+
+        link.click()
+        self.page.wait_for_load_state('load')
+        self.assertTrue(self.page.url.endswith('/library.html'), self.page.url)
+        expect(self.page.locator('#libTitle')).to_contain_text('全部作品')
+        expect(self.page.locator('#libMeta')).to_contain_text(f'共 {total} 部')
+        expect(self.page.locator('#libCount')).to_contain_text(f'共 {total} 部')
+        first_page = self.page.locator('#libGrid .card').count()
+        self.assertLessEqual(first_page, 24, '片库页每页 24 部')
+        if total > 24:
+            self.page.get_by_role('button', name='2', exact=True).click()
+            self.assertGreater(self.page.locator('#libGrid .card').count(), 0)
+            expect(self.page.locator('#libCount')).to_contain_text('第 2 / ')
+        # 筛选后页码回到第一页，避免停在越界页。
+        self.page.locator('#libGenre').select_option('scifi')
+        expect(self.page.locator('#libCount')).to_contain_text('第 1')
+
+    def test_home_search_shows_all_matches_without_paging(self):
+        # 搜索是明确意图，搜到了却因分页看不到是坏体验。
+        self.open_paged()
+        self.page.locator('#filmSearch').fill('科幻')
+        matched = self.cards().count()
+        self.assertGreater(matched, 12)
+        expect(self.page.locator('#loadMore')).to_be_hidden()
+
     def test_unknown_scores_and_paid_screenings_are_honest_empty_states(self):
         self.open()
         scores = self.page.locator('#filmGrid .score')
@@ -82,6 +124,13 @@ class FramepickLibrary(unittest.TestCase):
         expect(self.cards()).to_have_count(0)
         expect(self.page.locator('#emptyState')).to_contain_text('评分')
         self.page.locator('#resetFilters').click()
+        if SITE_MODE == 'ranking':
+            # 编选形态不提供付费放映：选项、会员区块与购票入口都应消失。
+            self.assertEqual(self.page.locator('#accessFilter option[value="paid"]').count(), 0)
+            expect(self.page.locator('#accessFilter')).to_have_value('all')
+            expect(self.page.locator('#membership')).to_be_hidden()
+            expect(self.page.locator('[data-membership]').first).to_be_hidden()
+            return
         self.page.locator('#accessFilter').select_option('paid')
         expect(self.cards()).to_have_count(0)
         expect(self.page.locator('#emptyState')).to_contain_text('付费放映')
@@ -94,8 +143,19 @@ class FramepickLibrary(unittest.TestCase):
         self.page.keyboard.press('Escape')
         expect(self.page.locator('#membershipDialog')).not_to_be_visible()
 
-    def test_cinema_and_creator_model_is_clear_without_fake_checkout(self):
+    def test_site_mode_matches_configured_form(self):
         self.open()
+        if SITE_MODE == 'ranking':
+            # 编选形态：影院、购票与账号入口整体隐藏，只留编选与片库。
+            expect(self.page.locator('.intro-note')).to_contain_text('AI 短片编选')
+            for selector in ('#membership', '#cinema', '#cinemaPlan', '#prototypeBar', '#accountEntry', '#meEntry'):
+                expect(self.page.locator(selector)).to_be_hidden()
+            nav = self.page.locator('nav[aria-label="站内导航"]')
+            expect(nav.get_by_role('link', name='本期推荐', exact=True)).to_have_attribute('href', '#rankings')
+            expect(nav).not_to_contain_text('观影计划')
+            expect(self.page.locator('body')).not_to_contain_text('买一张小票', use_inner_text=True)
+            expect(self.page.locator('body')).not_to_contain_text('橘生梦厂 VIP', use_inner_text=True)
+            return
         expect(self.page.locator('.intro-note')).to_contain_text('AI 电影线上影院')
         expect(self.page.locator('#membership')).to_contain_text('单片观影')
         expect(self.page.locator('#membership')).to_contain_text('3 元 / 5 元')

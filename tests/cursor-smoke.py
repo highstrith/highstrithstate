@@ -24,7 +24,7 @@ class ReadingCursor(unittest.TestCase):
         return page
 
     def test_public_page_copy_uses_an_arrow_including_nested_heading_letters(self):
-        for path in ['/', '/projects.html', '/in-progress.html', '/resume.html', '/reel/']:
+        for path in ['/', '/projects.html', '/in-progress.html', '/resume.html']:
             with self.subTest(path=path):
                 page = self.page(path)
                 text = page.locator('h1, h1 span, h2, h2 span, p').filter(visible=True)
@@ -42,9 +42,6 @@ class ReadingCursor(unittest.TestCase):
         for selector, cursor in [('a[href]', 'pointer'), ('#themeToggle', 'pointer'),
                                  ('.still-media', 'zoom-in'), ('.home-progress-card', 'zoom-in')]:
             self.assertEqual(page.locator(selector).first.evaluate('e=>getComputedStyle(e).cursor'), cursor)
-        page = self.page('/reel/')
-        for selector in ['.bar nav a', '.watch', '.card-media']:
-            self.assertEqual(page.locator(selector).first.evaluate('e=>getComputedStyle(e).cursor'), 'pointer')
 
     def test_actual_fields_stay_editable_and_reading_text_can_still_be_selected(self):
         page = self.page('/')
@@ -58,12 +55,12 @@ class ReadingCursor(unittest.TestCase):
             self.assertEqual(field.evaluate('e=>getComputedStyle(e).cursor'), 'text')
             field.fill('测试文字')
             expect(field).to_have_value('测试文字')
-        page = self.page('/reel/')
-        paragraph = page.locator('.lede')
+        page = self.page('/#filmRecommendations')
+        paragraph = page.locator('.film-product-copy p').first
         # Aim at real glyphs: a fixed offset into the box can land on the gap
         # around the line break and select nothing, which is a test artefact.
         point = page.evaluate('''() => {
-          const node = document.querySelector('.lede').firstChild;
+          const node = document.querySelector('.film-product-copy p').firstChild;
           const range = document.createRange();
           range.setStart(node, 0);
           range.setEnd(node, Math.min(8, node.textContent.length));

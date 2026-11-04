@@ -31,7 +31,7 @@ class ProjectPages(unittest.TestCase):
         self.context.unroute_all(behavior='ignoreErrors')
         self.context.close()
 
-    def test_recommended_film_screen_precedes_portrait_and_opens_in_current_tab(self):
+    def test_recommended_film_screen_precedes_portrait_and_links_to_the_standalone_site(self):
         for width in [1440, 820, 390, 320]:
             self.page.set_viewport_size({'width': width, 'height': 900})
             for path in ['/', '/?lang=en', '/projects.html', '/in-progress.html?lang=en']:
@@ -41,12 +41,12 @@ class ProjectPages(unittest.TestCase):
                 section = self.page.locator('#filmRecommendations')
                 self.assertEqual(section.evaluate('e=>e.previousElementSibling.id'), 'projects')
                 self.assertEqual(section.evaluate('e=>e.nextElementSibling.id'), 'about')
-                expect(section.locator('h2')).to_have_text('Framepick' if 'lang=en' in path else '帧选')
-                expect(section.locator('.film-product-label')).to_have_text('A product by Highstrith · AI film discovery' if 'lang=en' in path else '我的产品 · AI 影像精选')
+                expect(section.locator('h2')).to_have_text('Jusheng Mengchang' if 'lang=en' in path else '橘生梦厂')
+                expect(section.locator('.film-product-label')).to_have_text('A product by Highstrith · AI short film curation' if 'lang=en' in path else '我的产品 · AI 短片编选')
                 expect(self.page.locator('#projects a[href="reel/"]')).to_have_count(0)
                 expect(section.locator('img')).to_have_count(3)
                 self.assertEqual(section.locator('img').evaluate_all('images=>images.map(i=>i.getAttribute("src"))'),
-                                 ['reel/img/xianggu-640w.webp', 'reel/img/jinhaitang-640w.webp', 'reel/img/yanran-640w.webp'])
+                                 ['assets/film-recommendation/xianggu-640w.webp', 'assets/film-recommendation/jinhaitang-640w.webp', 'assets/film-recommendation/yanran-640w.webp'])
                 for cover in section.locator('img').all():
                     expect(cover).to_have_attribute('loading', 'lazy')
                     self.assertTrue(cover.get_attribute('width') and cover.get_attribute('height'))
@@ -56,19 +56,14 @@ class ProjectPages(unittest.TestCase):
                 if width > 800:
                     self.assertGreaterEqual(section.bounding_box()['height'], 900)
                 link = section.locator('.film-recommendation-link')
-                expect(link).to_have_text('Explore Framepick' if 'lang=en' in path else '进入帧选')
+                expect(link).to_have_text('Explore Jusheng Mengchang' if 'lang=en' in path else '进入橘生梦厂')
                 link.scroll_into_view_if_needed()
                 expect(link).to_be_visible()
-                expect(link).to_have_attribute('target', '_self')
+                # 橘生梦厂是独立站点：入口是绝对地址、新开标签页，不再路由到本站的 /reel/
+                expect(link).to_have_attribute('href', 'https://highstrith.github.io/jusheng/')
+                expect(link).to_have_attribute('target', '_blank')
+                expect(link).to_have_attribute('rel', 'noopener')
                 self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth'), width)
-                link.click()
-                expect(self.page).to_have_url(BASE + '/reel/')
-                # The film index retitled itself when the catalogue was rebuilt;
-                # what matters is that the link landed on Framepick in this tab.
-                expect(self.page).to_have_title(re.compile('帧选 Framepick'))
-                expect(self.page.locator('.mark')).to_have_accessible_name('帧选首页')
-                expect(self.page.locator('h1')).to_contain_text('好看的 AI 影像')
-                self.assertEqual(len(self.context.pages), 1)
 
     def test_film_index_recommendation_works_without_javascript(self):
         context = self.browser.new_context(java_script_enabled=False, viewport={'width': 390, 'height': 844})
@@ -78,13 +73,12 @@ class ProjectPages(unittest.TestCase):
         expect(page.locator('.main-nav a[href="reel/"]')).to_have_count(0)
         expect(page.locator('#filmRecommendations img')).to_have_count(3)
         expect(page.locator('#about .portrait-caption')).to_have_count(0)
-        page.locator('#filmRecommendations .film-recommendation-link').click()
-        expect(page).to_have_url(BASE + '/reel/')
-        expect(page.locator('.mark-cn')).to_have_text('帧选')
-        page.get_by_role('link', name='橘小桔的主页').click()
-        expect(page).to_have_url(BASE + '/#filmRecommendations')
+        link = page.locator('#filmRecommendations .film-recommendation-link')
+        # 无 JS 时入口同样指向独立站点（绝对地址写在 HTML 里，不依赖脚本）
+        expect(link).to_have_attribute('href', 'https://highstrith.github.io/jusheng/')
+        expect(link).to_have_attribute('target', '_blank')
 
-    def test_recommended_covers_load_and_are_current_tab_links_in_both_themes(self):
+    def test_recommended_covers_load_and_are_external_site_links_in_both_themes(self):
         self.page.set_viewport_size({'width': 1440, 'height': 900})
         self.page.goto(BASE + '/#filmRecommendations', wait_until='load')
         section = self.page.locator('#filmRecommendations')
@@ -97,13 +91,10 @@ class ProjectPages(unittest.TestCase):
         for theme in ['light', 'dark']:
             if theme == 'dark': self.page.locator('#themeToggle').click()
             for card, title in zip(section.locator('.film-recommendation-card').all(), ['相骨', '烬海棠', '燕然']):
-                expect(card).to_have_attribute('href', 'reel/')
-                expect(card).to_have_attribute('target', '_self')
+                expect(card).to_have_attribute('href', 'https://highstrith.github.io/jusheng/')
+                expect(card).to_have_attribute('target', '_blank')
                 expect(card).to_have_accessible_name(title)
             self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth'), 1440)
-        section.locator('.film-recommendation-card').last.click()
-        expect(self.page).to_have_url(BASE + '/reel/')
-        self.assertEqual(len(self.context.pages), 1)
 
     def test_home_nav_lands_project_section_then_opens_project_page(self):
         self.page.goto(BASE + '/')
@@ -221,15 +212,15 @@ class ProjectPages(unittest.TestCase):
         canvas_link = self.page.locator('.tools-secondary a[data-i18n="toolCanvas"]')
         reel_link = self.page.locator('#filmRecommendations .film-recommendation-link')
         expect(canvas_link).to_have_text('AI 无限画布')
-        # 当前已确认入口在独立推荐章节，同标签进入中文片单。
-        expect(reel_link).to_have_text('进入帧选')
-        expect(reel_link).to_have_attribute('href', 'reel/')
-        expect(reel_link).to_have_attribute('target', '_self')
+        # 橘生梦厂入口在独立推荐章节，指向独立站点。
+        expect(reel_link).to_have_text('进入橘生梦厂')
+        expect(reel_link).to_have_attribute('href', 'https://highstrith.github.io/jusheng/')
+        expect(reel_link).to_have_attribute('target', '_blank')
         self.page.locator('#langSwitch').click()
         expect(self.page.locator('#toolsTitle')).to_have_text('Director’s workbench')
         expect(canvas_link).to_have_attribute('href', 'projects.html?lang=en#canvasTitle')
-        expect(reel_link).to_have_text('Explore Framepick')
-        expect(reel_link).to_have_attribute('href', 'reel/')
+        expect(reel_link).to_have_text('Explore Jusheng Mengchang')
+        expect(reel_link).to_have_attribute('href', 'https://highstrith.github.io/jusheng/')
 
     def test_project_entries_work_without_javascript(self):
         context = self.browser.new_context(java_script_enabled=False)

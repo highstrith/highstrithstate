@@ -9,6 +9,7 @@ Override with ``FRAMEPICK_BASE_PATH`` (``/reel/`` or ``/``) and
 ``FRAMEPICK_SITE_ROOT`` (directory holding ``index.html``).
 """
 import os
+import re
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -17,6 +18,14 @@ ROOT = Path(__file__).resolve().parents[1]
 _segment = os.environ.get('FRAMEPICK_BASE_PATH', '/reel/').strip('/')
 BASE_PATH = f'/{_segment}/' if _segment else '/'
 SITE_ROOT = Path(os.environ.get('FRAMEPICK_SITE_ROOT', ROOT / 'reel')).resolve()
+
+# 站点形态由 reel/site-mode.js 决定：ranking 只留编选与片库，cinema 才展示观影、账号与订单。
+_MODE_FILE = SITE_ROOT / 'site-mode.js'
+SITE_MODE = 'cinema'
+if _MODE_FILE.exists():
+    _match = re.search(r"FRAMEPICK_SITE_MODE\s*=\s*'([a-z]+)'", _MODE_FILE.read_text())
+    if _match:
+        SITE_MODE = _match.group(1)
 
 
 def url(path=''):

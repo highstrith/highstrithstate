@@ -33,7 +33,10 @@
     q: $('#filmSearch'), genre: $('#genreFilter'), source: $('#sourceFilter'),
     rating: $('#scoreFilter'), access: $('#accessFilter'), sort: $('#sortFilter'), scoreBasis: $('#scoreBasis')
   };
-  const defaults = { q: '', category: 'all', genre: 'all', source: 'all', rating: 'all', access: 'all', sort: 'curated', scoreBasis: 'editor', saved: false, hideWatched: true };
+  // 首页只铺一屏能看完的量，其余走「加载更多」；否则作品上千时页面会极长。
+  const PAGE_QUERY = '(max-width: 760px)';
+  function pageSize() { return matchMedia(PAGE_QUERY).matches ? 6 : 12; }
+  const defaults = { q: '', category: 'all', genre: 'all', source: 'all', rating: 'all', access: 'all', sort: 'curated', scoreBasis: 'editor', saved: false, hideWatched: true, limit: 12 };
   const categories = [...document.querySelectorAll('[data-category]')].filter((node) => node.tagName === 'BUTTON');
   const storageKey = 'framepick:saved:v1';
   let storageAvailable = true;
@@ -57,7 +60,9 @@
 
   function readState() {
     const params = new URL(location.href).searchParams;
-    state = { ...defaults, q: (params.get('q') || '').slice(0, 100), saved: params.get('saved') === '1', hideWatched: params.get('hideWatched') !== '0' };
+    // ?perPage=all 一次铺开全部，给「查看全部」链接和自动化测试用。
+    const all = params.get('perPage') === 'all';
+    state = { ...defaults, limit: all ? Infinity : pageSize(), q: (params.get('q') || '').slice(0, 100), saved: params.get('saved') === '1', hideWatched: params.get('hideWatched') !== '0' };
     const category = params.get('category');
     if (categories.some((button) => button.dataset.category === category)) state.category = category;
     for (const key of ['genre', 'source', 'rating', 'access', 'sort', 'scoreBasis']) {
@@ -143,9 +148,12 @@
     );
     if (state.sort === 'score') visible.sort((a, b) => (selectedScore(b) ?? -1) - (selectedScore(a) ?? -1) || a.index - b.index);
     if (state.sort === 'newest') visible.sort((a, b) => b.date.localeCompare(a.date) || a.index - b.index);
-    const ids = new Set(visible.map((film) => film.id));
+    // 搜索是一次性意图，直接把匹配的给全；普通浏览按页给，避免首页过长。
+    const cap = query ? visible.length : Math.min(state.limit, visible.length);
+    const shown = visible.slice(0, cap);
+    const ids = new Set(shown.map((film) => film.id));
     for (const film of films) film.card.hidden = !ids.has(film.id);
-    const ordered = [...visible, ...films.filter((film) => !ids.has(film.id))];
+    const ordered = [...shown, ...films.filter((film) => !ids.has(film.id))];
     ordered.forEach((film, index) => {
       if (grid.children[index] !== film.card) grid.insertBefore(film.card, grid.children[index] || null);
     });
@@ -158,9 +166,19 @@
       (!state.saved || saved.has(film.id));
     const matchingExceptWatched = state.hideWatched ? films.filter((film) => passesOtherFilters(film) && watchedIds.has(film.id)) : [];
     const hiddenWatched = matchingExceptWatched.length;
-    $('#resultCount').textContent = visible.length + ' 部' + (state.saved ? '已收藏作品' : '精选作品') + (state.hideWatched && hiddenWatched ? ` · 已隐藏 ${hiddenWatched} 部已看` : '');
-    $('#emptyState').hidden = visible.length !== 0;
+    const total = visible.length;
+    const suffix = state.saved ? '已收藏作品' : '精选作品';
+    const countText = !query && total > cap ? `共 ${total} 部${suffix} · 显示前 ${cap} 部` : `${total} 部${suffix}`;
+    $('#resultCount').textContent = countText + (state.hideWatched && hiddenWatched ? ` · 已隐藏 ${hiddenWatched} 部已看` : '');
+    $('#emptyState').hidden = total !== 0;
     $('#emptyMembership').hidden = state.access !== 'paid';
+    const remaining = query ? 0 : total - cap;
+    $('#loadMore').hidden = remaining <= 0;
+    if (remaining > 0) {
+      $('#loadMoreNote').textContent = `这里显示最近更新的 ${cap} 部`;
+      const link = $('#loadMoreLink');
+      if (link) link.textContent = `查看全部 ${total} 部`;
+    }
     let title = '暂时没有匹配的作品';
     let copy = '试试其他题材，或清除筛选条件。';
     if (state.access === 'paid') {
@@ -169,7 +187,7 @@
     } else if (state.saved && saved.size === 0) {
       title = '还没有收藏的作品';
       copy = '点击作品上的收藏按钮，把想看的好片留在这台设备。';
-    } else if (state.hideWatched && visible.length === 0 && hiddenWatched > 0) {
+    } else if (state.hideWatched && total === 0 && hiddenWatched > 0) {
       title = '看过的都标记好了';
       copy = `这批筛选里的 ${hiddenWatched} 部都已看过，已从列表隐藏。切回「显示已看」，或在「我的」页面看观看历史。`;
     } else if (state.rating !== 'all' && films.every((film) => selectedScore(film) === null)) {
@@ -185,7 +203,7 @@
     syncWatchedBadges();
   }
 
-  function applyFilters() { syncControls(); render(); writeState(); }
+  function applyFilters(resetLimit = true) { if (resetLimit && state.limit !== Infinity) state.limit = pageSize(); syncControls(); render(); writeState(); }
 
   function viewingSnapshot(film) {
     return {
@@ -309,7 +327,14 @@
     syncControls();
     render();
     const id = new URL(location.href).searchParams.get('film');
-    if (byId.has(id)) openFilm(id); else closeFilmUI();
+    if (!byId.has(id)) { closeFilmUI(); return; }
+    // 深链进来的作品可能排在「加载更多」之后，先把它展开再打开。
+    const card = byId.get(id).card;
+    if (card.hidden) {
+      const pos = [...grid.children].indexOf(card);
+      if (pos >= state.limit) { state.limit = pos + 1; render(); }
+    }
+    openFilm(id);
   }
 
   for (const [key, control] of Object.entries(controls)) {
@@ -357,6 +382,8 @@
     state.hideWatched = !state.hideWatched;
     applyFilters();
   });
+  // 首页只铺一屏，完整列表交给 library.html，不再堆在主页上。
+
   $('[data-close-film]').addEventListener('click', requestCloseFilm);
   filmDialog.addEventListener('cancel', (event) => { event.preventDefault(); requestCloseFilm(); });
   filmDialog.addEventListener('click', (event) => { if (event.target === filmDialog) {

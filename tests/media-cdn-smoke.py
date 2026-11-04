@@ -130,8 +130,6 @@ class MediaCdn(unittest.TestCase):
         self.addCleanup(page.close)
         page.goto(self.base)
         self.assertTrue(page.locator('.no-js-work').first.get_attribute('href').startswith(self.cdn_url))
-        page.goto(self.base + 'reel/')
-        self.assertTrue(page.locator('img').first.get_attribute('src').startswith(self.cdn_url + 'reel/img/'))
         page.goto(self.base + 'projects.html')
         self.assertTrue(page.locator('img').first.get_attribute('src').startswith(self.cdn_url))
         page.goto(self.base + 'resume.html')

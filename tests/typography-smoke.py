@@ -70,8 +70,11 @@ class Typography(unittest.TestCase):
                 self.assertGreaterEqual(metrics['copy']['y'], metrics['title']['bottom'], (width, metrics))
             self.assertGreaterEqual(metrics['note']['y'], metrics['copy']['bottom'], (width, metrics))
             self.assertGreaterEqual(metrics['feature']['y'], max(metrics['title']['bottom'], metrics['note']['bottom']), (width, metrics))
-            expect(page.locator('article.card')).to_have_count(3)
-            expect(page.locator('article.card .watch')).to_have_count(3)
+            # 首页 HTML 里始终写全库卡片，显示几张由页面脚本控制；
+            # 这里只要求「看到的每张卡都带观看入口」，不写死数量。
+            visible_cards = page.locator('article.card:visible')
+            self.assertGreater(visible_cards.count(), 0, width)
+            self.assertEqual(page.locator('article.card:visible .watch').count(), visible_cards.count(), width)
 
 
 if __name__ == '__main__':

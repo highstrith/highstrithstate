@@ -67,7 +67,7 @@ class ChapterScenes(unittest.TestCase):
         self.assertAlmostEqual(second['x'], third['x'], delta=1)
         self.assertGreater(third['y'], second['y'])
         for card in covers.all():
-            expect(card).to_have_attribute('href', 'reel/')
+            expect(card).to_have_attribute('href', 'https://highstrith.github.io/jusheng/')
 
     def test_responsive_bilingual_chapters_keep_reading_order_and_controls(self):
         for width, height in [(320, 740), (390, 844), (820, 1180), (1440, 600), (1920, 1080)]:
