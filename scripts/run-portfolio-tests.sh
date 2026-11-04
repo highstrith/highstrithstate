@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Portfolio test entry: browser contracts, Node integration tests and the
-# static-snapshot guard. Framepick has its own entry: scripts/run-framepick-tests.sh
+# static-snapshot guard.
 #
 #   scripts/run-portfolio-tests.sh
 set -uo pipefail
@@ -23,7 +23,7 @@ trap cleanup EXIT
 status=0
 
 echo "== 浏览器用例 =="
-python3 -m unittest $(ls tests/*.py | grep -v framepick_layout | tr '\n' ' ') || status=1
+python3 -m unittest $(ls tests/*.py | tr '\n' ' ') || status=1
 
 # Transcoding tests need FFmpeg (FFMPEG_PATH or ~/.cache/portfolio-media-tools).
 media_tests=(
@@ -31,13 +31,7 @@ media_tests=(
   tests/optimized-media-integration.mjs
   tests/image-optimization-integration.mjs
 )
-node_tests=()
-for file in tests/*.mjs; do
-  case "$file" in
-    *framepick*) continue ;;
-  esac
-  node_tests+=("$file")
-done
+node_tests=(tests/*.mjs)
 
 if [ -n "${FFMPEG_PATH:-}" ] || command -v ffmpeg >/dev/null 2>&1 || [ -x "$HOME/.cache/portfolio-media-tools/ffmpeg" ]; then
   media_available=1

@@ -25,8 +25,8 @@ test('every catalogue cover variant is a real WebP below 200 KB', () => {
   }
 });
 
-test('project and reel cover images use budgeted WebP and lazy offscreen covers', () => {
-  for (const page of ['projects.html', 'reel/index.html']) {
+test('project cover images use budgeted WebP and lazy offscreen covers', () => {
+  for (const page of ['projects.html']) {
     const html = fs.readFileSync(path.join(root, page), 'utf8');
     const images = [...html.matchAll(/<img\b[^>]*\bsrc="([^"]+)"[^>]*>/g)];
     assert.ok(images.length >= 3);

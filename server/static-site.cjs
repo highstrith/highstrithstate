@@ -31,7 +31,7 @@ function safeDecode(value) {
 }
 
 // Directory requests fall back to index.html, matching GitHub Pages. Any site can
-// be served as a root, so the same handler covers the portfolio and Framepick.
+// be served as a root, so the same handler covers any static site root.
 function createStaticHandler({ root }) {
   const siteRoot = path.resolve(root);
 

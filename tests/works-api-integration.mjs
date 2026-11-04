@@ -34,7 +34,7 @@ async function withServer(works, run) {
   let child;
   try {
     await fs.copyFile(path.join(root, 'serve.js'), path.join(directory, 'serve.js'));
-    // serve.js keeps its shared handlers in server/ (static files, Framepick API),
+    // serve.js keeps its shared handlers in server/ (static files, works API),
     // so the entry point alone is not enough to boot a copy.
     await fs.cp(path.join(root, 'server'), path.join(directory, 'server'), { recursive: true });
     await fs.mkdir(path.join(directory, 'data'), { recursive: true });

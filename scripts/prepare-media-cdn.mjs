@@ -38,7 +38,7 @@ export function prepareMediaCdn({siteDir, mediaDir, baseUrl = ''}) {
     }
   };
   walk(siteDir);
-  const media = files.filter(name => /^(?:assets\/|reel\/img\/)/.test(name) && mediaExtension.test(name));
+  const media = files.filter(name => /^assets\//.test(name) && mediaExtension.test(name));
   const whitelist = new Set(media);
   const report = {baseUrl:base?.href || '',files:media.map(name => {
     const file = path.join(siteDir, name);
@@ -60,7 +60,7 @@ export function prepareMediaCdn({siteDir, mediaDir, baseUrl = ''}) {
     const file = path.join(siteDir, name);
     const original = fs.readFileSync(file, 'utf8');
     let result = original.replace(reference, value => {
-      const rootRelative = /^(?:assets\/|reel\/)/.test(value);
+      const rootRelative = /^assets\//.test(value);
       const resolutionBase = rootRelative ? origin : new URL(name, origin);
       const url = new URL(value, resolutionBase);
       let key;

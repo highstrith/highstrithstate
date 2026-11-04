@@ -9,14 +9,13 @@ async function fixture(run) {
   const site = path.join(temp, 'site');
   const files = {
     'index.html': '<html><head><link rel="canonical" href="https://highstrith.github.io/highstrithstate/"><link href="assets/site.css"></head><body><img src="assets/cover.webp" srcset="assets/cover.webp 480w, assets/poster.jpg 960w"><a href="resume.html">Resume</a><a href="assets/cv.pdf">PDF</a><script src="assets/main.js"></script><script>const posterImageData={"assets/poster.jpg":[{"src":"assets/cover.webp"}]};</script><video data-src="assets/clip.mp4"></video></body></html>',
-    'reel/index.html': '<html><head></head><body><img src="img/film.webp"><a href="../index.html">Home</a></body></html>',
     'assets/main.js': 'const poster="assets/cover.webp";const other="https://elsewhere.invalid/assets/cover.webp";',
     'assets/site.css': '.image{background:url("cover.webp")}',
     'data/works.json': JSON.stringify([{poster:'assets/poster.jpg',previewVideo:'assets/clip.mp4'}]),
     'assets/cover.webp': 'webp bytes', 'assets/poster.jpg': 'poster bytes',
-    'assets/clip.mp4': 'video bytes', 'reel/img/film.webp': 'film bytes',
+    'assets/clip.mp4': 'video bytes',
     'assets/cv.pdf': 'pdf bytes', 'assets/works/master.mp4': 'master bytes',
-    'reel/img/raw/original.png': 'original bytes', 'assets/._private.png': 'metadata',
+    'assets/raw/original.png': 'original bytes', 'assets/._private.png': 'metadata',
   };
   for (const [name, body] of Object.entries(files)) {
     fs.mkdirSync(path.dirname(path.join(site, name)), {recursive:true});
@@ -45,11 +44,10 @@ test('CDN publishing rewrites real media across static/dynamic views while keepi
     assert.ok(script.includes('poster="https://cdn.example.test/portfolio/assets/cover.webp"'));
     assert.ok(script.includes('https://elsewhere.invalid/assets/cover.webp'));
     assert.ok(fs.readFileSync(path.join(site,'assets/site.css'),'utf8').includes('url("https://cdn.example.test/portfolio/assets/cover.webp")'));
-    assert.ok(fs.readFileSync(path.join(site,'reel/index.html'),'utf8').includes('https://cdn.example.test/portfolio/reel/img/film.webp'));
     assert.equal(JSON.parse(fs.readFileSync(path.join(site,'data/works.json')))[0].previewVideo,'https://cdn.example.test/portfolio/assets/clip.mp4');
-    assert.deepEqual(report.files.map(f=>f.path).sort(),['assets/clip.mp4','assets/cover.webp','assets/poster.jpg','reel/img/film.webp']);
+    assert.deepEqual(report.files.map(f=>f.path).sort(),['assets/clip.mp4','assets/cover.webp','assets/poster.jpg']);
     for (const f of report.files) assert.equal(fs.readFileSync(path.join(mediaDir,f.path),'utf8'),files[f.path]);
-    for (const forbidden of ['assets/main.js','assets/cv.pdf','assets/works/master.mp4','reel/img/raw/original.png','assets/._private.png']) assert.equal(fs.existsSync(path.join(mediaDir,forbidden)),false);
+    for (const forbidden of ['assets/main.js','assets/cv.pdf','assets/works/master.mp4','assets/raw/original.png','assets/._private.png']) assert.equal(fs.existsSync(path.join(mediaDir,forbidden)),false);
     prepareMediaCdn({siteDir:site,mediaDir,baseUrl:'https://cdn.example.test/portfolio/'});
     assert.equal(fs.readFileSync(path.join(site,'index.html'),'utf8'),html,'same CDN transform is idempotent');
   });

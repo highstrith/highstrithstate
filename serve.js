@@ -3,24 +3,10 @@ const fs = require("fs");
 const path = require("path");
 const { URL } = require("url");
 const { createStaticHandler } = require("./server/static-site.cjs");
-const { createAccountHandler } = require("./server/framepick-accounts.cjs");
-const { createOrderHandler } = require("./server/framepick-orders.cjs");
 
 const root = __dirname;
 const port = process.env.PORT || 3000;
 // Local preview only. The public Pages artifact never contains this API or its data.
-// Keep the optional module optional for the server's existing single-file fixtures.
-const reviewModule = path.join(root, "server", "framepick-reviews.cjs");
-const cataloguePage = path.join(root, "reel", "index.html");
-// The review handler needs the published film ids; without the Framepick page
-// there is nothing to review, so keep the module optional as before.
-const handleFramepickReviews = fs.existsSync(reviewModule) && fs.existsSync(cataloguePage)
-  ? require(reviewModule).createReviewHandler({
-      dataDir: process.env.FRAMEPICK_REVIEWS_DATA_DIR,
-      filmIds: [...fs.readFileSync(cataloguePage, "utf8")
-        .matchAll(/<article\b[^>]*data-film="([^"]+)"/g)].map((match) => match[1]),
-    })
-  : null;
 const dataDir = path.join(root, "data");
 const worksFile = path.join(dataDir, "works.json");
 const uploadDir = path.join(root, "assets", "uploads");
@@ -413,20 +399,6 @@ async function handleApi(req, res, requestUrl) {
 }
 
 const handleStatic = createStaticHandler({ root });
-const handleFramepickAccounts = createAccountHandler({});
-// Demo orders: simulated payment only, data outside the repository
-// (FRAMEPICK_ORDERS_DATA_DIR overrides for tests).
-const handleFramepickOrders = createOrderHandler({ accounts: handleFramepickAccounts });
-// Viewing records: per-account watched flags + open history
-// (FRAMEPICK_VIEWING_DATA_DIR overrides for tests).
-const { createViewingHandler } = require("./server/framepick-viewing.cjs");
-const handleFramepickViewing = createViewingHandler({ accounts: handleFramepickAccounts });
-// The creator module is still an unshipped work in progress: mount it only when
-// the file exists so a checkout without it still starts.
-const creatorModule = path.join(root, "server", "framepick-creators.cjs");
-const handleFramepickCreators = fs.existsSync(creatorModule)
-  ? require(creatorModule).createCreatorHandler({ accounts: handleFramepickAccounts })
-  : null;
 const storageReady = ensureStorage();
 
 http.createServer(async (req, res) => {
@@ -434,31 +406,6 @@ http.createServer(async (req, res) => {
 
   try {
     await storageReady;
-
-    // Accounts own a narrower prefix, so they must be tried before the review
-    // handler, which claims every /api/framepick path.
-    if (await handleFramepickAccounts.handle(req, res, requestUrl)) {
-      return;
-    }
-
-    // Orders own a narrower prefix too (demo goods, simulated payment).
-    if (await handleFramepickOrders.handle(req, res, requestUrl)) {
-      return;
-    }
-
-    // Viewing records own a narrower prefix (/api/framepick/viewing).
-    if (await handleFramepickViewing.handle(req, res, requestUrl)) {
-      return;
-    }
-
-    // Creators own a narrower prefix too, so they come before the review handler.
-    if (handleFramepickCreators && await handleFramepickCreators.handle(req, res, requestUrl)) {
-      return;
-    }
-
-    if (handleFramepickReviews && await handleFramepickReviews(req, res, requestUrl)) {
-      return;
-    }
 
     if (await handleApi(req, res, requestUrl)) {
       return;
