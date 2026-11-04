@@ -66,12 +66,23 @@ if [ "$PUSH" = "1" ]; then
     --include "*.webp" --exclude "._*" \
     --meta "Cache-Control:public,max-age=600" \
     reel/img/ oss://highstrith-assets/reel/img/ 2>&1 | tail -3 || fail "上传失败"
+  # 作品集首页三张推荐卡封面走 assets/film-recommendation/，不再依赖 reel/img
+  find assets/film-recommendation -name '._*' -type f -delete 2>/dev/null
+  "$HOME/bin/ossutil" cp -r --update --jobs 4 \
+    --include "*.webp" --exclude "._*" \
+    --meta "Cache-Control:public,max-age=600" \
+    assets/film-recommendation/ oss://highstrith-assets/assets/film-recommendation/ 2>&1 | tail -3 || fail "推荐卡封面上传失败"
   step "3b/8 线上封面自检"
   BAD=0
   for file in reel/img/*.webp; do
     name=$(basename "$file")
     code=$(curl -s -o /dev/null -w '%{http_code}' -I "https://highstrith-assets.oss-cn-hangzhou.aliyuncs.com/reel/img/$name")
     [ "$code" = "200" ] || { echo "  $code $name"; BAD=$((BAD+1)); }
+  done
+  for file in assets/film-recommendation/*.webp; do
+    name=$(basename "$file")
+    code=$(curl -s -o /dev/null -w '%{http_code}' -I "https://highstrith-assets.oss-cn-hangzhou.aliyuncs.com/assets/film-recommendation/$name")
+    [ "$code" = "200" ] || { echo "  $code film-recommendation/$name"; BAD=$((BAD+1)); }
   done
   [ "$BAD" -eq 0 ] && echo "  全部 200" || fail "有 $BAD 张封面在 OSS 上不可访问，先别部署"
 else
