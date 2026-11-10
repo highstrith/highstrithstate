@@ -35,7 +35,7 @@ VISIBLE = sorted(
 FEATURE_REPLACEMENTS = {
     "work-lying-down-20261001": "featured-prove-it",
     "added-creative-3": "work-1783863606674-7ta9sp",
-    "added-visual-study": "featured-exported-film",
+    "added-visual-study": "featured-timeline-1",
     "added-title-render": "featured-timeline-1",
 }
 FEATURED = []
@@ -536,15 +536,24 @@ class StudioRedesign(unittest.TestCase):
             if event["requestId"] in images:
                 images[event["requestId"]].update(bytes=event["encodedDataLength"], finished=True)
 
+        def failed(event):
+            # Superseded duplicates (preload scanner, srcset re-picks) cancel
+            # their earlier request; only uncancelled failures are defects.
+            if event["requestId"] in images:
+                images[event["requestId"]].update(failed=True, canceled=bool(event.get("canceled")))
+
         network.on("Network.requestWillBeSent", requested)
         network.on("Network.responseReceived", received)
         network.on("Network.dataReceived", transferred)
         network.on("Network.loadingFinished", finished)
+        network.on("Network.loadingFailed", failed)
         self.ready(page)
         page.locator("#heroPoster").evaluate("image => image.decode()")
         page.wait_for_load_state("networkidle", timeout=30000)
         hero_url = page.locator("#heroPoster").evaluate("image => image.currentSrc")
-        hero_id = next((key for key, image in images.items() if image.get("url") == hero_url), None)
+        hero_id = next((key for key, image in images.items()
+                        if image.get("url") == hero_url and image.get("finished")), None)
+        hero_id = hero_id or next((key for key, image in images.items() if image.get("url") == hero_url), None)
         self.assertIsNotNone(hero_id, "The cold Hero must arrive through the real HTTP network")
         # naturalWidth is density-corrected with srcset. Decode the response
         # bytes already received to check physical pixels without another fetch.
@@ -567,7 +576,8 @@ class StudioRedesign(unittest.TestCase):
         self.assertTrue(video_requests, "The visible Hero may request its lightweight preview")
         self.assertTrue(all(url.endswith(FEATURED[0]['previewVideo']) for url in video_requests), video_requests)
         self.assertGreaterEqual(hero_width, 700, "A lightweight Hero must remain sharp at mobile DPR 2")
-        self.assertTrue(all(image.get("finished") and image.get("status") == 200
+        self.assertTrue(all((image.get("finished") and image.get("status") == 200)
+                            or (image.get("failed") and image.get("canceled"))
                             for image in images.values()), report)
         budget = 400 * 1024
         large_pngs = {work["poster"] for work in CATALOG

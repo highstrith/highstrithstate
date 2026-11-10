@@ -11,6 +11,14 @@ BASE = os.environ.get('STUDIO_BASE_URL', 'http://127.0.0.1:3000').rstrip('/')
 WORKS = sorted([w for w in json.loads((ROOT/'data/works.json').read_text()) if w['id'] != 'featured-giant-wheel'], key=lambda w:w.get('createdAt',''), reverse=True)
 
 
+import json as _catalogue_json
+from pathlib import Path as _catalogue_path
+_CATALOGUE_FOR_TESTS = _catalogue_json.loads((_catalogue_path(__file__).resolve().parents[1] / 'data/works.json').read_text())
+_VISIBLE_FOR_TESTS = sorted((_w for _w in _CATALOGUE_FOR_TESTS if _w['id'] != 'featured-giant-wheel'), key=lambda _w: _w.get('createdAt', ''), reverse=True)
+PUBLIC_WORKS = len(_VISIBLE_FOR_TESTS)
+MANAGED_WORKS = len(_CATALOGUE_FOR_TESTS)
+FIRST_WORK_ID = _VISIBLE_FOR_TESTS[0]['id']
+
 class CataloguePages(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -38,7 +46,7 @@ class CataloguePages(unittest.TestCase):
         expect(page.locator('.work-card:visible')).to_have_count(6)
         expect(page.locator('#worksPages a')).to_have_count(4)
         expect(page.locator('#worksPagination [aria-current="page"]')).to_have_text('1')
-        expect(page.locator('#worksCount')).to_have_text('1–6 / 20 部作品')
+        expect(page.locator('#worksCount')).to_have_text(f'1–6 / {len(WORKS)} 部作品')
         visited = self.ids(page)
         for number in [2,3,4]:
             page.locator(f'#worksPages [data-page="{number}"]').click()
@@ -47,14 +55,14 @@ class CataloguePages(unittest.TestCase):
             expect(page.locator('#worksPagination [aria-current="page"]')).to_have_text(str(number))
             visited += self.ids(page)
         self.assertEqual(visited, [w['id'] for w in WORKS])
-        self.assertEqual(len(set(visited)),20)
+        self.assertEqual(len(set(visited)),len(WORKS))
         expect(page.locator('#worksPagination [data-direction="next"]')).to_have_attribute('aria-disabled','true')
         page.locator('#worksPagination [data-direction="previous"]').click()
         self.assertEqual(self.ids(page), [w['id'] for w in WORKS[12:18]])
 
     def test_global_search_resets_page_and_single_results_hide_controls(self):
         page = self.page('/index.html?page=4#works')
-        expect(page.locator('.work-card:visible')).to_have_count(2)
+        expect(page.locator('.work-card:visible')).to_have_count(len(WORKS) - 18)
         page.locator('#workSearch').fill('Prove It')
         self.assertEqual(self.ids(page), ['featured-prove-it'])
         expect(page.locator('#worksPagination')).not_to_be_visible()
@@ -112,7 +120,7 @@ class CataloguePages(unittest.TestCase):
         self.assertEqual(self.ids(page),expected)
         expect(page.locator('#worksPagination')).to_have_attribute('aria-label','Work pages')
         page.reload(wait_until='load')
-        expect(page.locator('.work-card')).to_have_count(20)
+        expect(page.locator('.work-card')).to_have_count(len(WORKS))
         self.assertEqual(self.ids(page),expected)
         expect(page.locator('html')).to_have_attribute('lang','en')
         page.locator('#worksPages [data-page="4"]').click()
@@ -157,20 +165,20 @@ class CataloguePages(unittest.TestCase):
         expected=self.ids(page)
         self.assertIn('category=motion',page.url)
         page.reload(wait_until='load')
-        expect(page.locator('.work-card')).to_have_count(20)
+        expect(page.locator('.work-card')).to_have_count(len(WORKS))
         self.assertEqual(self.ids(page),expected)
         expect(page.locator('[data-filter="motion"]')).to_have_attribute('aria-pressed','true')
         shared=self.browser.new_page(reduced_motion='reduce')
         self.addCleanup(shared.context.close)
         shared.goto(page.locator('#worksPages [aria-current="page"]').get_attribute('href'),wait_until='load')
-        expect(shared.locator('.work-card')).to_have_count(20)
+        expect(shared.locator('.work-card')).to_have_count(len(WORKS))
         self.assertEqual(self.ids(shared),expected)
         page.locator('[data-filter="all"]').click()
         page.locator('#workSearch').fill('Prove It')
         expect(page.locator('.work-card:visible')).to_have_count(1)
         expect(page).to_have_url(re.compile(r'[?&]q=Prove'))
         page.reload(wait_until='load')
-        expect(page.locator('.work-card')).to_have_count(20)
+        expect(page.locator('.work-card')).to_have_count(len(WORKS))
         self.assertEqual(self.ids(page),['featured-prove-it'])
         expect(page.locator('#workSearch')).to_have_value('Prove It')
 
@@ -183,7 +191,7 @@ class CataloguePages(unittest.TestCase):
             for link in page.locator('#worksPagination a').all():
                 self.assertGreaterEqual(link.bounding_box()['height'],44)
         page2=self.page(java_script_enabled=False)
-        expect(page2.locator('.no-js-work')).to_have_count(20)
+        expect(page2.locator('.no-js-work')).to_have_count(len(WORKS))
         expect(page2.locator('#worksPagination')).not_to_be_visible()
 
 

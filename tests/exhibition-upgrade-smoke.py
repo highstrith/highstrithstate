@@ -7,6 +7,14 @@ from playwright.sync_api import expect, sync_playwright
 BASE = os.environ.get('STUDIO_BASE_URL', 'http://127.0.0.1:3000').rstrip('/')
 
 
+import json as _catalogue_json
+from pathlib import Path as _catalogue_path
+_CATALOGUE_FOR_TESTS = _catalogue_json.loads((_catalogue_path(__file__).resolve().parents[1] / 'data/works.json').read_text())
+_VISIBLE_FOR_TESTS = sorted((_w for _w in _CATALOGUE_FOR_TESTS if _w['id'] != 'featured-giant-wheel'), key=lambda _w: _w.get('createdAt', ''), reverse=True)
+PUBLIC_WORKS = len(_VISIBLE_FOR_TESTS)
+MANAGED_WORKS = len(_CATALOGUE_FOR_TESTS)
+FIRST_WORK_ID = _VISIBLE_FOR_TESTS[0]['id']
+
 class ExhibitionUpgrade(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -23,7 +31,7 @@ class ExhibitionUpgrade(unittest.TestCase):
         page.set_default_timeout(6000)
         self.addCleanup(page.close)
         page.goto(BASE + '/', wait_until='domcontentloaded')
-        expect(page.locator('#worksGrid .work-card')).to_have_count(20)
+        expect(page.locator('#worksGrid .work-card')).to_have_count(PUBLIC_WORKS)
         return page
 
     def test_floating_header_keeps_centered_navigation_and_compact_menu(self):
@@ -241,7 +249,7 @@ class ExhibitionUpgrade(unittest.TestCase):
             rect = page.locator('#stillViewer').bounding_box()
             self.assertLessEqual(rect['width'], width)
         page.keyboard.press('Escape')
-        self.assertEqual(page.locator('#worksGrid .work-card').count(), 20)
+        self.assertEqual(page.locator('#worksGrid .work-card').count(), PUBLIC_WORKS)
 
     def test_still_viewer_defers_original_and_pauses_requested_music(self):
         page = self.page(viewport={'width': 1440, 'height': 900}, reduced_motion='reduce')

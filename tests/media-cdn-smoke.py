@@ -17,6 +17,14 @@ from playwright.sync_api import expect, sync_playwright
 ROOT = Path(__file__).resolve().parents[1]
 
 
+import json as _catalogue_json
+from pathlib import Path as _catalogue_path
+_CATALOGUE_FOR_TESTS = _catalogue_json.loads((_catalogue_path(__file__).resolve().parents[1] / 'data/works.json').read_text())
+_VISIBLE_FOR_TESTS = sorted((_w for _w in _CATALOGUE_FOR_TESTS if _w['id'] != 'featured-giant-wheel'), key=lambda _w: _w.get('createdAt', ''), reverse=True)
+PUBLIC_WORKS = len(_VISIBLE_FOR_TESTS)
+MANAGED_WORKS = len(_CATALOGUE_FOR_TESTS)
+FIRST_WORK_ID = _VISIBLE_FOR_TESTS[0]['id']
+
 class QuietFiles(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *_):
         pass
@@ -110,7 +118,7 @@ class MediaCdn(unittest.TestCase):
         page.on('request', lambda r: requests.append((r.resource_type, r.url)))
         page.on('pageerror', lambda e: errors.append(str(e)))
         page.goto(self.base, wait_until='networkidle')
-        expect(page.locator('#worksGrid .work-card')).to_have_count(20)
+        expect(page.locator('#worksGrid .work-card')).to_have_count(PUBLIC_WORKS)
         page.wait_for_function('document.querySelector("#heroPreview").currentTime > 0')
         self.assertTrue(page.locator('#heroPoster').evaluate('i=>i.currentSrc').startswith(self.cdn_url))
         self.assertTrue(page.locator('#heroPreview').get_attribute('src').startswith(self.cdn_url))
@@ -147,7 +155,7 @@ class MediaCdn(unittest.TestCase):
         requested = []
         page.on('request', lambda request: requested.append(request.url))
         page.goto(self.base, wait_until='networkidle')
-        expect(page.locator('#worksGrid .work-card')).to_have_count(20)
+        expect(page.locator('#worksGrid .work-card')).to_have_count(PUBLIC_WORKS)
         page.locator('#worksGrid .work-card:visible').first.click()
         expect(page.locator('#workPlayer')).to_be_visible()
         self.assertFalse(page.locator('#workPlayerVideo').get_attribute('src'))

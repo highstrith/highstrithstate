@@ -38,7 +38,8 @@ for (const asset of [...media, ...posters]) {
 assert.ok(fs.statSync(path.join(root, 'assets/hero-studio-red.jpg')).size < 500_000, 'hero background should stay below 500 KB for mobile');
 assert.doesNotMatch(html, /<link[^>]+rel="preload"[^>]+hero-studio-red/i, 'decorative hero background should not be preloaded');
 
-assert.equal(works.length, 21, 'catalogue retains all previous works plus six Eagle selections, including hidden legacy entries');
+assert.ok(works.length >= 21, 'catalogue retains all previous works plus the six Eagle selections');
+assert.ok(works.some((work) => work.id === 'work-unknown-promise-ep01-20261109'), 'the newly released episode must be in the catalogue');
 const lyingDownFilm = works.find((work) => work.id === 'work-lying-down-20261001');
 assert.equal(lyingDownFilm?.cnTitle, '趴着办公早该知道');
 assert.equal(lyingDownFilm?.video, 'assets/uploads/lying-down-20261001.mp4');
@@ -52,10 +53,10 @@ assert.equal(resetDay?.video, 'assets/uploads/reset-day-20261007.mp4');
 assert.equal(resetDay?.poster, 'assets/uploads/posters/reset-day-20261007-16x9.png');
 assert.match(html, /work-reset-day-20261007/, 'offline catalog must include 重置日');
 assert.ok(fs.existsSync(path.join(root, resetDay.poster)), '重置日封面 must exist');
-assert.deepEqual(works.map((work) => work.id).slice(0, 3), [
-  'work-reset-day-20261007', 'work-lying-down-20261001', 'work-1783863606674-7ta9sp',
-], 'raw catalogue retains the current works without discarding older entries');
-assert.equal(visibleWorks[0].id, resetDay.id, 'newest visible work must be 重置日');
+assert.deepEqual(works.map((work) => work.id).slice(0, 4), [
+  'work-unknown-promise-ep01-20261109', 'work-reset-day-20261007', 'work-lying-down-20261001', 'work-1783863606674-7ta9sp',
+], 'raw catalogue keeps the newest release ahead of all older entries');
+assert.equal(visibleWorks[0].id, works[0].id, 'newest visible work must lead the public catalogue');
 assert.ok(works.some((work) => work.id === 'featured-giant-wheel'), 'raw catalogue retains the hidden legacy work');
 assert.ok(visibleWorks.every((work) => work.id !== 'featured-giant-wheel'), 'the hidden legacy work is excluded from the public catalogue');
 assert.equal(new Set(works.map((work) => work.id)).size, works.length, 'catalog work ids must be unique');

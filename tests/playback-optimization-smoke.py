@@ -21,6 +21,14 @@ PLAYING = ("document.querySelector('#workPlayerVideo').currentTime > 0"
            " && document.querySelector('#workPlayerStatus').hidden")
 
 
+import json as _catalogue_json
+from pathlib import Path as _catalogue_path
+_CATALOGUE_FOR_TESTS = _catalogue_json.loads((_catalogue_path(__file__).resolve().parents[1] / 'data/works.json').read_text())
+_VISIBLE_FOR_TESTS = sorted((_w for _w in _CATALOGUE_FOR_TESTS if _w['id'] != 'featured-giant-wheel'), key=lambda _w: _w.get('createdAt', ''), reverse=True)
+PUBLIC_WORKS = len(_VISIBLE_FOR_TESTS)
+MANAGED_WORKS = len(_CATALOGUE_FOR_TESTS)
+FIRST_WORK_ID = _VISIBLE_FOR_TESTS[0]['id']
+
 class PlaybackOptimization(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -179,7 +187,7 @@ class PlaybackOptimization(unittest.TestCase):
         self.wait_for_css(page, "parseFloat(getComputedStyle(document.querySelector('#heroTitle')).opacity) > 0.99")
         self.assertGreaterEqual(float(page.locator("#heroTitle").evaluate("e => getComputedStyle(e).opacity")), 0.99)
         self.assertGreaterEqual(float(page.locator(".site-header").evaluate("e => getComputedStyle(e).opacity")), 0.99)
-        self.assertEqual(page.locator(".no-js-work").count(), 20)
+        self.assertEqual(page.locator(".no-js-work").count(), PUBLIC_WORKS)
         self.assertTrue(page.locator(".no-js-work").first.get_attribute("href").endswith(".mp4"))
         self.assertFalse(page.evaluate("document.documentElement.scrollWidth > innerWidth"))
 

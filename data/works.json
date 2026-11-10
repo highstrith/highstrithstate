@@ -1,5 +1,20 @@
 [
   {
+    "id": "work-unknown-promise-ep01-20261109",
+    "createdAt": "2026-11-09T00:00:00.000Z",
+    "cnTitle": "未知之诺 第一集",
+    "enTitle": "The Unknown Promise · Episode 01",
+    "cnSub": "剧情 / AI 短片 · 第一集",
+    "enSub": "NARRATIVE / AI SHORT / EP.01",
+    "cnDesc": "发狂撞崖的巨兽，人人都当它失心疯，只有许知微看出那是求救。极枢特遣队要剖腹取核，她张开双臂挡在枪线前——金色神盾亮起，一生一诺，就此缔结。",
+    "enDesc": "A ranger reads a rampaging beast's pain as a plea for help, and steps unarmed into the firing line to shield it. A golden vow is sealed — and something vast watches from the mist.",
+    "video": "assets/uploads/unknown-promise-ep01-20261109.mp4",
+    "mobileVideo": "assets/optimized/work-unknown-promise-ep01-20261109/7f1da6f77ebb592b-mobile.mp4",
+    "poster": "assets/uploads/posters/unknown-promise-ep01-20261109-16x9.png",
+    "previewVideo": "assets/optimized/work-unknown-promise-ep01-20261109/7f1da6f77ebb592b-preview.mp4",
+    "webVideo": "assets/optimized/work-unknown-promise-ep01-20261109/a869be997df57b25-web.mp4"
+  },
+  {
     "id": "work-reset-day-20261007",
     "createdAt": "2026-10-07T00:00:00.000Z",
     "cnTitle": "重置日",

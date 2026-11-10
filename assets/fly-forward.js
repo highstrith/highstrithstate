@@ -41,7 +41,7 @@
   function build() {
     if (cards.length) return;
     // The normalized catalogue owns the images, order and translations.
-    sources = [...document.querySelectorAll('#worksGrid .work-card')].slice(0, 20);
+    sources = [...document.querySelectorAll('#worksGrid .work-card')];
     if (!sources.length) return;
     cards = sources.map(() => {
       const card = document.createElement('a');

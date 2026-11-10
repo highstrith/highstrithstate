@@ -68,7 +68,15 @@ for (const work of works) {
   }
   const desktop = path.join(root, work.webVideo || work.video);
   assert.ok(isFaststart(desktop), 'desktop full video needs front-loaded index');
-  if (work.webVideo) assert.equal(run(['-v', 'error', '-i', desktop, '-map', '0:v:0', '-map', '0:a:0?', '-c', 'copy', '-f', 'hash', '-']), run(['-v', 'error', '-i', sourcePath, '-map', '0:v:0', '-map', '0:a:0?', '-c', 'copy', '-f', 'hash', '-']), 'remux must preserve full media packets');
+  if (work.webVideo) {
+    // web 档是转码产物（源片 HEVC/H.264 都会重编码成 H.264 yuv420p 并前置 moov），
+    // 逐包哈希不再适用；改验「完整时长 + 原始画幅 + 可完整解码」。
+    const desktopMeta = probe(desktop);
+    assert.match(desktopMeta.video, /Video: h264/, `${work.cnTitle} desktop must stay web-compatible`);
+    assert.ok(Math.abs(desktopMeta.seconds - source.seconds) < 0.15, `${work.cnTitle} desktop must keep the full duration`);
+    assert.equal(`${desktopMeta.width}x${desktopMeta.height}`, `${source.width}x${source.height}`, `${work.cnTitle} desktop must keep the source frame size`);
+    run(['-v', 'error', '-i', desktop, '-f', 'null', '-']);
+  }
 }
 const mib = bytes => (bytes / 1024 / 1024).toFixed(2);
 const firstEight = works.slice(0, 8).reduce((sum, work) => sum + fs.statSync(path.join(root, work.previewVideo)).size, 0);

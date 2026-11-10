@@ -13,7 +13,7 @@
 
   const copy = {
     cn: {
-      skip: '跳转到作品', navWorks: '作品', navProgress: '正在制作', navProjects: '项目与应用', navResume: '创作者档案', navAbout: '关于', navContact: '联系', admin: '作品管理',
+      skip: '跳转到作品', navWorks: '作品', navProgress: '制作记录', navProjects: '项目与应用', navResume: '创作者档案', navAbout: '关于', navContact: '联系', admin: '作品管理',
       intro: '独立影像创作者 · 南京', heroTitle: '想象，在此成片',
       heroDesc: '用三维构建世界，用影像讲述故事。\n从一个念头，到让人记住的画面。',
       explore: '探索作品', selected: '精选放映', watch: '观看完整作品',
@@ -50,11 +50,11 @@
       toolCarouselPause: '暂停轮播', toolCarouselResume: '继续轮播', toolCarouselLink: '查看导演工作台项目',
       viewImage: '查看大图', zoomImage: '放大查看', fitImage: '适应画面', previousImage: '上一张', nextImage: '下一张', closeImage: '关闭图片浏览', backImages: '返回图集',
       imageLoading: '正在加载图片…', imageError: '图片暂时无法加载，请切换其他图片后重试。', copyEmail: '复制邮箱', emailCopied: '邮箱已复制', emailCopyFailed: '请手动复制：highstrith@gmail.com',
-      progressLabel: '成片之前', progressIntro: '资产、分镜，还有制作时的工作台。', inProduction: '制作中',
-      progressAsset: '森林湖岸都市', progressAssetKind: '场景资产', progressBoard: '高空投送', progressBoardKind: '分镜草图', progressWorkbench: '影片总览', progressWorkbenchKind: '导演工作台', progressNote: '制作中的阶段记录，画面会继续调整。', progressMore: '查看完整制作记录', progressCount: '15 张制作记录',
+      progressLabel: '成片之前', progressIntro: '资产、分镜，还有制作时的工作台。', inProduction: '第一集已发布',
+      progressAsset: '森林湖岸都市', progressAssetKind: '场景资产', progressBoard: '高空投送', progressBoardKind: '分镜草图', progressWorkbench: '影片总览', progressWorkbenchKind: '导演工作台', progressNote: '第一集已发布，这里保留成片之前的资产、分镜与工作台记录。', progressMore: '查看完整制作记录', progressCount: '15 张制作记录',
     },
     en: {
-      skip: 'Skip to works', navWorks: 'Works', navProgress: 'In progress', navProjects: 'Projects', navResume: 'Resume', navAbout: 'About', navContact: 'Contact', admin: 'Manage works',
+      skip: 'Skip to works', navWorks: 'Works', navProgress: 'Production notes', navProjects: 'Projects', navResume: 'Resume', navAbout: 'About', navContact: 'Contact', admin: 'Manage works',
       intro: 'Independent image maker · Nanjing', heroTitle: 'Imagination, in motion',
       heroDesc: 'Building worlds in 3D. Telling stories through film.\nFrom a first thought to an image that stays with you.',
       explore: 'Explore the works', selected: 'Selected screening', watch: 'Watch the full film',
@@ -91,8 +91,8 @@
       toolCarouselPause: 'Pause slideshow', toolCarouselResume: 'Resume slideshow', toolCarouselLink: 'View Director’s workbench project',
       viewImage: 'View full image', zoomImage: 'Zoom in', fitImage: 'Fit to screen', previousImage: 'Previous', nextImage: 'Next', closeImage: 'Close image viewer', backImages: 'Back to images',
       imageLoading: 'Loading image…', imageError: 'This image could not be loaded. Switch to another image and try again.', copyEmail: 'Copy email', emailCopied: 'Email copied', emailCopyFailed: 'Copy this address: highstrith@gmail.com',
-      progressLabel: 'Before the finished film', progressIntro: 'Assets, storyboards and a look at the workbench.', inProduction: 'In production',
-      progressAsset: 'Forest lakeside city', progressAssetKind: 'Environment asset', progressBoard: 'Aerial deployment', progressBoardKind: 'Storyboard sketch', progressWorkbench: 'Film overview', progressWorkbenchKind: 'Director’s workbench', progressNote: 'Work in progress. These images will continue to evolve.', progressMore: 'View the full production notes', progressCount: '15 production images',
+      progressLabel: 'Before the finished film', progressIntro: 'Assets, storyboards and a look at the workbench.', inProduction: 'Episode 01 released',
+      progressAsset: 'Forest lakeside city', progressAssetKind: 'Environment asset', progressBoard: 'Aerial deployment', progressBoardKind: 'Storyboard sketch', progressWorkbench: 'Film overview', progressWorkbenchKind: 'Director’s workbench', progressNote: 'Episode 01 is out. These are the assets, storyboards and workbench records from before the final cut.', progressMore: 'View the full production notes', progressCount: '15 production images',
     },
   };
 
@@ -461,7 +461,7 @@
     const featureReplacements = {
       'work-lying-down-20261001': 'featured-prove-it',
       'added-creative-3': 'work-1783863606674-7ta9sp',
-      'added-visual-study': 'featured-exported-film',
+      'added-visual-study': 'featured-timeline-1',
       'added-title-render': 'featured-timeline-1',
     };
     const candidates = works.map((work) => works.find((item) => item.id === featureReplacements[work.id]) || work);

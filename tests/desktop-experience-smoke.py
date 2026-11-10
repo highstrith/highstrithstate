@@ -10,6 +10,14 @@ PAGE_SIZE = 6
 HIDDEN_TITLE = '巨轮空降'
 
 
+import json as _catalogue_json
+from pathlib import Path as _catalogue_path
+_CATALOGUE_FOR_TESTS = _catalogue_json.loads((_catalogue_path(__file__).resolve().parents[1] / 'data/works.json').read_text())
+_VISIBLE_FOR_TESTS = sorted((_w for _w in _CATALOGUE_FOR_TESTS if _w['id'] != 'featured-giant-wheel'), key=lambda _w: _w.get('createdAt', ''), reverse=True)
+PUBLIC_WORKS = len(_VISIBLE_FOR_TESTS)
+MANAGED_WORKS = len(_CATALOGUE_FOR_TESTS)
+FIRST_WORK_ID = _VISIBLE_FOR_TESTS[0]['id']
+
 class DesktopExperience(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -30,7 +38,7 @@ class DesktopExperience(unittest.TestCase):
 
     def test_catalogue_opens_the_player_and_returns_to_the_same_place(self):
         page = self.page()
-        self.assertEqual(page.locator('.work-card').first.get_attribute('data-work-id'), 'work-reset-day-20261007')
+        self.assertEqual(page.locator('.work-card').first.get_attribute('data-work-id'), FIRST_WORK_ID)
         self.assertEqual(page.locator('.work-card', has_text=HIDDEN_TITLE).count(), 0)
         card = page.locator('.work-card').nth(PAGE_SIZE - 1)
         card.scroll_into_view_if_needed()
