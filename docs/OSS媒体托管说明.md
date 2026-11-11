@@ -101,6 +101,13 @@ ossutil referer --method get oss://highstrith-assets
 - 线上真实 Chrome 五页（首页／项目／进行中／简历／片单）：0 个 4xx、0 个控制台错误、媒体请求 100% 指向 OSS、横向溢出 0、Hero `readyState=4`、canvas 写入后可 `getImageData`（跨域未污染）
 - 首屏加载：首页 1.25s，其余 0.39–0.81s
 
+## 补传记录（2026-11-11，《未知之诺》换 5:46 母版）
+
+- **事故**：换 5:46 新三档后只推了 GitHub（commit `b058c53`），**漏了第 2 步「上传 OSS」**——线上 `works.json` 三档被 `prepare-media-cdn.mjs` 重写到 OSS 前缀，OSS 上没有新哈希文件，播放器 404 报「暂时无法加载这部作品」。
+- 教训：**「改 works.json／换视频」必须连带 OSS 上传才算交付**，只推 GitHub 不够。另注意 `assets/uploads/*.mp4` 在 Pages 上 404 是既有行为（打包白名单排除母版），页面只在优化档缺失时才回落，不要据此判断播放坏了。
+- 补传：`ossutil cp` 逐个上传三档（web 51,226,730／mobile 28,486,996／preview 1,641,402 B），带 `Cache-Control:public,max-age=600`；验证三档 200、Range 206、`OPTIONS` 预检 200。全程 12 秒。
+- **AccessKey 用后状态**：上传完成，RAM 子账号 `oss-uploader` 的 AccessKey 仍处启用状态，**待导演到 RAM 控制台禁用**。
+
 ## 换素材
 
 1. 本地改动后跑 `node scripts/prepare-media-cdn.mjs --site public --media-dir <临时目录>`，得到与公开文件一一对应的上传目录（或按 CI 白名单手工打包）
