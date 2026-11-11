@@ -5,13 +5,13 @@
     {
       "id": "work-unknown-promise-ep01-20261109",
       "source": "assets/uploads/unknown-promise-ep01-20261109.mp4",
-      "sourceHash": "e52a2cdf5372c72ef9bf6a1bca5b890b5c1cab8e13e7f425faef615dc6324a43",
+      "sourceHash": "5df8e5cea11c9a85d4380ddb34f11bef1f63daa59c4f897763d248ab788047a2",
       "previewSeconds": 20,
-      "previewBytes": 1646130,
-      "mobileBytes": 28726779,
+      "previewBytes": 1641402,
+      "mobileBytes": 28486996,
       "mobileMaxrate": "750k",
       "mobileKeyframeSeconds": 2,
-      "webBytes": 51711037,
+      "webBytes": 51226730,
       "webCRF": 23,
       "webMaxrate": "3500k"
     },
