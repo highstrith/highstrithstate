@@ -14,16 +14,35 @@ const html = fs.readFileSync(indexPath, 'utf8');
 
 // 按 index.html 中出现的顺序抓 assets 下的 .css（忽略 ?v= 查询串），去重保序
 const links = [...html.matchAll(/href="(assets\/[^"?]+\.css)(?:\?[^"]*)?"/g)].map((m) => m[1]);
-const files = [...new Set(links)].filter((rel) => !rel.includes('home-bundle.css'));
+// index.html 已经只剩 home-bundle.css 一个 <link>，抓不到源文件时按这份顺序合并。
+// 新增样式模块时把文件加进来，位置就是它在层叠里的位置。
+const SOURCES = [
+  'assets/base.css',
+  'assets/studio.css',
+  'assets/exhibition.css',
+  'assets/fly-forward.css',
+  'assets/director-word.css',
+  'assets/contact-rows.css',
+  'assets/motion-extra.css',
+  'assets/theme.css',
+  'assets/home-modules.css',
+  'assets/chapter-scenes.css',
+  'assets/section-jump.css',
+  'assets/stills-ticker.css',
+  'assets/player-seek.css',
+  'assets/software-ribbon.css',
+];
+const fromHtml = [...new Set(links)].filter((rel) => !rel.includes('home-bundle.css'));
+const files = fromHtml.length ? fromHtml : SOURCES;
 
 if (files.length === 0) {
-  console.error('✗ 没有在 index.html 里找到 assets/*.css 引用');
+  console.error('✗ 没有可合并的 assets/*.css');
   process.exit(1);
 }
 
 const banner =
   '/* 自动生成 · 请勿手改。\n' +
-  ' * 由 scripts/bundle-css.mjs 按 index.html 的 <link> 顺序合并以下源文件：\n' +
+  ' * 由 scripts/bundle-css.mjs 合并以下源文件（顺序即层叠顺序）：\n' +
   files.map((f) => ' *   ' + f).join('\n') +
   '\n */\n';
 
